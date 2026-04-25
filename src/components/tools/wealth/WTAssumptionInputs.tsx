@@ -1,0 +1,113 @@
+import type { WealthInputs } from "../../../hooks/useWealthMath";
+
+type Props = {
+  inputs: WealthInputs;
+  onChange: (next: WealthInputs) => void;
+};
+
+const labelClass = "mb-1.5 block font-[Lato,system-ui,sans-serif] text-[12px] font-semibold text-[#0B2A4A]";
+const inputClass =
+  "w-full rounded-md border border-slate-200/90 bg-white px-3 py-2 font-[Lato,system-ui,sans-serif] text-[14px] text-slate-900 shadow-sm focus:border-[#C6A15B] focus:outline-none focus:ring-1 focus:ring-[#C6A15B]/40";
+
+export function WTAssumptionInputs({ inputs, onChange }: Props) {
+  const set = <K extends keyof WealthInputs>(key: K, value: WealthInputs[K]) => onChange({ ...inputs, [key]: value });
+
+  return (
+    <section className="rounded-xl border border-slate-200/90 bg-white p-5 shadow-sm sm:p-6">
+      <div className="mb-4 flex items-center gap-2">
+        <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#3B6D11] text-[11px] font-bold text-white">
+          2
+        </span>
+        <h2 className="font-[Georgia,serif] text-[15px] font-medium text-[#0B2A4A]">Growth assumptions</h2>
+      </div>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div>
+          <label htmlFor="wt-appr" className={labelClass}>
+            Home appreciation (%/yr)
+          </label>
+          <input
+            id="wt-appr"
+            type="number"
+            step={0.1}
+            value={inputs.appr}
+            onChange={(e) => set("appr", parseFloat(e.target.value) || 0)}
+            className={inputClass}
+          />
+          <p className="mt-1 text-[11px] text-slate-500">MD-DC-VA avg ~3–4%/yr</p>
+        </div>
+        <div>
+          <label htmlFor="wt-rent-inc" className={labelClass}>
+            Annual rent increase (%)
+          </label>
+          <input
+            id="wt-rent-inc"
+            type="number"
+            step={0.1}
+            value={inputs.rentInc}
+            onChange={(e) => set("rentInc", parseFloat(e.target.value) || 0)}
+            className={inputClass}
+          />
+          <p className="mt-1 text-[11px] text-slate-500">National avg ~4–5%/yr</p>
+        </div>
+        <div>
+          <label htmlFor="wt-inv" className={labelClass}>
+            Investment return if renting (%)
+          </label>
+          <input
+            id="wt-inv"
+            type="number"
+            step={0.5}
+            value={inputs.invReturn}
+            onChange={(e) => set("invReturn", parseFloat(e.target.value) || 0)}
+            className={inputClass}
+          />
+          <p className="mt-1 text-[11px] text-slate-500">S&amp;P 500 historical ~7–10%</p>
+        </div>
+        <div>
+          <label htmlFor="wt-proptax" className={labelClass}>
+            Property tax rate (%/yr)
+          </label>
+          <input
+            id="wt-proptax"
+            type="number"
+            step={0.1}
+            value={inputs.propTax}
+            onChange={(e) => set("propTax", parseFloat(e.target.value) || 0)}
+            className={inputClass}
+          />
+          <p className="mt-1 text-[11px] text-slate-500">MD avg ~1.1%, VA avg ~0.8%</p>
+        </div>
+        <div>
+          <label htmlFor="wt-maint" className={labelClass}>
+            Annual maintenance (%)
+          </label>
+          <input
+            id="wt-maint"
+            type="number"
+            step={0.1}
+            value={inputs.maint}
+            onChange={(e) => set("maint", parseFloat(e.target.value) || 0)}
+            className={inputClass}
+          />
+          <p className="mt-1 text-[11px] text-slate-500">Rule of thumb: 1–2%/yr</p>
+        </div>
+        <div>
+          <label htmlFor="wt-taxrate" className={labelClass}>
+            Marginal tax rate (%)
+          </label>
+          <input
+            id="wt-taxrate"
+            type="number"
+            step={1}
+            min={0}
+            max={50}
+            value={inputs.taxRate}
+            onChange={(e) => set("taxRate", Math.min(50, Math.max(0, parseFloat(e.target.value) || 0)))}
+            className={inputClass}
+          />
+          <p className="mt-1 text-[11px] text-slate-500">For mortgage interest deduction estimate</p>
+        </div>
+      </div>
+    </section>
+  );
+}
