@@ -168,7 +168,7 @@ function SignalToggle({ label, emoji, sub, checked, onChange }: { label: string;
   return (
     <button type="button" onClick={() => onChange(!checked)} className={`w-full rounded-xl border p-4 text-left transition-all ${checked ? "border-[#0B2A4A] bg-[#0B2A4A]/5 ring-1 ring-[#0B2A4A]/20" : "border-slate-200 bg-white hover:border-slate-300"}`}>
       <div className="flex items-start gap-3">
-        <span className="text-xl shrink-0">{emoji}</span>
+        <span className="text-xl shrink-0" role="img" aria-label={label}>{emoji}</span>
         <div className="flex-1 min-w-0">
           <div className={`font-sans text-[13px] font-semibold ${checked ? "text-[#0B2A4A]" : "text-slate-700"}`}>{label}</div>
           <div className="font-sans text-[11px] text-slate-400 mt-0.5">{sub}</div>
@@ -285,23 +285,69 @@ export function LoanMatchmakerCalculator() {
             {hasFiltered && <button type="button" onClick={() => setHasFiltered(false)} className="w-full rounded-xl border border-slate-200 bg-white px-6 py-3 font-sans text-[13px] text-slate-500 hover:border-slate-300 transition-all">Browse All Programs</button>}
           </div>
           <div className="space-y-4">
-            {hasFiltered && highlighted.length > 0 && (
-              <div className="rounded-xl border border-[#C6A15B]/30 bg-amber-50/50 p-4">
-                <div className="font-sans text-[10px] font-bold uppercase tracking-widest text-[#854F0B] mb-1">{highlighted.length} Program{highlighted.length !== 1 ? "s" : ""} Worth Exploring</div>
-                <p className="font-sans text-[13px] text-amber-900">Based on the signals you selected — call IHL to determine actual fit and eligibility for your buyer's specific situation.</p>
+            {!hasFiltered ? (
+              <div className="flex h-full min-h-[500px] flex-col items-center justify-center rounded-xl border-2 border-dashed border-[#0B2A4A]/15 bg-gradient-to-br from-[#0B2A4A]/5 via-white to-[#C6A15B]/5 p-8 text-center">
+                <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-[#0B2A4A] shadow-lg shadow-[#0B2A4A]/20">
+                  <span className="text-4xl">🎯</span>
+                </div>
+
+                <div className="mb-2 font-sans text-[10px] font-bold uppercase tracking-[0.2em] text-[#C6A15B]">
+                  Know Before You Show
+                </div>
+
+                <h2 className="mb-4 font-[Georgia,serif] text-[1.5rem] font-medium leading-snug text-[#0B2A4A]">
+                  Find the right loan program<br />before the first showing.
+                </h2>
+
+                <p className="mb-6 max-w-sm font-sans text-[13px] leading-relaxed text-slate-600">
+                  Tell us about your buyer and instantly see which programs are worth exploring — with plain-English explanations, questions to ask IHL, and exactly what to tell your client.
+                </p>
+
+                <div className="mb-8 w-full max-w-sm space-y-2.5">
+                  {[
+                    { emoji: "🎖️", text: "VA, FHA, Conventional, USDA, Non-QM & more" },
+                    { emoji: "💡", text: "What makes each program different" },
+                    { emoji: "📞", text: "Questions to ask IHL for your buyer" },
+                    { emoji: "💬", text: "What to tell your client — word for word" },
+                    { emoji: "🤝", text: "MD, DC & VA programs to stack" },
+                  ].map((item) => (
+                    <div key={item.text} className="flex items-center gap-3 rounded-lg bg-white/80 border border-slate-200/60 px-4 py-2.5 shadow-sm">
+                      <span className="text-base shrink-0">{item.emoji}</span>
+                      <span className="font-sans text-[13px] font-medium text-slate-700">{item.text}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="flex items-center gap-2 rounded-full bg-[#0B2A4A] px-5 py-2.5 shadow-md">
+                  <span className="text-sm">🎯</span>
+                  <span className="font-sans text-[12px] font-bold text-[#C6A15B]">Select your buyer's signals on the left to get started</span>
+                </div>
+
+                <p className="mt-4 font-sans text-[11px] text-slate-400">
+                  8 programs covered · Educational only · Always drives to IHL
+                </p>
               </div>
+            ) : (
+              <>
+                {highlighted.length > 0 && (
+                  <div className="rounded-xl border border-[#C6A15B]/30 bg-amber-50/50 p-4">
+                    <div className="font-sans text-[10px] font-bold uppercase tracking-widest text-[#854F0B] mb-1">{highlighted.length} Program{highlighted.length !== 1 ? "s" : ""} Worth Exploring</div>
+                    <p className="font-sans text-[13px] text-amber-900">Based on the signals you selected — call IHL to determine actual fit and eligibility for your buyer's specific situation.</p>
+                  </div>
+                )}
+                {programs.map((program) => (
+                  <Fragment key={program.name}>
+                    <ProgramCard program={program} />
+                  </Fragment>
+                ))}
+                <div className="rounded-xl border border-[#C6A15B]/30 bg-[#0B2A4A] p-5 text-white">
+                  <div className="font-sans text-[10px] font-bold uppercase tracking-widest text-[#C6A15B] mb-2">📞 Ready to Find the Right Fit?</div>
+                  <p className="font-sans text-[13px] leading-relaxed text-white/85 mb-3">This library helps you understand the landscape. IHL determines the actual best program based on your buyer's complete financial picture — income, assets, credit history, goals, and the specific property.</p>
+                  <p className="font-sans text-[12px] font-semibold text-[#C6A15B]">(301) 555-0123 · Info@infinitehomelending.com</p>
+                </div>
+                <p className="font-sans text-[10px] leading-relaxed text-slate-500">This tool is for educational purposes only. Program descriptions are general overviews and do not constitute lending advice, qualification determinations, or commitment to lend. All program eligibility is determined by IHL based on the buyer's complete application. Programs and guidelines are subject to change.</p>
+              </>
             )}
-            {programs.map((program) => (
-              <Fragment key={program.name}>
-                <ProgramCard program={program} />
-              </Fragment>
-            ))}
-            <div className="rounded-xl border border-[#C6A15B]/30 bg-[#0B2A4A] p-5 text-white">
-              <div className="font-sans text-[10px] font-bold uppercase tracking-widest text-[#C6A15B] mb-2">📞 Ready to Find the Right Fit?</div>
-              <p className="font-sans text-[13px] leading-relaxed text-white/85 mb-3">This library helps you understand the landscape. IHL determines the actual best program based on your buyer's complete financial picture — income, assets, credit history, goals, and the specific property.</p>
-              <p className="font-sans text-[12px] font-semibold text-[#C6A15B]">(301) 555-0123 · Info@infinitehomelending.com</p>
-            </div>
-            <p className="font-sans text-[10px] leading-relaxed text-slate-500">This tool is for educational purposes only. Program descriptions are general overviews and do not constitute lending advice, qualification determinations, or commitment to lend. All program eligibility is determined by IHL based on the buyer's complete application. Programs and guidelines are subject to change.</p>
           </div>
         </div>
       </div>
