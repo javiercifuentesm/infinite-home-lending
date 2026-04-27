@@ -3,5 +3,8 @@
 }
 
 :8080 {
-  reverse_proxy localhost:8787
+  reverse_proxy localhost:8787 {
+    header_up Host {host}
+    header_up X-Real-IP {remote}
+  }
 }
