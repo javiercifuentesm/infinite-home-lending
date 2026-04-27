@@ -1,5 +1,4 @@
 # Railway: Config as Code
-# https://docs.railway.com/reference/config-as-code
 
 [build]
 builder = "nixpacks"
@@ -7,6 +6,4 @@ buildCommand = "npm install --legacy-peer-deps"
 
 [deploy]
 startCommand = "npm run server:agent-v3"
-healthcheckPath = "/api/health"
-healthcheckTimeout = 30
 restartPolicyType = "ON_FAILURE"
