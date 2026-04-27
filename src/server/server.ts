@@ -13,7 +13,24 @@ console.log("ENV CHECK:", {
 });
 
 const app = express();
-app.use(cors({ origin: ["http://localhost:3000", "http://127.0.0.1:3000"] }));
+
+const corsOrigins = [
+  "http://localhost:3000",
+  "http://127.0.0.1:3000",
+  "https://www.infinitehomelending.com",
+  "https://infinitehomelending.com",
+  ...(process.env.CORS_ORIGINS?.split(",")
+    .map((o) => o.trim())
+    .filter(Boolean) ?? []),
+];
+app.use(
+  cors({
+    origin: corsOrigins,
+  }),
+);
+app.get("/api/health", (_req, res) => {
+  res.status(200).json({ ok: true, service: "ihl-api" });
+});
 app.use(express.json({ limit: "1mb" }));
 
 app.use("/api/agent-v3", createAgentV3Router());
@@ -22,9 +39,9 @@ app.use("/api", createMortgageConciergeSendLeadRouter());
 app.use("/api", createSubmitLeadRouter());
 app.use("/api", createAnalyticsRouter());
 
-const port = Number(process.env.AGENT_V3_SERVER_PORT ?? 8787);
-app.listen(port, () => {
+const port = Number(process.env.PORT ?? process.env.AGENT_V3_SERVER_PORT ?? 8787);
+app.listen(port, "0.0.0.0", () => {
   console.info(
-  `[api] listening on http://localhost:${port}/api (agent-v3, upload-url, send-lead, submit-lead, analytics)`,
-);
+    `[api] listening on 0.0.0.0:${port}/api (agent-v3, upload-url, send-lead, submit-lead, analytics) | health GET /api/health`,
+  );
 });

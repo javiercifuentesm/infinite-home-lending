@@ -1,5 +1,6 @@
 import { Fragment, useCallback, useState } from "react";
 import { PageContainer } from "../components/PageContainer";
+import { apiUrl } from "../lib/apiBase";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 
@@ -449,7 +450,7 @@ function LeadDetailPanel({ lead, onClose }: { lead: LeadRow; onClose: () => void
 
 async function updateStatus(id: string, status: string, password: string): Promise<boolean> {
   try {
-    const res = await fetch(`/api/analytics/leads/${id}?pwd=${encodeURIComponent(password)}`, {
+    const res = await fetch(apiUrl(`/api/analytics/leads/${id}?pwd=${encodeURIComponent(password)}`), {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status }),
@@ -528,7 +529,7 @@ export default function AnalyticsDashboard() {
     setLoading(true);
     try {
       const q = new URLSearchParams({ password });
-      const res = await fetch(`/api/analytics/leads?${q}`);
+      const res = await fetch(apiUrl(`/api/analytics/leads?${q}`));
       const data = (await res.json().catch(() => ({}))) as { error?: string; leads?: LeadRow[] };
       if (!res.ok) { setLeads(null); setError(data.error ?? "Failed to load"); return; }
       setLeads(data.leads ?? []);

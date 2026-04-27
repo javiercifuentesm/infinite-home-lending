@@ -1,7 +1,10 @@
 import fs from "node:fs";
 import path from "node:path";
 
-const DATA_DIR = path.join(process.cwd(), "data");
+/** Local default `data/`; on Railway set `LEADS_DATA_DIR` to a mounted volume path, e.g. `/data` */
+const DATA_DIR = process.env.LEADS_DATA_DIR
+  ? path.resolve(process.env.LEADS_DATA_DIR)
+  : path.join(process.cwd(), "data");
 const LEADS_FILE = path.join(DATA_DIR, "leads.jsonl");
 
 export type LeadStatus = "new" | "in_process" | "funded";

@@ -1,3 +1,5 @@
+import { apiUrl } from "../lib/apiBase";
+
 export async function sendLeadEmail(params: {
   lead_name: string;
   lead_email: string;
@@ -14,7 +16,7 @@ export async function sendLeadEmail(params: {
   time: string;
   transcript: string;
 }) {
-  const response = await fetch("/api/send-lead", {
+  const response = await fetch(apiUrl("/api/send-lead"), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
