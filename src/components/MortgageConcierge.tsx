@@ -11,7 +11,6 @@ const PDF_ASSISTANT_LABEL = "Luna — IHL Mortgage Concierge";
 
 function MortgageConciergeInner() {
   const [isOpen, setIsOpen] = useState(false);
-  const [textInput, setTextInput] = useState("");
   const [isMuted, setIsMuted] = useState(false);
   const [transcript, setTranscript] = useState<
     { role: "user" | "assistant"; text: string; time: string; eventId?: number }[]
@@ -32,7 +31,6 @@ function MortgageConciergeInner() {
   const [isCoolingDown, setIsCoolingDown] = useState(false);
   const [showLeadFormRecovery, setShowLeadFormRecovery] = useState(false);
 
-  const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const coolingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const thinkingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const leadNotifyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -208,7 +206,7 @@ function MortgageConciergeInner() {
     };
   }, []);
 
-  const { startSession, endSession, sendUserMessage, sendContextualUpdate, sendUserActivity, setVolume, setMuted: setMicMuted, status, isSpeaking, message } =
+  const { startSession, endSession, sendContextualUpdate, sendUserActivity, setVolume, setMuted: setMicMuted, status, isSpeaking } =
     useConversation({
     agentId: AGENT_ID,
     clientTools,
@@ -219,11 +217,6 @@ function MortgageConciergeInner() {
       leadSubmittedRef.current = false;
       setIsOpen(false);
       setIsMuted(false);
-      setTextInput("");
-      if (typingTimeoutRef.current) {
-        clearTimeout(typingTimeoutRef.current);
-        typingTimeoutRef.current = null;
-      }
       if (leadNotifyTimeoutRef.current) {
         clearTimeout(leadNotifyTimeoutRef.current);
         leadNotifyTimeoutRef.current = null;
@@ -734,10 +727,6 @@ function MortgageConciergeInner() {
 
   useEffect(() => {
     if (!isConnected) {
-      if (typingTimeoutRef.current) {
-        clearTimeout(typingTimeoutRef.current);
-        typingTimeoutRef.current = null;
-      }
       setIsMuted(false);
     }
   }, [isConnected]);
@@ -759,9 +748,6 @@ function MortgageConciergeInner() {
 
   useEffect(() => {
     return () => {
-      if (typingTimeoutRef.current) {
-        clearTimeout(typingTimeoutRef.current);
-      }
       if (thinkingTimeoutRef.current) {
         clearTimeout(thinkingTimeoutRef.current);
         thinkingTimeoutRef.current = null;
@@ -774,22 +760,6 @@ function MortgageConciergeInner() {
       stopSilenceReminder();
     };
   }, [stopSilenceReminder]);
-
-  const handleSend = useCallback(() => {
-    if (isSpeaking) return;
-    if (textInput.trim() && status === "connected") {
-      if (typingTimeoutRef.current) {
-        clearTimeout(typingTimeoutRef.current);
-        typingTimeoutRef.current = null;
-      }
-      if (status === "connected") {
-        setMicMuted(false);
-      }
-      sendUserMessage(textInput.trim());
-      setTextInput("");
-      setIsThinking(true);
-    }
-  }, [textInput, status, isSpeaking, sendUserMessage, setMicMuted]);
 
   return (
     <>
@@ -1191,70 +1161,10 @@ function MortgageConciergeInner() {
 
           {isConnected && (
             <div style={{ borderTop: "1px solid #C6A15B22", flexShrink: 0 }}>
-            <div className="px-4 pb-2 flex gap-2 items-end">
-              <textarea
-                value={textInput}
-                onChange={(e) => {
-                  setTextInput(e.target.value);
-                  e.target.style.height = "auto";
-                  e.target.style.height = `${e.target.scrollHeight}px`;
-
-                  if (status === "connected") {
-                    setMicMuted(true);
-                  }
-
-                  if (typingTimeoutRef.current) {
-                    clearTimeout(typingTimeoutRef.current);
-                  }
-
-                  typingTimeoutRef.current = setTimeout(() => {
-                    if (statusRef.current === "connected" && !isSpeakingRef.current) {
-                      setMicMuted(false);
-                    }
-                  }, 1500);
-                }}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && !e.shiftKey && textInput.trim() && !isSpeaking) {
-                    e.preventDefault();
-                    handleSend();
-                  }
-                }}
-                placeholder="🎤 Talk or type your question..."
-                rows={1}
-                style={{
-                  backgroundColor: "#0d3560",
-                  color: "#F7F7F5",
-                  border: "1px solid #C6A15B44",
-                  resize: "none",
-                  overflow: "hidden",
-                  minHeight: "36px",
-                  maxHeight: "120px",
-                }}
-                className="min-w-0 flex-1 rounded-lg px-3 py-2 text-sm outline-none"
-              />
-              <button
-                type="button"
-                onClick={handleSend}
-                disabled={!textInput.trim() || isSpeaking}
-                className="rounded-lg p-2 transition-opacity hover:opacity-80 disabled:opacity-40 flex-shrink-0"
-                style={{ backgroundColor: "#C6A15B", color: "#0B2A4A" }}
-                title="Send message"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <line x1="22" y1="2" x2="11" y2="13" />
-                  <polygon points="22 2 15 22 11 13 2 9 22 2" />
-                </svg>
-              </button>
+            <div className="px-4 pb-2 flex items-center justify-center gap-2">
+              <span className="text-xs text-center" style={{ color: "#F7F7F5", opacity: 0.5 }}>
+                🎤 Speak with Luna
+              </span>
             </div>
             <div className="flex items-center gap-2 px-4 pb-2">
               <div
