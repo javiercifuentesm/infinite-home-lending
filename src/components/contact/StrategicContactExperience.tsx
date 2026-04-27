@@ -2,6 +2,7 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, typ
 import { AnimatePresence, motion, useScroll, useTransform } from "motion/react";
 import { useSearchParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
+import { apiUrl } from "../../lib/apiBase";
 import { ContactHeroEntry, CONTACT_HERO_PNG, CONTACT_HERO_WEBP } from "./ContactHeroEntry";
 import {
   initialPurchaseData,
@@ -1285,7 +1286,7 @@ export function StrategicContactExperience() {
     const hasUploadedStatement = Boolean(mortgageStatementFileKey);
 
     try {
-      const res = await fetch("/api/submit-lead", {
+      const res = await fetch(apiUrl("/api/submit-lead"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

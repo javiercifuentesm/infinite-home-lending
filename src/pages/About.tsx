@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Compass, MessageCircle, Shield, Sparkles } from "lucide-react";
 import { IHLLogo } from "../components/IHLLogo";
@@ -14,8 +14,8 @@ const IMG_NARRATIVE_ARCH = "/about/about-neighborhood-winter.png";
 /** Supporting: single-family suburban home — natural daylight, brick and siding context (watermark trimmed). */
 const IMG_APPROACH_HOME = "/about/about-single-family.png";
 
-const FOUNDER_PUBLIC_SRC = "/founder-portrait.jpg";
-const COFOUNDER_PUBLIC_SRC = "/alma-portrait.jpg";
+const FOUNDER_PUBLIC_SRC = "/about/javier-cifuentes-founder.jpg";
+const COFOUNDER_PUBLIC_SRC = "/about/alma-jaramillo-portrait.jpg";
 
 const MORTGAGE_WANTS_GRID = [
   {
@@ -60,19 +60,49 @@ function LeadershipPortrait(props: {
   alt: string;
   placeholderInitials: string;
   placeholderFilename: string;
+  /** Premium leadership portrait: 4:5, gold-accent frame (Founder + Co-Founder). */
+  variant?: "default" | "premium";
 }) {
   const [showPlaceholder, setShowPlaceholder] = useState(false);
-  const { src, alt, placeholderInitials, placeholderFilename } = props;
+  const { src, alt, placeholderInitials, placeholderFilename, variant = "default" } = props;
+  const isPremium = variant === "premium";
+
+  const frameClass = isPremium
+    ? "rounded-[22px] border border-gold/25 bg-white shadow-[0_22px_58px_-14px_rgba(10,25,47,0.24)] ring-1 ring-gold/15"
+    : "rounded-none border border-slate-200/50 bg-white shadow-[0_24px_56px_-18px_rgba(10,25,47,0.18)]";
+
+  const innerClass = isPremium
+    ? "relative aspect-[4/5] overflow-hidden rounded-[20px]"
+    : "relative aspect-[3/4] overflow-hidden rounded-none";
+
+  const imgClass = isPremium
+    ? "h-full w-full object-cover object-[center_22%]"
+    : "h-full w-full object-cover object-center";
+
+  const overlayClass = isPremium
+    ? "pointer-events-none absolute inset-0 rounded-[20px] bg-gradient-to-t from-navy/[0.04] via-transparent to-white/[0.08]"
+    : "pointer-events-none absolute inset-0 rounded-none bg-gradient-to-t from-navy/[0.1] via-transparent to-white/10";
+
   return (
-    <figure className="w-full max-w-[min(100%,28rem)] shrink-0 mx-auto lg:mx-0">
-      <div className="relative overflow-hidden rounded-none border border-slate-200/50 bg-white shadow-[0_24px_56px_-18px_rgba(10,25,47,0.18)]">
-        <div className="relative aspect-[3/4] overflow-hidden rounded-none">
+    <figure
+      className={
+        isPremium
+          ? "w-full max-w-[min(100%,420px)] shrink-0 mx-auto lg:mx-0"
+          : "w-full max-w-[min(100%,28rem)] shrink-0 mx-auto lg:mx-0"
+      }
+    >
+      <div className={`relative overflow-hidden ${frameClass}`}>
+        <div className={innerClass}>
           {!showPlaceholder ? (
             <img
               src={src}
               alt={alt}
-              className="h-full w-full object-cover object-center"
+              className={imgClass}
+              width={isPremium ? 820 : 600}
+              height={isPremium ? 1025 : 800}
+              sizes={isPremium ? "(min-width: 1024px) 400px, 100vw" : "(min-width: 1024px) 28rem, 100vw"}
               loading="lazy"
+              decoding="async"
               onError={() => setShowPlaceholder(true)}
               referrerPolicy="no-referrer"
             />
@@ -87,10 +117,7 @@ function LeadershipPortrait(props: {
               </p>
             </div>
           )}
-          <div
-            className="pointer-events-none absolute inset-0 rounded-none bg-gradient-to-t from-navy/[0.1] via-transparent to-white/10"
-            aria-hidden
-          />
+          <div className={overlayClass} aria-hidden />
         </div>
       </div>
     </figure>
@@ -98,6 +125,8 @@ function LeadershipPortrait(props: {
 }
 
 export default function About() {
+  const reduceMotion = useReducedMotion();
+
   return (
     <PageContainer>
       <section className="relative pt-[100px] lg:pt-[120px] pb-12 lg:pb-16 overflow-hidden bg-white border-b border-slate-100">
@@ -309,7 +338,7 @@ export default function About() {
 
       <section id="leadership" className="section-y border-b border-slate-200/90 bg-surface scroll-mt-28">
         <div className="max-w-7xl mx-auto px-6">
-          <header className="max-w-3xl mb-12 lg:mb-16">
+          <header className="max-w-3xl mb-14 lg:mb-20">
             <h2 className="type-editorial-section-title text-[1.85rem] sm:text-3xl lg:text-[2.35rem] mb-4 leading-[1.08] text-navy">
               Our Leadership
             </h2>
@@ -318,23 +347,28 @@ export default function About() {
             </p>
           </header>
 
-          <article
+          <motion.article
             id="founder-message"
             className="pb-16 lg:pb-20 mb-16 lg:mb-24 border-b border-slate-200/50"
+            initial={reduceMotion ? false : { opacity: 0, y: 28 }}
+            whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
           >
             <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-navy/40 mb-6">
               Founder
             </p>
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 lg:items-start">
-              <div className="lg:col-span-5 order-2 lg:order-1 flex justify-center lg:justify-start mb-8 lg:mb-0">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 xl:gap-16 lg:items-start">
+              <div className="lg:col-span-5 order-2 lg:order-1 flex w-full justify-center lg:justify-start self-start mt-0 mb-2 sm:mb-3 lg:mb-0">
                 <LeadershipPortrait
+                  variant="premium"
                   src={FOUNDER_PUBLIC_SRC}
-                  alt="Javier Cifuentes, Founder and Managing Member of Infinite Home Lending"
+                  alt="Javier Cifuentes, Founder of Infinite Home Lending"
                   placeholderInitials="JC"
-                  placeholderFilename="founder-portrait.jpg"
+                  placeholderFilename="javier-cifuentes-founder.jpg"
                 />
               </div>
-              <div className="lg:col-span-7 order-1 lg:order-2 min-w-0 text-left py-2 px-0 sm:px-2 lg:px-8 lg:py-10">
+              <div className="lg:col-span-7 order-1 lg:order-2 min-w-0 self-start text-left py-0 px-0 sm:px-2 lg:pl-0 lg:pr-8 lg:pt-0 lg:pb-2">
                 <p className="text-[17px] leading-[1.7] text-slate-600 font-sans mb-8 max-w-[42rem]">
                   When we started Infinite Home Lending, it came from a simple observation.
                 </p>
@@ -387,14 +421,29 @@ export default function About() {
                 </div>
               </div>
             </div>
-          </article>
+          </motion.article>
 
-          <article id="cofounder-message">
+          <motion.article
+            id="cofounder-message"
+            initial={reduceMotion ? false : { opacity: 0, y: 28 }}
+            whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+          >
             <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-navy/40 mb-6">
               Co-Founder
             </p>
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 lg:items-start">
-              <div className="lg:col-span-7 order-1 lg:order-1 min-w-0 text-left py-2 px-0 sm:px-2 lg:px-8 lg:py-10">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 xl:gap-16 lg:items-start">
+              <div className="lg:col-span-5 order-1 lg:order-2 flex w-full justify-center lg:justify-end self-start mt-0 mb-2 sm:mb-3 lg:mb-0">
+                <LeadershipPortrait
+                  variant="premium"
+                  src={COFOUNDER_PUBLIC_SRC}
+                  alt="Alma Jaramillo, Co-Founder of Infinite Home Lending"
+                  placeholderInitials="AJ"
+                  placeholderFilename="alma-jaramillo-portrait.jpg"
+                />
+              </div>
+              <div className="lg:col-span-7 order-2 lg:order-1 min-w-0 self-start text-left py-0 px-0 sm:px-2 lg:pr-2 lg:pl-8 lg:pt-0 lg:pb-2">
                 <p className="text-[17px] leading-[1.7] text-slate-600 font-sans mb-8 max-w-[42rem]">
                   In every loan I&apos;ve worked on, there&apos;s a point where the numbers stop being just numbers and the
                   decision becomes real.
@@ -437,16 +486,8 @@ export default function About() {
                   <p className="type-body-sm text-slate-500 mt-2 font-normal">Co-Founder</p>
                 </div>
               </div>
-              <div className="lg:col-span-5 order-2 lg:order-2 flex justify-center lg:justify-end mb-8 lg:mb-0">
-                <LeadershipPortrait
-                  src={COFOUNDER_PUBLIC_SRC}
-                  alt="Alma Jaramillo, Co-Founder of Infinite Home Lending"
-                  placeholderInitials="AJ"
-                  placeholderFilename="alma-portrait.jpg"
-                />
-              </div>
             </div>
-          </article>
+          </motion.article>
         </div>
       </section>
 

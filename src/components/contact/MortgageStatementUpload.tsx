@@ -1,4 +1,5 @@
 import { useCallback, useId, useRef, useState, type ChangeEvent, type DragEvent } from "react";
+import { apiUrl } from "../../lib/apiBase";
 import { motion, type HTMLMotionProps } from "motion/react";
 import { Shield, Upload } from "lucide-react";
 
@@ -66,7 +67,7 @@ export function MortgageStatementUpload({
         getOrCreateLeadClientId();
         const form = new FormData();
         form.append("file", file, file.name);
-        const res = await fetch("/api/upload-pdf", {
+        const res = await fetch(apiUrl("/api/upload-pdf"), {
           method: "POST",
           body: form,
         });

@@ -6,7 +6,8 @@ import { getClientAgentModeOverride } from "./agentV3ClientDebug";
 import type { AgentV3OrchestratorInput, AgentV3OrchestratorOutput } from "./agentV3Types";
 
 function apiBase(): string {
-  return (import.meta as unknown as { env?: { VITE_AGENT_V3_API_URL?: string } }).env?.VITE_AGENT_V3_API_URL ?? "";
+  const env = import.meta.env as { VITE_API_BASE_URL?: string; VITE_AGENT_V3_API_URL?: string };
+  return (env.VITE_API_BASE_URL || env.VITE_AGENT_V3_API_URL || "").trim().replace(/\/$/, "");
 }
 
 function buildJsonHeaders(): HeadersInit {
