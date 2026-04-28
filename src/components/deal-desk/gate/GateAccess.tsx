@@ -76,8 +76,8 @@ export function GateAccess() {
   };
 
   const benefits = [
-    "All 5 Deal Desk tools — instant access",
-    "Guided tours with client scripts for every tool",
+    "All 12 Deal Desk tools — instant access",
+    "Nexio AI Strategic Partner on every page",
     "Direct line to our Mortgage Advisors on every deal",
     "No referral quotas — no exclusivity requirements",
     "90-day browser session — enter once, use freely",
