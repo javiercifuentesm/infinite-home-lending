@@ -34,6 +34,11 @@ function MortgageConciergeInner() {
   /** Lead capture form visible — silence reminder / automated agent pings suppressed while true */
   const [isFormOpen, setIsFormOpen] = useState(false);
 
+  const [sessionDropped, setSessionDropped] = useState(false);
+  const sessionDroppedRef = useRef(false);
+  const userEndedRef = useRef(false);
+  const wasConnectedRef = useRef(false);
+
   const coolingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const thinkingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isFormOpenRef = useRef(false);
@@ -132,15 +137,41 @@ function MortgageConciergeInner() {
 
   const onConnect = useCallback(() => {
     console.log("Connected to IHL Mortgage Concierge");
+    wasConnectedRef.current = true;
+    sessionDroppedRef.current = false;
+    setSessionDropped(false);
   }, []);
 
   const onDisconnect = useCallback(() => {
     stopSilenceReminder();
+
+    if (userEndedRef.current) {
+      userEndedRef.current = false;
+      isFormOpenRef.current = false;
+      setIsFormOpen(false);
+      leadSubmittedRef.current = false;
+      setIsOpen(false);
+      setIsMuted(false);
+      sessionDroppedRef.current = false;
+      setSessionDropped(false);
+      return;
+    }
+
+    if (!leadSubmittedRef.current && wasConnectedRef.current) {
+      sessionDroppedRef.current = true;
+      setSessionDropped(true);
+      userEndedRef.current = false;
+      return;
+    }
+
     isFormOpenRef.current = false;
     setIsFormOpen(false);
     leadSubmittedRef.current = false;
     setIsOpen(false);
     setIsMuted(false);
+    sessionDroppedRef.current = false;
+    setSessionDropped(false);
+    userEndedRef.current = false;
   }, [stopSilenceReminder]);
 
   const onError = useCallback((error: unknown) => {
@@ -561,6 +592,10 @@ function MortgageConciergeInner() {
   };
 
   const handleOpen = useCallback(() => {
+    userEndedRef.current = false;
+    wasConnectedRef.current = false;
+    sessionDroppedRef.current = false;
+    setSessionDropped(false);
     if (captureLeadTimeoutRef.current) {
       clearTimeout(captureLeadTimeoutRef.current);
       captureLeadTimeoutRef.current = null;
@@ -584,9 +619,17 @@ function MortgageConciergeInner() {
   }, [startSession, stopSilenceReminder]);
 
   const handleClose = useCallback(() => {
+    userEndedRef.current = true;
     endSession();
     setIsOpen(false);
   }, [endSession]);
+
+  const handleReconnect = useCallback(() => {
+    setSessionDropped(false);
+    sessionDroppedRef.current = false;
+    wasConnectedRef.current = false;
+    startSession({ agentId: AGENT_ID, connectionType: "websocket" });
+  }, [startSession]);
 
   const isConnected = status === "connected";
   const isConnecting = status === "connecting";
@@ -786,7 +829,7 @@ function MortgageConciergeInner() {
 
       {isOpen && (
         <div
-          className="fixed bottom-6 right-6 z-50 w-80 rounded-2xl shadow-2xl overflow-hidden flex flex-col"
+          className="relative fixed bottom-6 right-6 z-50 flex w-80 flex-col overflow-hidden rounded-2xl shadow-2xl"
           style={{ backgroundColor: "#0B2A4A", maxHeight: "720px" }}
           role="dialog"
           aria-label="IHL Mortgage Concierge"
@@ -843,6 +886,50 @@ function MortgageConciergeInner() {
               </button>
             </div>
           </div>
+
+          <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden">
+            {sessionDropped && (
+              <div
+                className="absolute inset-0 z-30 flex flex-col items-center justify-center gap-4 px-6 text-center"
+                style={{
+                  backgroundColor: "#0B2A4A",
+                  borderTop: "1px solid rgba(198, 161, 91, 0.15)",
+                }}
+              >
+                <p className="text-sm font-medium" style={{ color: "#C6A15B" }}>
+                  Connection lost — your conversation is saved.
+                </p>
+                <button
+                  type="button"
+                  onClick={handleReconnect}
+                  className="rounded-lg px-6 py-2.5 text-xs font-semibold uppercase tracking-wide transition-opacity hover:opacity-90"
+                  style={{
+                    background: "linear-gradient(135deg, #C6A15B 0%, #b48e48 100%)",
+                    color: "#0B2A4A",
+                    border: "none",
+                    cursor: "pointer",
+                    boxShadow: "0 4px 24px rgba(198,161,91,0.25)",
+                    minWidth: "200px",
+                  }}
+                >
+                  Reconnect
+                </button>
+                <button
+                  type="button"
+                  onClick={handleClose}
+                  className="text-xs underline-offset-2 transition-opacity hover:opacity-90"
+                  style={{
+                    color: "rgba(247,247,245,0.55)",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    textDecoration: "underline",
+                  }}
+                >
+                  Start over
+                </button>
+              </div>
+            )}
 
           <div
             className="relative flex flex-col items-center justify-center pt-5 pb-3"
@@ -1271,6 +1358,7 @@ function MortgageConciergeInner() {
             <p className="text-xs" style={{ color: "#C6A15B", opacity: 0.6 }}>
               Infinite Home Lending · Your Mortgage Guide
             </p>
+          </div>
           </div>
         </div>
       )}

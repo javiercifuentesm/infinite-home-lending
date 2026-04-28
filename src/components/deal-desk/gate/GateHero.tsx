@@ -13,9 +13,69 @@ export function GateHero({ onStartTour }: GateHeroProps) {
         position: "relative",
         padding: "6rem 1.5rem 5rem",
         textAlign: "center",
+        background: "#0B2A4A",
+        overflow: "hidden",
       }}
     >
-      {/* Animated gold vertical line accent */}
+      {/* Animated gradient mesh orb — gold */}
+      <div
+        style={{
+          position: "absolute",
+          top: "-10%",
+          left: "60%",
+          width: "600px",
+          height: "600px",
+          borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(198,161,91,0.18) 0%, transparent 70%)",
+          filter: "blur(40px)",
+          animation: "orbFloat 8s ease-in-out infinite",
+          pointerEvents: "none",
+        }}
+      />
+      {/* Animated gradient mesh orb — navy deep */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: "-20%",
+          left: "-10%",
+          width: "500px",
+          height: "500px",
+          borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(11,42,74,0.8) 0%, transparent 70%)",
+          filter: "blur(60px)",
+          animation: "orbFloat 10s ease-in-out infinite reverse",
+          pointerEvents: "none",
+        }}
+      />
+      {/* Second gold orb */}
+      <div
+        style={{
+          position: "absolute",
+          top: "40%",
+          left: "10%",
+          width: "400px",
+          height: "400px",
+          borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(198,161,91,0.10) 0%, transparent 70%)",
+          filter: "blur(50px)",
+          animation: "orbFloat 12s ease-in-out infinite",
+          pointerEvents: "none",
+        }}
+      />
+
+      {/* Keyframes injected via style tag */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&display=swap');
+        @keyframes orbFloat {
+          0%, 100% { transform: translateY(0px) scale(1); }
+          50% { transform: translateY(-30px) scale(1.05); }
+        }
+        @keyframes ping {
+          75%, 100% { transform: scale(2); opacity: 0; }
+        }
+      `}</style>
+
+      {/* Vertical gold line accent */}
       <div
         style={{
           position: "absolute",
@@ -40,9 +100,9 @@ export function GateHero({ onStartTour }: GateHeroProps) {
             marginBottom: "2rem",
             background: "rgba(198,161,91,0.08)",
             border: "1px solid rgba(198,161,91,0.25)",
+            backdropFilter: "blur(8px)",
           }}
         >
-          {/* Animated pulse dot */}
           <div style={{ position: "relative", display: "flex", width: "8px", height: "8px" }}>
             <div
               style={{
@@ -187,7 +247,7 @@ export function GateHero({ onStartTour }: GateHeroProps) {
                 fontWeight: 600,
                 textTransform: "uppercase",
                 letterSpacing: "0.1em",
-                background: "rgba(255,255,255,0.04)",
+                background: "rgba(255,255,255,0.06)",
                 border: "1px solid rgba(198,161,91,0.3)",
                 color: "#F7F7F5",
                 cursor: "pointer",
