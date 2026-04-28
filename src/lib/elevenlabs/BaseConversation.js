@@ -209,9 +209,11 @@ export class BaseConversation {
         // Upstream ends the WebSocket when the agent emits the built-in `end_call` tool response.
         // Misconfigured agents often fire this after the first turn, which feels like Luna was "cut off".
         // Opt back into SDK behavior with VITE_LUNA_ALLOW_AGENT_END_CALL=true (users still end via ✕ End).
+        // Bracket env lookup keeps the marker string in the prod bundle (grep for VITE_LUNA_ALLOW_AGENT_END_CALL).
+        const LUNA_AGENT_END_CALL_ENV = "VITE_LUNA_ALLOW_AGENT_END_CALL";
         const allowAgentHangUp = typeof import.meta !== "undefined" &&
             import.meta.env &&
-            import.meta.env.VITE_LUNA_ALLOW_AGENT_END_CALL === "true";
+            import.meta.env[LUNA_AGENT_END_CALL_ENV] === "true";
         if (event.agent_tool_response.tool_name === "end_call" && allowAgentHangUp) {
             this.endSessionWithDetails({
                 reason: "agent",
