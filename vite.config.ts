@@ -13,6 +13,11 @@ export default defineConfig(({mode}) => {
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),
+        // Vendored @elevenlabs/client WebSocketConnection — survives Vercel node_modules cache / skipped postinstall.
+        '@elevenlabs/client/dist/utils/WebSocketConnection.js': path.resolve(
+          __dirname,
+          'src/lib/elevenlabs/WebSocketConnection.js',
+        ),
       },
     },
     server: {
