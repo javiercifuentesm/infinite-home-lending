@@ -64,20 +64,37 @@ const TOOLS = [
 
 export function DealDeskToolGrid() {
   return (
-    <section id="deal-desk-tools" className="scroll-mt-[calc(var(--site-header-height)+0.5rem)] border-t border-slate-200/80 bg-[#F4F6F9] py-14 sm:py-16">
+    <section
+      id="deal-desk-tools"
+      className="scroll-mt-[calc(var(--site-header-height)+0.5rem)] py-14 sm:py-16"
+      style={{
+        background: "rgba(255,255,255,0.02)",
+        borderTop: "1px solid rgba(198,161,91,0.1)",
+      }}
+    >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center gap-3">
-          <span className="inline-flex rounded-full border border-[#C6A15B]/40 bg-white px-3 py-1 font-sans text-[10px] font-semibold uppercase tracking-[0.14em] text-[#854F0B]">
-            Suite complete — playbook + 5 tools live
+          <span
+            className="inline-flex rounded-full px-3 py-1 font-sans text-[10px] font-semibold uppercase tracking-[0.14em]"
+            style={{
+              background: "rgba(198,161,91,0.08)",
+              border: "1px solid rgba(198,161,91,0.25)",
+              color: "#C6A15B",
+            }}
+          >
+            12 Tools Live · Nexio AI · Intelligence Loop
           </span>
-          <h2 className="text-center font-[Georgia,serif] text-2xl font-medium text-[#0B2A4A] sm:text-[1.65rem]">
+          <h2 className="text-center font-[Georgia,serif] text-2xl font-medium text-[#F7F7F5] sm:text-[1.65rem]">
             The Deal Desk Tools
           </h2>
         </div>
-        <p className="mx-auto mt-3 max-w-xl text-center font-sans text-[14px] text-slate-600">
+        <p
+          className="mx-auto mt-3 max-w-xl text-center font-sans text-[14px]"
+          style={{ color: "rgba(247,247,245,0.6)" }}
+        >
           Start with the Agent Playbook, then use five live tools at the moments that move deals — free for Deal Desk partner agents.
         </p>
-        <div className="mt-12 grid gap-6 md:grid-cols-2">
+        <div className="mt-12 grid gap-4 md:grid-cols-2">
           {TOOLS.map((t) => (
             <DealDeskToolCard
               key={t.to}

@@ -130,6 +130,88 @@ function MortgageConciergeInner() {
 
   const clientTools = useMemo(() => ({ captureLead: captureLeadTool }), [captureLeadTool]);
 
+  const onConnect = useCallback(() => {
+    console.log("Connected to IHL Mortgage Concierge");
+  }, []);
+
+  const onDisconnect = useCallback(() => {
+    stopSilenceReminder();
+    isFormOpenRef.current = false;
+    setIsFormOpen(false);
+    leadSubmittedRef.current = false;
+    setIsOpen(false);
+    setIsMuted(false);
+  }, [stopSilenceReminder]);
+
+  const onError = useCallback((error: unknown) => {
+    console.error("Assistant error:", error);
+  }, []);
+
+  const onMessage = useCallback((message: { message?: unknown; role?: string; source?: string; event_id?: number }) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const m = message as any;
+    const raw = m.message;
+    const text =
+      typeof raw === "string" ? raw : raw != null && typeof raw !== "object" ? String(raw) : "";
+    console.log("RAW MESSAGE ROLE:", m.role, "SOURCE:", m.source, "TEXT:", text.slice(0, 50));
+
+    if (!text.trim() || text.startsWith("[SYSTEM")) {
+      return;
+    }
+
+    const role = m.role;
+    const source = m.source;
+
+    let isUser: boolean;
+    if (role === "user") isUser = true;
+    else if (role === "agent" || role === "assistant") isUser = false;
+    else if (source === "user") isUser = true;
+    else if (source === "ai" || source === "agent" || source === "assistant") isUser = false;
+    else isUser = false;
+
+    if (isUser) {
+      setIsThinking(true);
+    }
+
+    setTranscript((prev) => {
+      const last = prev[prev.length - 1];
+      if (
+        last &&
+        last.text === text &&
+        last.role === (isUser ? "user" : "assistant")
+      ) {
+        return prev;
+      }
+
+      const recentDuplicate = prev.slice(-3).some((t) => t.text === text);
+      if (recentDuplicate) return prev;
+
+      return [
+        ...prev,
+        {
+          role: isUser ? "user" : "assistant",
+          text,
+          time: new Date().toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+        },
+      ];
+    });
+  }, []);
+
+  const conversationHookOptions = useMemo(
+    () => ({
+      agentId: AGENT_ID,
+      clientTools,
+      onConnect,
+      onDisconnect,
+      onError,
+      onMessage,
+    }),
+    [clientTools, onConnect, onDisconnect, onError, onMessage],
+  );
+
   useEffect(() => {
     const w = window as unknown as { __ihlThinkingStyleRef?: number };
     w.__ihlThinkingStyleRef = (w.__ihlThinkingStyleRef ?? 0) + 1;
@@ -191,72 +273,9 @@ function MortgageConciergeInner() {
   }, []);
 
   const { startSession, endSession, sendContextualUpdate, sendUserActivity, setVolume, setMuted: setMicMuted, status, isSpeaking } =
-    useConversation({
-    agentId: AGENT_ID,
-    clientTools,
-    onConnect: () => console.log("Connected to IHL Mortgage Concierge"),
-    onDisconnect: () => {
-      stopSilenceReminder();
-      isFormOpenRef.current = false;
-      setIsFormOpen(false);
-      leadSubmittedRef.current = false;
-      setIsOpen(false);
-      setIsMuted(false);
-    },
-    onError: (error) => console.error("Assistant error:", error),
-    onMessage: (message) => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const m = message as any;
-      const raw = m.message;
-      const text =
-        typeof raw === "string" ? raw : raw != null && typeof raw !== "object" ? String(raw) : "";
-      console.log("RAW MESSAGE ROLE:", m.role, "SOURCE:", m.source, "TEXT:", text.slice(0, 50));
+    useConversation(conversationHookOptions);
 
-      if (!text.trim() || text.startsWith("[SYSTEM")) {
-        return;
-      }
-
-      const role = m.role;
-      const source = m.source;
-
-      let isUser: boolean;
-      if (role === "user") isUser = true;
-      else if (role === "agent" || role === "assistant") isUser = false;
-      else if (source === "user") isUser = true;
-      else if (source === "ai" || source === "agent" || source === "assistant") isUser = false;
-      else isUser = false;
-
-      if (isUser) {
-        setIsThinking(true);
-      }
-
-      setTranscript((prev) => {
-        const last = prev[prev.length - 1];
-        if (
-          last &&
-          last.text === text &&
-          last.role === (isUser ? "user" : "assistant")
-        ) {
-          return prev;
-        }
-
-        const recentDuplicate = prev.slice(-3).some((t) => t.text === text);
-        if (recentDuplicate) return prev;
-
-        return [
-          ...prev,
-          {
-            role: isUser ? "user" : "assistant",
-            text,
-            time: new Date().toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-            }),
-          },
-        ];
-      });
-    },
-  });
+  console.log("[MortgageConcierge] useConversation status:", status, "session reinit check");
 
   const rawConversation = useRawConversation();
 
