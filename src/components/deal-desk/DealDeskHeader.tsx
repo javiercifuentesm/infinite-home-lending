@@ -23,7 +23,7 @@ export function DealDeskHeader({ toolTitle, hubOnly = false, className = "" }: P
 
   const sessionDot = (
     <span
-      className="inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-[#3B6D11]"
+      className="inline-block h-1.5 w-1.5 shrink-0 animate-pulse rounded-full bg-[#C6A15B]"
       title="Partner access active — 90-day session"
       aria-label="Partner access active, 90-day session"
     />
@@ -35,8 +35,16 @@ export function DealDeskHeader({ toolTitle, hubOnly = false, className = "" }: P
   };
 
   return (
-    <header className={`border-b border-slate-200/90 bg-white ${className}`}>
-      <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
+    <header
+      className={`relative sticky top-0 z-50 ${className}`}
+      style={{
+        background: "rgba(11, 42, 74, 0.90)",
+        backdropFilter: "blur(20px)",
+        WebkitBackdropFilter: "blur(20px)",
+        borderBottom: "1px solid rgba(198, 161, 91, 0.15)",
+      }}
+    >
+      <div className="relative z-10 mx-auto flex max-w-7xl flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
         <div className="flex min-w-0 flex-wrap items-center gap-3 sm:gap-4">
           {toolTitle ? (
             <p className="font-[Georgia,serif] text-[15px] italic leading-snug text-[#C6A15B] sm:text-[17px]">
@@ -45,7 +53,7 @@ export function DealDeskHeader({ toolTitle, hubOnly = false, className = "" }: P
                 <span>The Deal Desk</span>
               </span>
               <span className="px-1.5 font-sans text-slate-400 not-italic">·</span>
-              <span className="font-sans text-[15px] font-semibold not-italic text-[#0B2A4A] sm:text-[17px]">{toolTitle}</span>
+              <span className="font-sans text-[15px] font-semibold not-italic text-[#F7F7F5] sm:text-[17px]">{toolTitle}</span>
             </p>
           ) : hubOnly ? (
             <p className="flex items-center gap-2 font-[Georgia,serif] text-[15px] italic leading-snug text-[#C6A15B] sm:text-[17px]">
@@ -61,8 +69,8 @@ export function DealDeskHeader({ toolTitle, hubOnly = false, className = "" }: P
               >
                 <IHLLogo className="h-10 w-auto sm:h-11 md:h-12" />
               </Link>
-              <div className="min-w-0 border-l border-slate-200/90 pl-3 sm:pl-4">
-                <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-[#0B2A4A] sm:text-[11px]">Infinite Home Lending</p>
+              <div className="min-w-0 border-l border-[rgba(198,161,91,0.2)] pl-3 sm:pl-4">
+                <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-[#F7F7F5] sm:text-[11px]">Infinite Home Lending</p>
                 <p className="mt-0.5 flex items-center gap-2 font-[Georgia,serif] text-[11px] italic text-[#C6A15B]">
                   {sessionDot}
                   The Deal Desk
@@ -75,41 +83,58 @@ export function DealDeskHeader({ toolTitle, hubOnly = false, className = "" }: P
           <button
             type="button"
             onClick={exitDealDesk}
-            className="font-sans text-[10px] text-slate-500 underline decoration-slate-300 underline-offset-2 transition-colors hover:text-[#0B2A4A]"
+            className="font-sans text-[10px] text-[rgba(247,247,245,0.5)] underline decoration-slate-300 underline-offset-2 transition-colors hover:text-[#C6A15B]"
           >
             ← Exit Deal Desk
           </button>
-          <span className="inline-flex items-center rounded-full border-2 border-[#C6A15B] bg-white px-3 py-1 font-sans text-[9px] font-semibold uppercase tracking-[0.12em] text-[#0B2A4A]">
+          <span
+            className="inline-flex items-center rounded-full px-3 py-1 font-sans text-[9px] font-semibold uppercase tracking-[0.12em]"
+            style={{
+              border: "1px solid rgba(198,161,91,0.35)",
+              background: "rgba(198,161,91,0.08)",
+              color: "#C6A15B",
+            }}
+          >
             For Real Estate Professionals
           </span>
           <div className="flex flex-wrap items-center gap-3">
             <Link
               to="/deal-desk/playbook"
               aria-current={onPlaybookPage ? "page" : undefined}
-              className={`inline-flex max-w-full items-center gap-1.5 rounded-md border bg-gradient-to-r from-[#C6A15B]/[0.12] to-transparent px-2.5 py-1.5 font-sans text-[12px] font-semibold text-[#0B2A4A] shadow-sm transition-[border-color,background-color] hover:border-[#C6A15B]/55 hover:from-[#C6A15B]/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C6A15B]/40 ${
-                onPlaybookPage
-                  ? "border-[#C6A15B] ring-1 ring-[#C6A15B]/35"
-                  : "border-[#C6A15B]/35"
+              className={`inline-flex max-w-full items-center gap-1.5 rounded-md border border-[rgba(198,161,91,0.25)] bg-[rgba(198,161,91,0.08)] px-2.5 py-1.5 font-sans text-[12px] font-semibold text-[#F7F7F5] shadow-sm transition-[border-color,background-color] hover:bg-[rgba(198,161,91,0.15)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#C6A15B]/40 ${
+                onPlaybookPage ? "ring-1 ring-[#C6A15B]/35" : ""
               }`}
             >
-              <BookOpen className="h-3.5 w-3.5 shrink-0 text-[#8b6914]" aria-hidden />
+              <BookOpen className="h-3.5 w-3.5 shrink-0 text-[#C6A15B]" aria-hidden />
               <span className="leading-tight">
                 Agent Playbook
-                <span className="mt-0.5 block font-normal text-[10px] text-slate-600">Step inside — how it all works</span>
+                <span className="mt-0.5 block font-normal text-[10px] text-[rgba(247,247,245,0.45)]">
+                  Step inside — how it all works
+                </span>
               </span>
             </Link>
-            <span className="hidden font-sans text-[12px] text-slate-300 sm:inline" aria-hidden>
+            <span className="hidden font-sans text-[12px] text-[rgba(198,161,91,0.3)] sm:inline" aria-hidden>
               ·
             </span>
             <Link
               to="/deal-desk"
-              className="font-sans text-[12px] font-medium text-[#0B2A4A] underline decoration-[#C6A15B]/40 underline-offset-2 transition-colors hover:text-[#C6A15B]"
+              className="font-sans text-[12px] font-medium text-[rgba(247,247,245,0.65)] underline decoration-[#C6A15B]/40 underline-offset-2 transition-colors hover:text-[#C6A15B]"
             >
               ← All Deal Desk Tools
             </Link>
           </div>
         </div>
       </div>
+      <div
+        style={{
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: "1px",
+          background: "linear-gradient(90deg, transparent, rgba(198,161,91,0.5), transparent)",
+        }}
+      />
     </header>
   );
 }

@@ -2,35 +2,18 @@ import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import {defineConfig, loadEnv} from 'vite';
-import { elevenLabsBaseConversationVendorPlugin } from './vite-plugin-elevenlabs-baseconversation-vendor';
 
 const elevenLabsWebSocketVendor = path.resolve(
   __dirname,
   'src/lib/elevenlabs/WebSocketConnection.js',
 );
-const elevenLabsBaseConversationVendor = path.resolve(
-  __dirname,
-  'src/lib/elevenlabs/BaseConversation.js',
-);
-const elevenLabsBaseConversationSdk = path.resolve(
-  __dirname,
-  'node_modules/@elevenlabs/client/dist/BaseConversation.js',
-);
 
 export default defineConfig(({mode}) => {
   const env = loadEnv(mode, '.', '');
   return {
-    plugins: [
-      elevenLabsBaseConversationVendorPlugin(elevenLabsBaseConversationVendor),
-      react(),
-      tailwindcss(),
-    ],
+    plugins: [react(), tailwindcss()],
     define: {
       'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
-    },
-    // Pre-bundling @elevenlabs/client can bake in the stock BaseConversation before resolve.alias runs.
-    optimizeDeps: {
-      exclude: ['@elevenlabs/client'],
     },
     resolve: {
       alias: [
@@ -38,24 +21,6 @@ export default defineConfig(({mode}) => {
         {
           find: '@elevenlabs/client/dist/utils/WebSocketConnection.js',
           replacement: elevenLabsWebSocketVendor,
-        },
-        // SDK ships BaseConversation at dist/BaseConversation.js (not under dist/utils/).
-        {
-          find: '@elevenlabs/client/dist/BaseConversation.js',
-          replacement: elevenLabsBaseConversationVendor,
-        },
-        {
-          find: '@elevenlabs/client/dist/utils/BaseConversation.js',
-          replacement: elevenLabsBaseConversationVendor,
-        },
-        {
-          find: elevenLabsBaseConversationSdk,
-          replacement: elevenLabsBaseConversationVendor,
-        },
-        // Bundlers resolve this dep to an absolute path under node_modules; string aliases above miss it.
-        {
-          find: /[/\\]node_modules[/\\]@elevenlabs[/\\]client[/\\]dist[/\\]BaseConversation\.js$/,
-          replacement: elevenLabsBaseConversationVendor,
         },
       ],
     },
