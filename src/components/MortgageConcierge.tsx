@@ -264,15 +264,18 @@ function MortgageConciergeInner() {
   sendContextualUpdateRef.current = sendContextualUpdate;
   statusRef.current = status;
 
+  const endSessionRef = useRef(endSession);
+  endSessionRef.current = endSession;
+
   useEffect(() => {
     return () => {
       try {
-        endSession();
+        endSessionRef.current();
       } catch {
         /* ignore */
       }
     };
-  }, [endSession]);
+  }, []);
 
   const isSpeakingRef = useRef(false);
   useEffect(() => {
