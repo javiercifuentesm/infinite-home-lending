@@ -6,6 +6,7 @@ import { createAnalyticsRouter } from "./analyticsRoute";
 import { createUploadUrlRouter } from "./uploadUrlRoute";
 import { createMortgageConciergeSendLeadRouter } from "./mortgageConciergeSendLeadRoute";
 import { createSubmitLeadRouter } from "./submitLeadRoute";
+import { createIntelligenceLoopRouter } from "./intelligenceLoopRoute";
 
 console.log("ENV CHECK:", {
   RESEND_API_KEY: process.env.RESEND_API_KEY ? "✅ PRESENT" : "❌ MISSING",
@@ -38,10 +39,11 @@ app.use("/api", createUploadUrlRouter());
 app.use("/api", createMortgageConciergeSendLeadRouter());
 app.use("/api", createSubmitLeadRouter());
 app.use("/api", createAnalyticsRouter());
+app.use("/api", createIntelligenceLoopRouter());
 
 const port = Number(process.env.PORT ?? process.env.AGENT_V3_SERVER_PORT ?? 8787);
 app.listen(port, "0.0.0.0", () => {
   console.info(
-    `[api] listening on 0.0.0.0:${port}/api (agent-v3, upload-url, send-lead, submit-lead, analytics) | health GET /api/health`,
+    `[api] listening on 0.0.0.0:${port}/api (agent-v3, upload-url, send-lead, submit-lead, analytics, intelligence-loop) | health GET /api/health`,
   );
 });

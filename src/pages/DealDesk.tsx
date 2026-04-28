@@ -5,6 +5,7 @@ import { DealDeskHero } from "../components/deal-desk/DealDeskHero";
 import { DealDeskValueProps } from "../components/deal-desk/DealDeskValueProps";
 import { DealDeskToolGrid } from "../components/deal-desk/DealDeskToolGrid";
 import { DealDeskPartnerCTA } from "../components/deal-desk/DealDeskPartnerCTA";
+import { IntelligenceLoop } from "../components/deal-desk/IntelligenceLoop";
 
 const CANONICAL = "https://www.infinitehomelending.com/deal-desk";
 
@@ -99,6 +100,7 @@ export default function DealDesk() {
       <div className="relative z-10">
         <DealDeskHeader hubOnly />
         <DealDeskHero onExploreClick={scrollToTools} />
+        <IntelligenceLoop />
         <DealDeskValueProps />
         <DealDeskToolGrid />
         <DealDeskPartnerCTA />
