@@ -1,0 +1,25 @@
+diff --git a/node_modules/@elevenlabs/client/dist/utils/WebSocketConnection.js b/node_modules/@elevenlabs/client/dist/utils/WebSocketConnection.js
+index 56b6854..6acad4c 100644
+--- a/node_modules/@elevenlabs/client/dist/utils/WebSocketConnection.js
++++ b/node_modules/@elevenlabs/client/dist/utils/WebSocketConnection.js
+@@ -91,6 +91,8 @@ export class WebSocketConnection extends BaseConnection {
+             const conversationConfig = await new Promise((resolve, reject) => {
+                 socket.addEventListener("open", () => {
+                     const overridesEvent = constructOverrides(config);
++                    // Always send here: this handler runs only after the socket has opened.
++                    // Do not gate on readyState — matches upstream and avoids dropping init if timing differs.
+                     socket?.send(JSON.stringify(overridesEvent));
+                 }, { once: true });
+                 socket.addEventListener("error", event => {
+@@ -136,7 +138,10 @@ export class WebSocketConnection extends BaseConnection {
+         this.socket.close(1000, "User ended conversation");
+     }
+     sendMessage(message) {
+-        this.socket.send(JSON.stringify(message));
++        const ws = this.socket;
++        if (ws && ws.readyState === WebSocket.OPEN) {
++            ws.send(JSON.stringify(message));
++        }
+     }
+     addListener(listener) {
+         this.outputListeners.add(listener);

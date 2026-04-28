@@ -30,17 +30,17 @@ function MortgageConciergeInner() {
   const [isThinking, setIsThinking] = useState(false);
   const [isCoolingDown, setIsCoolingDown] = useState(false);
   const [showLeadFormRecovery, setShowLeadFormRecovery] = useState(false);
+  /** Lead capture form visible — silence reminder / automated agent pings suppressed while true */
+  const [isFormOpen, setIsFormOpen] = useState(false);
 
   const coolingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const thinkingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const leadNotifyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isFormOpenRef = useRef(false);
   const leadSubmittedRef = useRef(false);
   const setMicMutedRef = useRef<((muted: boolean) => void) | null>(null);
   const sendContextualUpdateRef = useRef<((text: string) => void) | null>(null);
   const statusRef = useRef<"disconnected" | "connecting" | "connected" | "disconnecting">("disconnected");
   const silenceReminderRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const startSilenceReminderRef = useRef<() => void>(() => {});
   const captureLeadAttemptsRef = useRef(0);
   const captureLeadTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const triggerLeadFormRef = useRef<(() => void) | null>(null);
@@ -64,6 +64,7 @@ function MortgageConciergeInner() {
     leadSubmittedRef.current = false;
     captureLeadAttemptsRef.current += 1;
     isFormOpenRef.current = true;
+    setIsFormOpen(true);
     setIsOpen(true);
     setShowLeadForm(true);
     setLeadSubmitted(false);
@@ -83,22 +84,13 @@ function MortgageConciergeInner() {
         /* ignore */
       }
     }
-
-    setTimeout(() => {
-      if (isFormOpenRef.current) {
-        startSilenceReminderRef.current?.();
-      }
-    }, 1000);
   }, []);
 
   triggerLeadFormRef.current = triggerLeadForm;
 
   const captureLeadTool = useCallback(() => {
     console.log("✅ captureLeadTool FIRED");
-    if (leadNotifyTimeoutRef.current) {
-      clearTimeout(leadNotifyTimeoutRef.current);
-      leadNotifyTimeoutRef.current = null;
-    }
+    setIsFormOpen(true);
 
     if (sendContextualUpdateRef.current && statusRef.current === "connected") {
       try {
@@ -120,21 +112,12 @@ function MortgageConciergeInner() {
     } else {
       leadSubmittedRef.current = false;
       isFormOpenRef.current = true;
+      setIsFormOpen(true);
       setIsOpen(true);
       setShowLeadForm(true);
       setLeadSubmitted(false);
       setLeadData({ name: "", email: "", phone: "", bestDay: "", bestTime: "", preferredContact: "" });
     }
-
-    leadNotifyTimeoutRef.current = setTimeout(() => {
-      if (sendContextualUpdateRef.current && statusRef.current === "connected") {
-        try {
-          sendContextualUpdateRef.current("MANDATORY SILENCE IN EFFECT. Form is open. Do not speak.");
-        } catch {
-          /* ignore */
-        }
-      }
-    }, 500);
 
     return (
       "FORM IS NOW DISPLAYED ON SCREEN. " +
@@ -214,13 +197,10 @@ function MortgageConciergeInner() {
     onDisconnect: () => {
       stopSilenceReminder();
       isFormOpenRef.current = false;
+      setIsFormOpen(false);
       leadSubmittedRef.current = false;
       setIsOpen(false);
       setIsMuted(false);
-      if (leadNotifyTimeoutRef.current) {
-        clearTimeout(leadNotifyTimeoutRef.current);
-        leadNotifyTimeoutRef.current = null;
-      }
     },
     onError: (error) => console.error("Assistant error:", error),
     onMessage: (message) => {
@@ -279,37 +259,6 @@ function MortgageConciergeInner() {
   setMicMutedRef.current = setMicMuted;
   sendContextualUpdateRef.current = sendContextualUpdate;
   statusRef.current = status;
-
-  const startSilenceReminder = useCallback(() => {
-    if (silenceReminderRef.current) {
-      clearInterval(silenceReminderRef.current);
-      silenceReminderRef.current = null;
-    }
-
-    silenceReminderRef.current = setInterval(() => {
-      if (isFormOpenRef.current && !leadSubmittedRef.current && statusRef.current === "connected") {
-        try {
-          sendContextualUpdate(
-            "FORM IS STILL OPEN. The visitor is still filling out the contact form. " +
-              "Do not speak. Do not say anything. Complete silence required. " +
-              "Wait for the system message confirming form submission.",
-          );
-        } catch {
-          /* ignore */
-        }
-      } else {
-        if (!isFormOpenRef.current) {
-          console.log("Silence reminder stopping — isFormOpenRef is false");
-        }
-        if (silenceReminderRef.current) {
-          clearInterval(silenceReminderRef.current);
-          silenceReminderRef.current = null;
-        }
-      }
-    }, 2000);
-  }, [sendContextualUpdate]);
-
-  startSilenceReminderRef.current = startSilenceReminder;
 
   const isSpeakingRef = useRef(false);
   useEffect(() => {
@@ -548,6 +497,7 @@ function MortgageConciergeInner() {
     }
 
     isFormOpenRef.current = false;
+    setIsFormOpen(false);
     leadSubmittedRef.current = true;
     setLeadSubmitted(true);
     setShowLeadForm(false);
@@ -558,11 +508,6 @@ function MortgageConciergeInner() {
       } catch {
         /* ignore */
       }
-    }
-
-    if (leadNotifyTimeoutRef.current) {
-      clearTimeout(leadNotifyTimeoutRef.current);
-      leadNotifyTimeoutRef.current = null;
     }
 
     if (statusRef.current === "connected") {
@@ -582,10 +527,6 @@ function MortgageConciergeInner() {
   };
 
   const handleOpen = useCallback(() => {
-    if (leadNotifyTimeoutRef.current) {
-      clearTimeout(leadNotifyTimeoutRef.current);
-      leadNotifyTimeoutRef.current = null;
-    }
     if (captureLeadTimeoutRef.current) {
       clearTimeout(captureLeadTimeoutRef.current);
       captureLeadTimeoutRef.current = null;
@@ -601,6 +542,7 @@ function MortgageConciergeInner() {
     setLeadSubmitted(false);
     setLeadData({ name: "", email: "", phone: "", bestDay: "", bestTime: "", preferredContact: "" });
     isFormOpenRef.current = false;
+    setIsFormOpen(false);
     leadSubmittedRef.current = false;
     setIsCoolingDown(false);
     setIsOpen(true);
@@ -751,9 +693,6 @@ function MortgageConciergeInner() {
       if (thinkingTimeoutRef.current) {
         clearTimeout(thinkingTimeoutRef.current);
         thinkingTimeoutRef.current = null;
-      }
-      if (leadNotifyTimeoutRef.current) {
-        clearTimeout(leadNotifyTimeoutRef.current);
       }
       if (coolingTimeoutRef.current) clearTimeout(coolingTimeoutRef.current);
       if (captureLeadTimeoutRef.current) clearTimeout(captureLeadTimeoutRef.current);
@@ -1093,6 +1032,7 @@ function MortgageConciergeInner() {
                     onClick={() => {
                       stopSilenceReminder();
                       isFormOpenRef.current = false;
+                      setIsFormOpen(false);
                       leadSubmittedRef.current = false;
                       setShowLeadForm(false);
                       if (status === "connected") {
