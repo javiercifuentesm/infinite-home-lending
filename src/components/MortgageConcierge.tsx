@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 const IHL_THINKING_STYLE_ID = "ihl-thinking-animations";
 import { jsPDF } from "jspdf";
-import { ConversationProvider, useConversation, useRawConversation } from "@elevenlabs/react";
+import { useConversation, useRawConversation } from "@elevenlabs/react";
 import { sendLeadEmail } from "../api/sendLead";
 
 const AGENT_ID = "agent_3401kpnqkz31f85a1efq42k7fn9e";
@@ -44,11 +45,11 @@ function MortgageConciergeInner() {
   const captureLeadAttemptsRef = useRef(0);
   const captureLeadTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const triggerLeadFormRef = useRef<(() => void) | null>(null);
+  const leadFormAnchorRef = useRef<HTMLDivElement | null>(null);
   const agentSpokenForThinkingRef = useRef(false);
   const prevIsSpeakingForThinkingRef = useRef(false);
 
   const stopSilenceReminder = useCallback(() => {
-    console.log("stopSilenceReminder called from:", new Error().stack?.split("\n")[2]);
     if (silenceReminderRef.current) {
       clearInterval(silenceReminderRef.current);
       silenceReminderRef.current = null;
@@ -206,9 +207,12 @@ function MortgageConciergeInner() {
     onMessage: (message) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const m = message as any;
-      console.log("RAW MESSAGE ROLE:", m.role, "SOURCE:", m.source, "TEXT:", message.message?.substring(0, 50));
+      const raw = m.message;
+      const text =
+        typeof raw === "string" ? raw : raw != null && typeof raw !== "object" ? String(raw) : "";
+      console.log("RAW MESSAGE ROLE:", m.role, "SOURCE:", m.source, "TEXT:", text.slice(0, 50));
 
-      if (!message.message || message.message.trim() === "" || message.message.startsWith("[SYSTEM")) {
+      if (!text.trim() || text.startsWith("[SYSTEM")) {
         return;
       }
 
@@ -230,20 +234,20 @@ function MortgageConciergeInner() {
         const last = prev[prev.length - 1];
         if (
           last &&
-          last.text === message.message &&
+          last.text === text &&
           last.role === (isUser ? "user" : "assistant")
         ) {
           return prev;
         }
 
-        const recentDuplicate = prev.slice(-3).some((t) => t.text === message.message);
+        const recentDuplicate = prev.slice(-3).some((t) => t.text === text);
         if (recentDuplicate) return prev;
 
         return [
           ...prev,
           {
             role: isUser ? "user" : "assistant",
-            text: message.message,
+            text,
             time: new Date().toLocaleTimeString([], {
               hour: "2-digit",
               minute: "2-digit",
@@ -259,6 +263,16 @@ function MortgageConciergeInner() {
   setMicMutedRef.current = setMicMuted;
   sendContextualUpdateRef.current = sendContextualUpdate;
   statusRef.current = status;
+
+  useEffect(() => {
+    return () => {
+      try {
+        endSession();
+      } catch {
+        /* ignore */
+      }
+    };
+  }, [endSession]);
 
   const isSpeakingRef = useRef(false);
   useEffect(() => {
@@ -556,6 +570,11 @@ function MortgageConciergeInner() {
 
   const isConnected = status === "connected";
   const isConnecting = status === "connecting";
+
+  useLayoutEffect(() => {
+    if (!showLeadForm || leadSubmitted) return;
+    leadFormAnchorRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [showLeadForm, leadSubmitted]);
 
   useEffect(() => {
     if (!showLeadForm) return;
@@ -913,7 +932,7 @@ function MortgageConciergeInner() {
               )}
 
             {showLeadForm && !leadSubmitted && (
-              <div id="ihl-lead-form" className="flex flex-col px-4 py-2 gap-2" ref={(el) => { if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}>
+              <div id="ihl-lead-form" className="flex flex-col px-4 py-2 gap-2" ref={leadFormAnchorRef}>
                 <p className="text-sm font-semibold" style={{ color: "#C6A15B" }}>
                   Connect with a Mortgage Advisor
                 </p>
@@ -1240,9 +1259,9 @@ function MortgageConciergeInner() {
 }
 
 export default function MortgageConcierge() {
-  return (
-    <ConversationProvider>
-      <MortgageConciergeInner />
-    </ConversationProvider>
-  );
+  const location = useLocation();
+  if (location.pathname.startsWith("/deal-desk")) {
+    return null;
+  }
+  return <MortgageConciergeInner />;
 }

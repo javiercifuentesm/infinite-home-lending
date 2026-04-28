@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import { ConversationProvider } from "@elevenlabs/react";
 import { useEffect } from "react";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -47,12 +48,6 @@ const ScrollToTop = () => {
   return null;
 };
 
-const MortgageConciergeWhenNotDealDesk = () => {
-  const location = useLocation();
-  const isDealDesk = location.pathname.startsWith("/deal-desk");
-  return !isDealDesk ? <MortgageConcierge /> : null;
-};
-
 const FooterWhenNotAnalytics = () => {
   const { pathname } = useLocation();
   if (pathname === "/analytics") return null;
@@ -62,10 +57,11 @@ const FooterWhenNotAnalytics = () => {
 export default function App() {
   return (
     <Router>
+      <ConversationProvider>
       <MortgageAgentProvider>
         <AgentV2Provider>
         <ScrollToTop />
-        <MortgageConciergeWhenNotDealDesk />
+        <MortgageConcierge />
         <div className="min-h-screen bg-white font-sans text-slate-900 selection:bg-slate-900 selection:text-white">
           <Navbar />
           <main>
@@ -111,6 +107,7 @@ export default function App() {
         </div>
         </AgentV2Provider>
       </MortgageAgentProvider>
+      </ConversationProvider>
     </Router>
   );
 }
