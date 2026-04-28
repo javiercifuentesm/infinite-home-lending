@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import DealDeskAssistant from "../../components/DealDeskAssistant";
+import Nexio from "../../components/Nexio";
 import LoanMatchmakerCalculator from "../../components/deal-desk/loan-matchmaker/LoanMatchmakerCalculator";
 
 const CANONICAL = "https://www.infinitehomelending.com/deal-desk/loan-matchmaker";
@@ -37,7 +37,7 @@ export default function LoanMatchmaker() {
   return (
     <div className="pt-[calc(var(--site-header-height)+0.25rem)]">
       <LoanMatchmakerCalculator />
-      <DealDeskAssistant />
+      <Nexio />
     </div>
   );
 }

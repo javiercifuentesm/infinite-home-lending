@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import DealDeskAssistant from "../../components/DealDeskAssistant";
+import Nexio from "../../components/Nexio";
 import OOCalculator from "../../components/deal-desk/offer-optimizer/OOCalculator";
 
 const CANONICAL = "https://www.infinitehomelending.com/deal-desk/offer-optimizer";
@@ -37,7 +37,7 @@ export default function OfferOptimizer() {
   return (
     <div className="pt-[calc(var(--site-header-height)+0.25rem)]">
       <OOCalculator />
-      <DealDeskAssistant />
+      <Nexio />
     </div>
   );
 }

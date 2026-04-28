@@ -6,11 +6,10 @@ const IHL_THINKING_STYLE_ID = "ihl-thinking-animations";
 
 const AGENT_ID = "agent_1001kpnehp1vfx9t2pjy4nb2pz8m";
 
-const PDF_ASSISTANT_LABEL = "Sarah — Deal Desk Assistant";
+const PDF_ASSISTANT_LABEL = "Nexio — IHL Strategic Partner";
 
-function DealDeskAssistantInner() {
+function NexioInner() {
   const [isOpen, setIsOpen] = useState(false);
-  const [textInput, setTextInput] = useState("");
   const [isMuted, setIsMuted] = useState(false);
   const [transcript, setTranscript] = useState<
     { role: "user" | "assistant"; text: string; time: string; eventId?: number }[]
@@ -18,8 +17,6 @@ function DealDeskAssistantInner() {
   const [isThinking, setIsThinking] = useState(false);
   const [isCoolingDown, setIsCoolingDown] = useState(false);
 
-  const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const thinkingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const coolingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const agentSpokenForThinkingRef = useRef(false);
   const prevIsSpeakingForThinkingRef = useRef(false);
@@ -84,53 +81,43 @@ function DealDeskAssistantInner() {
     };
   }, []);
 
-  const { startSession, endSession, sendUserMessage, sendUserActivity, setVolume, setMuted: setMicMuted, status, isSpeaking, message } =
+  const { startSession, endSession, sendUserActivity, setVolume, setMuted: setMicMuted, status, isSpeaking } =
     useConversation({
-    agentId: AGENT_ID,
-    onConnect: () => console.log("Connected to Deal Desk Assistant"),
-    onDisconnect: () => setIsOpen(false),
-    onError: (error) => console.error("Assistant error:", error),
-    onMessage: (payload) => {
-      const text = payload.message;
-      if (text == null || String(text).trim() === "") return;
-      const transcriptRole = payload.role === "user" ? "user" : "assistant";
-      if (transcriptRole === "user") {
-        setIsThinking(true);
-      }
-      const time = new Date().toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      });
-      const eventId = payload.event_id;
-
-      setTranscript((prev) => {
-        const last = prev[prev.length - 1];
-
-        if (eventId !== undefined && last?.eventId === eventId) {
-          if (last.text === text) return prev;
-          return [...prev.slice(0, -1), { ...last, text, time, eventId }];
+      agentId: AGENT_ID,
+      onConnect: () => console.log("Connected to Nexio"),
+      onDisconnect: () => setIsOpen(false),
+      onError: (error) => console.error("Assistant error:", error),
+      onMessage: (payload) => {
+        const text = payload.message;
+        if (text == null || String(text).trim() === "") return;
+        const transcriptRole = payload.role === "user" ? "user" : "assistant";
+        if (transcriptRole === "user") {
+          setIsThinking(true);
         }
+        const time = new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+        const eventId = payload.event_id;
 
-        if (last && last.role === transcriptRole && last.text === text) {
-          return prev;
-        }
+        setTranscript((prev) => {
+          const last = prev[prev.length - 1];
 
-        return [...prev, { role: transcriptRole, text, time, eventId }];
-      });
-    },
-  });
+          if (eventId !== undefined && last?.eventId === eventId) {
+            if (last.text === text) return prev;
+            return [...prev.slice(0, -1), { ...last, text, time, eventId }];
+          }
+
+          if (last && last.role === transcriptRole && last.text === text) {
+            return prev;
+          }
+
+          return [...prev, { role: transcriptRole, text, time, eventId }];
+        });
+      },
+    });
 
   const rawConversation = useRawConversation();
-
-  const statusRef = useRef(status);
-  useEffect(() => {
-    statusRef.current = status;
-  }, [status]);
-
-  const isSpeakingRef = useRef(false);
-  useEffect(() => {
-    isSpeakingRef.current = isSpeaking;
-  }, [isSpeaking]);
 
   const downloadPDF = useCallback(() => {
     const doc = new jsPDF();
@@ -147,7 +134,7 @@ function DealDeskAssistantInner() {
     doc.text("Infinite Home Lending", margin, 18);
     doc.setFontSize(10);
     doc.setFont("helvetica", "normal");
-    doc.text("Deal Desk Conversation Transcript", margin, 28);
+    doc.text("Nexio · Strategic Partner — Conversation Transcript", margin, 28);
     doc.setTextColor(255, 255, 255);
     doc.text(
       new Date().toLocaleDateString("en-US", {
@@ -199,7 +186,7 @@ function DealDeskAssistantInner() {
       290,
     );
 
-    doc.save(`IHL-Conversation-${Date.now()}.pdf`);
+    doc.save(`IHL-Nexio-Conversation-${Date.now()}.pdf`);
   }, [transcript]);
 
   const handleOpen = useCallback(() => {
@@ -266,10 +253,6 @@ function DealDeskAssistantInner() {
 
   useEffect(() => {
     if (!isConnected) {
-      if (typingTimeoutRef.current) {
-        clearTimeout(typingTimeoutRef.current);
-        typingTimeoutRef.current = null;
-      }
       setIsMuted(false);
     }
   }, [isConnected]);
@@ -279,7 +262,6 @@ function DealDeskAssistantInner() {
     try {
       if (isSpeaking) {
         setMicMuted(true);
-        // Sarah is speaking — only explicit Stop button should end her turn; mic stays muted
       } else {
         setMicMuted(false);
       }
@@ -290,32 +272,9 @@ function DealDeskAssistantInner() {
 
   useEffect(() => {
     return () => {
-      if (typingTimeoutRef.current) {
-        clearTimeout(typingTimeoutRef.current);
-      }
-      if (thinkingTimeoutRef.current) {
-        clearTimeout(thinkingTimeoutRef.current);
-        thinkingTimeoutRef.current = null;
-      }
       if (coolingTimeoutRef.current) clearTimeout(coolingTimeoutRef.current);
     };
   }, []);
-
-  const handleSend = useCallback(() => {
-    if (isSpeaking) return;
-    if (textInput.trim() && status === "connected") {
-      if (typingTimeoutRef.current) {
-        clearTimeout(typingTimeoutRef.current);
-        typingTimeoutRef.current = null;
-      }
-      if (status === "connected") {
-        setMicMuted(false);
-      }
-      sendUserMessage(textInput.trim());
-      setTextInput("");
-      setIsThinking(true);
-    }
-  }, [textInput, status, isSpeaking, sendUserMessage, setMicMuted]);
 
   return (
     <>
@@ -323,8 +282,12 @@ function DealDeskAssistantInner() {
         <button
           type="button"
           onClick={handleOpen}
-          className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-5 py-3 rounded-full shadow-lg transition-all hover:opacity-90 hover:shadow-xl"
-          style={{ backgroundColor: "#0B2A4A", color: "#C6A15B" }}
+          className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-6 py-3 rounded-full shadow-lg transition-all hover:opacity-90 hover:shadow-xl"
+          style={{
+            backgroundColor: "#0B2A4A",
+            color: "#C6A15B",
+            border: "1px solid rgba(198,161,91,0.3)",
+          }}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -342,7 +305,7 @@ function DealDeskAssistantInner() {
             <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
             <line x1="12" y1="19" x2="12" y2="22" />
           </svg>
-          <span className="text-sm font-semibold tracking-wide whitespace-nowrap">Ask the Deal Desk Assistant</span>
+          <span className="text-sm font-semibold tracking-wide whitespace-nowrap">Ask Nexio</span>
         </button>
       )}
 
@@ -351,7 +314,7 @@ function DealDeskAssistantInner() {
           className="fixed bottom-6 right-6 z-50 w-80 rounded-2xl shadow-2xl overflow-hidden flex flex-col"
           style={{ backgroundColor: "#0B2A4A", maxHeight: "480px" }}
           role="dialog"
-          aria-label="Deal Desk Assistant"
+          aria-label="Nexio — Strategic Partner"
         >
           <div
             className="flex items-center justify-between px-4 py-3 border-b"
@@ -365,7 +328,7 @@ function DealDeskAssistantInner() {
                 }}
               />
               <span className="text-sm font-semibold" style={{ color: "#C6A15B" }}>
-                Deal Desk Assistant
+                Nexio · Strategic Partner
               </span>
             </div>
             <div className="flex items-center">
@@ -390,7 +353,7 @@ function DealDeskAssistantInner() {
                   }}
                   className="text-xs opacity-60 hover:opacity-100 transition-opacity mr-2"
                   style={{ color: "#F7F7F5" }}
-                  title={isMuted ? "Unmute Sarah" : "Mute Sarah"}
+                  title={isMuted ? "Unmute Nexio" : "Mute Nexio"}
                 >
                   {isMuted ? "🔇" : "🔊"}
                 </button>
@@ -487,157 +450,95 @@ function DealDeskAssistantInner() {
                     zIndex: 2,
                   }}
                 />
-
               </div>
             </div>
-
           </div>
 
           {isConnected && (
-            <>
-            <div className="px-4 pb-2 flex gap-2 items-end">
-              <textarea
-                value={textInput}
-                onChange={(e) => {
-                  setTextInput(e.target.value);
-                  e.target.style.height = "auto";
-                  e.target.style.height = `${e.target.scrollHeight}px`;
-
-                  if (status === "connected") {
-                    setMicMuted(true);
-                  }
-
-                  if (typingTimeoutRef.current) {
-                    clearTimeout(typingTimeoutRef.current);
-                  }
-
-                  typingTimeoutRef.current = setTimeout(() => {
-                    if (statusRef.current === "connected" && !isSpeakingRef.current) {
-                      setMicMuted(false);
-                    }
-                  }, 1500);
-                }}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && !e.shiftKey && textInput.trim() && !isSpeaking) {
-                    e.preventDefault();
-                    handleSend();
-                  }
-                }}
-                placeholder="🎤 Talk or type your question..."
-                rows={1}
-                style={{
-                  backgroundColor: "#0d3560",
-                  color: "#F7F7F5",
-                  border: "1px solid #C6A15B44",
-                  resize: "none",
-                  overflow: "hidden",
-                  minHeight: "36px",
-                  maxHeight: "120px",
-                }}
-                className="min-w-0 flex-1 rounded-lg px-3 py-2 text-sm outline-none"
-              />
-              <button
-                type="button"
-                onClick={handleSend}
-                disabled={!textInput.trim() || isSpeaking}
-                className="rounded-lg p-2 transition-opacity hover:opacity-80 disabled:opacity-40 flex-shrink-0"
-                style={{ backgroundColor: "#C6A15B", color: "#0B2A4A" }}
-                title="Send message"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <line x1="22" y1="2" x2="11" y2="13" />
-                  <polygon points="22 2 15 22 11 13 2 9 22 2" />
-                </svg>
-              </button>
-            </div>
-            <div className="flex items-center gap-2 px-4 pb-2">
-              <div
-                className="w-2 h-2 rounded-full flex-shrink-0"
-                style={{
-                  backgroundColor: isSpeaking ? "#C6A15B" : isMuted ? "#6b7280" : "#22c55e",
-                  boxShadow: isSpeaking ? "0 0 6px #C6A15B" : isMuted ? "none" : "0 0 6px #22c55e",
-                }}
-              />
-              <span className="text-xs" style={{ color: "#F7F7F5", opacity: 0.6 }}>
-                {isSpeaking
-                  ? "Sarah is speaking..."
-                  : isMuted
-                    ? "Mic muted"
-                    : "Mic active"}
-              </span>
-
-              {isSpeaking && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    try {
-                      const c = rawConversation as (typeof rawConversation) & {
-                        output?: { interrupt?: (resetDuration?: number) => void };
-                      };
-                      if (c?.output && typeof c.output.interrupt === "function") {
-                        c.output.interrupt(0);
-                        sendUserActivity();
-                      } else {
-                        setVolume({ volume: 0 });
-                        setTimeout(() => {
-                          try {
-                            setVolume({ volume: 1 });
-                          } catch {
-                            /* ignore */
-                          }
-                        }, 100);
-                        sendUserActivity();
-                      }
-                    } catch {
-                      /* ignore */
-                    }
-                  }}
-                  title="Stop Sarah"
-                  onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#C6A15B44";
-                    (e.currentTarget as HTMLButtonElement).style.borderColor = "#C6A15B";
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#C6A15B22";
-                    (e.currentTarget as HTMLButtonElement).style.borderColor = "#C6A15B66";
-                  }}
+            <div style={{ borderTop: "1px solid #C6A15B22", flexShrink: 0 }}>
+              <div className="px-4 pb-2 flex items-center justify-center gap-2">
+                <span className="text-xs text-center" style={{ color: "#C6A15B", opacity: 0.6 }}>
+                  🎤 Speak with Nexio
+                </span>
+              </div>
+              <div className="flex items-center gap-2 px-4 pb-2">
+                <div
+                  className="w-2 h-2 rounded-full flex-shrink-0"
                   style={{
-                    width: "18px",
-                    height: "18px",
-                    borderRadius: "4px",
-                    backgroundColor: "#C6A15B22",
-                    border: "1px solid #C6A15B66",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    cursor: "pointer",
-                    transition: "all 0.2s ease",
-                    flexShrink: 0,
-                    marginLeft: "2px",
+                    backgroundColor: isSpeaking ? "#C6A15B" : isMuted ? "#6b7280" : "#22c55e",
+                    boxShadow: isSpeaking ? "0 0 6px #C6A15B" : isMuted ? "none" : "0 0 6px #22c55e",
                   }}
-                >
-                  <div
-                    style={{
-                      width: "6px",
-                      height: "6px",
-                      borderRadius: "1px",
-                      backgroundColor: "#C6A15B",
+                />
+                <span className="text-xs" style={{ color: "#F7F7F5", opacity: 0.6 }}>
+                  {isSpeaking
+                    ? "Nexio is speaking..."
+                    : isMuted
+                      ? "Mic muted"
+                      : "Mic active"}
+                </span>
+
+                {isSpeaking && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      try {
+                        const c = rawConversation as (typeof rawConversation) & {
+                          output?: { interrupt?: (resetDuration?: number) => void };
+                        };
+                        if (c?.output && typeof c.output.interrupt === "function") {
+                          c.output.interrupt(0);
+                          sendUserActivity();
+                        } else {
+                          setVolume({ volume: 0 });
+                          setTimeout(() => {
+                            try {
+                              setVolume({ volume: 1 });
+                            } catch {
+                              /* ignore */
+                            }
+                          }, 100);
+                          sendUserActivity();
+                        }
+                      } catch {
+                        /* ignore */
+                      }
                     }}
-                  />
-                </button>
-              )}
+                    title="Stop Nexio"
+                    onMouseEnter={(e) => {
+                      (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#C6A15B44";
+                      (e.currentTarget as HTMLButtonElement).style.borderColor = "#C6A15B";
+                    }}
+                    onMouseLeave={(e) => {
+                      (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#C6A15B22";
+                      (e.currentTarget as HTMLButtonElement).style.borderColor = "#C6A15B66";
+                    }}
+                    style={{
+                      width: "18px",
+                      height: "18px",
+                      borderRadius: "4px",
+                      backgroundColor: "#C6A15B22",
+                      border: "1px solid #C6A15B66",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      cursor: "pointer",
+                      transition: "all 0.2s ease",
+                      flexShrink: 0,
+                      marginLeft: "2px",
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: "6px",
+                        height: "6px",
+                        borderRadius: "1px",
+                        backgroundColor: "#C6A15B",
+                      }}
+                    />
+                  </button>
+                )}
+              </div>
             </div>
-            </>
           )}
 
           {isConnected && (
@@ -677,14 +578,14 @@ function DealDeskAssistantInner() {
                   margin: 0,
                 }}
               >
-                This is our Virtual IHL Deal Desk Assistant — not licensed mortgage advice. All scenarios are estimates only. Consult a licensed IHL loan officer before advising clients.
+                Nexio is IHL&apos;s AI Strategic Partner — built for licensed real estate professionals. All outputs are educational and do not constitute mortgage advice or loan commitments.
               </p>
             </div>
           )}
 
           <div className="px-4 py-3 text-center border-t" style={{ borderColor: "#C6A15B33" }}>
             <p className="text-xs" style={{ color: "#C6A15B", opacity: 0.6 }}>
-              Infinite Home Lending · Deal Desk
+              Infinite Home Lending · Nexio · Strategic Intelligence
             </p>
           </div>
         </div>
@@ -693,10 +594,10 @@ function DealDeskAssistantInner() {
   );
 }
 
-export default function DealDeskAssistant() {
+export default function Nexio() {
   return (
     <ConversationProvider>
-      <DealDeskAssistantInner />
+      <NexioInner />
     </ConversationProvider>
   );
 }

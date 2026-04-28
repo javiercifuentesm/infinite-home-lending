@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import DealDeskAssistant from "../../components/DealDeskAssistant";
+import Nexio from "../../components/Nexio";
 import NARScriptLibrary from "../../components/deal-desk/nar-scripts/NARScriptLibrary";
 
 const CANONICAL = "https://www.infinitehomelending.com/deal-desk/nar-scripts";
@@ -37,7 +37,7 @@ export default function NARScripts() {
   return (
     <div className="pt-[calc(var(--site-header-height)+0.25rem)]">
       <NARScriptLibrary />
-      <DealDeskAssistant />
+      <Nexio />
     </div>
   );
 }

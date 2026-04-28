@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import DealDeskAssistant from "../../components/DealDeskAssistant";
+import Nexio from "../../components/Nexio";
 import LBCalculator from "../../components/deal-desk/listing-boost/LBCalculator";
 
 const CANONICAL = "https://www.infinitehomelending.com/deal-desk/listing-boost";
@@ -37,7 +37,7 @@ export default function ListingBoost() {
   return (
     <div className="pt-[calc(var(--site-header-height)+0.25rem)]">
       <LBCalculator />
-      <DealDeskAssistant />
+      <Nexio />
     </div>
   );
 }

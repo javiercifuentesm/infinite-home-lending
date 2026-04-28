@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import DealDeskAssistant from "../../components/DealDeskAssistant";
+import Nexio from "../../components/Nexio";
 import CQCalculator from "../../components/deal-desk/client-qualifier/CQCalculator";
 
 const CANONICAL = "https://www.infinitehomelending.com/deal-desk/client-qualifier";
@@ -37,7 +37,7 @@ export default function ClientQualifier() {
   return (
     <div className="pt-[calc(var(--site-header-height)+0.25rem)]">
       <CQCalculator />
-      <DealDeskAssistant />
+      <Nexio />
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import DealDeskAssistant from "../../components/DealDeskAssistant";
+import Nexio from "../../components/Nexio";
 import SNSCalculator from "../../components/deal-desk/seller-net-sheet/SNSCalculator";
 
 const CANONICAL = "https://www.infinitehomelending.com/deal-desk/net-sheet";
@@ -37,7 +37,7 @@ export default function SellerNetSheet() {
   return (
     <div className="pt-[calc(var(--site-header-height)+0.25rem)]">
       <SNSCalculator />
-      <DealDeskAssistant />
+      <Nexio />
     </div>
   );
 }

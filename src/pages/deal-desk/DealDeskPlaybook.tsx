@@ -12,7 +12,7 @@ import { PlaybookAssumableGuide } from "../../components/deal-desk/playbook/Play
 import { PlaybookSellerNetGuide } from "../../components/deal-desk/playbook/PlaybookSellerNetGuide";
 import { PlaybookCompletion } from "../../components/deal-desk/playbook/PlaybookCompletion";
 import { PlaybookToolGuides } from "../../components/deal-desk/playbook/PlaybookToolGuides";
-import DealDeskAssistant from "../../components/DealDeskAssistant";
+import Nexio from "../../components/Nexio";
 import { printPlaybookQuickReference } from "../../utils/generatePlaybookPDF";
 
 const CANONICAL = "https://www.infinitehomelending.com/deal-desk/playbook";
@@ -190,7 +190,7 @@ export default function DealDeskPlaybook() {
           </footer>
         </div>
       </div>
-      <DealDeskAssistant />
+      <Nexio />
     </div>
   );
 }

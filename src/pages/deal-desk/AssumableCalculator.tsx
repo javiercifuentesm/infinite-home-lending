@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import DealDeskAssistant from "../../components/DealDeskAssistant";
+import Nexio from "../../components/Nexio";
 import ACCalculator from "../../components/deal-desk/assumable-calculator/ACCalculator";
 
 const CANONICAL = "https://www.infinitehomelending.com/deal-desk/assumable-calculator";
@@ -37,7 +37,7 @@ export default function AssumableCalculator() {
   return (
     <div className="pt-[calc(var(--site-header-height)+0.25rem)]">
       <ACCalculator />
-      <DealDeskAssistant />
+      <Nexio />
     </div>
   );
 }
