@@ -1,0 +1,17 @@
+diff --git a/node_modules/@elevenlabs/client/dist/BaseConversation.js b/node_modules/@elevenlabs/client/dist/BaseConversation.js
+index d47ba48..c069d2d 100644
+--- a/node_modules/@elevenlabs/client/dist/BaseConversation.js
++++ b/node_modules/@elevenlabs/client/dist/BaseConversation.js
+@@ -206,12 +206,6 @@ export class BaseConversation {
+         }
+     }
+     handleAgentToolResponse(event) {
+-        if (event.agent_tool_response.tool_name === "end_call") {
+-            this.endSessionWithDetails({
+-                reason: "agent",
+-                context: new CloseEvent("end_call", { reason: "Agent ended the call" }),
+-            });
+-        }
+         if (this.options.onAgentToolResponse) {
+             this.options.onAgentToolResponse(event.agent_tool_response);
+         }
