@@ -275,8 +275,6 @@ function MortgageConciergeInner() {
   const { startSession, endSession, sendContextualUpdate, sendUserActivity, setVolume, setMuted: setMicMuted, status, isSpeaking } =
     useConversation(conversationHookOptions);
 
-  console.log("[MortgageConcierge] useConversation status:", status, "session reinit check");
-
   const rawConversation = useRawConversation();
 
   setMicMutedRef.current = setMicMuted;

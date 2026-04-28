@@ -18,6 +18,10 @@ export default defineConfig(({mode}) => {
           __dirname,
           'src/lib/elevenlabs/WebSocketConnection.js',
         ),
+        '@elevenlabs/client/dist/BaseConversation.js': path.resolve(
+          __dirname,
+          'src/lib/elevenlabs/BaseConversation.js',
+        ),
       },
     },
     server: {
