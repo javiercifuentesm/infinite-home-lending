@@ -1,5 +1,6 @@
 import type { PaymentFreq } from "../../hooks/useAcceleratorMath";
 import { fmt } from "../../hooks/useAcceleratorMath";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 type Props = {
   extraAmt: number;
@@ -10,22 +11,6 @@ type Props = {
   freq: PaymentFreq;
 };
 
-function freqPhrase(f: PaymentFreq, amount: number): string {
-  if (amount === 0) return "";
-  switch (f) {
-    case "monthly":
-      return `${fmt(amount)} per month`;
-    case "biweekly":
-      return `${fmt(amount)} bi-weekly toward principal`;
-    case "annual":
-      return `${fmt(amount)} annually`;
-    case "onetime":
-      return `a one-time ${fmt(amount)} payment`;
-    default:
-      return fmt(amount);
-  }
-}
-
 export function AcceleratorInsight({
   extraAmt,
   monthsSaved,
@@ -34,18 +19,42 @@ export function AcceleratorInsight({
   basePayment,
   freq,
 }: Props) {
+  const { t, lang } = useLanguage();
+
+  const freqPhrase = (f: PaymentFreq, amount: number): string => {
+    if (amount === 0) return "";
+    switch (f) {
+      case "monthly":
+        return `${fmt(amount)} ${t("tool.accelerator.insight.perMonth")}`;
+      case "biweekly":
+        return `${fmt(amount)} ${t("tool.accelerator.insight.biweekly")}`;
+      case "annual":
+        return `${fmt(amount)} ${t("tool.accelerator.insight.annually")}`;
+      case "onetime":
+        if (lang === "es") {
+          return `${t("tool.accelerator.insight.onetime")} ${fmt(amount)}`;
+        }
+        return `${t("tool.accelerator.insight.onetime")} ${fmt(amount)} ${t("tool.accelerator.insight.payment")}`;
+      default:
+        return fmt(amount);
+    }
+  };
+
   let text: string;
 
   if (extraAmt === 0) {
-    text =
-      "Move the slider above to see what even a small extra payment does to your loan. Most people are surprised by how quickly the numbers change — especially the total interest saved. Start with $100 and go from there.";
+    text = t("tool.accelerator.insight.zero");
   } else if (monthsSaved >= 36 && intSaved >= 20000) {
     const pctOfPayment = basePayment > 0 ? Math.round((extraAmt / basePayment) * 100) : 0;
-    text = `Adding ${freqPhrase(freq, extraAmt)} is one of the highest-impact financial moves available to a homeowner. That's roughly ${pctOfPayment}% more than your standard payment — and it's shaving ${yearsSaved} years off your mortgage while eliminating ${fmt(intSaved)} in interest. The compounding effect of early principal reduction is what makes this so powerful.`;
+    text = t("tool.accelerator.insight.high")
+      .replace("{freqPhrase}", freqPhrase(freq, extraAmt))
+      .replace("{pct}", String(pctOfPayment))
+      .replace("{years}", String(yearsSaved))
+      .replace("{intSaved}", fmt(intSaved));
   } else if (monthsSaved >= 12) {
-    text = `${freqPhrase(freq, extraAmt)} adds up to more than it looks. The reason the savings are disproportionate to the payment size is that every dollar of principal you eliminate today eliminates all the interest that would have accrued on that dollar for the remaining life of the loan. Early payments are the most powerful ones.`;
+    text = t("tool.accelerator.insight.medium").replace("{freqPhrase}", freqPhrase(freq, extraAmt));
   } else {
-    text = `Even this amount is doing real work — removing ${fmt(intSaved)} in interest and shortening your loan. The earlier in the loan term you make extra payments, the larger the impact. Principal eliminated now eliminates decades of future interest compounding.`;
+    text = t("tool.accelerator.insight.low");
   }
 
   return (

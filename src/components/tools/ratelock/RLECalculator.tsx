@@ -1,5 +1,6 @@
 import { useState, type CSSProperties } from "react";
 import { runCalculation, type RLEInputs } from "../../../hooks/useRLEMath";
+import { useLanguage } from "../../../i18n/LanguageContext";
 import { SmartToolIntro } from "../SmartToolIntro";
 import { RLEFramingBanner } from "./RLEFramingBanner";
 import { RLELoanInputs } from "./RLELoanInputs";
@@ -31,6 +32,7 @@ const defaultInputs: RLEInputs = {
 };
 
 export default function RLECalculator() {
+  const { t } = useLanguage();
   const [inputs, setInputs] = useState<RLEInputs>(defaultInputs);
   const results = runCalculation(inputs);
 
@@ -46,12 +48,8 @@ export default function RLECalculator() {
         } as CSSProperties
       }
     >
-      <SmartToolIntro title="The Rate Lock Decision Engine">
-        <p>
-          This is not a rate prediction tool — nobody can tell you where rates are going. This is a risk quantification tool. It
-          tells you exactly what you are betting on if you float, and exactly what you are protecting if you lock — in your
-          personal dollars.
-        </p>
+      <SmartToolIntro title={t("tool.rle.title")}>
+        <p>{t("tool.rle.intro")}</p>
       </SmartToolIntro>
 
       <section className="mt-10 space-y-8">
@@ -67,7 +65,7 @@ export default function RLECalculator() {
             style={{ background: "rgba(163,45,45,0.08)", borderColor: "rgba(163,45,45,0.25)", color: "#A32D2D" }}
             role="alert"
           >
-            ⚠ Urgent: {results.daysToClose} days to close — floating carries extreme rate risk. Consider locking immediately.
+            {t("tool.rle.urgentPre")} {results.daysToClose} {t("tool.rle.urgentPost")}
           </div>
         ) : null}
 
@@ -82,12 +80,7 @@ export default function RLECalculator() {
         <RLEInsight results={results} />
         <RLECTA results={results} />
 
-        <p className="text-center text-[10px] leading-relaxed text-slate-500">
-          This tool is for educational purposes only and does not constitute financial advice or a loan commitment. Rate
-          movement scenarios are hypothetical — actual rates depend on market conditions. Extension fees and float-down costs vary
-          by lender. Contact Infinite Home Lending to discuss your actual lock options, float-down availability, and current
-          rate environment before making any rate lock decision.
-        </p>
+        <p className="text-center text-[10px] leading-relaxed text-slate-500">{t("tool.rle.disclaimer")}</p>
       </section>
     </div>
   );

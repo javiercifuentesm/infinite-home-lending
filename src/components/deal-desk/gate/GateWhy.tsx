@@ -11,7 +11,7 @@ export function GateWhy() {
             gap financing — in 60 seconds.
           </p>
           <p className="gate-why__body">
-            That&apos;s The Deal Desk. Five tools built for the five moments that move deals. Not after the deal. During it.
+            That&apos;s The Deal Desk. 12 tools built for every moment that moves a deal. Not after the deal. During it.
           </p>
         </div>
 

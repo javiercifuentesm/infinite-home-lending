@@ -157,3 +157,33 @@ export function scenarioLabel(mo: number): string {
   const m = mo % 12;
   return `${y}y ${m}m`;
 }
+
+/** Localized variants — pass `t` from useLanguage(). */
+export function formatWaitPeriodLabelI18n(months: number, t: (key: string) => string): string {
+  const m = Math.max(1, Math.floor(months));
+  if (m < 12) return m === 1 ? `1 ${t("tool.waiting.time.month")}` : `${m} ${t("tool.waiting.time.months")}`;
+  if (m === 12) return `1 ${t("tool.waiting.time.year")}`;
+  const y = m / 12;
+  const rounded = Math.round(y * 10) / 10;
+  const s = rounded % 1 === 0 ? String(Math.round(rounded)) : String(rounded);
+  return `${s} ${t("tool.waiting.time.years")}`;
+}
+
+export function formatCompactWaitI18n(months: number, t: (key: string) => string): string {
+  const m = Math.max(1, Math.floor(months));
+  if (m < 12) return m === 1 ? `1 ${t("tool.waiting.time.month")}` : `${m} ${t("tool.waiting.time.months")}`;
+  if (m === 12) return t("tool.waiting.time.scenario12");
+  const y = Math.floor(m / 12);
+  const mo = m % 12;
+  if (mo === 0) return `${y}${t("tool.waiting.time.yChar")}`;
+  return `${y}${t("tool.waiting.time.yChar")} ${mo}${t("tool.waiting.time.mChar")}`;
+}
+
+export function scenarioLabelI18n(mo: number, t: (key: string) => string): string {
+  if (mo < 12) return mo === 1 ? `1 ${t("tool.waiting.time.month")}` : `${mo} ${t("tool.waiting.time.months")}`;
+  if (mo === 12) return t("tool.waiting.time.scenario12");
+  if (mo % 12 === 0) return t("tool.waiting.time.scenarioNYrs").replace("{n}", String(mo / 12));
+  const y = Math.floor(mo / 12);
+  const m = mo % 12;
+  return t("tool.waiting.time.scenarioYrMo").replace("{y}", String(y)).replace("{m}", String(m));
+}

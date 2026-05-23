@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { runCalculation, type SEQInputs } from "../../../hooks/useSEQMath";
+import { useLanguage } from "../../../i18n/LanguageContext";
 import { SEQBankStatementInputs } from "./SEQBankStatementInputs";
 import { SEQCTA } from "./SEQCTA";
 import { SEQDocChecklist } from "./SEQDocChecklist";
@@ -38,6 +39,7 @@ const defaultInputs: SEQInputs = {
 };
 
 export function SEQCalculator() {
+  const { t } = useLanguage();
   const [path, setPath] = useState<SEQPath>("taxreturn");
   const [inputs, setInputs] = useState<SEQInputs>(defaultInputs);
 
@@ -48,12 +50,8 @@ export function SEQCalculator() {
 
   return (
     <div className="mx-auto max-w-5xl px-4 pb-16 pt-0 sm:px-6 lg:px-8">
-      <SmartToolIntro title="The Self-Employed Mortgage Qualifier">
-        <p>
-          Standard mortgage tools assume you have a W-2. This one doesn&apos;t. Enter your real numbers — tax return
-          income or bank deposit cash flow — and see exactly how lenders calculate your qualifying income, which path
-          qualifies you for more home, and what adjusting your write-offs could unlock.
-        </p>
+      <SmartToolIntro title={t("tool.seq.title")}>
+        <p>{t("tool.seq.intro")}</p>
       </SmartToolIntro>
 
       <SEQPathTabs path={path} onPathChange={setPath} />

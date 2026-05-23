@@ -1,9 +1,11 @@
 import type { FHAResult } from "../../../hooks/useFHAMath";
 import { fmt, fmtK } from "../../../hooks/useFHAMath";
+import { useLanguage } from "../../../i18n/LanguageContext";
 
 type Props = { results: FHAResult };
 
 export function FHAMetrics({ results }: Props) {
+  const { t } = useLanguage();
   const {
     convPmt,
     fhaPmt,
@@ -21,7 +23,9 @@ export function FHAMetrics({ results }: Props) {
   const fhaMo = fhaPmt + mipMoInit;
   const moDiff = Math.abs(convMo - fhaMo);
   const convCheaperMo = convMo < fhaMo;
-  const cheaperLabel = convCheaperMo ? "Conventional" : "FHA";
+  const cheaperLabel = convCheaperMo ? t("tool.fha.metrics.conventional") : t("tool.fha.metrics.fha");
+  const winnerLabel = convWins ? t("tool.fha.metrics.conventional") : t("tool.fha.metrics.fha");
+  const costDiffTitle = `${t("tool.fha.metrics.costDiffPre")} (${stay} ${t("tool.fha.metrics.costDiffPost")})`;
 
   const card = (title: string, value: string, sub: string) => (
     <div className="rounded-xl border border-[var(--color-border-tertiary)] bg-[var(--color-background-secondary)] p-4 sm:p-5">
@@ -33,17 +37,23 @@ export function FHAMetrics({ results }: Props) {
 
   return (
     <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-      {card("Monthly difference", fmt(moDiff), `${cheaperLabel} is cheaper/mo`)}
-      {card(`Cost difference (${stay} yr)`, fmtK(diff), `${convWins ? "Conventional" : "FHA"} saves this over ${stay} yrs`)}
+      {card(t("tool.fha.metrics.moDiff"), fmt(moDiff), `${cheaperLabel} ${t("tool.fha.metrics.isCheaperMo")}`)}
+      {card(costDiffTitle, fmtK(diff), `${winnerLabel} ${t("tool.fha.metrics.savesPre")} ${stay} ${t("tool.fha.metrics.savesPost")}`)}
       {card(
-        "Crossover year",
-        crossoverYear !== null && crossoverYear <= 30 ? `Year ${crossoverYear}` : "30+",
-        "when Conventional becomes cheaper",
+        t("tool.fha.metrics.crossoverTitle"),
+        crossoverYear !== null && crossoverYear <= 30
+          ? `${t("tool.fha.metrics.year")} ${crossoverYear}`
+          : t("tool.fha.metrics.crossover30plus"),
+        t("tool.fha.metrics.crossoverSub"),
       )}
       {card(
-        "PMI removal",
-        pmiRate === 0 ? "N/A" : pmiRemoveYr ? `${pmiRemoveYr} yrs` : "~7–8 yrs",
-        pmiRate === 0 ? "20%+ down, no PMI" : "Conv PMI cancels automatically",
+        t("tool.fha.metrics.pmiRemoval"),
+        pmiRate === 0
+          ? t("tool.fha.metrics.na")
+          : pmiRemoveYr
+            ? `${pmiRemoveYr} ${t("tool.fha.metrics.yrs")}`
+            : t("tool.fha.metrics.pmi78"),
+        pmiRate === 0 ? t("tool.fha.metrics.pmiNone") : t("tool.fha.metrics.pmiAuto"),
       )}
     </div>
   );

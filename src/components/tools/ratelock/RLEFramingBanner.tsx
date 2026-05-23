@@ -1,4 +1,8 @@
+import { useLanguage } from "../../../i18n/LanguageContext";
+
 export function RLEFramingBanner() {
+  const { t } = useLanguage();
+
   return (
     <div
       className="flex gap-3 rounded-lg border-[0.5px] px-4 py-[0.65rem]"
@@ -20,9 +24,7 @@ export function RLEFramingBanner() {
         <path d="M12 16v-4M12 8h.01" strokeLinecap="round" />
       </svg>
       <p className="text-[12px] leading-[1.5]" style={{ color: "#633806" }}>
-        <strong>Important framing:</strong> No tool — and no expert — can predict where mortgage rates will move. This engine
-        quantifies the cost of each choice so you can make an informed decision based on your own risk tolerance, timeline, and
-        financial situation.
+        <strong>{t("tool.rle.framing.strong")}</strong> {t("tool.rle.framing.body")}
       </p>
     </div>
   );

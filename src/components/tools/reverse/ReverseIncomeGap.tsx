@@ -1,6 +1,7 @@
 import type { ReverseInputs, ReverseResult } from "../../../hooks/useReverseMath";
 import { fmt } from "../../../hooks/useReverseMath";
 import type { ReactNode } from "react";
+import { useLanguage } from "../../../i18n/LanguageContext";
 
 type Props = {
   inputs: ReverseInputs;
@@ -8,24 +9,28 @@ type Props = {
 };
 
 export function ReverseIncomeGap({ inputs, results }: Props) {
+  const { t } = useLanguage();
   const { retIncome, retExpenses } = inputs;
   const { incomeGap, tenurePayment } = results;
   const gap = incomeGap;
   const absGap = Math.abs(gap);
+  const surplus = t("tool.reverse.gap.surplus");
 
   return (
     <div className="rounded-xl border border-[var(--color-border-tertiary)] bg-white p-5 sm:p-6">
-      <h3 className="font-[Georgia,serif] text-lg font-medium text-[#0B2A4A]">Your monthly income gap analysis</h3>
+      <h3 className="font-[Georgia,serif] text-lg font-medium text-[#0B2A4A]">{t("tool.reverse.gap.title")}</h3>
       <div className="mt-4 border-t border-[var(--color-border-tertiary)]">
-        <Row label="Monthly retirement income" value={fmt(retIncome)} />
-        <Row label="Monthly living expenses" value={fmt(retExpenses)} />
+        <Row label={t("tool.reverse.gap.retIncome")} value={fmt(retIncome)} />
+        <Row label={t("tool.reverse.gap.retExpenses")} value={fmt(retExpenses)} />
         <Row
-          label="Monthly income gap"
+          label={t("tool.reverse.gap.moGap")}
           value={
             gap > 0 ? (
               <span className="font-semibold text-[#A32D2D]">−{fmt(absGap)}</span>
             ) : (
-              <span className="font-semibold text-[#27500A]">+{fmt(absGap)} surplus</span>
+              <span className="font-semibold text-[#27500A]">
+                +{fmt(absGap)} {surplus}
+              </span>
             )
           }
         />
@@ -33,15 +38,20 @@ export function ReverseIncomeGap({ inputs, results }: Props) {
         {gap > 0 && tenurePayment > 0 ? (
           <>
             <Row
-              label="Tenure payment covers"
-              value={<span className="font-semibold text-[#27500A]">{fmt(Math.min(tenurePayment, gap))}/mo of your gap</span>}
+              label={t("tool.reverse.gap.tenureCovers")}
+              value={
+                <span className="font-semibold text-[#27500A]">
+                  {fmt(Math.min(tenurePayment, gap))}
+                  {t("tool.reverse.gap.ofYourGap")}
+                </span>
+              }
             />
             <Row
-              label="Remaining gap after reverse mortgage"
+              label={t("tool.reverse.gap.remainingGap")}
               value={
                 tenurePayment >= gap ? (
                   <span className="font-semibold text-[#27500A]">
-                    Fully covered — {fmt(tenurePayment - gap)} surplus
+                    {t("tool.reverse.gap.fullyCovered")} {fmt(tenurePayment - gap)} {surplus}
                   </span>
                 ) : (
                   <span className="font-semibold text-[#A32D2D]">−{fmt(gap - tenurePayment)}</span>
@@ -53,10 +63,8 @@ export function ReverseIncomeGap({ inputs, results }: Props) {
 
         {gap <= 0 ? (
           <Row
-            label="Your income currently covers expenses"
-            value={
-              <span className="font-semibold text-[#27500A]">A reverse mortgage could build a growing safety net</span>
-            }
+            label={t("tool.reverse.gap.coversExpenses")}
+            value={<span className="font-semibold text-[#27500A]">{t("tool.reverse.gap.safetyNet")}</span>}
           />
         ) : null}
       </div>

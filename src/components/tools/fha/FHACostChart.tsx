@@ -13,6 +13,7 @@ import {
 import { Line } from "react-chartjs-2";
 import type { FHAResult } from "../../../hooks/useFHAMath";
 import { chartCostYFmt } from "../../../hooks/useFHAMath";
+import { useLanguage } from "../../../i18n/LanguageContext";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Filler, Legend);
 
@@ -22,6 +23,15 @@ type Props = {
 };
 
 export function FHACostChart({ results, chartKey }: Props) {
+  const { t } = useLanguage();
+  const titlePre = t("tool.fha.costChart.titlePre");
+  const titlePost = t("tool.fha.costChart.titlePost");
+  const legendConv = t("tool.fha.costChart.legendConv");
+  const legendFha = t("tool.fha.costChart.legendFha");
+  const tooltipConv = t("tool.fha.metrics.conventional");
+  const tooltipFha = t("tool.fha.metrics.fha");
+  const yrPrefix = t("tool.fha.charts.yr");
+
   const { data, options } = useMemo(() => {
     const { labels, convCostsArr, fhaCostsArr } = results;
     const n = labels.length;
@@ -29,7 +39,7 @@ export function FHACostChart({ results, chartKey }: Props) {
 
     const ticks = labels.map((_, i) => {
       const yr = i + 1;
-      if (yr % skipN === 0 || yr === n) return "Yr " + yr;
+      if (yr % skipN === 0 || yr === n) return yrPrefix + yr;
       return "";
     });
 
@@ -37,7 +47,7 @@ export function FHACostChart({ results, chartKey }: Props) {
       labels: labels.map((_, i) => String(i + 1)),
       datasets: [
         {
-          label: "Conventional",
+          label: legendConv,
           data: convCostsArr,
           borderColor: "#0B2A4A",
           backgroundColor: "rgba(11,42,74,0.05)",
@@ -47,7 +57,7 @@ export function FHACostChart({ results, chartKey }: Props) {
           fill: true,
         },
         {
-          label: "FHA",
+          label: legendFha,
           data: fhaCostsArr,
           borderColor: "#3B6D11",
           backgroundColor: "rgba(59,109,17,0.05)",
@@ -71,7 +81,7 @@ export function FHACostChart({ results, chartKey }: Props) {
               return labels[i] ?? "";
             },
             label(ctx: { datasetIndex?: number; parsed: { y: number } }) {
-              const lab = ctx.datasetIndex === 0 ? "Conventional" : "FHA";
+              const lab = ctx.datasetIndex === 0 ? tooltipConv : tooltipFha;
               return lab + ": " + chartCostYFmt(ctx.parsed.y);
             },
           },
@@ -102,19 +112,21 @@ export function FHACostChart({ results, chartKey }: Props) {
     };
 
     return { data: dataObj, options: optionsObj };
-  }, [results]);
+  }, [results, legendConv, legendFha, tooltipConv, tooltipFha, yrPrefix]);
 
   return (
     <div>
-      <h3 className="font-[Georgia,serif] text-lg font-medium text-[#0B2A4A]">Cumulative total cost over {results.termYears} years</h3>
+      <h3 className="font-[Georgia,serif] text-lg font-medium text-[#0B2A4A]">
+        {titlePre} {results.termYears} {titlePost}
+      </h3>
       <div className="mt-3 flex flex-wrap gap-6 text-[11px] text-[#888780]">
         <span className="inline-flex items-center gap-2">
           <span className="inline-block h-2.5 w-2.5 rounded-sm bg-[#0B2A4A]" aria-hidden />
-          Conventional total cost
+          {legendConv}
         </span>
         <span className="inline-flex items-center gap-2">
           <span className="inline-block h-2.5 w-2.5 rounded-sm bg-[#3B6D11]" aria-hidden />
-          FHA total cost
+          {legendFha}
         </span>
       </div>
       <div key={chartKey} className="relative mt-3 h-[210px] w-full">

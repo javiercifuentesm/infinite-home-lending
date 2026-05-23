@@ -12,7 +12,7 @@ export function PlaybookHero({ onDownloadPdf, pdfLoading }: Props) {
       <div className="mx-auto max-w-3xl text-center">
         <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.14em] text-[#C6A15B]">The Deal Desk Playbook</p>
         <h1 className="mt-3 font-[Georgia,serif] text-[28px] font-medium leading-tight text-[#0B2A4A]">
-          Five tools. Five moments. One lender partner.
+          12 tools. Every moment. One lender partner.
         </h1>
         <p className="mx-auto mt-4 max-w-2xl font-sans text-[16px] leading-relaxed text-slate-600">
           Everything you need to know to use The Deal Desk tools in real transactions — including the exact scripts that move sellers, qualify buyers,
@@ -36,7 +36,7 @@ export function PlaybookHero({ onDownloadPdf, pdfLoading }: Props) {
           </Link>
         </div>
         <div className="mt-10 flex flex-wrap items-center justify-center gap-2 font-sans text-[12px] text-slate-500">
-          <span>Playbook + 5 tools</span>
+          <span>Playbook + 12 tools</span>
           <span className="text-slate-300" aria-hidden>
             |
           </span>

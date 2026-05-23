@@ -11,8 +11,10 @@ import { AcceleratorMilestones } from "./AcceleratorMilestones";
 import { AcceleratorInsight } from "./AcceleratorInsight";
 import { AcceleratorCTA } from "./AcceleratorCTA";
 import { SmartToolIntro } from "./SmartToolIntro";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 export default function AcceleratorCalculator() {
+  const { t } = useLanguage();
   const [inputs, setInputs] = useState<AcceleratorFormState>(() => defaultAcceleratorState());
 
   const results = runCalculation({
@@ -49,18 +51,11 @@ export default function AcceleratorCalculator() {
         } as CSSProperties
       }
     >
-      <SmartToolIntro title="The Principal Accelerator">
+      <SmartToolIntro title={t("tool.accelerator.title")}>
+        <p>{t("tool.accelerator.intro1")}</p>
         <p>
-          Most people don&apos;t realize that small extra payments toward your principal can shave years off your mortgage and save
-          tens of thousands in interest. This tool shows you exactly what your money can do — move the slider and watch your loan
-          transform in real time.
-        </p>
-        <p>
-          Weighing extra payments vs. borrowing against equity?{" "}
-          <Link to="/tools/heloc-planner">
-            HELOC Smart Planner
-          </Link>{" "}
-          — see the full draw-to-repayment cost picture.
+          {t("tool.accelerator.intro2Lead")}{" "}
+          <Link to="/tools/heloc-planner">{t("tool.accelerator.helocLink")}</Link> {t("tool.accelerator.intro2Trail")}
         </p>
       </SmartToolIntro>
 
@@ -116,11 +111,7 @@ export default function AcceleratorCalculator() {
 
         <AcceleratorCTA />
 
-        <p className="text-center text-[11px] leading-relaxed text-[var(--color-text-tertiary)]">
-          Estimates are for educational purposes only. Actual savings depend on your loan terms, lender policies, and payment timing.
-          Some loans have prepayment restrictions — confirm with your lender. Contact Infinite Home Lending for a personalized
-          analysis.
-        </p>
+        <p className="text-center text-[11px] leading-relaxed text-[var(--color-text-tertiary)]">{t("tool.accelerator.disclaimer")}</p>
       </section>
     </div>
   );

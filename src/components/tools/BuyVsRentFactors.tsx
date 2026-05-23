@@ -1,5 +1,6 @@
 import type { BuyVsRentInputs, YearlySnapshot } from "../../hooks/useBuyVsRentMath";
 import { fmt } from "../../hooks/useBuyVsRentMath";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 type Props = {
   inputs: BuyVsRentInputs;
@@ -8,80 +9,84 @@ type Props = {
 };
 
 export function BuyVsRentFactors({ inputs, snapshot, crossoverYr }: Props) {
+  const { t } = useLanguage();
   type Factor = { dot: string; title: string; detail: string };
   const factors: Factor[] = [];
 
   if (crossoverYr != null && crossoverYr <= 7) {
     factors.push({
       dot: "#3B6D11",
-      title: "Strong crossover timeline",
-      detail: `The math tips to buying at year ${crossoverYr} — well within a typical homeownership horizon. This is a meaningful signal that buying builds more wealth over most realistic timescales.`,
+      title: t("tool.bvr.factors.strongCrossTitle"),
+      detail: t("tool.bvr.factors.strongCrossDetail").replace("{yr}", String(crossoverYr)),
     });
   } else if (crossoverYr == null || crossoverYr > 15) {
     factors.push({
       dot: "#A32D2D",
-      title: "Long crossover timeline",
-      detail: `Buying doesn't take the wealth lead until year ${crossoverYr ?? "30+"}. A long crossover suggests either high home prices, high rates, or favorable investment returns are working against the buy case.`,
+      title: t("tool.bvr.factors.longCrossTitle"),
+      detail: t("tool.bvr.factors.longCrossDetail").replace(
+        "{yr}",
+        crossoverYr != null ? String(crossoverYr) : t("tool.bvr.factors.longCrossYrPlus"),
+      ),
     });
   }
 
   if (snapshot.monthlyBuyCost > snapshot.monthlyRent * 1.4) {
     factors.push({
       dot: "#A32D2D",
-      title: `Monthly cost gap: ${fmt(snapshot.monthlyBuyCost - snapshot.monthlyRent)}/mo more to buy`,
-      detail: "The higher monthly cost of buying means more money flows into the renter's investment portfolio each month — which is a powerful compounding advantage in early years.",
+      title: `${t("tool.bvr.factors.costGapPre")} ${fmt(snapshot.monthlyBuyCost - snapshot.monthlyRent)}${t("tool.bvr.factors.costGapPost")}`,
+      detail: t("tool.bvr.factors.costGapDetail"),
     });
   } else if (snapshot.monthlyBuyCost < snapshot.monthlyRent * 1.1) {
     factors.push({
       dot: "#3B6D11",
-      title: "Monthly costs are close",
-      detail: "When the cost to buy is close to the cost to rent, the case for buying strengthens — you build equity without significantly increasing your monthly obligations.",
+      title: t("tool.bvr.factors.costCloseTitle"),
+      detail: t("tool.bvr.factors.costCloseDetail"),
     });
   }
 
   if (inputs.appr >= 4) {
     factors.push({
       dot: "#3B6D11",
-      title: `${inputs.appr}% appreciation favors buying`,
-      detail: "Home values growing faster than inflation accelerate equity building and reduce the time until buying becomes the stronger financial path.",
+      title: `${inputs.appr}${t("tool.bvr.factors.apprTitle")}`,
+      detail: t("tool.bvr.factors.apprDetail"),
     });
   }
 
   if (inputs.inv >= 8) {
     factors.push({
       dot: "#C6A15B",
-      title: `${inputs.inv}% investment return is a high bar`,
-      detail: "Assuming high stock market returns increases the renting scenario's competitiveness. If returns are lower, the crossover year moves earlier in favor of buying.",
+      title: `${inputs.inv}${t("tool.bvr.factors.invTitle")}`,
+      detail: t("tool.bvr.factors.invDetail"),
     });
   }
 
   if (inputs.ri >= 4) {
     factors.push({
       dot: "#3B6D11",
-      title: `${inputs.ri}% rent increases work for buyers`,
-      detail: "Rapid rent increases mean renters face growing monthly costs without building any equity. A fixed mortgage payment becomes more valuable as rent rises around it.",
+      title: `${inputs.ri}${t("tool.bvr.factors.riTitle")}`,
+      detail: t("tool.bvr.factors.riDetail"),
     });
   }
 
   if (inputs.dp >= 20) {
     factors.push({
       dot: "#3B6D11",
-      title: "20%+ down payment eliminates PMI",
-      detail: "A 20% down payment removes private mortgage insurance, reducing your true monthly cost and strengthening the buying case from day one.",
+      title: t("tool.bvr.factors.pmiTitle"),
+      detail: t("tool.bvr.factors.pmiDetail"),
     });
   }
 
   if (factors.length === 0) {
     factors.push({
       dot: "#C6A15B",
-      title: "The decision is in the nuance",
-      detail: "Your inputs produce a scenario where both paths are competitive. The decision comes down to personal factors — stability, flexibility, community, and your specific financial goals — as much as the numbers.",
+      title: t("tool.bvr.factors.nuanceTitle"),
+      detail: t("tool.bvr.factors.nuanceDetail"),
     });
   }
 
   return (
     <div className="rounded-xl border border-[var(--color-border-tertiary)] bg-white p-5 sm:p-6">
-      <h3 className="font-[Georgia,serif] text-lg font-medium text-[#0B2A4A]">What&apos;s driving the result</h3>
+      <h3 className="font-[Georgia,serif] text-lg font-medium text-[#0B2A4A]">{t("tool.bvr.factors.title")}</h3>
       <ul className="mt-4 space-y-4">
         {factors.map((f) => (
           <li key={f.title} className="flex gap-3">

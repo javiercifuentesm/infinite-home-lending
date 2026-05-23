@@ -1,11 +1,13 @@
 import type { ReverseResult } from "../../../hooks/useReverseMath";
 import { fmt } from "../../../hooks/useReverseMath";
+import { useLanguage } from "../../../i18n/LanguageContext";
 
 type Props = {
   results: ReverseResult;
 };
 
 export function ReverseHeirSnapshot({ results }: Props) {
+  const { t } = useLanguage();
   const y = results.yr10;
 
   return (
@@ -13,17 +15,17 @@ export function ReverseHeirSnapshot({ results }: Props) {
       className="rounded-xl border border-[rgba(11,42,74,0.12)] p-5 sm:p-6"
       style={{ background: "rgba(11,42,74,0.04)" }}
     >
-      <h3 className="text-[13px] font-medium text-[#0B2A4A]">Inheritance picture at year 10</h3>
+      <h3 className="text-[13px] font-medium text-[#0B2A4A]">{t("tool.reverse.heir.snapshotTitle")}</h3>
       <div className="mt-4 space-y-0 border-t border-[var(--color-border-tertiary)]">
-        <SnapRow label="Home value at year 10" value={fmt(y.homeValue)} />
-        <SnapRow label="Loan balance at year 10" value={fmt(y.loanBalance)} />
-        <SnapRow label="Remaining equity (heirs keep)" value={fmt(Math.max(0, y.equity))} highlight />
+        <SnapRow label={t("tool.reverse.heir.homeVal")} value={fmt(y.homeValue)} />
+        <SnapRow label={t("tool.reverse.heir.loanBal")} value={fmt(y.loanBalance)} />
+        <SnapRow label={t("tool.reverse.heir.equity")} value={fmt(Math.max(0, y.equity))} highlight />
         <SnapRow
-          label="Non-recourse protection"
-          value="Yes — heirs never owe more than home value"
+          label={t("tool.reverse.heir.nonRecourse")}
+          value={t("tool.reverse.heir.nonRecourseVal")}
           highlight
         />
-        <SnapRow label="Heirs' option" value="Sell home, repay loan, keep difference" last />
+        <SnapRow label={t("tool.reverse.heir.option")} value={t("tool.reverse.heir.optionVal")} last />
       </div>
     </div>
   );

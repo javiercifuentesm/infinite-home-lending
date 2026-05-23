@@ -2,6 +2,12 @@
 @import "tailwindcss";
 
 /* True Cost of Waiting + shared tool tokens */
+html {
+  font-size: clamp(14px, 1.4vw, 16px);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
 :root {
   --color-background-danger: #fde8e8;
   --color-background-warning: #fef3c7;
@@ -866,9 +872,8 @@ html {
     width: 100%;
     margin-left: auto;
     margin-right: auto;
-    height: 85vh;
-    min-height: 620px;
-    max-height: 900px;
+    min-height: max(85vh, 620px);
+    max-height: none;
     border-radius: 0;
     overflow: hidden;
     background-color: var(--color-navy);
@@ -1140,7 +1145,7 @@ html {
     max-width: min(1200px, 100%);
     margin-left: 0;
     margin-right: auto;
-    padding-top: clamp(140px, 18vh, 220px);
+    padding-top: clamp(80px, 10vh, 140px);
     text-align: left;
   }
 

@@ -1604,6 +1604,20 @@ body.deal-desk-gate-active footer.site-footer {
 }
 
 @media (max-width: 768px) {
+  .gate-hero-tile {
+    grid-template-columns: 1fr !important;
+  }
+
+  .gate-hero-tile-right {
+    border-radius: 0 0 20px 20px !important;
+    border-left: none !important;
+    border-top: 1px solid rgba(198, 161, 91, 0.15) !important;
+  }
+
+  .gate-intel-preview-grid {
+    grid-template-columns: 1fr !important;
+  }
+
   .gate-tour-bubble {
     top: calc(var(--site-header-height) + 8px);
     right: 12px;
@@ -1612,4 +1626,16 @@ body.deal-desk-gate-active footer.site-footer {
   .gate-tour-card {
     width: 160px;
   }
+}
+
+@keyframes ping {
+  75%,
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+.deal-desk-gate .gate-split-hero-ping {
+  animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
 }

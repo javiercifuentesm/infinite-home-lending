@@ -19,6 +19,7 @@ function formatTranscript(transcript: string): string {
 
   return lines
     .map((line) => {
+      // Legacy transcripts may prefix assistant lines as "Luna" or "Sarah"
       const isSarah = /^(luna|sarah)\b/i.test(line.trim());
       const bgColor = isSarah ? "#EFE6D6" : "#f0f4ff";
       const nameColor = isSarah ? "#0B2A4A" : "#1e40af";
@@ -28,7 +29,7 @@ function formatTranscript(transcript: string): string {
       const message = line
         .replace(/^(Luna|Sarah|Visitor)\s*\([^)]+\):\s*/i, "")
         .trim();
-      const speaker = isSarah ? "Luna · IHL Concierge" : "Visitor";
+      const speaker = isSarah ? "Sarah · IHL Concierge" : "Visitor";
 
       return `
       <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:12px;">
@@ -53,7 +54,7 @@ function sanitizeHexColor(c: unknown, fallback: string): string {
   return /^#[0-9A-Fa-f]{6}$/.test(t) ? t : fallback;
 }
 
-/** Visitor-only lines (lowercased, joined) — excludes Luna so detection is not biased by her prompts. */
+/** Visitor-only lines (lowercased, joined) — excludes assistant lines so detection is not biased by prompts. */
 function getVisitorLinesText(transcript: string): string {
   return transcript
     .split("\n")
@@ -178,7 +179,7 @@ function generateLoanProfile(transcript: string): string {
     <tr>
       <td style="padding: 0 40px 24px 40px;background-color:#ffffff;">
         <p style="margin:0 0 14px 0;color:#0B2A4A;font-size:17px;font-weight:bold;">📊 Estimated Loan Profile</p>
-        <p style="margin:0 0 14px 0;color:#64748b;font-size:12px;">Based on information shared with Luna. Verify all figures on the first call.</p>
+        <p style="margin:0 0 14px 0;color:#64748b;font-size:12px;">Based on information shared with Sarah. Verify all figures on the first call.</p>
         <table width="100%" cellpadding="0" cellspacing="0"
           style="border:1px solid #e2e8f0;border-radius:10px;overflow:hidden;">
           <tr style="background-color:#f8fafc;">
@@ -235,7 +236,7 @@ function generateFollowUpSequence(preferredContact: string, bestDay: string, bes
                         </td>
                         <td style="vertical-align:top;padding-left:12px;">
                           <p style="margin:0 0 2px 0;color:#15803d;font-size:12px;font-weight:bold;text-transform:uppercase;letter-spacing:0.5px;">Immediately — ${e(preferredContact)}</p>
-                          <p style="margin:0;color:#1e293b;font-size:13px;line-height:1.5;">Call and leave a warm, brief voicemail: <em>"Hi [Name], this is [your name] from Infinite Home Lending. I saw you connected with our AI concierge Luna today and I wanted to personally reach out. Give me a call back at [number] — no pressure, just here to help!"</em></p>
+                          <p style="margin:0;color:#1e293b;font-size:13px;line-height:1.5;">Call and leave a warm, brief voicemail: <em>"Hi [Name], this is [your name] from Infinite Home Lending. I saw you connected with our AI concierge Sarah today and I wanted to personally reach out. Give me a call back at [number] — no pressure, just here to help!"</em></p>
                         </td>
                       </tr>
                     </table>
@@ -259,7 +260,7 @@ function generateFollowUpSequence(preferredContact: string, bestDay: string, bes
                         </td>
                         <td style="vertical-align:top;padding-left:12px;">
                           <p style="margin:0 0 2px 0;color:#a16207;font-size:12px;font-weight:bold;text-transform:uppercase;letter-spacing:0.5px;">1 Hour Later — Text Message</p>
-                          <p style="margin:0;color:#1e293b;font-size:13px;line-height:1.5;">Send a short, warm text: <em>"Hi [Name]! This is [name] from Infinite Home Lending — just following up on your chat with Luna. Happy to answer any questions at your own pace. Feel free to text or call me anytime! 😊"</em></p>
+                          <p style="margin:0;color:#1e293b;font-size:13px;line-height:1.5;">Send a short, warm text: <em>"Hi [Name]! This is [name] from Infinite Home Lending — just following up on your chat with Sarah. Happy to answer any questions at your own pace. Feel free to text or call me anytime! 😊"</em></p>
                         </td>
                       </tr>
                     </table>
@@ -283,7 +284,7 @@ function generateFollowUpSequence(preferredContact: string, bestDay: string, bes
                         </td>
                         <td style="vertical-align:top;padding-left:12px;">
                           <p style="margin:0 0 2px 0;color:#1d4ed8;font-size:12px;font-weight:bold;text-transform:uppercase;letter-spacing:0.5px;">Next Day — Email</p>
-                          <p style="margin:0;color:#1e293b;font-size:13px;line-height:1.5;">Send a personal email introducing yourself, referencing their conversation with Luna, and including one helpful resource (e.g. first-time buyer guide, MD program overview, or payment calculator link).</p>
+                          <p style="margin:0;color:#1e293b;font-size:13px;line-height:1.5;">Send a personal email introducing yourself, referencing their conversation with Sarah, and including one helpful resource (e.g. first-time buyer guide, MD program overview, or payment calculator link).</p>
                           ${dayNote}
                         </td>
                       </tr>
@@ -382,8 +383,9 @@ function generateTimeline(transcript: string): string {
     const time = timeMatch ? timeMatch[1] : "";
     const text = line.toLowerCase();
 
+    // Match legacy greetings that name either assistant label in older transcripts
     if ((line.toLowerCase().startsWith("luna") || line.toLowerCase().startsWith("sarah")) && text.includes("hi") && (text.includes("luna") || text.includes("sarah"))) {
-      milestones.push({ time, event: "Visitor initiated contact with Luna", color: "#0B2A4A" });
+      milestones.push({ time, event: "Visitor initiated contact with Sarah", color: "#0B2A4A" });
     }
     if (text.includes("purchase") || text.includes("buy")) {
       milestones.push({ time, event: "Confirmed purchase intent", color: "#0B2A4A" });
@@ -583,7 +585,7 @@ function generatePlaybook(
       ? "refinance your home"
       : "explore your mortgage options";
 
-  const openingLine = `"Hi ${firstName}, this is [your name] from Infinite Home Lending. Luna mentioned you're looking to ${purposeText}${budget ? ` with a budget around ${budget}` : ""} — I'd love to help make that happen!"`;
+  const openingLine = `"Hi ${firstName}, this is [your name] from Infinite Home Lending. Sarah mentioned you're looking to ${purposeText}${budget ? ` with a budget around ${budget}` : ""} — I'd love to help make that happen!"`;
 
   return `
     <!-- SECTION 1: LEAD GRADE -->
@@ -790,7 +792,7 @@ function generatePlaybook(
     <tr>
       <td style="padding: 0 40px 24px 40px;background-color:#ffffff;">
         <p style="margin:0 0 6px 0;color:#0B2A4A;font-size:17px;font-weight:bold;">💬 Conversation Flow</p>
-        <p style="margin:0 0 16px 0;color:#64748b;font-size:12px;">Full transcript of the Luna AI conversation that led to this lead.</p>
+        <p style="margin:0 0 16px 0;color:#64748b;font-size:12px;">Full transcript of the Sarah AI conversation that led to this lead.</p>
         ${formatTranscript(transcript)}
       </td>
     </tr>
@@ -840,6 +842,7 @@ export function createMortgageConciergeSendLeadRouter(): Router {
       date,
       time,
       transcript,
+      lead_subject_override,
     } = b;
 
     const tRaw = String(transcript ?? "");
@@ -979,10 +982,14 @@ export function createMortgageConciergeSendLeadRouter(): Router {
 </body>
 </html>`;
 
-    const subject = `${String(lead_emoji ?? "")} ${String(lead_grade ?? "")} Lead — ${lead_name} · ${String(preferred_contact ?? "")} · ${String(best_day ?? "")}`;
+    const subjectOverride = String(lead_subject_override ?? "").trim();
+    const subject = subjectOverride
+      ? subjectOverride
+      : `${String(lead_emoji ?? "")} ${String(lead_grade ?? "")} Lead — ${lead_name} · ${String(preferred_contact ?? "")} · ${String(best_day ?? "")}`;
 
     const resendBody = {
-      from: "IHL Mortgage Concierge <luna@update.infinitehomelending.com>",
+      // Ensure Resend + domain allow listing for this sender address.
+      from: "IHL Mortgage Concierge <sarah@update.infinitehomelending.com>",
       to: "Info@infinitehomelending.com",
       subject,
       html,

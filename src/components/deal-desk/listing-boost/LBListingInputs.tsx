@@ -1,4 +1,5 @@
 import type { ListingBoostInputs } from "../../../hooks/useListingBoostMath";
+import { DollarInput, PercentInput } from "../../tools/shared/FormattedInput";
 
 const label = "mb-1.5 block font-sans text-[12px] font-semibold text-[#0B2A4A]";
 const input =
@@ -24,14 +25,7 @@ export function LBListingInputs({ inputs, onChange }: Props) {
           <label htmlFor="lb-listPrice" className={label}>
             List price ($)
           </label>
-          <input
-            id="lb-listPrice"
-            type="number"
-            step={5000}
-            className={input}
-            value={inputs.listPrice || ""}
-            onChange={(e) => set("listPrice", Number.parseFloat(e.target.value) || 0)}
-          />
+          <DollarInput id="lb-listPrice" className={input} value={inputs.listPrice} onChange={(n) => set("listPrice", n)} />
         </div>
         <div>
           <label htmlFor="lb-dom" className={label}>
@@ -51,27 +45,19 @@ export function LBListingInputs({ inputs, onChange }: Props) {
           <label htmlFor="lb-rate" className={label}>
             Current market rate (%)
           </label>
-          <input
+          <PercentInput
             id="lb-rate"
-            type="number"
             step={0.125}
             className={input}
-            value={inputs.rate || ""}
-            onChange={(e) => set("rate", Number.parseFloat(e.target.value) || 0)}
+            value={inputs.rate}
+            onChange={(n) => set("rate", n)}
           />
         </div>
         <div>
           <label htmlFor="lb-budget" className={label}>
             Seller concession budget ($)
           </label>
-          <input
-            id="lb-budget"
-            type="number"
-            step={1000}
-            className={input}
-            value={inputs.budget || ""}
-            onChange={(e) => set("budget", Number.parseFloat(e.target.value) || 0)}
-          />
+          <DollarInput id="lb-budget" className={input} value={inputs.budget} onChange={(n) => set("budget", n)} />
           <p className="mt-1 font-sans text-[11px] text-slate-500">Total dollars seller is willing to offer</p>
         </div>
         <div>

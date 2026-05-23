@@ -1,4 +1,5 @@
 import type { JurisdictionKey, SellerNetInputs } from "../../../hooks/useSellerNetMath";
+import { DollarInput } from "../../tools/shared/FormattedInput";
 
 const label = "mb-1.5 block font-sans text-[12px] font-semibold text-[#0B2A4A]";
 const input =
@@ -49,42 +50,21 @@ export function SNSJurisdictionInputs({ inputs, onChange }: Props) {
           <label htmlFor="sns-titleFee" className={label}>
             Title / settlement fee ($)
           </label>
-          <input
-            id="sns-titleFee"
-            type="number"
-            step={100}
-            className={input}
-            value={inputs.titleFee || ""}
-            onChange={(e) => set("titleFee", Number.parseFloat(e.target.value) || 0)}
-          />
+          <DollarInput id="sns-titleFee" className={input} value={inputs.titleFee} onChange={(n) => set("titleFee", n)} />
           <p className="mt-1 font-sans text-[11px] text-slate-500">Estimate from your title company</p>
         </div>
         <div>
           <label htmlFor="sns-taxPro" className={label}>
             Property tax proration ($)
           </label>
-          <input
-            id="sns-taxPro"
-            type="number"
-            step={100}
-            className={input}
-            value={inputs.taxPro || ""}
-            onChange={(e) => set("taxPro", Number.parseFloat(e.target.value) || 0)}
-          />
+          <DollarInput id="sns-taxPro" className={input} value={inputs.taxPro} onChange={(n) => set("taxPro", n)} />
           <p className="mt-1 font-sans text-[11px] text-slate-500">Seller&apos;s share based on closing date</p>
         </div>
         <div>
           <label htmlFor="sns-other" className={label}>
             Other seller costs ($)
           </label>
-          <input
-            id="sns-other"
-            type="number"
-            step={100}
-            className={input}
-            value={inputs.other || ""}
-            onChange={(e) => set("other", Number.parseFloat(e.target.value) || 0)}
-          />
+          <DollarInput id="sns-other" className={input} value={inputs.other} onChange={(n) => set("other", n)} />
         </div>
       </div>
     </section>

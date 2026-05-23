@@ -15,6 +15,7 @@ import { WaitingReframe } from "./WaitingReframe";
 import { WaitingInsight } from "./WaitingInsight";
 import { WaitingCTA } from "./WaitingCTA";
 import { SmartToolIntro } from "./SmartToolIntro";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 const defaultInputs: WaitingInputs = {
   hp: 480000,
@@ -28,6 +29,7 @@ const defaultInputs: WaitingInputs = {
 };
 
 export default function WaitingCalculator() {
+  const { t } = useLanguage();
   const [inputs, setInputs] = useState<WaitingInputs>(defaultInputs);
   const [waitMonths, setWaitMonths] = useState(6);
 
@@ -59,12 +61,8 @@ export default function WaitingCalculator() {
         } as CSSProperties
       }
     >
-      <SmartToolIntro title="The True Cost of Waiting">
-        <p>
-          Every month you wait to buy a home has a real financial cost — rent paid that builds no equity, home prices
-          that keep appreciating, and the compounding wealth you&apos;re not building. This tool calculates exactly what
-          waiting is costing you, so you can make the decision with the full picture in front of you.
-        </p>
+      <SmartToolIntro title={t("tool.waiting.title")}>
+        <p>{t("tool.waiting.intro")}</p>
       </SmartToolIntro>
 
       <section className="mt-10 space-y-8">
@@ -74,7 +72,7 @@ export default function WaitingCalculator() {
         <WaitingBreakdown data={data} waitMonths={waitMonths} />
         <WaitingMonthlyTicker data={data} />
         <div>
-          <p className="mb-3 text-[13px] font-semibold text-[#0B2A4A]">Compare common wait lengths</p>
+          <p className="mb-3 text-[13px] font-semibold text-[#0B2A4A]">{t("tool.waiting.compareLabel")}</p>
           <WaitingScenarioStrip waitMonths={waitMonths} scenarioData={scenarioData} onSelect={setWaitMonths} />
         </div>
         <WaitingChart chartData={chartData} chartMonths={chartMonths} chartKey={chartKey} />
@@ -82,9 +80,7 @@ export default function WaitingCalculator() {
         <WaitingInsight waitMonths={waitMonths} inputs={inputs} data={data} />
         <WaitingCTA />
         <p className="text-center text-[10px] leading-relaxed text-[var(--tcw-text-muted)]">
-          For educational purposes only. Home price appreciation, rent increases, and interest rate projections are
-          assumptions — not guarantees. Actual market conditions will vary. This tool does not constitute financial advice
-          or a loan offer. Contact Infinite Home Lending for a personalized analysis.
+          {t("tool.waiting.disclaimer")}
         </p>
       </section>
     </div>

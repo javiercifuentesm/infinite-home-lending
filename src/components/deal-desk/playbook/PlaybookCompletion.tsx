@@ -34,7 +34,7 @@ export function PlaybookCompletion() {
       <div className="mx-auto max-w-4xl">
         <h2 className="text-center font-[Georgia,serif] text-2xl font-medium text-[#0B2A4A] sm:text-[1.5rem]">The Deal Desk is complete.</h2>
         <p className="mx-auto mt-4 max-w-[600px] text-center font-sans text-[16px] leading-relaxed text-slate-600">
-          Five tools. Five moments that move deals. One lender partner who brings the math to every listing appointment, buyer consultation, and offer
+          12 tools. Every moment that moves a deal. One lender partner who brings the math to every listing appointment, buyer consultation, and offer
           negotiation.
         </p>
 
@@ -73,7 +73,7 @@ export function PlaybookCompletion() {
         <div className="mt-12 grid gap-8 md:grid-cols-3">
           <div className="text-center">
             <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#0B2A4A] text-2xl text-[#C6A15B]">🔧</div>
-            <p className="mt-3 font-sans text-[14px] font-semibold text-[#0B2A4A]">All 5 Deal Desk tools — free forever for IHL partner agents</p>
+            <p className="mt-3 font-sans text-[14px] font-semibold text-[#0B2A4A]">All 12 Deal Desk tools — free forever for IHL partner agents</p>
             <p className="mt-2 font-sans text-[12px] leading-relaxed text-slate-600">
               Run every calculator as often as you need — no paywall, no limits.
             </p>

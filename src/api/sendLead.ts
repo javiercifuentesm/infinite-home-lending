@@ -15,6 +15,8 @@ export async function sendLeadEmail(params: {
   date: string;
   time: string;
   transcript: string;
+  /** When set, used as email subject instead of the default concierge subject */
+  lead_subject_override?: string;
 }) {
   const response = await fetch(apiUrl("/api/send-lead"), {
     method: "POST",
@@ -34,6 +36,9 @@ export async function sendLeadEmail(params: {
       date: params.date,
       time: params.time,
       transcript: params.transcript,
+      ...(params.lead_subject_override
+        ? { lead_subject_override: params.lead_subject_override }
+        : {}),
     }),
   });
 

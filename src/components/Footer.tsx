@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Facebook, Instagram, Linkedin, Mail, MapPin, Phone } from "lucide-react";
 import { IHLLogo } from "./IHLLogo";
+import { useLanguage } from "../i18n/LanguageContext";
 
 const OFFICE_LINES = ["7272 Wisconsin Avenue, 9th Floor", "Bethesda, MD 20814"] as const;
 const PHONE_DISPLAY = "(301) 555-0123";
@@ -16,6 +17,7 @@ const SOCIAL = [
 
 const Footer = () => {
   const year = new Date().getFullYear();
+  const { t } = useLanguage();
 
   return (
     <footer className="site-footer relative isolate overflow-x-clip border-t border-slate-200/60 bg-[#F7F7F5] text-navy">
@@ -41,11 +43,11 @@ const Footer = () => {
             <div className="mt-6 w-8 h-px bg-[#C5A059]" />
 
             <p className="mt-5 max-w-xs font-sans text-[14px] leading-[1.75] text-slate-500">
-              Premium mortgage guidance built around your life — not just your rate. Serving Maryland, Virginia, and Washington, D.C.
+              {t("footer.tagline")}
             </p>
 
             <p className="mt-4 font-heading text-[13px] italic text-[#9a7b3a]">
-              Tailored Lending. Infinite Possibilities.
+              {t("footer.slogan")}
             </p>
 
             <div className="mt-7 flex items-center gap-2.5">
@@ -68,22 +70,22 @@ const Footer = () => {
           {/* Company nav */}
           <div className="lg:col-span-2">
             <h2 className="font-sans text-[10px] font-semibold uppercase tracking-[0.22em] text-[#C5A059]">
-              Company
+              {t("footer.company")}
             </h2>
             <ul className="mt-5 flex flex-col gap-3">
               {[
-                { label: "About Us", to: "/about" },
-                { label: "How We Work", to: "/how-it-works" },
-                { label: "Loan Solutions", to: "/solutions" },
-                { label: "Knowledge Center", to: "/knowledge-center" },
-                { label: "Contact", to: "/contact" },
-              ].map(({ label, to }) => (
-                <li key={label}>
+                { labelKey: "footer.aboutUs", to: "/about" },
+                { labelKey: "footer.howWeWork", to: "/how-it-works" },
+                { labelKey: "footer.loanSolutions", to: "/solutions" },
+                { labelKey: "footer.knowledgeCenter", to: "/knowledge-center" },
+                { labelKey: "footer.contact", to: "/contact" },
+              ].map(({ labelKey, to }) => (
+                <li key={to}>
                   <Link
                     to={to}
                     className="font-sans text-[13px] text-slate-500 transition-colors duration-150 hover:text-navy"
                   >
-                    {label}
+                    {t(labelKey)}
                   </Link>
                 </li>
               ))}
@@ -93,22 +95,22 @@ const Footer = () => {
           {/* Resources nav */}
           <div className="lg:col-span-2">
             <h2 className="font-sans text-[10px] font-semibold uppercase tracking-[0.22em] text-[#C5A059]">
-              Resources
+              {t("footer.resources")}
             </h2>
             <ul className="mt-5 flex flex-col gap-3">
               {[
-                { label: "Smart Tools", to: "/smart-tools" },
-                { label: "Deal Desk", to: "/deal-desk" },
-                { label: "Calculators", to: "/calculators" },
-                { label: "Ask Luna", to: "/" },
-                { label: "Start Pre-Approval", to: "/get-started" },
-              ].map(({ label, to }) => (
-                <li key={label}>
+                { labelKey: "footer.smartTools", to: "/smart-tools" },
+                { labelKey: "footer.dealDesk", to: "/deal-desk" },
+                { labelKey: "footer.calculators", to: "/calculators" },
+                { labelKey: "footer.askSarah", to: "/" },
+                { labelKey: "footer.startPreApproval", to: "/get-started" },
+              ].map(({ labelKey, to }) => (
+                <li key={to}>
                   <Link
                     to={to}
                     className="font-sans text-[13px] text-slate-500 transition-colors duration-150 hover:text-navy"
                   >
-                    {label}
+                    {t(labelKey)}
                   </Link>
                 </li>
               ))}
@@ -118,7 +120,7 @@ const Footer = () => {
           {/* Contact cards */}
           <div className="flex flex-col gap-3 lg:col-span-4">
             <h2 className="font-sans text-[10px] font-semibold uppercase tracking-[0.22em] text-[#C5A059]">
-              Get in Touch
+              {t("footer.getInTouch")}
             </h2>
 
             <a
@@ -131,7 +133,7 @@ const Footer = () => {
                 <MapPin className="h-4 w-4" strokeWidth={1.75} aria-hidden />
               </span>
               <span>
-                <span className="block font-sans text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400">Office</span>
+                <span className="block font-sans text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400">{t("footer.office")}</span>
                 <span className="mt-1 block font-sans text-[13px] leading-snug text-slate-700 transition-colors group-hover:text-navy">
                   {OFFICE_LINES[0]}<br />{OFFICE_LINES[1]}
                 </span>
@@ -146,7 +148,7 @@ const Footer = () => {
                 <Mail className="h-4 w-4" strokeWidth={1.75} aria-hidden />
               </span>
               <span>
-                <span className="block font-sans text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400">Email</span>
+                <span className="block font-sans text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400">{t("footer.email")}</span>
                 <span className="mt-1 block font-sans text-[13px] text-slate-700 transition-colors group-hover:text-[#8b6f2f]">
                   {EMAIL}
                 </span>
@@ -161,7 +163,7 @@ const Footer = () => {
                 <Phone className="h-4 w-4" strokeWidth={1.75} aria-hidden />
               </span>
               <span>
-                <span className="block font-sans text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400">Phone</span>
+                <span className="block font-sans text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400">{t("footer.phone")}</span>
                 <span className="mt-1 block font-sans text-[13px] tabular-nums text-slate-700 transition-colors group-hover:text-[#8b6f2f]">
                   {PHONE_DISPLAY}
                 </span>
@@ -174,15 +176,15 @@ const Footer = () => {
         <div className="mt-14 border-t border-slate-200/80 py-8">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div className="space-y-1.5 font-sans text-[11px] leading-[1.75] text-slate-400">
-              <p className="text-slate-500">© {year} Infinite Home Lending. All rights reserved.</p>
-              <p>NMLS #{NMLS_ID} · Licensed in Maryland, Virginia, and Washington DC.</p>
-              <p>All loans subject to credit approval. Rates and terms subject to change without notice.</p>
+              <p className="text-slate-500">© {year} Infinite Home Lending. {t("footer.rights")}</p>
+              <p>NMLS #{NMLS_ID} · {t("footer.nmls")}</p>
+              <p>{t("footer.loanDisclaimer")}</p>
             </div>
             <div className="flex flex-col gap-2 sm:items-end sm:text-right">
-              <p className="font-sans text-[11px] text-slate-400">Serving Maryland, Virginia &amp; Washington, D.C.</p>
+              <p className="font-sans text-[11px] text-slate-400">{t("footer.serving")}</p>
               <div className="flex gap-6">
-                <a href="#" className="font-sans text-[11px] text-slate-400 transition-colors hover:text-navy">Privacy Policy</a>
-                <a href="#" className="font-sans text-[11px] text-slate-400 transition-colors hover:text-navy">Terms of Service</a>
+                <a href="#" className="font-sans text-[11px] text-slate-400 transition-colors hover:text-navy">{t("footer.privacy")}</a>
+                <a href="#" className="font-sans text-[11px] text-slate-400 transition-colors hover:text-navy">{t("footer.terms")}</a>
               </div>
             </div>
           </div>

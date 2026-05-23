@@ -1,4 +1,5 @@
 import type { SellerNetInputs } from "../../../hooks/useSellerNetMath";
+import { DollarInput, PercentInput } from "../../tools/shared/FormattedInput";
 
 const label = "mb-1.5 block font-sans text-[12px] font-semibold text-[#0B2A4A]";
 const input =
@@ -23,39 +24,24 @@ export function SNSPropertyInputs({ inputs, onChange }: Props) {
           <label htmlFor="sns-price" className={label}>
             List / sale price ($)
           </label>
-          <input
-            id="sns-price"
-            type="number"
-            step={5000}
-            className={input}
-            value={inputs.price || ""}
-            onChange={(e) => set("price", Number.parseFloat(e.target.value) || 0)}
-          />
+          <DollarInput id="sns-price" className={input} value={inputs.price} onChange={(n) => set("price", n)} />
         </div>
         <div>
           <label htmlFor="sns-payoff" className={label}>
             Mortgage payoff ($)
           </label>
-          <input
-            id="sns-payoff"
-            type="number"
-            step={1000}
-            className={input}
-            value={inputs.payoff || ""}
-            onChange={(e) => set("payoff", Number.parseFloat(e.target.value) || 0)}
-          />
+          <DollarInput id="sns-payoff" className={input} value={inputs.payoff} onChange={(n) => set("payoff", n)} />
         </div>
         <div>
           <label htmlFor="sns-comm" className={label}>
             Commission rate (%)
           </label>
-          <input
+          <PercentInput
             id="sns-comm"
-            type="number"
             step={0.25}
             className={input}
-            value={inputs.comm || ""}
-            onChange={(e) => set("comm", Number.parseFloat(e.target.value) || 0)}
+            value={inputs.comm}
+            onChange={(n) => set("comm", n)}
           />
           <p className="mt-1 font-sans text-[11px] text-slate-500">Total — both sides combined</p>
         </div>
@@ -63,14 +49,7 @@ export function SNSPropertyInputs({ inputs, onChange }: Props) {
           <label htmlFor="sns-concession" className={label}>
             Seller concession ($)
           </label>
-          <input
-            id="sns-concession"
-            type="number"
-            step={500}
-            className={input}
-            value={inputs.concession || ""}
-            onChange={(e) => set("concession", Number.parseFloat(e.target.value) || 0)}
-          />
+          <DollarInput id="sns-concession" className={input} value={inputs.concession} onChange={(n) => set("concession", n)} />
           <p className="mt-1 font-sans text-[11px] text-slate-500">Buydown credit, closing cost help, repairs, etc.</p>
         </div>
         <div>

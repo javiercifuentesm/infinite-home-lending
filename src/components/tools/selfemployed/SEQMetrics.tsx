@@ -1,4 +1,5 @@
 import type { SEQRunResult } from "../../../hooks/useSEQMath";
+import { useLanguage } from "../../../i18n/LanguageContext";
 import type { SEQPath } from "./SEQPathTabs";
 import { fmt, fmtK } from "./seqFormat";
 
@@ -8,6 +9,7 @@ type Props = {
 };
 
 export function SEQMetrics({ path, results }: Props) {
+  const { t } = useLanguage();
   const useBs = path === "bankstatement";
   const {
     tx,
@@ -37,33 +39,36 @@ export function SEQMetrics({ path, results }: Props) {
 
   const priceColor = canAfford ? "text-[#27500A]" : "text-[#A32D2D]";
 
+  const maxLoanSub = t("tool.seq.metrics.maxLoanSub").replace("{rate}", rate.toFixed(2));
+  const priceSub = canAfford
+    ? t("tool.seq.metrics.coversTarget")
+    : t("tool.seq.metrics.belowGap").replace("${gap}", fmtK(gap));
+  const debtSub = t("tool.seq.metrics.debtSub").replace("${avail}", fmt(available));
+
   return (
     <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
       <div className="rounded-lg border border-slate-200/90 bg-white p-5 shadow-sm">
-        <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">Qualifying income</p>
-        <p className="mt-2 font-serif text-2xl font-semibold text-[#0B2A4A]">${fmt(primaryIncome)}/mo</p>
-        <p className="mt-1 text-[11px] text-slate-500">per month</p>
+        <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">{t("tool.seq.metrics.qualIncome")}</p>
+        <p className="mt-2 font-serif text-2xl font-semibold text-[#0B2A4A]">
+          ${fmt(primaryIncome)}
+          {t("tool.seq.cols.perMo")}
+        </p>
+        <p className="mt-1 text-[11px] text-slate-500">{t("tool.seq.metrics.perMonth")}</p>
       </div>
       <div className="rounded-lg border border-slate-200/90 bg-white p-5 shadow-sm">
-        <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">Max qualifying loan</p>
+        <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">{t("tool.seq.metrics.maxLoan")}</p>
         <p className="mt-2 font-serif text-2xl font-semibold text-[#0B2A4A]">${fmtK(primaryMaxLoan)}</p>
-        <p className="mt-1 text-[11px] text-slate-500">
-          at {rate.toFixed(2)}% / 43% DTI
-        </p>
+        <p className="mt-1 text-[11px] text-slate-500">{maxLoanSub}</p>
       </div>
       <div className="rounded-lg border border-slate-200/90 bg-white p-5 shadow-sm">
-        <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">Max home price</p>
+        <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">{t("tool.seq.metrics.maxPrice")}</p>
         <p className={`mt-2 font-serif text-2xl font-semibold ${priceColor}`}>${fmtK(primaryMaxPrice)}</p>
-        <p className="mt-1 text-[11px] text-slate-500">
-          {canAfford ? "✓ covers target" : `Below target by $${fmtK(gap)}`}
-        </p>
+        <p className="mt-1 text-[11px] text-slate-500">{priceSub}</p>
       </div>
       <div className="rounded-lg border border-slate-200/90 bg-white p-5 shadow-sm">
-        <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">Max total debt payment</p>
+        <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">{t("tool.seq.metrics.maxDebtPmt")}</p>
         <p className="mt-2 font-serif text-2xl font-semibold text-[#0B2A4A]">${fmt(totalDtiPmt)}</p>
-        <p className="mt-1 text-[11px] text-slate-500">
-          at 43% DTI · ${fmt(available)} available for mortgage
-        </p>
+        <p className="mt-1 text-[11px] text-slate-500">{debtSub}</p>
       </div>
     </div>
   );

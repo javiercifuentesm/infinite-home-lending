@@ -1,6 +1,7 @@
 import { useMemo, useState, type CSSProperties } from "react";
 import { defaultHelocInputs, runCalculation } from "../../../hooks/useHelocMath";
 import type { HelocInputs } from "../../../hooks/useHelocMath";
+import { useLanguage } from "../../../i18n/LanguageContext";
 import { HelocEquityInputs } from "./HelocEquityInputs";
 import { HelocTermInputs } from "./HelocTermInputs";
 import { HelocUseCaseSelector, type UseCaseKey } from "./HelocUseCaseSelector";
@@ -17,6 +18,7 @@ import { HelocCTA } from "./HelocCTA";
 import { SmartToolIntro } from "../SmartToolIntro";
 
 export default function HelocCalculator() {
+  const { t } = useLanguage();
   const [inputs, setInputs] = useState<HelocInputs>(() => defaultHelocInputs());
   const [activeUse, setActiveUse] = useState<UseCaseKey>("reno");
 
@@ -40,12 +42,8 @@ export default function HelocCalculator() {
         } as CSSProperties
       }
     >
-      <SmartToolIntro title="HELOC Smart Planner">
-        <p>
-          Most HELOC calculators show you a credit limit and stop there. This one shows you your full borrowing power, the real
-          cost through both phases of the loan, what happens when rates rise, and whether a HELOC is actually the right tool for
-          what you&apos;re trying to do — compared to your other options.
-        </p>
+      <SmartToolIntro title={t("tool.heloc.title")}>
+        <p>{t("tool.heloc.intro")}</p>
       </SmartToolIntro>
 
       <section className="mt-10 space-y-8">
@@ -64,12 +62,7 @@ export default function HelocCalculator() {
         <HelocInsight inputs={inputs} results={results} activeUse={activeUse} />
         <HelocCTA />
 
-        <p className="text-center text-[10px] leading-relaxed text-[var(--color-text-tertiary)]">
-          Estimates are for educational purposes only and do not constitute a loan offer. HELOC availability, rates, and CLTV
-          limits vary by lender, state, and borrower qualification. Variable rates may increase significantly — model rate
-          scenarios accordingly. Tax deductibility of HELOC interest depends on use of funds; consult a tax advisor. Contact
-          Infinite Home Lending for a personalized analysis.
-        </p>
+        <p className="text-center text-[10px] leading-relaxed text-[var(--color-text-tertiary)]">{t("tool.heloc.disclaimer")}</p>
       </section>
     </div>
   );

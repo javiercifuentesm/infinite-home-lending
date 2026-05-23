@@ -1,14 +1,7 @@
 import { forwardRef, useLayoutEffect, useMemo, useState } from "react";
 import { motion, useScroll, useTransform, useMotionValueEvent } from "motion/react";
 import { CheckCircle2, Search, ShieldCheck, Target, Zap } from "lucide-react";
-
-const STEPS = [
-  { title: "Consultation", desc: "Deep discovery of your goals and financial landscape.", icon: Search },
-  { title: "Strategy", desc: "Designing a bespoke loan structure that fits your life.", icon: Target },
-  { title: "Pre-Approval", desc: "Positioning your offer with institutional-grade authority.", icon: ShieldCheck },
-  { title: "Execution", desc: "Managing every detail with precision and proactive updates.", icon: Zap },
-  { title: "Closing", desc: "Finalizing your journey with total clarity and ease.", icon: CheckCircle2 },
-] as const;
+import { useLanguage } from "../i18n/LanguageContext";
 
 /**
  * Raw section scroll (0→1) is remapped so the full 0–1 band range is reachable
@@ -55,6 +48,16 @@ export const InfiniteProcessRail = forwardRef<HTMLElement, InfiniteProcessRailPr
       setActiveStep((prev) => (prev !== next ? next : prev));
     });
 
+    const { t } = useLanguage();
+
+    const STEPS = [
+      { title: t("home.process.step1.title"), desc: t("home.process.step1.desc"), icon: Search },
+      { title: t("home.process.step2.title"), desc: t("home.process.step2.desc"), icon: Target },
+      { title: t("home.process.step3.title"), desc: t("home.process.step3.desc"), icon: ShieldCheck },
+      { title: t("home.process.step4.title"), desc: t("home.process.step4.desc"), icon: Zap },
+      { title: t("home.process.step5.title"), desc: t("home.process.step5.desc"), icon: CheckCircle2 },
+    ];
+
     const connectorTransition = reducedMotion ? "transition-none" : "transition-[width] duration-500 ease-out";
 
     const stepStates = useMemo(() => {
@@ -84,10 +87,10 @@ export const InfiniteProcessRail = forwardRef<HTMLElement, InfiniteProcessRailPr
               transition={{ duration: reducedMotion ? 0 : 0.75 }}
             >
               <h2 className="type-section-title-lg mb-6 text-[2rem] text-white sm:text-[2.35rem] lg:text-[2.65rem]">
-                The Infinite Process
+                {t("home.process.title")}
               </h2>
               <p className="mx-auto max-w-2xl font-sans text-lg font-normal leading-[1.65] text-slate-400/95 lg:text-xl">
-                A structured, intelligent path designed to bring clarity and confidence from consultation to closing.
+                {t("home.process.subtitle")}
               </p>
             </motion.div>
           </div>
@@ -126,7 +129,7 @@ export const InfiniteProcessRail = forwardRef<HTMLElement, InfiniteProcessRailPr
 
                 return (
                   <div
-                    key={item.title}
+                    key={idx}
                     className="flex flex-col items-center border-b border-white/[0.07] pb-10 text-center last:border-0 last:pb-0 md:items-start md:border-0 md:pb-0 md:text-left"
                   >
                     <div className="relative mx-auto mb-6 h-20 w-20 shrink-0 md:mx-0 md:mb-10">

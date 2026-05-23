@@ -1,11 +1,14 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { InactivityWarning } from "../components/deal-desk/InactivityWarning";
 import { DealDeskHeader } from "../components/deal-desk/DealDeskHeader";
 import { DealDeskHero } from "../components/deal-desk/DealDeskHero";
 import { DealDeskValueProps } from "../components/deal-desk/DealDeskValueProps";
 import { DealDeskToolGrid } from "../components/deal-desk/DealDeskToolGrid";
-import { DealDeskPartnerCTA } from "../components/deal-desk/DealDeskPartnerCTA";
 import { IntelligenceLoop } from "../components/deal-desk/IntelligenceLoop";
+import Nexio from "../components/Nexio";
+import { useDealDeskAuth } from "../hooks/useDealDeskAuth";
+import { useDealDeskInactivity } from "../hooks/useDealDeskInactivity";
 
 const CANONICAL = "https://www.infinitehomelending.com/deal-desk";
 
@@ -13,6 +16,9 @@ const PLAYFAIR_FONT_ID = "deal-desk-playfair-font";
 const MESH_STYLE_ID = "deal-desk-mesh-keyframes";
 
 export default function DealDesk() {
+  const { isAuthenticated } = useDealDeskAuth();
+  const { showWarning, resetTimer, logout } = useDealDeskInactivity();
+
   useEffect(() => {
     document.title = "The Deal Desk | Realtor Partner Tools | Infinite Home Lending";
     const setMeta = (attr: "name" | "property", key: string, content: string) => {
@@ -66,10 +72,6 @@ export default function DealDesk() {
     };
   }, []);
 
-  const scrollToTools = () => {
-    document.getElementById("deal-desk-tools")?.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
-
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#0B2A4A] pt-[calc(var(--site-header-height)+0.25rem)]">
       <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden>
@@ -99,11 +101,10 @@ export default function DealDesk() {
 
       <div className="relative z-10">
         <DealDeskHeader hubOnly />
-        <DealDeskHero onExploreClick={scrollToTools} />
+        <DealDeskHero />
         <IntelligenceLoop />
         <DealDeskValueProps />
         <DealDeskToolGrid />
-        <DealDeskPartnerCTA />
         <div
           className="border-t px-4 py-8 sm:px-6"
           style={{ borderColor: "rgba(198,161,91,0.1)", backgroundColor: "transparent" }}
@@ -132,7 +133,11 @@ export default function DealDesk() {
             for consumers remain available separately.
           </p>
         </div>
+        <Nexio />
       </div>
+      {isAuthenticated() ? (
+        <InactivityWarning showWarning={showWarning} resetTimer={resetTimer} logout={logout} />
+      ) : null}
     </div>
   );
 }

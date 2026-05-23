@@ -1,4 +1,5 @@
 import type { AssumableInputs, LoanType } from "../../../hooks/useAssumableMath";
+import { DollarInput, PercentInput } from "../../tools/shared/FormattedInput";
 
 const label = "mb-1.5 block font-sans text-[12px] font-semibold text-[#0B2A4A]";
 const input =
@@ -39,13 +40,12 @@ export function ACLoanInputs({ inputs, onChange }: Props) {
           <label htmlFor="ac-assumedRate" className={label}>
             Assumed rate (%)
           </label>
-          <input
+          <PercentInput
             id="ac-assumedRate"
-            type="number"
             step={0.125}
             className={input}
-            value={inputs.assumedRate || ""}
-            onChange={(e) => set("assumedRate", Number.parseFloat(e.target.value) || 0)}
+            value={inputs.assumedRate}
+            onChange={(n) => set("assumedRate", n)}
           />
           <p className="mt-1 font-sans text-[11px] text-slate-500">Rate on the existing loan being assumed</p>
         </div>
@@ -53,14 +53,7 @@ export function ACLoanInputs({ inputs, onChange }: Props) {
           <label htmlFor="ac-loanBal" className={label}>
             Remaining loan balance ($)
           </label>
-          <input
-            id="ac-loanBal"
-            type="number"
-            step={5000}
-            className={input}
-            value={inputs.loanBal || ""}
-            onChange={(e) => set("loanBal", Number.parseFloat(e.target.value) || 0)}
-          />
+          <DollarInput id="ac-loanBal" className={input} value={inputs.loanBal} onChange={(n) => set("loanBal", n)} />
         </div>
         <div>
           <label htmlFor="ac-termYrs" className={label}>

@@ -17,9 +17,11 @@
     "process-logo": ".venv/bin/python scripts/process-ihl-logo.py"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.91.1",
     "@aws-sdk/client-s3": "^3.1031.0",
     "@aws-sdk/s3-request-presigner": "^3.1031.0",
-    "@elevenlabs/react": "^1.1.1",
+    "@elevenlabs/client": "1.2.1",
+    "@elevenlabs/react": "1.2.1",
     "@google/genai": "^1.29.0",
     "@tailwindcss/vite": "^4.1.14",
     "@vitejs/plugin-react": "^5.0.4",
@@ -47,8 +49,8 @@
     "@types/multer": "^2.1.0",
     "@types/node": "^22.14.0",
     "autoprefixer": "^10.4.21",
-    "tailwindcss": "^4.1.14",
     "patch-package": "^8.0.1",
+    "tailwindcss": "^4.1.14",
     "tsx": "^4.21.0",
     "typescript": "~5.8.2",
     "vite": "^6.2.0"

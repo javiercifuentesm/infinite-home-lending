@@ -1,4 +1,5 @@
 import type { PowerMapInputs } from "../../../hooks/usePowerMapMath";
+import { useLanguage } from "../../../i18n/LanguageContext";
 
 type Props = {
   inputs: PowerMapInputs;
@@ -13,11 +14,13 @@ const rangeClass =
   "mt-2 h-1 w-full cursor-pointer appearance-none rounded-full bg-slate-200 accent-[#C6A15B] [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#C6A15B]";
 
 export function PMImprovementSliders({ inputs, onChange }: Props) {
+  const { t } = useLanguage();
   const set = <K extends keyof PowerMapInputs>(key: K, value: PowerMapInputs[K]) =>
     onChange({ ...inputs, [key]: value });
 
   const { scoreBase, creditImp, debtPayoff, savingsBoost, incomeGrowth } = inputs;
   const targetScore = Math.min(760, scoreBase + creditImp);
+  const pts = t("tool.pm.sliders.points");
 
   return (
     <section className="rounded-xl border border-slate-200/90 bg-white p-5 shadow-sm sm:p-6">
@@ -25,19 +28,16 @@ export function PMImprovementSliders({ inputs, onChange }: Props) {
         <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#3B6D11] text-[11px] font-bold text-white">
           2
         </span>
-        <h2 className="font-[Georgia,serif] text-[15px] font-medium text-[#0B2A4A]">Financial improvement simulator</h2>
+        <h2 className="font-[Georgia,serif] text-[15px] font-medium text-[#0B2A4A]">{t("tool.pm.sliders.heading")}</h2>
       </div>
-      <p className="mb-6 text-[11px] leading-relaxed text-slate-500">
-        Adjust each slider to model improvements to your financial profile. Watch your buying power and unlocked markets update
-        instantly.
-      </p>
+      <p className="mb-6 text-[11px] leading-relaxed text-slate-500">{t("tool.pm.sliders.subtitle")}</p>
 
       <div className="space-y-6">
         <div>
           <div className={labelRow}>
-            <span className={labelText}>📈 Credit score improvement</span>
+            <span className={labelText}>{t("tool.pm.sliders.credit")}</span>
             <span className={valueText}>
-              {creditImp > 0 ? `+${creditImp} points` : "No improvement"}
+              {creditImp > 0 ? `+${creditImp} ${pts}` : t("tool.pm.sliders.creditNone")}
             </span>
           </div>
           <input
@@ -48,18 +48,18 @@ export function PMImprovementSliders({ inputs, onChange }: Props) {
             value={creditImp}
             onChange={(e) => set("creditImp", parseInt(e.target.value, 10))}
             className={rangeClass}
-            aria-label="Credit score improvement"
+            aria-label={t("tool.pm.sliders.credit")}
           />
           <p className={noteText}>
-            Moving from {scoreBase} to {targetScore} unlocks better rates and lower PMI costs
+            {t("tool.pm.sliders.creditNote").replace("{base}", String(scoreBase)).replace("{target}", String(targetScore))}
           </p>
         </div>
 
         <div>
           <div className={labelRow}>
-            <span className={labelText}>💳 Monthly debt payoff ($)</span>
+            <span className={labelText}>{t("tool.pm.sliders.debt")}</span>
             <span className={valueText}>
-              {debtPayoff > 0 ? `${fmtShort(debtPayoff)}/mo reduced` : "No reduction"}
+              {debtPayoff > 0 ? `${fmtShort(debtPayoff)}${t("tool.pm.sliders.moReduced")}` : t("tool.pm.sliders.debtNone")}
             </span>
           </div>
           <input
@@ -70,15 +70,17 @@ export function PMImprovementSliders({ inputs, onChange }: Props) {
             value={debtPayoff}
             onChange={(e) => set("debtPayoff", parseInt(e.target.value, 10))}
             className={rangeClass}
-            aria-label="Monthly debt payoff"
+            aria-label={t("tool.pm.sliders.debt")}
           />
-          <p className={noteText}>Every $100/month in debt eliminated adds ~$15,000–$20,000 in buying power</p>
+          <p className={noteText}>{t("tool.pm.sliders.debtNote")}</p>
         </div>
 
         <div>
           <div className={labelRow}>
-            <span className={labelText}>🏦 Additional monthly savings ($)</span>
-            <span className={valueText}>{savingsBoost > 0 ? `+$${savingsBoost}/mo` : "+$0/mo"}</span>
+            <span className={labelText}>{t("tool.pm.sliders.savings")}</span>
+            <span className={valueText}>
+              {savingsBoost > 0 ? `+$${savingsBoost}${t("tool.pm.sliders.mo")}` : t("tool.pm.sliders.savingsNone")}
+            </span>
           </div>
           <input
             type="range"
@@ -88,16 +90,18 @@ export function PMImprovementSliders({ inputs, onChange }: Props) {
             value={savingsBoost}
             onChange={(e) => set("savingsBoost", parseInt(e.target.value, 10))}
             className={rangeClass}
-            aria-label="Additional monthly savings"
+            aria-label={t("tool.pm.sliders.savings")}
           />
-          <p className={noteText}>More savings = faster down payment accumulation and expanded loan eligibility</p>
+          <p className={noteText}>{t("tool.pm.sliders.savingsNote")}</p>
         </div>
 
         <div>
           <div className={labelRow}>
-            <span className={labelText}>💼 Annual income growth ($)</span>
+            <span className={labelText}>{t("tool.pm.sliders.income")}</span>
             <span className={valueText}>
-              {incomeGrowth > 0 ? `+$${incomeGrowth.toLocaleString("en-US")}/yr` : "+$0/yr"}
+              {incomeGrowth > 0
+                ? `+$${incomeGrowth.toLocaleString("en-US")}${t("tool.pm.sliders.yr")}`
+                : t("tool.pm.sliders.incomeNone")}
             </span>
           </div>
           <input
@@ -108,9 +112,9 @@ export function PMImprovementSliders({ inputs, onChange }: Props) {
             value={incomeGrowth}
             onChange={(e) => set("incomeGrowth", parseInt(e.target.value, 10))}
             className={rangeClass}
-            aria-label="Annual income growth"
+            aria-label={t("tool.pm.sliders.income")}
           />
-          <p className={noteText}>Raise, promotion, or side income. Every $10,000/yr adds ~$30,000 in buying power</p>
+          <p className={noteText}>{t("tool.pm.sliders.incomeNote")}</p>
         </div>
       </div>
     </section>

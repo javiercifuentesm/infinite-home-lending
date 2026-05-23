@@ -5,10 +5,11 @@ import { DealDeskHeader } from "../DealDeskHeader";
 import { SNSCTA } from "./SNSCTA";
 import { SNSGuidedTour } from "./SNSGuidedTour";
 import { SNSInsight } from "./SNSInsight";
-import { SNSJurisdictionInputs } from "./SNSJurisdictionInputs";
+import { SNSAgentBranding, type AgentBranding } from "./SNSAgentBranding";
 import { SNSNetSheetTable } from "./SNSNetSheetTable";
 import { SNSPrintButton } from "./SNSPrintButton";
 import { SNSPropertyInputs } from "./SNSPropertyInputs";
+import { SNSJurisdictionInputs } from "./SNSJurisdictionInputs";
 import { SNSScenarioHero } from "./SNSScenarioHero";
 import { SNSTaxNote } from "./SNSTaxNote";
 import { SNSUnderwaterWarning } from "./SNSUnderwaterWarning";
@@ -30,6 +31,13 @@ export default function SNSCalculator() {
   const [inputs, setInputs] = useState<SellerNetInputs>(defaultInputs);
   const [tourUiActive, setTourUiActive] = useState(false);
   const [replayToken, setReplayToken] = useState(0);
+  const [branding, setBranding] = useState<AgentBranding>({
+    name: "",
+    brokerage: "",
+    phone: "",
+    email: "",
+    logoDataUrl: null,
+  });
   const mainToolRef = useRef<HTMLDivElement>(null);
 
   const results = useMemo(() => runCalculation(inputs), [inputs]);
@@ -63,13 +71,14 @@ export default function SNSCalculator() {
             <div className="sns-inputs space-y-8 print:hidden">
               <SNSPropertyInputs inputs={inputs} onChange={setInputs} />
               <SNSJurisdictionInputs inputs={inputs} onChange={setInputs} />
+              <SNSAgentBranding branding={branding} onChange={setBranding} />
             </div>
 
             <div className="sns-results space-y-8">
               <SNSScenarioHero results={results} />
 
               <div className="print:hidden">
-                <SNSPrintButton />
+                <SNSPrintButton results={results} branding={branding} />
               </div>
 
               <SNSNetSheetTable results={results} />

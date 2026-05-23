@@ -1,4 +1,5 @@
 import type { SEQRunResult } from "../../../hooks/useSEQMath";
+import { useLanguage } from "../../../i18n/LanguageContext";
 import type { SEQPath } from "./SEQPathTabs";
 import { fmt, fmtK } from "./seqFormat";
 
@@ -16,6 +17,7 @@ function StarIcon() {
 }
 
 export function SEQWinnerBanner({ path, results }: Props) {
+  const { t } = useLanguage();
   const {
     tx,
     bs,
@@ -31,6 +33,9 @@ export function SEQWinnerBanner({ path, results }: Props) {
   } = results;
 
   const neither = txMaxLoan <= 0 && bsMaxLoan <= 0;
+  const priceFmt = `$${fmt(targetPrice)}`;
+  const txPriceK = `$${fmtK(txMaxPrice)}`;
+  const bsPriceK = `$${fmtK(bsMaxPrice)}`;
 
   if (neither) {
     return (
@@ -38,13 +43,20 @@ export function SEQWinnerBanner({ path, results }: Props) {
         className="mb-8 w-full rounded-lg px-5 py-6 text-white"
         style={{ backgroundColor: "#854F0B" }}
       >
-        <p className="font-serif text-[15px] font-semibold">Income too low to qualify at current DTI</p>
-        <p className="mt-2 text-[12px] text-white/80">Reduce debts, increase income, or adjust your target home price.</p>
+        <p className="font-serif text-[15px] font-semibold">{t("tool.seq.banner.neitherTitle")}</p>
+        <p className="mt-2 text-[12px] text-white/80">{t("tool.seq.banner.neitherSub")}</p>
       </div>
     );
   }
 
   if (path === "taxreturn") {
+    const lead = txCanAfford
+      ? t("tool.seq.banner.taxQualifies").replace("${price}", priceFmt)
+      : t("tool.seq.banner.taxMax").replace("${price}", txPriceK);
+    const meta = t("tool.seq.banner.taxMeta")
+      .replace("${inc}", fmt(tx.qualifyingMonthly))
+      .replace("${loan}", fmtK(txMaxLoan))
+      .replace("{rate}", BASE_RATE.toFixed(3));
     return (
       <div className="mb-8 w-full rounded-lg px-5 py-6 text-white" style={{ backgroundColor: "#0B2A4A" }}>
         <div className="flex items-start gap-3">
@@ -52,16 +64,9 @@ export function SEQWinnerBanner({ path, results }: Props) {
             <StarIcon />
           </div>
           <div className="min-w-0 flex-1">
-            <p className="text-[10px] font-semibold uppercase tracking-wider text-white/60">Tax return path result</p>
-            <p className="mt-1 font-serif text-[15px] font-semibold leading-snug">
-              {txCanAfford
-                ? `You qualify for your $${fmt(targetPrice)} target home`
-                : `Your maximum qualifying home price is $${fmtK(txMaxPrice)}`}
-            </p>
-            <p className="mt-2 text-[12px] text-white/70">
-              Qualifying monthly income: ${fmt(tx.qualifyingMonthly)} · Max DTI loan: ${fmtK(txMaxLoan)} · Rate:{" "}
-              {BASE_RATE.toFixed(3)}%
-            </p>
+            <p className="text-[10px] font-semibold uppercase tracking-wider text-white/60">{t("tool.seq.banner.taxEyebrow")}</p>
+            <p className="mt-1 font-serif text-[15px] font-semibold leading-snug">{lead}</p>
+            <p className="mt-2 text-[12px] text-white/70">{meta}</p>
           </div>
         </div>
       </div>
@@ -69,6 +74,13 @@ export function SEQWinnerBanner({ path, results }: Props) {
   }
 
   if (path === "bankstatement") {
+    const lead = bsCanAfford
+      ? t("tool.seq.banner.bsQualifies").replace("${price}", priceFmt)
+      : t("tool.seq.banner.bsMax").replace("${price}", bsPriceK);
+    const meta = t("tool.seq.banner.bsMeta")
+      .replace("${inc}", fmt(bs.qualifyingMonthly))
+      .replace("${loan}", fmtK(bsMaxLoan))
+      .replace("{rate}", BS_RATE.toFixed(3));
     return (
       <div className="mb-8 w-full rounded-lg px-5 py-6 text-white" style={{ backgroundColor: "#3B6D11" }}>
         <div className="flex items-start gap-3">
@@ -76,28 +88,26 @@ export function SEQWinnerBanner({ path, results }: Props) {
             <StarIcon />
           </div>
           <div className="min-w-0 flex-1">
-            <p className="text-[10px] font-semibold uppercase tracking-wider text-white/60">Bank statement path result</p>
-            <p className="mt-1 font-serif text-[15px] font-semibold leading-snug">
-              {bsCanAfford
-                ? `You qualify for your $${fmt(targetPrice)} target home`
-                : `Your maximum qualifying home price is $${fmtK(bsMaxPrice)}`}
-            </p>
-            <p className="mt-2 text-[12px] text-white/70">
-              Qualifying monthly income: ${fmt(bs.qualifyingMonthly)} · Max DTI loan: ${fmtK(bsMaxLoan)} · Rate:{" "}
-              {BS_RATE.toFixed(3)}%
-            </p>
+            <p className="text-[10px] font-semibold uppercase tracking-wider text-white/60">{t("tool.seq.banner.bsEyebrow")}</p>
+            <p className="mt-1 font-serif text-[15px] font-semibold leading-snug">{lead}</p>
+            <p className="mt-2 text-[12px] text-white/70">{meta}</p>
           </div>
         </div>
       </div>
     );
   }
 
-  // compare
   const tie = txMaxPrice === bsMaxPrice;
   const taxWins = txMaxPrice >= bsMaxPrice;
   const bg = taxWins ? "#0B2A4A" : "#3B6D11";
-  const winnerLabel = tie ? "Both paths" : taxWins ? "Tax Return" : "Bank Statement";
+  const winnerPathLabel = tie ? t("tool.seq.banner.pathBoth") : taxWins ? t("tool.seq.banner.pathTax") : t("tool.seq.banner.pathBs");
   const diff = Math.abs(txMaxPrice - bsMaxPrice);
+
+  const lead = tie
+    ? t("tool.seq.banner.compareTie")
+    : t("tool.seq.banner.compareWinner").replace("{path}", winnerPathLabel).replace("${diff}", fmtK(diff));
+
+  const meta = t("tool.seq.banner.compareMeta").replace("${txPrice}", fmtK(txMaxPrice)).replace("${bsPrice}", fmtK(bsMaxPrice));
 
   return (
     <div className="mb-8 w-full rounded-lg px-5 py-6 text-white" style={{ backgroundColor: bg }}>
@@ -106,15 +116,9 @@ export function SEQWinnerBanner({ path, results }: Props) {
           <StarIcon />
         </div>
         <div className="min-w-0 flex-1">
-          <p className="text-[10px] font-semibold uppercase tracking-wider text-white/60">Best path for your situation</p>
-          <p className="mt-1 font-serif text-[15px] font-semibold leading-snug">
-            {tie
-              ? "Both paths qualify you for the same amount"
-              : `${winnerLabel} path qualifies you for $${fmtK(diff)} more home`}
-          </p>
-          <p className="mt-2 text-[12px] text-white/70">
-            Tax return: ${fmtK(txMaxPrice)} · Bank statement: ${fmtK(bsMaxPrice)}
-          </p>
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-white/60">{t("tool.seq.banner.compareEyebrow")}</p>
+          <p className="mt-1 font-serif text-[15px] font-semibold leading-snug">{lead}</p>
+          <p className="mt-2 text-[12px] text-white/70">{meta}</p>
         </div>
       </div>
     </div>

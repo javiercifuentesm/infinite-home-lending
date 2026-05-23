@@ -6,6 +6,7 @@ import {
   MARYLAND_COUNTY_KEYS,
   PURCHASE_STATE_OPTIONS,
 } from "../../data/purchaseLocations";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 export type PurchaseFlowStep = "inactive" | "intro" | "property" | "price" | "down" | "credit" | "complete";
 
@@ -33,18 +34,6 @@ export const initialPurchaseData = (): PurchaseDataState => ({
   downPaymentStr: "",
   creditRange: "",
 });
-
-const PROPERTY_OPTIONS = [
-  { id: true, label: "Yes, I have a specific property" },
-  { id: false, label: "Not yet, still exploring" },
-] as const;
-
-const CREDIT_OPTIONS = [
-  { id: "excellent", label: "Excellent (720+)" },
-  { id: "good", label: "Good (680–720)" },
-  { id: "fair", label: "Fair (620–680)" },
-  { id: "unsure", label: "Not sure" },
-] as const;
 
 /** Spec: digits only → $ + toLocaleString */
 export function formatCurrency(value: string): string {
@@ -124,12 +113,6 @@ export function CurrencyInput({ id, name, value, onChange, placeholder, "aria-la
   );
 }
 
-const microLine = (
-  <p className="mx-auto max-w-[32rem] px-2 text-center font-sans text-[12px] leading-relaxed text-[#6B7280] sm:text-[13px]">
-    Optional — share what you can. We&apos;ll guide you either way.
-  </p>
-);
-
 const skipBtnClass =
   "purchase-skip-btn w-full border-0 bg-transparent p-2 font-sans text-[13px] text-[#6B7280] transition-colors hover:text-[#0B2A4A]";
 
@@ -149,6 +132,26 @@ type Props = {
  * All fields optional; same card/input styling as main contact flow.
  */
 export function PurchasePathStep({ purchaseFlowStep, purchaseData, setPurchaseData, stepMotion, reducedMotion, onSkip }: Props) {
+  const { t } = useLanguage();
+
+  const PROPERTY_OPTIONS = [
+    { id: true, label: t("contact.purchase.property.yes") },
+    { id: false, label: t("contact.purchase.property.no") },
+  ];
+
+  const CREDIT_OPTIONS = [
+    { id: "excellent", label: t("contact.purchase.credit.excellent") },
+    { id: "good", label: t("contact.purchase.credit.good") },
+    { id: "fair", label: t("contact.purchase.credit.fair") },
+    { id: "unsure", label: t("contact.purchase.credit.unsure") },
+  ];
+
+  const microLine = (
+    <p className="mx-auto max-w-[32rem] px-2 text-center font-sans text-[12px] leading-relaxed text-[#6B7280] sm:text-[13px]">
+      {t("contact.purchase.microLine")}
+    </p>
+  );
+
   const inputClass =
     "purchase-input-field w-full rounded-xl border border-[#E5E7EB] bg-white px-4 py-3.5 font-sans text-navy outline-none transition-colors focus:border-[#C6A15B] focus:shadow-[0_0_0_2px_rgba(198,161,91,0.15)]";
 
@@ -156,11 +159,11 @@ export function PurchasePathStep({ purchaseFlowStep, purchaseData, setPurchaseDa
     return (
       <motion.div id="purchase-flow-intro" key="purchase-intro" className="form-step space-y-6" {...stepMotion}>
         <p className="mx-auto max-w-[34rem] text-center font-sans text-[13px] leading-relaxed text-slate-500 sm:text-[14px]">
-          The more we understand about what you&apos;re looking to do, the better we can prepare to guide you.
-          <span className="mt-2 block text-slate-500/95">You can share as much or as little as you&apos;d like.</span>
+          {t("contact.purchase.intro.body1")}
+          <span className="mt-2 block text-slate-500/95">{t("contact.purchase.intro.body2")}</span>
         </p>
         <button type="button" className={skipBtnClass} onClick={onSkip}>
-          Skip for now
+          {t("contact.purchase.skip")}
         </button>
       </motion.div>
     );
@@ -170,7 +173,7 @@ export function PurchasePathStep({ purchaseFlowStep, purchaseData, setPurchaseDa
     return (
       <motion.div id="purchase-flow-property" key="purchase-property" className="form-step space-y-5" {...stepMotion}>
         <h2 className="text-balance text-center font-heading text-lg font-semibold text-[#0B2A4A] sm:text-xl">
-          Do you already have a property in mind?
+          {t("contact.purchase.property.question")}
         </h2>
         {microLine}
         <div className="option-group grid grid-cols-1 gap-3">
@@ -207,7 +210,8 @@ export function PurchasePathStep({ purchaseFlowStep, purchaseData, setPurchaseDa
               className="option-group mx-auto w-full max-w-[520px] space-y-2 text-left"
             >
               <label htmlFor="sc-purchase-address" className="font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">
-                Property address <span className="font-normal text-slate-400">(optional)</span>
+                {t("contact.purchase.property.address.label")}{" "}
+                <span className="font-normal text-slate-400">{t("contact.purchase.property.address.optional")}</span>
               </label>
               <input
                 id="sc-purchase-address"
@@ -216,7 +220,7 @@ export function PurchasePathStep({ purchaseFlowStep, purchaseData, setPurchaseDa
                 autoComplete="street-address"
                 value={purchaseData.address}
                 onChange={(e) => setPurchaseData((d) => ({ ...d, address: e.target.value }))}
-                placeholder="Street, city, state"
+                placeholder={t("contact.purchase.property.address.placeholder")}
                 className={`${inputClass} text-center`}
               />
             </motion.div>
@@ -232,10 +236,10 @@ export function PurchasePathStep({ purchaseFlowStep, purchaseData, setPurchaseDa
               className="option-group mx-auto w-full max-w-[520px] space-y-6"
             >
               <h3 className="text-balance text-center font-heading text-base font-semibold text-[#0B2A4A] sm:text-lg">
-                Where are you planning to buy?
+                {t("contact.purchase.property.where.question")}
               </h3>
               <p className="text-center font-sans text-[13px] leading-relaxed text-slate-600 sm:text-[14px]">
-                This helps us understand your market and guide you more precisely.
+                {t("contact.purchase.property.where.body")}
               </p>
               <div className="grid grid-cols-1 gap-3">
                 {PURCHASE_STATE_OPTIONS.map((opt) =>
@@ -263,12 +267,12 @@ export function PurchasePathStep({ purchaseFlowStep, purchaseData, setPurchaseDa
                         type="button"
                         disabled
                         aria-disabled="true"
-                        aria-label={`${opt.label} — coming soon`}
+                        aria-label={`${opt.label} — ${t("contact.purchase.property.comingSoon")}`}
                         className="card-option cursor-not-allowed py-4 text-center font-sans text-[15px] font-semibold text-[#0B2A4A] opacity-[0.55]"
                       >
                         {opt.label}
                         <span className="mt-1 block text-center font-sans text-[11px] font-semibold uppercase tracking-[0.1em] text-slate-500">
-                          Coming soon
+                          {t("contact.purchase.property.comingSoon")}
                         </span>
                       </button>
                     </div>
@@ -276,7 +280,7 @@ export function PurchasePathStep({ purchaseFlowStep, purchaseData, setPurchaseDa
                 )}
               </div>
               <p className="text-center font-sans text-[11px] leading-relaxed text-slate-500">
-                We&apos;re expanding into Virginia and D.C. soon.
+                {t("contact.purchase.property.expanding")}
               </p>
 
               <AnimatePresence mode="wait">
@@ -291,7 +295,7 @@ export function PurchasePathStep({ purchaseFlowStep, purchaseData, setPurchaseDa
                     className="space-y-3"
                   >
                     <h4 className="text-center font-heading text-[15px] font-semibold text-[#0B2A4A] sm:text-base">
-                      Which county are you interested in?
+                      {t("contact.purchase.property.county.question")}
                     </h4>
                     <label htmlFor="sc-purchase-county" className="sr-only">
                       County (optional)
@@ -310,7 +314,7 @@ export function PurchasePathStep({ purchaseFlowStep, purchaseData, setPurchaseDa
                       className="time-picker w-full"
                       aria-label="County (optional)"
                     >
-                      <option value="">Select a county</option>
+                      <option value="">{t("contact.purchase.property.county.placeholder")}</option>
                       {MARYLAND_COUNTY_KEYS.map((county) => (
                         <option key={county} value={county}>
                           {county}
@@ -333,7 +337,7 @@ export function PurchasePathStep({ purchaseFlowStep, purchaseData, setPurchaseDa
                     className="space-y-3"
                   >
                     <h4 className="text-center font-heading text-[15px] font-semibold text-[#0B2A4A] sm:text-base">
-                      Which city or area?
+                      {t("contact.purchase.property.city.question")}
                     </h4>
                     <label htmlFor="sc-purchase-city-select" className="sr-only">
                       City or area (optional)
@@ -346,7 +350,7 @@ export function PurchasePathStep({ purchaseFlowStep, purchaseData, setPurchaseDa
                       className="time-picker w-full"
                       aria-label="City or area (optional)"
                     >
-                      <option value="">Select a city or area</option>
+                      <option value="">{t("contact.purchase.property.city.placeholder")}</option>
                       {getCitiesForMarylandCounty(purchaseData.locationCounty).map((city) => (
                         <option key={city} value={city}>
                           {city}
@@ -360,7 +364,7 @@ export function PurchasePathStep({ purchaseFlowStep, purchaseData, setPurchaseDa
           ) : null}
         </AnimatePresence>
         <button type="button" className={skipBtnClass} onClick={onSkip}>
-          Skip for now
+          {t("contact.purchase.skip")}
         </button>
       </motion.div>
     );
@@ -370,7 +374,7 @@ export function PurchasePathStep({ purchaseFlowStep, purchaseData, setPurchaseDa
     return (
       <motion.div id="purchase-flow-price" key="purchase-price" className="form-step space-y-4" {...stepMotion}>
         <h2 className="text-balance text-center font-heading text-lg font-semibold text-[#0B2A4A] sm:text-xl">
-          Do you have a purchase price range in mind?
+          {t("contact.purchase.price.question")}
         </h2>
         {microLine}
         <div className="option-group mx-auto w-full max-w-[320px]">
@@ -387,7 +391,7 @@ export function PurchasePathStep({ purchaseFlowStep, purchaseData, setPurchaseDa
           />
         </div>
         <button type="button" className={skipBtnClass} onClick={onSkip}>
-          Skip for now
+          {t("contact.purchase.skip")}
         </button>
       </motion.div>
     );
@@ -398,10 +402,10 @@ export function PurchasePathStep({ purchaseFlowStep, purchaseData, setPurchaseDa
     return (
       <motion.div id="purchase-flow-down" key="purchase-down" className="form-step space-y-4" {...stepMotion}>
         <h2 className="text-balance text-center font-heading text-lg font-semibold text-[#0B2A4A] sm:text-xl">
-          Do you have a down payment amount in mind?
+          {t("contact.purchase.down.question")}
         </h2>
         <p className="mx-auto max-w-[28rem] text-center font-sans text-[12px] leading-relaxed text-slate-500 sm:text-[13px]">
-          This helps us structure the right options for you.
+          {t("contact.purchase.down.body")}
         </p>
         {microLine}
         <div className="mx-auto flex max-w-[320px] justify-center gap-2">
@@ -459,7 +463,7 @@ export function PurchasePathStep({ purchaseFlowStep, purchaseData, setPurchaseDa
           )}
         </div>
         <button type="button" className={skipBtnClass} onClick={onSkip}>
-          Skip for now
+          {t("contact.purchase.skip")}
         </button>
       </motion.div>
     );
@@ -469,10 +473,10 @@ export function PurchasePathStep({ purchaseFlowStep, purchaseData, setPurchaseDa
     return (
       <motion.div id="credit-step" key="purchase-credit" className="form-step space-y-4" {...stepMotion}>
         <h2 className="text-balance text-center font-heading text-lg font-semibold text-[#0B2A4A] sm:text-xl">
-          Do you have a general sense of your credit?
+          {t("contact.purchase.credit.question")}
         </h2>
         <p className="mx-auto max-w-[30rem] text-center font-sans text-[12px] leading-relaxed text-slate-500 sm:text-[13px]">
-          A rough sense is plenty — no exact score needed.
+          {t("contact.purchase.credit.body")}
         </p>
         {microLine}
         <div className="option-group grid grid-cols-1 gap-3">
@@ -490,7 +494,7 @@ export function PurchasePathStep({ purchaseFlowStep, purchaseData, setPurchaseDa
           ))}
         </div>
         <button type="button" className={skipBtnClass} onClick={onSkip}>
-          Skip for now
+          {t("contact.purchase.skip")}
         </button>
       </motion.div>
     );

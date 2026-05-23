@@ -1,31 +1,33 @@
 import type { ReverseResult } from "../../../hooks/useReverseMath";
 import { fmt } from "../../../hooks/useReverseMath";
+import { useLanguage } from "../../../i18n/LanguageContext";
 
 type Props = {
   results: ReverseResult;
 };
 
 export function ReverseMetrics({ results }: Props) {
+  const { t } = useLanguage();
   const { grossPL, netPL, tenurePayment, incomeGap } = results;
 
   let m4Value: string;
   let m4Sub: string;
   if (incomeGap <= 0) {
-    m4Value = "No gap";
-    m4Sub = "income exceeds expenses";
+    m4Value = t("tool.reverse.metrics.noGap");
+    m4Sub = t("tool.reverse.metrics.noGapSub");
   } else if (tenurePayment >= incomeGap) {
-    m4Value = "Fully";
-    m4Sub = `${fmt(incomeGap)}/mo gap`;
+    m4Value = t("tool.reverse.metrics.fully");
+    m4Sub = `${fmt(incomeGap)}${t("tool.reverse.metrics.moGap")}`;
   } else {
-    m4Value = "Partially";
-    m4Sub = `${fmt(incomeGap)}/mo gap`;
+    m4Value = t("tool.reverse.metrics.partially");
+    m4Sub = `${fmt(incomeGap)}${t("tool.reverse.metrics.moGap")}`;
   }
 
   const cards = [
-    { label: "Gross principal limit", value: fmt(grossPL), sub: "before costs & payoff" },
-    { label: "Net available proceeds", value: fmt(netPL), sub: "after mortgage & closing costs" },
-    { label: "Max monthly (tenure)", value: fmt(tenurePayment), sub: "for life, in your home" },
-    { label: "Income gap covered", value: m4Value, sub: m4Sub },
+    { label: t("tool.reverse.metrics.grossPL"), value: fmt(grossPL), sub: t("tool.reverse.metrics.grossPLSub") },
+    { label: t("tool.reverse.metrics.netPL"), value: fmt(netPL), sub: t("tool.reverse.metrics.netPLSub") },
+    { label: t("tool.reverse.metrics.tenure"), value: fmt(tenurePayment), sub: t("tool.reverse.metrics.tenureSub") },
+    { label: t("tool.reverse.metrics.gapCovered"), value: m4Value, sub: m4Sub },
   ];
 
   return (

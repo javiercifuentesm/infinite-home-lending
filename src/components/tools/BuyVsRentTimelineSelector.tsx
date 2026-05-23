@@ -1,4 +1,5 @@
 import { TIMELINE_YEARS } from "../../hooks/useBuyVsRentMath";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 type Props = {
   viewYear: number;
@@ -6,10 +7,13 @@ type Props = {
 };
 
 export function BuyVsRentTimelineSelector({ viewYear, onChange }: Props) {
+  const { t } = useLanguage();
+
   return (
     <div className="flex flex-wrap gap-2">
       {TIMELINE_YEARS.map((y) => {
         const active = viewYear === y;
+        const suffix = y === 1 ? t("tool.bvr.timeline.yr") : t("tool.bvr.timeline.yrs");
         return (
           <button
             key={y}
@@ -21,7 +25,7 @@ export function BuyVsRentTimelineSelector({ viewYear, onChange }: Props) {
                 : "border border-[var(--color-border-tertiary)] bg-[var(--color-background-secondary)] text-[var(--color-text-tertiary)] hover:border-[#0B2A4A]/30"
             }`}
           >
-            {y} yr{y === 1 ? "" : "s"}
+            {y} {suffix}
           </button>
         );
       })}

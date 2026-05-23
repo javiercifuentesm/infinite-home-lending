@@ -86,7 +86,7 @@ function exportPdf(leads: LeadRow[], filter = "ALL") {
   doc.text("Infinite Home Lending", 14, 11);
   doc.setFontSize(9);
   doc.setFont("helvetica", "normal");
-  doc.text("Luna AI Concierge — Lead Analytics Report", 14, 18);
+  doc.text("Sarah AI Concierge — Lead Analytics Report", 14, 18);
   doc.setTextColor(255, 255, 255);
   doc.text(`Generated: ${fmtDate(new Date().toISOString())}`, 14, 24);
   doc.setTextColor(11, 42, 74);
@@ -202,7 +202,7 @@ function LeadDetailPanel({ lead, onClose }: { lead: LeadRow; onClose: () => void
         : /reverse/i.test(lead.goal) ? "explore a reverse mortgage"
           : "explore your mortgage options";
 
-  const openingLine = `"Hi ${firstName}, this is [your name] from Infinite Home Lending. Luna mentioned you're looking to ${purposeText}${lead.budget ? ` with a budget around $${lead.budget}` : ""} — I'd love to help make that happen!"`;
+  const openingLine = `"Hi ${firstName}, this is [your name] from Infinite Home Lending. Sarah mentioned you're looking to ${purposeText}${lead.budget ? ` with a budget around $${lead.budget}` : ""} — I'd love to help make that happen!"`;
 
   const transcriptLines = lead.transcript ? lead.transcript.split("\n").filter((l) => l.trim()) : [];
 
@@ -344,7 +344,7 @@ function LeadDetailPanel({ lead, onClose }: { lead: LeadRow; onClose: () => void
               <InfoRow label="First-time Buyer" value={lead.firstTimeBuyer ? "🌟 Yes — first-time buyer" : "🔄 Has bought before"} />
               <InfoRow label="Has Agent" value={lead.hasAgent === null ? "❓ Unknown" : lead.hasAgent ? "✅ Working with agent" : "⚠️ No agent yet — referral opportunity"} />
               <InfoRow label="Credit Status" value={lead.creditStatus === "Wants to explore" ? "📊 Wants to explore with advisor" : lead.creditStatus === "Has reviewed" ? "✅ Has reviewed credit" : "❓ Not yet discussed"} />
-              <InfoRow label="Conversation Length" value={`${lead.conversationLength} exchanges with Luna`} />
+              <InfoRow label="Conversation Length" value={`${lead.conversationLength} exchanges with Sarah`} />
             </div>
           </div>
           <div style={{ background: "#EFE6D6", borderRadius: 12, padding: 24 }}>
@@ -390,9 +390,9 @@ function LeadDetailPanel({ lead, onClose }: { lead: LeadRow; onClose: () => void
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               {[
-                { num: 1, color: "#22C55E", bg: "#F0FDF4", border: "#86EFAC", label: `Immediately — ${lead.preferredContact || "Phone"}`, text: `Call and leave a warm voicemail: "Hi ${firstName}, this is [your name] from Infinite Home Lending. I saw you connected with our AI concierge Luna today and wanted to personally reach out. Give me a call back — no pressure, just here to help!"` },
-                { num: 2, color: "#EAB308", bg: "#FEFCE8", border: "#FDE047", label: "1 Hour Later — Text Message", text: `Send a short warm text: "Hi ${firstName}! This is [name] from Infinite Home Lending — just following up on your chat with Luna. Happy to answer any questions at your own pace. Feel free to text or call anytime! 😊"` },
-                { num: 3, color: "#3B82F6", bg: "#EFF6FF", border: "#93C5FD", label: "Next Day — Email", text: `Send a personal email introducing yourself, referencing their conversation with Luna, and including one helpful resource.${lead.bestDay ? ` Note: They requested contact on ${lead.bestDay}${lead.bestTime ? ` during ${lead.bestTime}` : ""} — prioritize that window.` : ""}` },
+                { num: 1, color: "#22C55E", bg: "#F0FDF4", border: "#86EFAC", label: `Immediately — ${lead.preferredContact || "Phone"}`, text: `Call and leave a warm voicemail: "Hi ${firstName}, this is [your name] from Infinite Home Lending. I saw you connected with our AI concierge Sarah today and wanted to personally reach out. Give me a call back — no pressure, just here to help!"` },
+                { num: 2, color: "#EAB308", bg: "#FEFCE8", border: "#FDE047", label: "1 Hour Later — Text Message", text: `Send a short warm text: "Hi ${firstName}! This is [name] from Infinite Home Lending — just following up on your chat with Sarah. Happy to answer any questions at your own pace. Feel free to text or call anytime! 😊"` },
+                { num: 3, color: "#3B82F6", bg: "#EFF6FF", border: "#93C5FD", label: "Next Day — Email", text: `Send a personal email introducing yourself, referencing their conversation with Sarah, and including one helpful resource.${lead.bestDay ? ` Note: They requested contact on ${lead.bestDay}${lead.bestTime ? ` during ${lead.bestTime}` : ""} — prioritize that window.` : ""}` },
               ].map(({ num, color, bg, border, label, text }) => (
                 <div key={num} style={{ background: bg, border: `1px solid ${border}`, borderRadius: 10, padding: 16, display: "flex", gap: 14 }}>
                   <div style={{ width: 28, height: 28, background: color, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
@@ -410,13 +410,14 @@ function LeadDetailPanel({ lead, onClose }: { lead: LeadRow; onClose: () => void
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
                 <span style={{ fontSize: 17 }}>💬</span>
-                <span style={{ fontFamily: "Georgia,serif", fontSize: 17, color: NAVY, fontWeight: 700 }}>Conversation with Luna</span>
+                <span style={{ fontFamily: "Georgia,serif", fontSize: 17, color: NAVY, fontWeight: 700 }}>Conversation with Sarah</span>
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                 {transcriptLines.map((line, i) => {
+                  // Legacy transcripts may prefix assistant lines as "Luna" or "Sarah"
                   const isSarah = /^(luna|sarah)\b/i.test(line.trim());
                   const msg = line.replace(/^(Luna|Sarah|Visitor)\s*\([^)]+\):\s*/i, "").trim();
-                  const speaker = isSarah ? "Luna · IHL Concierge" : "Visitor";
+                  const speaker = isSarah ? "Sarah · IHL Concierge" : "Visitor";
                   return (
                     <div key={i} style={{ display: "flex", justifyContent: isSarah ? "flex-start" : "flex-end" }}>
                       <div style={{ maxWidth: "80%", background: isSarah ? "#EFE6D6" : "#EFF6FF", borderRadius: isSarah ? "4px 16px 16px 16px" : "16px 4px 16px 16px", padding: "10px 14px" }}>
@@ -565,9 +566,9 @@ export default function AnalyticsDashboard() {
       <div style={{ maxWidth: 1200, margin: "0 auto", padding: "32px 24px", fontFamily: "Georgia,serif" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 32 }}>
           <div>
-            <div style={{ fontFamily: "sans-serif", fontSize: 10, color: GOLD, letterSpacing: 3, textTransform: "uppercase", marginBottom: 6 }}>Luna AI · Lead Analytics</div>
+            <div style={{ fontFamily: "sans-serif", fontSize: 10, color: GOLD, letterSpacing: 3, textTransform: "uppercase", marginBottom: 6 }}>Sarah AI · Lead Analytics</div>
             <h1 style={{ fontSize: 28, color: NAVY, margin: "0 0 4px" }}>Lead Dashboard</h1>
-            <p style={{ fontFamily: "sans-serif", fontSize: 13, color: "#94A3B8", margin: 0 }}>All leads captured by Luna — IHL Mortgage Concierge · Click any row to open the full MA intelligence brief</p>
+            <p style={{ fontFamily: "sans-serif", fontSize: 13, color: "#94A3B8", margin: 0 }}>All leads captured by Sarah — IHL Mortgage Concierge · Click any row to open the full MA intelligence brief</p>
           </div>
           <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} onKeyDown={(e) => e.key === "Enter" && load()} placeholder="Password" style={{ padding: "9px 14px", border: "1px solid #E2E8F0", borderRadius: 8, fontFamily: "sans-serif", fontSize: 13, color: NAVY, outline: "none", width: 140 }} />
@@ -698,7 +699,7 @@ export default function AnalyticsDashboard() {
                   <tbody>
                     {displayed.length === 0 && (
                       <tr><td colSpan={10} style={{ padding: 40, textAlign: "center", color: "#94A3B8", fontSize: 14 }}>
-                        {total === 0 ? "No leads captured yet. Luna is ready and waiting! 🔮" : "No leads match your filters."}
+                        {total === 0 ? "No leads captured yet. Sarah is ready and waiting! 🔮" : "No leads match your filters."}
                       </td></tr>
                     )}
                     {displayed.map((l, i) => (
@@ -728,7 +729,7 @@ export default function AnalyticsDashboard() {
           </>
         )}
         <div style={{ textAlign: "center", padding: "32px 0 16px", fontFamily: "sans-serif", fontSize: 11, color: "#94A3B8" }}>
-          Infinite Home Lending · Luna AI Analytics · Internal Use Only
+          Infinite Home Lending · Sarah AI Analytics · Internal Use Only
         </div>
       </div>
     </PageContainer>

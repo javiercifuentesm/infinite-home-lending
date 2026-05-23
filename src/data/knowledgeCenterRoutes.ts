@@ -2,6 +2,8 @@
  * Guided Knowledge Center routes — decision-support content, not blog posts.
  */
 
+import { FEATURED_MISUNDERSTANDINGS_ES, KNOWLEDGE_ROUTES_ES } from "./knowledgeCenterRoutes.es";
+
 export type KnowledgeRouteId =
   | "start-here"
   | "buying"
@@ -1014,14 +1016,25 @@ export type SearchHit = {
   subtitle?: string;
 };
 
-export function searchKnowledgeCenter(query: string, limit = 8): SearchHit[] {
+export function getKnowledgeRoutes(lang?: string): Record<KnowledgeRouteId, KnowledgeRoute> {
+  return lang === "es"
+    ? (KNOWLEDGE_ROUTES_ES as Record<KnowledgeRouteId, KnowledgeRoute>)
+    : KNOWLEDGE_ROUTES;
+}
+
+export function getFeaturedMisunderstandings(lang?: string) {
+  return lang === "es" ? FEATURED_MISUNDERSTANDINGS_ES : FEATURED_MISUNDERSTANDINGS;
+}
+
+export function searchKnowledgeCenter(query: string, limit = 8, lang?: string): SearchHit[] {
   const q = query.trim().toLowerCase();
   if (q.length < 2) return [];
 
   const hits: SearchHit[] = [];
+  const routes = getKnowledgeRoutes(lang);
 
   for (const rid of KNOWLEDGE_ROUTE_ORDER) {
-    const r = KNOWLEDGE_ROUTES[rid];
+    const r = routes[rid];
     const hay = joinSearch(r).toLowerCase();
     if (hay.includes(q)) {
       hits.push({
@@ -1061,7 +1074,6 @@ export function searchKnowledgeCenter(query: string, limit = 8): SearchHit[] {
           kind: "faq",
           routeId: rid,
           title: it.q,
-          subtitle: "FAQ",
         });
       }
     }

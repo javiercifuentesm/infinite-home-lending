@@ -1,8 +1,11 @@
+import { useLanguage } from "../../../i18n/LanguageContext";
+
 type Props = {
   crossoverYear: number | null;
 };
 
 export function FHACrossoverFlag({ crossoverYear }: Props) {
+  const { t } = useLanguage();
   if (crossoverYear === null || crossoverYear > 30) return null;
 
   return (
@@ -15,7 +18,11 @@ export function FHACrossoverFlag({ crossoverYear }: Props) {
         <path d="M12 7v5l3 2" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
       </svg>
       <p className="text-[12px] leading-snug text-[#854F0B]">
-        Conventional takes the lead at <b>year {crossoverYear}</b> — the crossover point where the total cost of Conventional drops below FHA.
+        {t("tool.fha.crossoverFlagPre")}{" "}
+        <b>
+          {t("tool.fha.crossoverFlagYear")} {crossoverYear}
+        </b>{" "}
+        {t("tool.fha.crossoverFlagPost")}
       </p>
     </div>
   );

@@ -1,16 +1,17 @@
 import type { ReverseInputs } from "../../../hooks/useReverseMath";
+import { useLanguage } from "../../../i18n/LanguageContext";
+import { DollarInput, PercentInput } from "../shared/FormattedInput";
 
 type Props = {
   inputs: ReverseInputs;
   onChange: (next: ReverseInputs) => void;
 };
 
-function num(v: string, fallback: number): number {
-  const n = parseFloat(v);
-  return Number.isFinite(n) ? n : fallback;
-}
+const fieldClass =
+  "min-h-[44px] w-full rounded-lg border border-[var(--color-border-tertiary,#e2e8f0)] bg-white px-3 py-2.5 text-[15px] tabular-nums text-[#0B2A4A] outline-none focus:ring-2 focus:ring-[#C6A15B]/40 md:min-h-[40px]";
 
 export function ReverseIncomeInputs({ inputs, onChange }: Props) {
+  const { t } = useLanguage();
   const patch = (p: Partial<ReverseInputs>) => onChange({ ...inputs, ...p });
 
   return (
@@ -27,74 +28,49 @@ export function ReverseIncomeInputs({ inputs, onChange }: Props) {
         </span>
         <div>
           <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--color-text-tertiary)]">
-            Your retirement income picture
+            {t("tool.reverse.income.eyebrow")}
           </p>
-          <h2 className="font-[Georgia,serif] text-lg font-semibold text-[#0B2A4A]">Income &amp; assumptions</h2>
+          <h2 className="font-[Georgia,serif] text-lg font-semibold text-[#0B2A4A]">{t("tool.reverse.income.heading")}</h2>
         </div>
       </div>
 
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
         <label className="block">
           <span className="mb-1.5 block text-[11px] font-bold uppercase tracking-wide text-[var(--color-text-tertiary)]">
-            Monthly retirement income ($)
+            {t("tool.reverse.income.retIncome")}
           </span>
-          <input
-            id="retIncome"
-            type="number"
-            step={100}
-            min={0}
-            className="min-h-[44px] w-full rounded-lg border border-[var(--color-border-tertiary)] px-3 py-2.5 text-[15px] tabular-nums text-[#0B2A4A] md:min-h-[40px]"
-            value={inputs.retIncome}
-            onChange={(e) => patch({ retIncome: num(e.target.value, inputs.retIncome) })}
-          />
-          <p className="mt-1.5 text-[13px] leading-snug text-[var(--color-text-tertiary)]">Social Security + pension + other</p>
+          <DollarInput id="retIncome" value={inputs.retIncome} min={0} className={fieldClass} onChange={(n) => patch({ retIncome: n })} />
+          <p className="mt-1.5 text-[13px] leading-snug text-[var(--color-text-tertiary)]">{t("tool.reverse.income.retIncomeNote")}</p>
         </label>
 
         <label className="block">
           <span className="mb-1.5 block text-[11px] font-bold uppercase tracking-wide text-[var(--color-text-tertiary)]">
-            Monthly living expenses ($)
+            {t("tool.reverse.income.retExpenses")}
           </span>
-          <input
+          <DollarInput
             id="retExpenses"
-            type="number"
-            step={100}
-            min={0}
-            className="min-h-[44px] w-full rounded-lg border border-[var(--color-border-tertiary)] px-3 py-2.5 text-[15px] tabular-nums text-[#0B2A4A] md:min-h-[40px]"
             value={inputs.retExpenses}
-            onChange={(e) => patch({ retExpenses: num(e.target.value, inputs.retExpenses) })}
-          />
-          <p className="mt-1.5 text-[13px] leading-snug text-[var(--color-text-tertiary)]">Include housing, healthcare, living</p>
-        </label>
-
-        <label className="block">
-          <span className="mb-1.5 block text-[11px] font-bold uppercase tracking-wide text-[var(--color-text-tertiary)]">
-            Expected interest rate (%)
-          </span>
-          <input
-            id="intRate"
-            type="number"
-            step={0.05}
             min={0}
-            className="min-h-[44px] w-full rounded-lg border border-[var(--color-border-tertiary)] px-3 py-2.5 text-[15px] tabular-nums text-[#0B2A4A] md:min-h-[40px]"
-            value={inputs.intRate}
-            onChange={(e) => patch({ intRate: num(e.target.value, inputs.intRate) })}
+            className={fieldClass}
+            onChange={(n) => patch({ retExpenses: n })}
           />
-          <p className="mt-1.5 text-[13px] leading-snug text-[var(--color-text-tertiary)]">Current HECM rates ~6–7%</p>
+          <p className="mt-1.5 text-[13px] leading-snug text-[var(--color-text-tertiary)]">{t("tool.reverse.income.retExpensesNote")}</p>
         </label>
 
         <label className="block">
           <span className="mb-1.5 block text-[11px] font-bold uppercase tracking-wide text-[var(--color-text-tertiary)]">
-            Home appreciation (% /yr)
+            {t("tool.reverse.income.intRate")}
           </span>
-          <input
-            id="appr"
-            type="number"
-            step={0.1}
-            className="min-h-[44px] w-full rounded-lg border border-[var(--color-border-tertiary)] px-3 py-2.5 text-[15px] tabular-nums text-[#0B2A4A] md:min-h-[40px]"
-            value={inputs.appr}
-            onChange={(e) => patch({ appr: num(e.target.value, inputs.appr) })}
-          />
-          <p className="mt-1.5 text-[13px] leading-snug text-[var(--color-text-tertiary)]">MD/DC/VA historical ~3–4%</p>
+          <PercentInput id="intRate" value={inputs.intRate} step={0.05} min={0} className={fieldClass} onChange={(n) => patch({ intRate: n })} />
+          <p className="mt-1.5 text-[13px] leading-snug text-[var(--color-text-tertiary)]">{t("tool.reverse.income.intRateNote")}</p>
+        </label>
+
+        <label className="block">
+          <span className="mb-1.5 block text-[11px] font-bold uppercase tracking-wide text-[var(--color-text-tertiary)]">
+            {t("tool.reverse.income.appr")}
+          </span>
+          <PercentInput id="rev-appr-income" value={inputs.appr} step={0.1} className={fieldClass} onChange={(n) => patch({ appr: n })} />
+          <p className="mt-1.5 text-[13px] leading-snug text-[var(--color-text-tertiary)]">{t("tool.reverse.income.apprNote")}</p>
         </label>
       </div>
     </div>

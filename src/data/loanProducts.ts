@@ -1,4 +1,5 @@
 import type { LoanProductData } from "../components/LoanProductCard";
+import { LOAN_PRODUCTS_ES } from "./loanProducts.es";
 
 /** Grid layout: 3 + 3 + 3 */
 export const LOAN_GRID_ROWS: readonly (readonly string[])[] = [
@@ -706,6 +707,11 @@ export const LOAN_PRODUCTS: LoanProductData[] = [
   },
 ];
 
-export function getLoanProductById(id: string): LoanProductData | undefined {
-  return LOAN_PRODUCTS.find((p) => p.id === id);
+export function getLoanProductById(id: string, lang?: string): LoanProductData | undefined {
+  const products = lang === "es" ? LOAN_PRODUCTS_ES : LOAN_PRODUCTS;
+  return products.find((p) => p.id === id);
+}
+
+export function getLoanProductsForLang(lang?: string): LoanProductData[] {
+  return lang === "es" ? LOAN_PRODUCTS_ES : LOAN_PRODUCTS;
 }

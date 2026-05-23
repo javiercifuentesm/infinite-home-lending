@@ -2,10 +2,10 @@ import { useCallback, useId, useRef, useState, type ChangeEvent, type DragEvent 
 import { apiUrl } from "../../lib/apiBase";
 import { motion, type HTMLMotionProps } from "motion/react";
 import { Shield, Upload } from "lucide-react";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 const MAX_BYTES = 10 * 1024 * 1024;
 const PDF_TYPE = "application/pdf";
-const VALIDATION_ERROR = "Please upload a valid PDF under 10MB";
 
 type StepMotion = Pick<HTMLMotionProps<"div">, "initial" | "animate" | "exit" | "transition">;
 
@@ -39,24 +39,28 @@ export function MortgageStatementUpload({
   isUploading,
   onUploadingChange,
 }: Props) {
+  const { t } = useLanguage();
   const inputId = useId();
   const [showDropZone, setShowDropZone] = useState(false);
   const [dragOver, setDragOver] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const validateFile = useCallback((file: File): boolean => {
-    if (file.type !== PDF_TYPE || !file.name.toLowerCase().endsWith(".pdf")) {
-      setError(VALIDATION_ERROR);
-      return false;
-    }
-    if (file.size > MAX_BYTES) {
-      setError(VALIDATION_ERROR);
-      return false;
-    }
-    setError(null);
-    return true;
-  }, []);
+  const validateFile = useCallback(
+    (file: File): boolean => {
+      if (file.type !== PDF_TYPE || !file.name.toLowerCase().endsWith(".pdf")) {
+        setError(t("contact.upload.error.validation"));
+        return false;
+      }
+      if (file.size > MAX_BYTES) {
+        setError(t("contact.upload.error.validation"));
+        return false;
+      }
+      setError(null);
+      return true;
+    },
+    [t],
+  );
 
   const uploadFile = useCallback(
     async (file: File) => {
@@ -73,19 +77,19 @@ export function MortgageStatementUpload({
         });
         const data = (await res.json()) as { fileKey?: string; error?: string };
         if (!res.ok || !data.fileKey) {
-          setError(data.error ?? "Upload is temporarily unavailable. You can continue without uploading.");
+          setError(data.error ?? t("contact.upload.error.unavailable"));
           onUploadingChange(false);
           return;
         }
         onFileKeyChange(data.fileKey);
         onStepInteraction?.();
       } catch {
-        setError("Something went wrong. You can try again or continue without uploading.");
+        setError(t("contact.upload.error.generic"));
       } finally {
         onUploadingChange(false);
       }
     },
-    [onFileKeyChange, onStepInteraction, onUploadingChange, validateFile],
+    [onFileKeyChange, onStepInteraction, onUploadingChange, t, validateFile],
   );
 
   const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -107,14 +111,14 @@ export function MortgageStatementUpload({
     <motion.div id={contactStepId} key="mortgage-upload" className="form-step space-y-6" {...stepMotion}>
       <div className="space-y-3 text-center">
         <h2 className="text-balance font-heading text-lg font-semibold text-[#0B2A4A] sm:text-xl">
-          Want us to take a closer look for you?
+          {t("contact.upload.title")}
         </h2>
         <p className="mx-auto max-w-[32rem] font-sans text-[14px] leading-relaxed text-slate-600 sm:text-[15px]">
-          You can securely upload your most recent mortgage statement — this helps us give you more precise guidance from the start.
+          {t("contact.upload.body")}
         </p>
         <p className="mx-auto flex max-w-[32rem] items-center justify-center gap-1.5 font-sans text-[12px] leading-relaxed text-[#6B7280] sm:text-[13px]">
           <Shield className="h-3.5 w-3.5 shrink-0 text-[#0B2A4A]/70" aria-hidden />
-          <span>Encrypted. Reviewed only by our team. Completely optional.</span>
+          <span>{t("contact.upload.security")}</span>
         </p>
       </div>
 
@@ -124,10 +128,10 @@ export function MortgageStatementUpload({
           role="status"
         >
           <p className="font-sans text-[14px] font-medium leading-relaxed text-emerald-900">
-            Your document has been securely received.
+            {t("contact.upload.success.title")}
           </p>
           <p className="mt-2 font-sans text-[13px] leading-relaxed text-emerald-800/90">
-            This will help us better understand your current situation.
+            {t("contact.upload.success.body")}
           </p>
         </div>
       ) : null}
@@ -144,10 +148,10 @@ export function MortgageStatementUpload({
             className="card-option contact-card-transition flex min-h-[52px] items-center justify-center gap-2 py-4 text-center font-sans text-[15px] font-semibold text-[#0B2A4A]"
           >
             <Upload className="h-4 w-4 shrink-0" aria-hidden />
-            Upload my statement
+            {t("contact.upload.btn")}
           </button>
           <p className="text-center font-sans text-[12px] text-[#6B7280] sm:text-[13px]">
-            Or use <span className="font-medium text-slate-600">Continue</span> below to move on — no upload required.
+            {t("contact.upload.skip")}
           </p>
         </div>
       ) : null}
@@ -170,9 +174,9 @@ export function MortgageStatementUpload({
           >
             <Upload className="mb-3 h-8 w-8 text-[#0B2A4A]/50" aria-hidden />
             <span className="font-sans text-[14px] font-medium text-[#0B2A4A]">
-              Drag and drop your mortgage statement here
+              {t("contact.upload.dropzone.title")}
             </span>
-            <span className="mt-1 font-sans text-[13px] text-slate-500">or click to upload (PDF only, max 10MB)</span>
+            <span className="mt-1 font-sans text-[13px] text-slate-500">{t("contact.upload.dropzone.sub")}</span>
             <input
               ref={fileInputRef}
               id={inputId}
@@ -189,7 +193,7 @@ export function MortgageStatementUpload({
             disabled={isUploading}
             className="w-full rounded-xl border border-slate-200 bg-white py-3 font-sans text-[14px] font-semibold text-[#0B2A4A] transition-colors duration-300 hover:border-slate-300 hover:bg-slate-50 disabled:opacity-60"
           >
-            {isUploading ? "Uploading…" : "Choose PDF file"}
+            {isUploading ? t("contact.upload.uploading") : t("contact.upload.choosing")}
           </button>
         </div>
       ) : null}

@@ -1,18 +1,7 @@
 import { RATE_TABLE, tierFloorForScore } from "../../../hooks/useCreditMath";
+import { useLanguage } from "../../../i18n/LanguageContext";
 
 const TIER_ORDER = [760, 740, 720, 700, 680, 660, 640, 620, 580] as const;
-
-const TIER_LABEL: Record<number, string> = {
-  760: "760+",
-  740: "740–759",
-  720: "720–739",
-  700: "700–719",
-  680: "680–699",
-  660: "660–679",
-  640: "640–659",
-  620: "620–639",
-  580: "580–619",
-};
 
 const TIER_COLOR: Record<number, string> = {
   760: "#27500A",
@@ -37,14 +26,13 @@ function barPct(tierRate: number): string {
 }
 
 export function CreditTierTrack({ curScore, effectiveTgt }: Props) {
+  const { t } = useLanguage();
   const curFloor = tierFloorForScore(curScore);
   const tgtFloor = tierFloorForScore(effectiveTgt);
 
   return (
     <div className="rounded-lg border border-[var(--color-border-tertiary,#e2e8f0)] bg-white px-4 py-5 sm:px-6">
-      <h3 className="font-[Georgia,serif] text-[13px] font-medium text-[#0B2A4A]">
-        Rate by credit score tier — where you are and where you&apos;re going
-      </h3>
+      <h3 className="font-[Georgia,serif] text-[13px] font-medium text-[#0B2A4A]">{t("tool.credit.tier.title")}</h3>
       <div className="mt-5 space-y-3">
         {TIER_ORDER.map((tier) => {
           const tierRate = RATE_TABLE[tier];
@@ -52,13 +40,15 @@ export function CreditTierTrack({ curScore, effectiveTgt }: Props) {
           let indicator = "";
           const isYou = curFloor === tier;
           const isTgt = tgtFloor === tier;
-          if (isYou && isTgt) indicator = "↑↓";
-          else if (isYou) indicator = "YOU";
-          else if (isTgt) indicator = "→ TGT";
+          if (isYou && isTgt) indicator = t("tool.credit.tier.both");
+          else if (isYou) indicator = t("tool.credit.tier.you");
+          else if (isTgt) indicator = t("tool.credit.tier.tgt");
 
           return (
             <div key={tier} className="flex items-center gap-3">
-              <span className="w-[52px] shrink-0 text-[11px] font-medium text-slate-600">{TIER_LABEL[tier]}</span>
+              <span className="w-[52px] shrink-0 text-[11px] font-medium text-slate-600">
+                {t(`tool.credit.tier.range.${tier}` as never)}
+              </span>
               <div className="h-2 min-w-0 flex-1 overflow-hidden rounded-full bg-slate-100">
                 <div
                   className="h-full rounded-full transition-[width] duration-500 ease-out"

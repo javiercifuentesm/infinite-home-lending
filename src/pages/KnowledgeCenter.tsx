@@ -18,12 +18,13 @@ import {
   PAGE_SECTION_HERO_PAD_CLASS,
 } from "../constants/layout";
 import {
-  FEATURED_MISUNDERSTANDINGS,
+  getFeaturedMisunderstandings,
+  getKnowledgeRoutes,
   KNOWLEDGE_ROUTE_ORDER,
-  KNOWLEDGE_ROUTES,
   type KnowledgeRouteId,
   searchKnowledgeCenter,
 } from "../data/knowledgeCenterRoutes";
+import { useLanguage } from "../i18n/LanguageContext";
 
 const ENTRY_IMAGE_BY_ROUTE: Record<KnowledgeRouteId, { src: string; objectClass: string }> = {
   "start-here": { src: "/knowledge/knowledge-start-here.png", objectClass: "object-[center_38%]" },
@@ -45,13 +46,6 @@ const ROUTE_ICONS: Record<
   "refinance-equity": RefreshCw,
   "quick-answers": MessageCircle,
 };
-
-const SUGGESTION_CHIPS: { label: string; routeId: KnowledgeRouteId }[] = [
-  { label: "First-time buyer", routeId: "buying" },
-  { label: "Credit questions", routeId: "numbers" },
-  { label: "Down payment", routeId: "buying" },
-  { label: "Refinancing", routeId: "refinance-equity" },
-];
 
 const fadeUp = {
   initial: { opacity: 0, y: 16 },
@@ -96,6 +90,16 @@ function KnowledgeTopicBand({
 }
 
 export default function KnowledgeCenter() {
+  const { t, lang } = useLanguage();
+  const ROUTES = getKnowledgeRoutes(lang);
+  const MISUNDERSTANDINGS = getFeaturedMisunderstandings(lang);
+  const suggestionChips: { label: string; routeId: KnowledgeRouteId }[] = [
+    { label: t("knowledge.chips.firstTime"), routeId: "buying" },
+    { label: t("knowledge.chips.credit"), routeId: "numbers" },
+    { label: t("knowledge.chips.downPayment"), routeId: "buying" },
+    { label: t("knowledge.chips.refinancing"), routeId: "refinance-equity" },
+  ];
+
   const [selectedRoute, setSelectedRoute] = useState<KnowledgeRouteId | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
@@ -107,8 +111,8 @@ export default function KnowledgeCenter() {
   }, [selectedRoute]);
 
   useEffect(() => {
-    document.title = "Knowledge Center | Infinite Home Lending";
-  }, []);
+    document.title = t("knowledge.eyebrow") + " | Infinite Home Lending";
+  }, [t]);
 
   useEffect(() => {
     const onDoc = (e: MouseEvent) => {
@@ -121,11 +125,11 @@ export default function KnowledgeCenter() {
   }, []);
 
   const searchResults = useMemo(
-    () => searchKnowledgeCenter(searchQuery, 10),
-    [searchQuery]
+    () => searchKnowledgeCenter(searchQuery, 10, lang),
+    [searchQuery, lang]
   );
 
-  const route = selectedRoute ? KNOWLEDGE_ROUTES[selectedRoute] : null;
+  const route = selectedRoute ? ROUTES[selectedRoute] : null;
 
   /** Reset to main entry (hero + six paths). */
   function resetToMainMenu() {
@@ -183,19 +187,19 @@ export default function KnowledgeCenter() {
               variants={fadeUp}
               className="type-eyebrow text-gold tracking-[0.22em] mb-5"
             >
-              Knowledge Center
+              {t("knowledge.eyebrow")}
             </motion.p>
             <motion.h1
               variants={fadeUp}
               className="font-heading text-navy text-[2.35rem] sm:text-5xl lg:text-[3.25rem] leading-[1.06] tracking-[-0.035em] font-semibold mb-5"
             >
-              Where do you want to start?
+              {t("knowledge.title")}
             </motion.h1>
             <motion.p
               variants={fadeUp}
               className="font-sans text-lg sm:text-xl text-slate-600 font-light leading-relaxed"
             >
-              Clear answers. Thoughtful guidance. No guesswork.
+              {t("knowledge.subtitle")}
             </motion.p>
           </motion.div>
 
@@ -220,16 +224,16 @@ export default function KnowledgeCenter() {
                   setSearchOpen(true);
                 }}
                 onFocus={() => setSearchOpen(true)}
-                placeholder="Ask anything about mortgages…"
+                placeholder={t("knowledge.search.placeholder")}
                 className="w-full rounded-2xl border border-slate-200/90 bg-white pl-12 pr-4 py-4 text-[15px] text-navy shadow-[0_8px_40px_rgba(10,25,47,0.06)] placeholder:text-slate-400 focus:border-gold/40 focus:ring-2 focus:ring-gold/20 focus:outline-none transition-shadow"
                 autoComplete="off"
-                aria-label="Search knowledge center"
+                aria-label={t("knowledge.search.placeholder")}
               />
             </div>
             {searchOpen && searchQuery.trim().length >= 2 && (
               <div className="absolute left-0 right-0 top-full mt-2 rounded-2xl border border-slate-200/90 bg-white shadow-[0_24px_64px_-12px_rgba(10,25,47,0.18)] max-h-[min(70vh,22rem)] overflow-y-auto z-30">
                 {searchResults.length === 0 ? (
-                  <p className="px-4 py-4 text-sm text-slate-500">No matches — try another phrase.</p>
+                  <p className="px-4 py-4 text-sm text-slate-500">{t("knowledge.search.noResults")}</p>
                 ) : (
                   <ul className="py-2">
                     {searchResults.map((hit) => (
@@ -240,7 +244,11 @@ export default function KnowledgeCenter() {
                           className="w-full text-left px-4 py-3 hover:bg-surface/80 transition-colors"
                         >
                           <span className="block font-sans text-[13px] font-semibold uppercase tracking-[0.1em] text-gold/90 mb-0.5">
-                            {hit.kind === "route" ? "Topic" : hit.kind === "article" ? "Article" : "FAQ"}
+                            {hit.kind === "route"
+                              ? t("knowledge.search.kind.route")
+                              : hit.kind === "article"
+                                ? t("knowledge.search.kind.article")
+                                : t("knowledge.search.kind.faq")}
                           </span>
                           <span className="block text-[15px] text-navy font-medium leading-snug">{hit.title}</span>
                           {hit.subtitle ? (
@@ -262,9 +270,9 @@ export default function KnowledgeCenter() {
             animate="animate"
             className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-12 lg:mb-14"
           >
-            {SUGGESTION_CHIPS.map((chip) => (
+            {suggestionChips.map((chip, chipIdx) => (
               <button
-                key={chip.label}
+                key={`${chip.routeId}-${chipIdx}`}
                 type="button"
                 onClick={() => applyChip(chip.routeId)}
                 className="rounded-full border border-slate-200/90 bg-white px-4 py-2 text-[13px] font-medium text-navy/80 shadow-sm hover:border-gold/40 hover:bg-white hover:shadow-md transition-all duration-200"
@@ -280,19 +288,19 @@ export default function KnowledgeCenter() {
             animate="animate"
             className="mx-auto mb-10 max-w-2xl text-center text-[13px] leading-relaxed text-slate-600"
           >
-            <span className="font-semibold text-navy">Getting started &amp; financial readiness:</span>{" "}
+            <span className="font-semibold text-navy">{t("knowledge.tools.intro")}</span>{" "}
             <Link to="/tools/true-cost-of-waiting" className="font-medium text-gold underline decoration-gold/40 hover:text-navy">
-              The True Cost of Waiting
+              {t("knowledge.tools.waitingLink")}
             </Link>{" "}
-            — see rent, appreciation, and equity missed while you delay.{" "}
+            {t("knowledge.tools.waitingDesc")}{" "}
             <Link to="/tools/buy-vs-rent" className="font-medium text-gold underline decoration-gold/40 hover:text-navy">
-              Buy vs. Rent: The Full Picture
+              {t("knowledge.tools.buyRentLink")}
             </Link>{" "}
-            — crossover year, wealth curves, and when renting still wins.{" "}
+            {t("knowledge.tools.buyRentDesc")}{" "}
             <Link to="/tools/conventional-vs-fha" className="font-medium text-gold underline decoration-gold/40 hover:text-navy">
-              Conventional vs. FHA: The Full Cost Comparison
+              {t("knowledge.tools.fhaLink")}
             </Link>{" "}
-            — mortgage insurance crossover, refi strategy, and credit-tier guidance.
+            {t("knowledge.tools.fhaDesc")}
           </motion.p>
 
           <motion.p
@@ -301,11 +309,11 @@ export default function KnowledgeCenter() {
             animate="animate"
             className="mx-auto mb-10 max-w-2xl text-center text-[13px] leading-relaxed text-slate-600"
           >
-            <span className="font-semibold text-navy">Loan types:</span>{" "}
+            <span className="font-semibold text-navy">{t("knowledge.tools.loanTypes")}</span>{" "}
             <Link to="/tools/conventional-vs-fha" className="font-medium text-gold underline decoration-gold/40 hover:text-navy">
-              FHA vs. Conventional calculator
+              {t("knowledge.tools.fhaCalcLink")}
             </Link>{" "}
-            — PMI vs. MIP, total cost over time, and which program often wins for your profile.
+            {t("knowledge.tools.fhaCalcDesc")}
           </motion.p>
 
           <motion.p
@@ -314,15 +322,15 @@ export default function KnowledgeCenter() {
             animate="animate"
             className="mx-auto mb-10 max-w-2xl text-center text-[13px] leading-relaxed text-slate-600"
           >
-            <span className="font-semibold text-navy">Refinancing &amp; equity:</span>{" "}
+            <span className="font-semibold text-navy">{t("knowledge.tools.refiEquity")}</span>{" "}
             <Link to="/tools/principal-accelerator" className="font-medium text-gold underline decoration-gold/40 hover:text-navy">
-              The Principal Accelerator
+              {t("knowledge.tools.acceleratorLink")}
             </Link>{" "}
-            — see what extra payments do to your payoff date and total interest.{" "}
+            {t("knowledge.tools.acceleratorDesc")}{" "}
             <Link to="/tools/heloc-planner" className="font-medium text-gold underline decoration-gold/40 hover:text-navy">
-              HELOC Smart Planner
+              {t("knowledge.tools.helocLink")}
             </Link>{" "}
-            — credit limit, payment cliff, rate scenarios, and HELOC vs alternatives.
+            {t("knowledge.tools.helocDesc")}
           </motion.p>
 
           <motion.p
@@ -331,11 +339,11 @@ export default function KnowledgeCenter() {
             animate="animate"
             className="mx-auto mb-10 max-w-2xl text-center text-[13px] leading-relaxed text-slate-600"
           >
-            <span className="font-semibold text-navy">Homeowners 62+ &amp; retirement:</span>{" "}
+            <span className="font-semibold text-navy">{t("knowledge.tools.reverse")}</span>{" "}
             <Link to="/tools/reverse-mortgage-planner" className="font-medium text-gold underline decoration-gold/40 hover:text-navy">
-              Reverse Mortgage Retirement Planner
+              {t("knowledge.tools.reverseLink")}
             </Link>{" "}
-            — income gap, all four payout options, and heir inheritance over 20 years.
+            {t("knowledge.tools.reverseDesc")}
           </motion.p>
 
           {/* 6 entry cards */}
@@ -346,7 +354,7 @@ export default function KnowledgeCenter() {
             className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 lg:gap-6 list-none p-0 m-0 max-w-6xl mx-auto"
           >
             {KNOWLEDGE_ROUTE_ORDER.map((rid, idx) => {
-              const r = KNOWLEDGE_ROUTES[rid];
+              const r = ROUTES[rid];
               const img = ENTRY_IMAGE_BY_ROUTE[rid];
               const Icon = ROUTE_ICONS[rid];
               return (
@@ -376,7 +384,7 @@ export default function KnowledgeCenter() {
                         {r.cardDescription}
                       </span>
                       <span className="mt-5 inline-flex items-center gap-2 font-sans text-[11px] font-semibold uppercase tracking-[0.14em] text-gold">
-                        Explore
+                        {t("knowledge.card.explore")}
                         <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
                       </span>
                     </div>
@@ -405,7 +413,7 @@ export default function KnowledgeCenter() {
                       onClick={resetToMainMenu}
                       className="text-slate-500 hover:text-navy transition-colors duration-200 underline-offset-2 hover:underline"
                     >
-                      Knowledge Center
+                      {t("knowledge.breadcrumb.home")}
                     </button>
                   </li>
                   <li className="text-slate-300" aria-hidden>
@@ -420,7 +428,7 @@ export default function KnowledgeCenter() {
                   onClick={resetToMainMenu}
                   className="self-start sm:self-auto inline-flex items-center gap-2 rounded-xl border border-slate-200/90 bg-white px-3.5 py-2 text-[13px] font-semibold text-navy shadow-sm hover:border-gold/35 hover:bg-surface/40 transition-all duration-200"
                 >
-                  ← Change topic
+                  {t("knowledge.breadcrumb.change")}
                 </button>
               </nav>
             </div>
@@ -434,7 +442,7 @@ export default function KnowledgeCenter() {
               <p className="sr-only">Switch topic</p>
               <div className="flex gap-2 overflow-x-auto pb-1 [-webkit-overflow-scrolling:touch]">
                 {KNOWLEDGE_ROUTE_ORDER.map((rid) => {
-                  const r = KNOWLEDGE_ROUTES[rid];
+                  const r = ROUTES[rid];
                   const active = selectedRoute === rid;
                   return (
                     <button
@@ -493,7 +501,7 @@ export default function KnowledgeCenter() {
                     id="matters-label"
                     className="font-heading text-xl sm:text-2xl font-semibold text-navy mb-5 tracking-[-0.02em]"
                   >
-                    What matters most
+                    {t("knowledge.section.whatMatters")}
                   </h3>
                   <div className="rounded-2xl border-l-[5px] border-gold bg-gradient-to-r from-gold/[0.08] to-transparent pl-6 pr-5 py-7 sm:pl-8 sm:pr-8 sm:py-8">
                     <ul className="space-y-5 list-none m-0 p-0">
@@ -523,7 +531,7 @@ export default function KnowledgeCenter() {
                     id="clarity-cards-label"
                     className="font-heading text-xl font-semibold text-navy mb-5 tracking-[-0.02em]"
                   >
-                    {route.claritySectionTitle ?? "Clarity cards"}
+                    {route.claritySectionTitle ?? t("knowledge.section.clarityCards")}
                   </h3>
                   <div
                     className={`grid grid-cols-1 gap-5 sm:gap-6 max-w-6xl ${
@@ -541,7 +549,7 @@ export default function KnowledgeCenter() {
                         <p className="font-sans text-[14px] text-slate-600 leading-[1.6] mb-4">{c.summary}</p>
                         <details className="group kc-details-expand mt-auto border-t border-slate-200/70 pt-4 open:border-slate-200/85 open:[&_summary]:text-gold">
                           <summary className="flex min-h-[48px] cursor-pointer list-none items-center font-sans text-[13px] font-semibold uppercase tracking-[0.12em] text-gold [&::-webkit-details-marker]:hidden transition-colors duration-[240ms] ease-out">
-                            {c.expandLabel ?? "Learn more"}
+                            {c.expandLabel ?? t("knowledge.card.learnMore")}
                             <ChevronDown className="ml-2 h-4 w-4 shrink-0 transition-transform duration-[240ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-open:rotate-180" />
                           </summary>
                           <div className="kc-details-body -mx-1 mt-3 rounded-b-[10px] border-t border-slate-200/80 bg-transparent px-4 pb-4 pt-4 font-sans text-[14px] text-slate-600 leading-[1.65] transition-colors duration-[240ms] ease-out group-open:bg-slate-50/85 sm:px-5 space-y-3">
@@ -576,7 +584,7 @@ export default function KnowledgeCenter() {
                 {/* 4 — How it works (step flow) */}
                 <section aria-labelledby="how-label" className="max-w-3xl">
                   <h3 id="how-label" className="font-heading text-xl font-semibold text-navy mb-6 tracking-[-0.02em] sm:mb-7">
-                    {route.howItWorksSectionTitle ?? "How it works"}
+                    {route.howItWorksSectionTitle ?? t("knowledge.section.howItWorks")}
                   </h3>
                   {route.howItWorksIntro ? (
                     <div className="mb-7 max-w-2xl space-y-3">
@@ -616,7 +624,7 @@ export default function KnowledgeCenter() {
                               {s.learnMore?.trim() ? (
                                 <details className="group kc-details-expand">
                                   <summary className="flex min-h-[48px] cursor-pointer list-none items-center gap-2 font-sans text-[13px] font-semibold text-navy/80 [&::-webkit-details-marker]:hidden transition-colors duration-[240ms] ease-out">
-                                    <span className="border-b border-gold/40 pb-px">Expand step</span>
+                                    <span className="border-b border-gold/40 pb-px">{t("knowledge.step.expand")}</span>
                                     <ChevronDown className="h-4 w-4 shrink-0 text-gold transition-transform duration-[240ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-open:rotate-180" />
                                   </summary>
                                   <div className="kc-details-body mt-3 space-y-3 border-t border-slate-200/80 px-3 pb-3 pt-4 font-sans text-[14px] text-slate-600 leading-[1.65] transition-colors duration-[240ms] ease-out group-open:bg-slate-50/90 sm:px-4">
@@ -640,7 +648,7 @@ export default function KnowledgeCenter() {
                   {/* 5 — FAQ curated */}
                   <section aria-labelledby="faq-label" className="max-w-3xl">
                     <h3 id="faq-label" className="font-heading text-xl font-semibold text-navy mb-5 tracking-[-0.02em]">
-                      Common questions
+                      {t("knowledge.section.faq")}
                     </h3>
                     {(() => {
                       const faqCap = route.faqInitialCount ?? FAQ_INITIAL;
@@ -676,7 +684,7 @@ export default function KnowledgeCenter() {
                               onClick={() => setFaqShowAll((v) => !v)}
                               className="mt-5 font-sans text-[14px] font-semibold text-navy border-b border-gold/50 pb-0.5 transition-colors duration-[240ms] ease-out hover:text-gold"
                             >
-                              {faqShowAll ? "Show fewer questions" : "View more questions"}
+                              {faqShowAll ? t("knowledge.faq.showLess") : t("knowledge.faq.showMore")}
                             </button>
                           ) : null}
                         </>
@@ -763,14 +771,14 @@ export default function KnowledgeCenter() {
             className="text-center max-w-2xl mx-auto mb-12 lg:mb-14"
           >
             <h2 className="font-heading text-3xl sm:text-4xl font-semibold text-navy tracking-[-0.03em] leading-[1.1] mb-3">
-              What most people misunderstand
+              {t("knowledge.misunderstandings.title")}
             </h2>
             <p className="font-sans text-slate-600 text-[15px] leading-relaxed">
-              Straight framing before you decide — no noise, no jargon walls.
+              {t("knowledge.misunderstandings.subtitle")}
             </p>
           </motion.div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6 max-w-6xl mx-auto">
-            {FEATURED_MISUNDERSTANDINGS.map((f) => (
+            {MISUNDERSTANDINGS.map((f) => (
               <article
                 key={f.id}
                 className="rounded-2xl border border-slate-200/80 bg-white p-6 lg:p-7 shadow-[0_8px_36px_rgba(10,25,47,0.06)]"
@@ -787,16 +795,16 @@ export default function KnowledgeCenter() {
       <section className="py-16 lg:py-24 bg-gradient-to-b from-white to-surface/30">
         <div className={`${PAGE_CONTENT_RAIL_CLASS} text-center max-w-2xl mx-auto`}>
           <h2 className="font-heading text-2xl sm:text-3xl font-semibold text-navy tracking-[-0.02em] mb-4">
-            Still unsure? Let&apos;s walk through it together.
+            {t("knowledge.cta.title")}
           </h2>
           <p className="font-sans text-slate-600 mb-8 text-[15px] leading-relaxed">
-            A real conversation beats endless tabs — we&apos;ll meet you where you are.
+            {t("knowledge.cta.body")}
           </p>
           <Link
             to="/contact?topic=advisory"
             className="inline-flex items-center justify-center gap-2 rounded-2xl bg-navy px-10 py-4 font-sans text-[15px] font-semibold text-white shadow-[0_16px_48px_rgba(10,25,47,0.25)] hover:bg-navy/90 transition-colors duration-200"
           >
-            Start a conversation
+            {t("knowledge.cta.button")}
             <ArrowRight size={18} className="opacity-90" />
           </Link>
         </div>
@@ -807,21 +815,21 @@ export default function KnowledgeCenter() {
         <div className={PAGE_CONTENT_RAIL_CLASS}>
           <div className="max-w-3xl mx-auto py-14 lg:py-16 text-center">
             <p className="font-heading text-xl sm:text-2xl font-semibold text-white mb-6 leading-[1.25] tracking-[-0.02em]">
-              Infinite Home Lending — clarity before commitment.
+              {t("knowledge.brand.line")}
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
                 to="/contact"
                 className="btn-gold group !px-8 !py-3.5 !rounded-2xl inline-flex items-center gap-2 shadow-[0_12px_40px_rgba(197,160,89,0.25)]"
               >
-                Start Pre-Approval
+                {t("knowledge.brand.cta")}
                 <ArrowRight size={18} className="transition-transform group-hover:translate-x-0.5" />
               </Link>
               <Link
                 to="/loan-structure-simulator"
                 className="text-sm font-semibold text-white/85 border-b border-white/30 pb-0.5 hover:text-white transition-colors"
               >
-                Try the Structure Simulator
+                {t("knowledge.brand.simulator")}
               </Link>
             </div>
           </div>

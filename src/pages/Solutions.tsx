@@ -5,6 +5,7 @@ import { LoanProductDetailModal } from "../components/LoanProductDetailModal";
 import { LoanProductGridCard } from "../components/LoanProductGridCard";
 import { getLoanProductById, LOAN_GRID_ROWS } from "../data/loanProducts";
 import { PageContainer } from "../components/PageContainer";
+import { useLanguage } from "../i18n/LanguageContext";
 
 type GuidedPath = "buy" | "equity" | "explore";
 
@@ -18,14 +19,15 @@ function matchesGuided(loanId: string, path: GuidedPath | null): boolean {
 }
 
 const Solutions = () => {
+  const { t, lang } = useLanguage();
   const [modalProductId, setModalProductId] = useState<string | null>(null);
   const [guidedPath, setGuidedPath] = useState<GuidedPath | null>(null);
   const [recentlyClosedId, setRecentlyClosedId] = useState<string | null>(null);
   const gridRef = useRef<HTMLDivElement>(null);
 
   const modalProduct = useMemo(
-    () => (modalProductId ? getLoanProductById(modalProductId) : null),
-    [modalProductId],
+    () => (modalProductId ? getLoanProductById(modalProductId, lang) : null),
+    [modalProductId, lang],
   );
 
   useEffect(() => {
@@ -64,13 +66,13 @@ const Solutions = () => {
             className="mb-10 md:mb-12"
           >
             <span className="inline-block px-4 py-1.5 bg-surface text-gold text-[11px] font-bold uppercase tracking-[0.25em] rounded-sm mb-10">
-              Loan Solutions
+              {t("solutions.eyebrow")}
             </span>
             <h1 className="mb-6 text-navy text-[2rem] sm:text-4xl lg:text-[2.625rem] leading-[1.12] tracking-[-0.025em] font-semibold font-heading">
-              Let&apos;s point you in the right direction
+              {t("solutions.title")}
             </h1>
             <p className="text-[17px] text-slate-500 max-w-2xl leading-relaxed font-light mb-10">
-              Tell us where you&apos;re starting—we&apos;ll help the right options stand out. Nothing here locks you in; it&apos;s just a compass.
+              {t("solutions.subtitle")}
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-5xl">
@@ -84,10 +86,10 @@ const Solutions = () => {
                 }`}
               >
                 <span className="block text-navy font-semibold text-[15px] leading-snug mb-2">
-                  I&apos;m buying a home
+                  {t("solutions.guided.buy.title")}
                 </span>
                 <span className="block text-sm text-slate-500 font-light leading-snug">
-                  Purchase paths, low down payment options, and move-in ready strategies.
+                  {t("solutions.guided.buy.desc")}
                 </span>
               </button>
               <button
@@ -100,10 +102,10 @@ const Solutions = () => {
                 }`}
               >
                 <span className="block text-navy font-semibold text-[15px] leading-snug mb-2">
-                  I want to access my home&apos;s equity
+                  {t("solutions.guided.equity.title")}
                 </span>
                 <span className="block text-sm text-slate-500 font-light leading-snug">
-                  Refinance, cash-out, and flexible equity solutions.
+                  {t("solutions.guided.equity.desc")}
                 </span>
               </button>
               <button
@@ -116,10 +118,10 @@ const Solutions = () => {
                 }`}
               >
                 <span className="block text-navy font-semibold text-[15px] leading-snug mb-2">
-                  I&apos;m not sure where I fit yet
+                  {t("solutions.guided.explore.title")}
                 </span>
                 <span className="block text-sm text-slate-500 font-light leading-snug">
-                  Explore all options and find the right path with guidance.
+                  {t("solutions.guided.explore.desc")}
                 </span>
               </button>
             </div>
@@ -132,7 +134,7 @@ const Solutions = () => {
                 className="grid grid-cols-1 md:grid-cols-3 gap-7 md:gap-8 items-stretch"
               >
                 {row.map((id) => {
-                  const product = getLoanProductById(id);
+                  const product = getLoanProductById(id, lang);
                   if (!product) return null;
                   const guidedMatch = matchesGuided(id, guidedPath);
                   const dim = guidedDimmingActive && !guidedMatch;
@@ -154,30 +156,31 @@ const Solutions = () => {
 
           <div className="mt-14 md:mt-16 max-w-2xl mx-auto text-center px-2">
             <p className="text-sm text-slate-600 font-light leading-relaxed">
+              <span>{t("solutions.selfEmployed.pre")} </span>
               <Link
                 to="/tools/self-employed-qualifier"
                 className="font-semibold text-navy underline decoration-gold/45 underline-offset-2 hover:text-gold"
               >
-                Self-employed? Use our Qualifier →
+                {t("solutions.selfEmployed.link")}
               </Link>
-              <span className="text-slate-500"> — Schedule C, bank statements, and write-off tradeoffs modeled together.</span>
+              <span className="text-slate-500"> {t("solutions.selfEmployed.post")}</span>
             </p>
             <p className="mt-4 text-sm text-slate-500 font-light leading-relaxed">
-              Open any card when you&apos;re ready—the page stays calm around you, and you can change your path above anytime.
+              {t("solutions.disclaimer")}
             </p>
           </div>
 
           <div className="mt-14 md:mt-16 bg-navy text-white p-12 md:p-20 rounded-[4px] text-center relative overflow-hidden">
             <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"></div>
-            <h3 className="text-2xl md:text-3xl font-bold mb-6 text-white">Not sure which option is right for you?</h3>
+            <h3 className="text-2xl md:text-3xl font-bold mb-6 text-white">{t("solutions.cta.title")}</h3>
             <p className="text-slate-400 mb-10 max-w-xl mx-auto text-lg font-light">
-              Our advisors are here to help you navigate the options and design a strategy that fits your life.
+              {t("solutions.cta.body")}
             </p>
             <Link
               to="/contact"
               className="btn-gold"
             >
-              Request a Consultation
+              {t("solutions.cta.button")}
             </Link>
           </div>
         </div>

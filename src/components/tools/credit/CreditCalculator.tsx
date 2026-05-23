@@ -5,6 +5,7 @@ import {
   SCORE_TIERS,
   type CreditInputs,
 } from "../../../hooks/useCreditMath";
+import { useLanguage } from "../../../i18n/LanguageContext";
 import { CreditModeTabs } from "./CreditModeTabs";
 import { CreditSituationInputs } from "./CreditSituationInputs";
 import { CreditActionGrid } from "./CreditActionGrid";
@@ -46,6 +47,7 @@ function normalizeInputs(next: CreditInputs): CreditInputs {
 }
 
 export default function CreditCalculator() {
+  const { t } = useLanguage();
   const [inputs, setInputs] = useState<CreditInputs>(defaultInputs);
   const [mode, setMode] = useState<"compare" | "actions">("compare");
   const [selectedActions, setSelectedActions] = useState(new Set<string>());
@@ -90,11 +92,8 @@ export default function CreditCalculator() {
         } as CSSProperties
       }
     >
-      <SmartToolIntro title="The Credit Score ROI Calculator">
-        <p>
-          Every credit score point you earn before applying for a mortgage has a real dollar value. This tool calculates exactly what improving
-          your score is worth — and which specific actions deliver the highest return on your time and effort.
-        </p>
+      <SmartToolIntro title={t("tool.credit.title")}>
+        <p>{t("tool.credit.intro")}</p>
       </SmartToolIntro>
 
       <section className="mt-10 space-y-8">
@@ -104,8 +103,7 @@ export default function CreditCalculator() {
 
         {isTopTier ? (
           <p className="rounded-md border border-amber-200/80 bg-amber-50/90 px-4 py-3 text-[13px] leading-relaxed text-amber-950">
-            You&apos;re already in the top rate tier. The Action Planner can help you maintain it. Score comparison results are hidden — adjust
-            your current score below to model a lower tier, or use the action planner.
+            {t("tool.credit.topTierWarn")}
           </p>
         ) : null}
 
@@ -140,26 +138,22 @@ export default function CreditCalculator() {
         <CreditInsight results={results} curScore={inputs.curScore} isTopTier={isTopTier} />
 
         <p className="rounded-lg border border-slate-200/80 bg-slate-50/90 px-4 py-3 text-center text-[13px] leading-relaxed text-slate-700">
-          See which MD-DC-VA markets your improved score unlocks over time:{" "}
+          {t("tool.credit.powerMapPre")}{" "}
           <Link
             to="/tools/homebuying-power-map"
             className="font-semibold text-[#0B2A4A] underline decoration-[#C6A15B]/40 hover:text-[#C6A15B]"
           >
-            The Homebuying Power Map →
+            {t("tool.credit.powerMapLink")}
           </Link>
         </p>
 
         <CreditCTA results={results} />
 
-        <p className="text-center text-[10px] leading-relaxed text-[var(--color-text-tertiary)]">
-          Rate estimates are based on industry-standard FICO score tier pricing as of 2026 and are for educational purposes only. Actual rates depend
-          on lender, loan type, market conditions, and full borrower profile. Credit score improvement timelines are estimates — individual results
-          vary. This tool does not constitute a loan offer or credit advice. Contact Infinite Home Lending for a personalized rate analysis.
-        </p>
+        <p className="text-center text-[10px] leading-relaxed text-[var(--color-text-tertiary)]">{t("tool.credit.disclaimer")}</p>
 
         <p className="text-center text-[12px] text-slate-500">
           <Link to="/smart-tools" className="font-semibold text-[#0B2A4A] underline decoration-[#C6A15B]/40 hover:text-[#C6A15B]">
-            ← Back to Smart Tools
+            {t("tool.credit.backLink")}
           </Link>
         </p>
       </section>

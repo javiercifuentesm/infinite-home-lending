@@ -35,7 +35,7 @@ export function DealDeskPartnerCTA() {
           Ready to elevate your practice?
         </h2>
         <p className="mx-auto mb-8 max-w-xl font-sans text-[14px] leading-relaxed" style={{ color: "rgba(247,247,245,0.6)" }}>
-          Partner with IHL and get full access to The Deal Desk — 12 tools, Nexio AI, and the Intelligence Loop. No referral quotas. Just better deals.
+          Partner with IHL and get full access to The Deal Desk — 12 tools, Nexio — The Deal Desk Virtual Assistant, and the Intelligence Loop. No referral quotas. Just better deals.
         </p>
         <Link
           to="/contact?topic=deal-desk-partner"

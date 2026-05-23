@@ -1,10 +1,12 @@
 import type { ReactNode } from "react";
 import type { FHAResult } from "../../../hooks/useFHAMath";
 import { fmt, fmtK } from "../../../hooks/useFHAMath";
+import { useLanguage } from "../../../i18n/LanguageContext";
 
 type Props = { results: FHAResult };
 
 export function FHAMIExplainer({ results }: Props) {
+  const { t } = useLanguage();
   const {
     pmiRate,
     pmiMoInit,
@@ -27,34 +29,39 @@ export function FHAMIExplainer({ results }: Props) {
 
   return (
     <div className="rounded-xl border border-[var(--color-border-tertiary)] bg-white p-5 sm:p-6">
-      <h3 className="font-[Georgia,serif] text-[13px] font-medium text-[#0B2A4A]">Mortgage insurance: the key difference explained</h3>
+      <h3 className="font-[Georgia,serif] text-[13px] font-medium text-[#0B2A4A]">{t("tool.fha.explainer.title")}</h3>
       <div className="mt-4">
         {row(
-          "Conventional PMI monthly",
-          pmiRate === 0 ? <span className="text-[#27500A]">$0 (no PMI required)</span> : fmt(pmiMoInit),
+          t("tool.fha.explainer.convPmiMo"),
+          pmiRate === 0 ? <span className="text-[#27500A]">{t("tool.fha.explainer.noPmi")}</span> : fmt(pmiMoInit),
         )}
         {row(
-          "PMI cancellation",
+          t("tool.fha.explainer.pmiCancel"),
           pmiRate === 0 ? (
-            <span className="text-[#27500A]">N/A — no PMI</span>
+            <span className="text-[#27500A]">{t("tool.fha.explainer.pmiCancelNa")}</span>
           ) : pmiRemoveYr ? (
-            `Automatically at year ~${pmiRemoveYr}`
+            `${t("tool.fha.explainer.pmiAutoAt")}${pmiRemoveYr}`
           ) : (
-            "When LTV reaches 80%"
+            t("tool.fha.explainer.pmiLtv")
           ),
         )}
-        {row("FHA upfront MIP (1.75%)", <span className="text-[#A32D2D]">{fmt(fhaUFMIP)} (rolled into loan)</span>)}
-        {row("FHA annual MIP monthly", <span className="text-[#A32D2D]">{fmt(mipMoInit)}</span>)}
         {row(
-          "FHA MIP cancellation",
+          t("tool.fha.explainer.fhaUfmip"),
+          <span className="text-[#A32D2D]">
+            {fmt(fhaUFMIP)} {t("tool.fha.explainer.rolledIn")}
+          </span>,
+        )}
+        {row(t("tool.fha.explainer.fhaMipMo"), <span className="text-[#A32D2D]">{fmt(mipMoInit)}</span>)}
+        {row(
+          t("tool.fha.explainer.fhaMipCancel"),
           dpPercentFha >= 10 ? (
-            <span className="text-[#854F0B]">After 11 years (10%+ down)</span>
+            <span className="text-[#854F0B]">{t("tool.fha.explainer.fhaMip11")}</span>
           ) : (
-            <span className="text-[#A32D2D]">Never — must refinance to remove</span>
+            <span className="text-[#A32D2D]">{t("tool.fha.explainer.fhaMipNever")}</span>
           ),
         )}
-        {row("Total PMI paid (Conventional)", fmtK(convMiTotal))}
-        {row("Total MIP paid (FHA incl. upfront)", <span className="text-[#854F0B]">{fmtK(fhaMiTotal)}</span>, true)}
+        {row(t("tool.fha.explainer.totalPmi"), fmtK(convMiTotal))}
+        {row(t("tool.fha.explainer.totalMip"), <span className="text-[#854F0B]">{fmtK(fhaMiTotal)}</span>, true)}
       </div>
     </div>
   );

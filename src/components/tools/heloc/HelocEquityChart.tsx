@@ -13,6 +13,7 @@ import {
 import { Line } from "react-chartjs-2";
 import type { HelocResult } from "../../../hooks/useHelocMath";
 import { chartYFmt, fmt } from "../../../hooks/useHelocMath";
+import { useLanguage } from "../../../i18n/LanguageContext";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Filler, Legend);
 
@@ -22,6 +23,13 @@ type Props = {
 };
 
 export function HelocEquityChart({ results, chartKey }: Props) {
+  const { t } = useLanguage();
+  const eqChartTitle = t("tool.heloc.eqChart.title");
+  const legendEquity = t("tool.heloc.eqChart.legendEquity");
+  const legendBal = t("tool.heloc.eqChart.legendBal");
+  const tooltipBal = t("tool.heloc.eqChart.tooltipBal");
+  const yrPrefix = t("tool.heloc.charts.yr");
+
   const { data, options } = useMemo(() => {
     const { schedule, drawYrs, repayYrs } = results;
     const totalYrs = drawYrs + repayYrs;
@@ -31,7 +39,7 @@ export function HelocEquityChart({ results, chartKey }: Props) {
       const mo = i + 1;
       if (mo % 12 !== 0) return "";
       const yr = mo / 12;
-      if (yr % skipNYr === 0 || yr === totalYrs) return "Yr " + yr;
+      if (yr % skipNYr === 0 || yr === totalYrs) return yrPrefix + yr;
       return "";
     });
 
@@ -39,7 +47,7 @@ export function HelocEquityChart({ results, chartKey }: Props) {
       labels: schedule.map((_, i) => String(i + 1)),
       datasets: [
         {
-          label: "Home equity",
+          label: legendEquity,
           data: schedule.map((s) => Math.max(0, s.equity)),
           borderColor: "#3B6D11",
           backgroundColor: "rgba(59,109,17,0.07)",
@@ -49,7 +57,7 @@ export function HelocEquityChart({ results, chartKey }: Props) {
           fill: true,
         },
         {
-          label: "HELOC balance",
+          label: legendBal,
           data: schedule.map((s) => s.helBal),
           borderColor: "#C6A15B",
           backgroundColor: "transparent",
@@ -71,7 +79,7 @@ export function HelocEquityChart({ results, chartKey }: Props) {
           bodyFont: { size: 14 },
           callbacks: {
             label(ctx: { datasetIndex?: number; parsed: { y: number } }) {
-              const lab = ctx.datasetIndex === 0 ? "Equity" : "HELOC balance";
+              const lab = ctx.datasetIndex === 0 ? legendEquity : tooltipBal;
               return lab + ": " + fmt(Math.max(0, ctx.parsed.y));
             },
           },
@@ -102,19 +110,19 @@ export function HelocEquityChart({ results, chartKey }: Props) {
     };
 
     return { data: dataObj, options: optionsObj };
-  }, [results]);
+  }, [results, legendEquity, legendBal, tooltipBal, yrPrefix]);
 
   return (
     <div>
-      <h3 className="font-[Georgia,serif] text-lg font-medium text-[#0B2A4A]">Remaining equity over the life of the HELOC</h3>
+      <h3 className="font-[Georgia,serif] text-lg font-medium text-[#0B2A4A]">{eqChartTitle}</h3>
       <div className="mt-3 flex flex-wrap gap-6 text-[11px] text-[#888780]">
         <span className="inline-flex items-center gap-2">
           <span className="inline-block h-2.5 w-2.5 rounded-sm bg-[#3B6D11]" aria-hidden />
-          Home equity
+          {legendEquity}
         </span>
         <span className="inline-flex items-center gap-2">
           <span className="inline-block h-0.5 w-5 border-t-2 border-dashed border-[#C6A15B]" aria-hidden />
-          HELOC balance outstanding
+          {legendBal}
         </span>
       </div>
       <div key={chartKey + "-eq"} className="relative mt-3 h-[190px] w-full">

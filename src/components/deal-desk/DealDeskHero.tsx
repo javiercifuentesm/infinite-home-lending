@@ -1,8 +1,4 @@
-import { Link } from "react-router-dom";
-
-type Props = { onExploreClick: () => void };
-
-export function DealDeskHero({ onExploreClick }: Props) {
+export function DealDeskHero() {
   return (
     <section className="relative px-4 py-24 sm:px-6 lg:py-32">
       {/* Animated gold line accent */}
@@ -72,34 +68,6 @@ export function DealDeskHero({ onExploreClick }: Props) {
         >
           Powered by Nexio — IHL&apos;s AI Strategic Partner — and 12 live deal execution tools.
         </p>
-
-        {/* CTAs */}
-        <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-          <button
-            type="button"
-            onClick={onExploreClick}
-            className="inline-flex min-h-[50px] min-w-[200px] items-center justify-center rounded-lg px-8 py-3 font-sans text-[13px] font-semibold uppercase tracking-[0.1em] transition-all hover:scale-[1.02]"
-            style={{
-              background: "linear-gradient(135deg, #C6A15B 0%, #b48e48 100%)",
-              color: "#0B2A4A",
-              boxShadow: "0 4px 24px rgba(198,161,91,0.25)",
-            }}
-          >
-            Enter the Deal Desk →
-          </button>
-          <Link
-            to="/contact?topic=deal-desk-partner"
-            className="inline-flex min-h-[50px] items-center justify-center rounded-lg px-8 py-3 font-sans text-[13px] font-semibold uppercase tracking-[0.1em] transition-all hover:scale-[1.02]"
-            style={{
-              background: "rgba(255,255,255,0.04)",
-              border: "1px solid rgba(198,161,91,0.3)",
-              color: "#F7F7F5",
-              backdropFilter: "blur(8px)",
-            }}
-          >
-            Request Partner Access
-          </Link>
-        </div>
 
         {/* Stats row */}
         <div className="mx-auto mt-16 grid max-w-lg grid-cols-3 gap-8">

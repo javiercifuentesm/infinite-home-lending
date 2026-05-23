@@ -1,3 +1,5 @@
+import { useLanguage } from "../../../i18n/LanguageContext";
+
 type Mode = "compare" | "actions";
 
 type Props = {
@@ -6,11 +8,13 @@ type Props = {
 };
 
 export function CreditModeTabs({ mode, onModeChange }: Props) {
+  const { t } = useLanguage();
+
   return (
     <div
       className="inline-flex rounded-md border border-[var(--color-border-tertiary,#e2e8f0)] bg-[var(--color-background-secondary,#f1f5f9)] p-[3px]"
       role="tablist"
-      aria-label="Calculator mode"
+      aria-label={t("tool.credit.mode.ariaLabel")}
     >
       <button
         type="button"
@@ -23,7 +27,7 @@ export function CreditModeTabs({ mode, onModeChange }: Props) {
         }`}
         onClick={() => onModeChange("compare")}
       >
-        Score comparison
+        {t("tool.credit.mode.compare")}
       </button>
       <button
         type="button"
@@ -36,7 +40,7 @@ export function CreditModeTabs({ mode, onModeChange }: Props) {
         }`}
         onClick={() => onModeChange("actions")}
       >
-        Action planner
+        {t("tool.credit.mode.actions")}
       </button>
     </div>
   );

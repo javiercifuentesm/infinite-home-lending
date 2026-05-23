@@ -1,4 +1,5 @@
 import type { AssumableInputs, VaElig } from "../../../hooks/useAssumableMath";
+import { DollarInput, PercentInput } from "../../tools/shared/FormattedInput";
 
 const label = "mb-1.5 block font-sans text-[12px] font-semibold text-[#0B2A4A]";
 const input =
@@ -24,13 +25,11 @@ export function ACPurchaseInputs({ inputs, onChange }: Props) {
           <label htmlFor="ac-purchasePrice" className={label}>
             Purchase price ($)
           </label>
-          <input
+          <DollarInput
             id="ac-purchasePrice"
-            type="number"
-            step={5000}
             className={input}
-            value={inputs.purchasePrice || ""}
-            onChange={(e) => set("purchasePrice", Number.parseFloat(e.target.value) || 0)}
+            value={inputs.purchasePrice}
+            onChange={(n) => set("purchasePrice", n)}
           />
         </div>
         <div>
@@ -68,13 +67,12 @@ export function ACPurchaseInputs({ inputs, onChange }: Props) {
           <label htmlFor="ac-mktRate" className={label}>
             Current market rate (%)
           </label>
-          <input
+          <PercentInput
             id="ac-mktRate"
-            type="number"
             step={0.125}
             className={input}
-            value={inputs.mktRate || ""}
-            onChange={(e) => set("mktRate", Number.parseFloat(e.target.value) || 0)}
+            value={inputs.mktRate}
+            onChange={(n) => set("mktRate", n)}
           />
           <p className="mt-1 font-sans text-[11px] text-slate-500">What a new 30-year loan would cost today</p>
         </div>

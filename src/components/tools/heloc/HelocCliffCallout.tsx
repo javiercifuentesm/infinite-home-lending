@@ -1,10 +1,18 @@
 import type { HelocResult } from "../../../hooks/useHelocMath";
 import { fmt } from "../../../hooks/useHelocMath";
+import { useLanguage } from "../../../i18n/LanguageContext";
 
 type Props = { results: HelocResult };
 
 export function HelocCliffCallout({ results }: Props) {
+  const { t } = useLanguage();
   const { drawYrs, ioPmt, piPmtVal, cliffAmount, cliffPct } = results;
+  const body = t("tool.heloc.cliff.body")
+    .replace("{drawYrs}", String(drawYrs))
+    .replace("{io}", fmt(ioPmt))
+    .replace("{pi}", fmt(piPmtVal))
+    .replace("{cliff}", fmt(cliffAmount))
+    .replace("{pct}", String(cliffPct));
 
   return (
     <div
@@ -21,9 +29,7 @@ export function HelocCliffCallout({ results }: Props) {
         </svg>
       </span>
       <p className="text-[12px] leading-relaxed text-[#633806]">
-        <strong>Payment cliff warning:</strong> when the draw period ends in {drawYrs} years, your monthly payment jumps from{" "}
-        {fmt(ioPmt)} to {fmt(piPmtVal)} — an increase of {fmt(cliffAmount)}/month ({cliffPct}% higher). Plan for this transition
-        before it arrives.
+        <strong>{t("tool.heloc.cliff.strong")}</strong> {body}
       </p>
     </div>
   );

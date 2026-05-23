@@ -1,4 +1,5 @@
 import type { WealthInputs } from "../../../hooks/useWealthMath";
+import { DollarInput, PercentInput } from "../shared/FormattedInput";
 
 type Props = {
   inputs: WealthInputs;
@@ -6,8 +7,8 @@ type Props = {
 };
 
 const labelClass = "mb-1.5 block font-[Lato,system-ui,sans-serif] text-[12px] font-semibold text-[#0B2A4A]";
-const inputClass =
-  "w-full rounded-md border border-slate-200/90 bg-white px-3 py-2 font-[Lato,system-ui,sans-serif] text-[14px] text-slate-900 shadow-sm focus:border-[#C6A15B] focus:outline-none focus:ring-1 focus:ring-[#C6A15B]/40";
+const fieldClass =
+  "w-full rounded-md border border-slate-200/90 bg-white px-3 py-2 font-[Lato,system-ui,sans-serif] text-[14px] text-slate-900 shadow-sm tabular-nums focus:border-[#C6A15B] focus:outline-none focus:ring-1 focus:ring-[#C6A15B]/40";
 
 export function WTPurchaseInputs({ inputs, onChange }: Props) {
   const set = <K extends keyof WealthInputs>(key: K, value: WealthInputs[K]) => onChange({ ...inputs, [key]: value });
@@ -25,60 +26,36 @@ export function WTPurchaseInputs({ inputs, onChange }: Props) {
           <label htmlFor="wt-hp" className={labelClass}>
             Home price ($)
           </label>
-          <input
-            id="wt-hp"
-            type="number"
-            min={0}
-            step={5000}
-            value={inputs.hp}
-            onChange={(e) => set("hp", Math.max(0, parseFloat(e.target.value) || 0))}
-            className={inputClass}
-          />
+          <DollarInput id="wt-hp" value={inputs.hp} min={0} className={fieldClass} onChange={(n) => set("hp", Math.max(0, n))} />
         </div>
         <div>
           <label htmlFor="wt-dp" className={labelClass}>
             Down payment (%)
           </label>
-          <input
+          <PercentInput
             id="wt-dp"
-            type="number"
+            value={inputs.dp}
             min={3}
             max={30}
             step={1}
-            value={inputs.dp}
-            onChange={(e) => {
-              const v = Math.round(parseFloat(e.target.value) || 3);
+            className={fieldClass}
+            onChange={(n) => {
+              const v = Math.round(n);
               set("dp", Math.min(30, Math.max(3, v)));
             }}
-            className={inputClass}
           />
         </div>
         <div>
           <label htmlFor="wt-rate" className={labelClass}>
             Mortgage rate (%)
           </label>
-          <input
-            id="wt-rate"
-            type="number"
-            step={0.125}
-            value={inputs.rate}
-            onChange={(e) => set("rate", parseFloat(e.target.value) || 0)}
-            className={inputClass}
-          />
+          <PercentInput id="wt-rate" value={inputs.rate} step={0.125} className={fieldClass} onChange={(n) => set("rate", n)} />
         </div>
         <div>
           <label htmlFor="wt-rent" className={labelClass}>
             Current monthly rent ($)
           </label>
-          <input
-            id="wt-rent"
-            type="number"
-            min={0}
-            step={50}
-            value={inputs.rent}
-            onChange={(e) => set("rent", Math.max(0, parseFloat(e.target.value) || 0))}
-            className={inputClass}
-          />
+          <DollarInput id="wt-rent" value={inputs.rent} min={0} className={fieldClass} onChange={(n) => set("rent", Math.max(0, n))} />
         </div>
       </div>
     </section>

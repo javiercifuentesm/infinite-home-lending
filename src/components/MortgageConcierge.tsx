@@ -1,528 +1,767 @@
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
-
-const IHL_THINKING_STYLE_ID = "ihl-thinking-animations";
 import { jsPDF } from "jspdf";
-import { useConversation, useRawConversation } from "@elevenlabs/react";
 import { sendLeadEmail } from "../api/sendLead";
+import { getApiBaseUrl } from "../lib/apiBase";
+import { useLanguage } from "../i18n/LanguageContext";
 
-const AGENT_ID = "agent_3401kpnqkz31f85a1efq42k7fn9e";
+const PDF_ASSISTANT_LABEL = "Sarah — IHL Mortgage Concierge";
+const IS_MOBILE = () => window.innerWidth < 768;
 
-const PDF_ASSISTANT_LABEL = "Luna — IHL Mortgage Concierge";
+type Screen = "idle" | "widget" | "fullscreen" | "goodbye";
+
+type Message = {
+  role: "user" | "assistant";
+  content: string;
+  time: string;
+  streaming?: boolean;
+  docName?: string;
+};
+
+type LeadData = {
+  name: string;
+  email: string;
+  phone: string;
+  bestDay: string;
+  bestTime: string;
+  preferredContact: string;
+};
+
+type ContentBlock =
+  | { type: "text"; text: string }
+  | { type: "image"; source: { type: "base64"; media_type: string; data: string } }
+  | { type: "document"; source: { type: "base64"; media_type: string; data: string } };
+
+const ORB_BG = "radial-gradient(circle at 30% 28%, rgba(255,240,190,0.95) 0%, rgba(198,161,91,0.9) 15%, rgba(15,55,100,0.95) 38%, rgba(5,25,55,0.98) 65%, rgba(2,8,22,1) 100%)";
+
+/** Web Speech API — not modeled in TS's default DOM lib */
+type SpeechRecognitionEvent = {
+  results: ArrayLike<{ 0: { transcript: string }; isFinal: boolean }> & { length: number };
+};
+type SpeechRecognition = {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  onstart: (() => void) | null;
+  onend: (() => void) | null;
+  onerror: (() => void) | null;
+  onresult: ((event: SpeechRecognitionEvent) => void) | null;
+  start(): void;
+  stop(): void;
+};
+
+// ─── SUB-COMPONENTS (defined OUTSIDE the main component to prevent re-mount on every render) ───
+
+function parseBold(text: string): React.ReactNode {
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  return parts.map((part, i) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      return <strong key={i} style={{ color: "#C6A15B", fontWeight: 700 }}>{part.slice(2, -2)}</strong>;
+    }
+    return part;
+  });
+}
+
+function renderMarkdown(text: string): React.ReactNode {
+  const lines = text.split("\n");
+  return lines.map((line, i) => {
+    const trimmed = line.trim();
+
+    // Bold-only line (header): **text** or **text:**
+    if (/^\*\*[^*]+\*\*:?$/.test(trimmed)) {
+      const label = trimmed.replace(/\*\*/g, "").replace(/:$/, "");
+      return (
+        <div key={i} style={{ color: "#C6A15B", fontWeight: 700, fontSize: "15px", marginTop: i > 0 ? "12px" : "0", marginBottom: "6px", letterSpacing: "0.3px" }}>
+          {label}
+        </div>
+      );
+    }
+
+    // Numbered list: "1. text" or "1. **bold** text"
+    const numberedMatch = trimmed.match(/^(\d+)\.\s+(.+)/);
+    if (numberedMatch) {
+      return (
+        <div key={i} style={{ display: "flex", gap: "10px", marginBottom: "6px", alignItems: "flex-start" }}>
+          <span style={{ color: "#C6A15B", fontWeight: 700, minWidth: "22px", flexShrink: 0, fontSize: "14px" }}>{numberedMatch[1]}.</span>
+          <span style={{ flex: 1 }}>{parseBold(numberedMatch[2])}</span>
+        </div>
+      );
+    }
+
+    // Bullet: "· text" or "- text"
+    const bulletMatch = trimmed.match(/^[·\-•]\s+(.+)/);
+    if (bulletMatch) {
+      return (
+        <div key={i} style={{ display: "flex", gap: "10px", marginBottom: "5px", alignItems: "flex-start" }}>
+          <span style={{ color: "#C6A15B", fontWeight: 700, flexShrink: 0, fontSize: "16px", lineHeight: "1.4" }}>›</span>
+          <span style={{ flex: 1 }}>{parseBold(bulletMatch[1])}</span>
+        </div>
+      );
+    }
+
+    // Checkmark ✓ or ✗
+    const checkMatch = trimmed.match(/^([✓✗])\s+(.+)/);
+    if (checkMatch) {
+      return (
+        <div key={i} style={{ display: "flex", gap: "10px", marginBottom: "5px", alignItems: "flex-start" }}>
+          <span style={{ color: checkMatch[1] === "✓" ? "#22c55e" : "#ef4444", fontWeight: 700, flexShrink: 0, fontSize: "15px" }}>{checkMatch[1]}</span>
+          <span style={{ flex: 1 }}>{parseBold(checkMatch[2])}</span>
+        </div>
+      );
+    }
+
+    // Empty line
+    if (trimmed === "") return <div key={i} style={{ height: "10px" }} />;
+
+    // Default paragraph with inline bold
+    return <div key={i} style={{ marginBottom: "4px", lineHeight: "1.7" }}>{parseBold(trimmed)}</div>;
+  });
+}
+
+// Typewriter: smoothly renders characters one-by-one when streaming
+const MessageBubble = ({ msg, index, scrollRef }: { msg: Message; index: number; scrollRef?: React.RefObject<HTMLDivElement | null> }) => {
+  void index;
+
+  const [displayed, setDisplayed] = useState(msg.streaming ? "" : msg.content);
+  const posRef = useRef(0);
+  const rafRef = useRef<number>(0);
+
+  useEffect(() => {
+    // When content grows (streaming chunks arriving), animate new chars
+    if (!msg.streaming && !msg.content.includes("FORM_SUBMITTED")) {
+      // Streaming done — jump to full content immediately
+      setDisplayed(msg.content);
+      posRef.current = msg.content.length;
+      if (scrollRef?.current) { scrollRef.current.scrollTop = scrollRef.current.scrollHeight; }
+      return;
+    }
+
+    const target = msg.content;
+    if (posRef.current >= target.length) return;
+
+    const tick = () => {
+      posRef.current = Math.min(posRef.current + 3, target.length); // 3 chars per frame ≈ smooth
+      setDisplayed(target.slice(0, posRef.current));
+      if (scrollRef?.current) { scrollRef.current.scrollTop = scrollRef.current.scrollHeight; }
+      if (posRef.current < target.length) {
+        rafRef.current = requestAnimationFrame(tick);
+      } else {
+        if (scrollRef?.current) { scrollRef.current.scrollTop = scrollRef.current.scrollHeight; }
+      }
+    };
+    rafRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [msg.content, msg.streaming, scrollRef]);
+
+  if (msg.content.includes("FORM_SUBMITTED")) return null;
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: msg.role === "user" ? "flex-end" : "flex-start", animation: "sarahMsgIn 0.35s ease forwards" }}>
+      {msg.role === "assistant" && (!msg.streaming || msg.content.trim() !== "") && (
+        <div style={{ display: "flex", alignItems: "flex-start", gap: "10px", maxWidth: "88%" }}>
+          <div style={{ flexShrink: 0, marginTop: "2px" }}>
+            <div style={{ width: "28px", height: "28px", borderRadius: "50%", background: ORB_BG, border: "1.5px solid rgba(198,161,91,0.5)", boxShadow: msg.streaming ? "0 0 12px rgba(198,161,91,0.4)" : "0 0 8px rgba(198,161,91,0.2)", animation: msg.streaming ? "sarahOrbBreathe 1.6s ease-in-out infinite" : "none" }} />
+          </div>
+          <div style={{ flex: 1 }}>
+            <div style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(198,161,91,0.12)", borderRadius: "4px 16px 16px 16px", padding: "13px 16px", color: "rgba(247,247,245,0.92)", fontSize: "14px", lineHeight: "1.7", borderLeft: "3px solid rgba(198,161,91,0.4)", whiteSpace: "pre-wrap" }}>
+              {msg.streaming ? displayed : renderMarkdown(displayed)}
+              {msg.streaming && <span style={{ display: "inline-block", width: "2px", height: "14px", backgroundColor: "#C6A15B", marginLeft: "3px", verticalAlign: "middle", animation: "sarahCursor 0.7s ease infinite", borderRadius: "1px" }} />}
+            </div>
+            <p style={{ color: "rgba(247,247,245,0.25)", fontSize: "10px", marginTop: "4px", paddingLeft: "4px" }}>Sarah · {msg.time}</p>
+          </div>
+        </div>
+      )}
+      {msg.role === "user" && (
+        <div style={{ maxWidth: "75%" }}>
+          {msg.docName && (
+            <div style={{ backgroundColor: "rgba(198,161,91,0.15)", border: "1px solid rgba(198,161,91,0.3)", borderRadius: "10px 10px 0 0", padding: "8px 12px", display: "flex", alignItems: "center", gap: "6px" }}>
+              <span style={{ fontSize: "16px" }}>📎</span>
+              <span style={{ color: "#C6A15B", fontSize: "12px", fontWeight: 600 }}>{msg.docName}</span>
+            </div>
+          )}
+          {msg.content && msg.content !== `📎 ${msg.docName}` && (
+            <div style={{ background: "linear-gradient(135deg, #C6A15B 0%, #d4b06a 100%)", borderRadius: msg.docName ? "0 0 16px 16px" : "16px 4px 16px 16px", padding: "13px 16px", color: "#0B2A4A", fontSize: "14px", lineHeight: "1.7", fontWeight: 500 }}>
+              {msg.content}
+            </div>
+          )}
+          <p style={{ color: "rgba(247,247,245,0.25)", fontSize: "10px", marginTop: "4px", textAlign: "right", paddingRight: "4px" }}>You · {msg.time}</p>
+        </div>
+      )}
+    </div>
+  );
+};
+
+type SarahHeaderProps = {
+  onEnd: () => void;
+  onSave?: () => void;
+  messageCount?: number;
+};
+
+const SarahHeader = ({ onEnd, onSave, messageCount = 0 }: SarahHeaderProps) => (
+  <div style={{ padding: "14px 18px", borderBottom: "1px solid rgba(198,161,91,0.12)", background: "linear-gradient(135deg, rgba(198,161,91,0.08) 0%, transparent 100%)", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+      <div style={{ position: "relative", flexShrink: 0 }}>
+        <div style={{ width: "38px", height: "38px", borderRadius: "50%", background: ORB_BG, border: "2px solid rgba(198,161,91,0.6)" }} />
+        <div style={{ position: "absolute", bottom: "1px", right: "1px", width: "10px", height: "10px", borderRadius: "50%", backgroundColor: "#22c55e", border: "2px solid #0B2A4A" }} />
+      </div>
+      <div>
+        <div style={{ display: "flex", alignItems: "center", gap: "7px" }}>
+          <p style={{ color: "#C6A15B", fontSize: "15px", fontWeight: 700 }}>Sarah</p>
+          <span style={{ backgroundColor: "rgba(34,197,94,0.15)", color: "#22c55e", fontSize: "10px", fontWeight: 600, padding: "2px 6px", borderRadius: "20px", border: "1px solid rgba(34,197,94,0.3)" }}>ONLINE</span>
+        </div>
+        <p style={{ color: "rgba(247,247,245,0.4)", fontSize: "11px" }}>IHL Mortgage Concierge · MD · DC · VA</p>
+      </div>
+    </div>
+    <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+      {onSave && messageCount > 1 && (
+        <button type="button" onClick={onSave}
+          style={{ color: "rgba(198,161,91,0.6)", background: "none", border: "none", cursor: "pointer", fontSize: "11px", padding: "6px 8px", borderRadius: "6px" }}>
+          ↓ Save
+        </button>
+      )}
+      <button type="button" onClick={onEnd}
+        style={{ color: "rgba(247,247,245,0.4)", background: "none", border: "none", cursor: "pointer", fontSize: "11px", padding: "6px 8px", borderRadius: "6px" }}>
+        ✕ End
+      </button>
+    </div>
+  </div>
+);
+
+type InputBarProps = {
+  inputText: string;
+  setInputText: (v: string) => void;
+  isThinking: boolean;
+  isLockdown: boolean;
+  isMicActive: boolean;
+  micSupported: boolean;
+  pendingDoc: { name: string; base64: string; mediaType: string } | null;
+  setPendingDoc: (v: null) => void;
+  inputRef: React.RefObject<HTMLTextAreaElement | null>;
+  fileInputRef: React.RefObject<HTMLInputElement | null>;
+  onSend: () => void;
+  onMic: () => void;
+  onFileUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  compact?: boolean;
+};
+
+const InputBar = ({
+  inputText, setInputText, isThinking, isLockdown, isMicActive, micSupported,
+  pendingDoc, setPendingDoc, inputRef, fileInputRef, onSend, onMic, onFileUpload, compact = false
+}: InputBarProps) => (
+  <div style={{ padding: compact ? "10px 14px 12px" : "12px 16px 16px", flexShrink: 0, background: "rgba(0,0,0,0.15)" }}>
+    {pendingDoc && (
+      <div style={{ backgroundColor: "rgba(198,161,91,0.1)", border: "1px solid rgba(198,161,91,0.3)", borderRadius: "8px", padding: "6px 10px", marginBottom: "8px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+          <span style={{ fontSize: "14px" }}>📎</span>
+          <span style={{ color: "#C6A15B", fontSize: "12px" }}>{pendingDoc.name}</span>
+        </div>
+        <button type="button" onClick={() => setPendingDoc(null)} style={{ color: "rgba(247,247,245,0.5)", background: "none", border: "none", cursor: "pointer", fontSize: "14px" }}>✕</button>
+      </div>
+    )}
+    {isLockdown ? (
+      <div style={{ textAlign: "center", padding: "12px", color: "rgba(247,247,245,0.4)", fontSize: "12px" }}>
+        <span style={{ animation: "sarahGlow 2s ease-in-out infinite", display: "inline-block" }}>✦</span>
+        {" "}Please complete the form above{" "}
+        <span style={{ animation: "sarahGlow 2s ease-in-out infinite 1s", display: "inline-block" }}>✦</span>
+      </div>
+    ) : (
+      <>
+        <div style={{ display: "flex", gap: "8px", alignItems: "flex-end" }}>
+          <input type="file" ref={fileInputRef} onChange={onFileUpload} accept=".pdf,image/*" style={{ display: "none" }} />
+          <button type="button" onClick={() => fileInputRef.current?.click()}
+            title="Upload document"
+            style={{ width: "40px", height: "40px", borderRadius: "50%", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, backgroundColor: "rgba(198,161,91,0.1)", transition: "all 0.2s" }}
+            onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.backgroundColor = "rgba(198,161,91,0.2)"}
+            onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.backgroundColor = "rgba(198,161,91,0.1)"}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C6A15B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+            </svg>
+          </button>
+          <div style={{ flex: 1, display: "flex", alignItems: "flex-end", backgroundColor: "rgba(255,255,255,0.05)", border: "1px solid rgba(198,161,91,0.18)", borderRadius: "14px", padding: "10px 14px", transition: "border-color 0.2s", minHeight: "44px" }}>
+            <textarea
+              ref={inputRef}
+              autoFocus
+              placeholder={isMicActive ? "🎤 Listening..." : "Ask Sarah anything..."}
+              value={inputText}
+              onChange={e => setInputText(e.target.value)}
+              onKeyDown={e => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  onSend();
+                }
+              }}
+              onFocus={e => (e.currentTarget.parentElement!.style.borderColor = "rgba(198,161,91,0.45)")}
+              onBlur={e => (e.currentTarget.parentElement!.style.borderColor = "rgba(198,161,91,0.18)")}
+              disabled={isThinking}
+              rows={1}
+              style={{ flex: 1, background: "none", border: "none", outline: "none", color: "#F7F7F5", fontSize: "14px", width: "100%", resize: "none", lineHeight: "1.5", maxHeight: "120px", overflowY: "auto", fontFamily: "inherit", caretColor: "#C6A15B" }}
+            />
+          </div>
+          {micSupported && (
+            <button type="button" onClick={onMic} title={isMicActive ? "Stop" : "Speak"}
+              style={{ width: "40px", height: "40px", borderRadius: "50%", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, backgroundColor: isMicActive ? "#C6A15B" : "rgba(198,161,91,0.1)", animation: isMicActive ? "sarahMicPulse 1.5s ease-in-out infinite" : "none", transition: "all 0.2s" }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill={isMicActive ? "#0B2A4A" : "#C6A15B"}>
+                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2" stroke={isMicActive ? "#0B2A4A" : "#C6A15B"} strokeWidth="2" fill="none" strokeLinecap="round"/>
+                <line x1="12" y1="19" x2="12" y2="23" stroke={isMicActive ? "#0B2A4A" : "#C6A15B"} strokeWidth="2" strokeLinecap="round"/>
+                <line x1="8" y1="23" x2="16" y2="23" stroke={isMicActive ? "#0B2A4A" : "#C6A15B"} strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </button>
+          )}
+          <button type="button" onClick={onSend}
+            disabled={(!inputText.trim() && !pendingDoc) || isThinking}
+            style={{ width: "40px", height: "40px", borderRadius: "50%", border: "none", cursor: (!inputText.trim() && !pendingDoc) || isThinking ? "default" : "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, background: (inputText.trim() || pendingDoc) && !isThinking ? "linear-gradient(135deg, #C6A15B 0%, #d4b06a 100%)" : "rgba(198,161,91,0.1)", transition: "all 0.2s" }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={(inputText.trim() || pendingDoc) && !isThinking ? "#0B2A4A" : "rgba(198,161,91,0.4)"} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+            </svg>
+          </button>
+        </div>
+        <p style={{ color: "rgba(247,247,245,0.2)", fontSize: "10px", textAlign: "center", marginTop: "8px", lineHeight: 1.4 }}>
+          Sarah is our IHL Mortgage Concierge — not a licensed advisor. Information is educational only.
+        </p>
+      </>
+    )}
+  </div>
+);
+
+type LeadFormProps = {
+  leadData: LeadData;
+  setLeadData: React.Dispatch<React.SetStateAction<LeadData>>;
+  onSubmit: () => void;
+  onDismiss: () => void;
+};
+
+const LeadForm = ({ leadData, setLeadData, onSubmit, onDismiss }: LeadFormProps) => (
+  <div style={{ animation: "sarahMsgIn 0.4s ease forwards", background: "linear-gradient(135deg, rgba(198,161,91,0.07) 0%, rgba(198,161,91,0.03) 100%)", border: "1px solid rgba(198,161,91,0.2)", borderRadius: "16px", padding: "18px", display: "flex", flexDirection: "column", gap: "10px" }}>
+    <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "2px" }}>
+      <div style={{ width: "34px", height: "34px", borderRadius: "50%", backgroundColor: "rgba(198,161,91,0.1)", border: "1px solid rgba(198,161,91,0.3)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <span style={{ fontSize: "15px" }}>🏡</span>
+      </div>
+      <div>
+        <p style={{ color: "#C6A15B", fontSize: "14px", fontWeight: 700, lineHeight: 1.2 }}>Connect with an IHL Advisor</p>
+        <p style={{ color: "rgba(247,247,245,0.45)", fontSize: "11px" }}>We'll reach out on your schedule</p>
+      </div>
+    </div>
+    {[
+      { placeholder: "Full name", key: "name", type: "text" },
+      { placeholder: "Email address", key: "email", type: "email" },
+      { placeholder: "Phone number", key: "phone", type: "tel" },
+    ].map(field => (
+      <input key={field.key} type={field.type} placeholder={field.placeholder}
+        value={leadData[field.key as keyof LeadData]}
+        onChange={e => setLeadData(prev => ({ ...prev, [field.key]: e.target.value }))}
+        style={{ backgroundColor: "rgba(255,255,255,0.04)", border: "1px solid rgba(198,161,91,0.18)", borderRadius: "10px", padding: "11px 14px", color: "#F7F7F5", fontSize: "14px", outline: "none", width: "100%" }}
+        onFocus={e => (e.currentTarget.style.borderColor = "rgba(198,161,91,0.5)")}
+        onBlur={e => (e.currentTarget.style.borderColor = "rgba(198,161,91,0.18)")}
+      />
+    ))}
+    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
+      {[
+        { key: "bestDay", placeholder: "Best day", options: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Any weekday", "Any day works"] },
+        { key: "bestTime", placeholder: "Best time", options: ["Morning (8–11am)", "Midday (11am–1pm)", "Afternoon (1–5pm)", "Evening (5–7pm)", "Anytime works"] },
+      ].map(field => (
+        <select key={field.key} value={leadData[field.key as keyof LeadData]}
+          onChange={e => setLeadData(prev => ({ ...prev, [field.key]: e.target.value }))}
+          style={{ backgroundColor: "rgba(255,255,255,0.04)", border: "1px solid rgba(198,161,91,0.18)", borderRadius: "10px", padding: "11px 10px", color: leadData[field.key as keyof LeadData] ? "#F7F7F5" : "rgba(247,247,245,0.35)", fontSize: "13px", outline: "none", width: "100%" }}>
+          <option value="" disabled style={{ backgroundColor: "#0B2A4A" }}>{field.placeholder}</option>
+          {field.options.map(opt => <option key={opt} value={opt} style={{ backgroundColor: "#0B2A4A" }}>{opt}</option>)}
+        </select>
+      ))}
+    </div>
+    <select value={leadData.preferredContact}
+      onChange={e => setLeadData(prev => ({ ...prev, preferredContact: e.target.value }))}
+      style={{ backgroundColor: "rgba(255,255,255,0.04)", border: "1px solid rgba(198,161,91,0.18)", borderRadius: "10px", padding: "11px 14px", color: leadData.preferredContact ? "#F7F7F5" : "rgba(247,247,245,0.35)", fontSize: "14px", outline: "none", width: "100%" }}>
+      <option value="" disabled style={{ backgroundColor: "#0B2A4A" }}>Preferred contact method</option>
+      {["Phone call", "Text message", "Email", "Any — whatever's easiest"].map(opt => (
+        <option key={opt} value={opt} style={{ backgroundColor: "#0B2A4A" }}>{opt}</option>
+      ))}
+    </select>
+    <div style={{ display: "flex", gap: "8px", marginTop: "2px" }}>
+      <button type="button" onClick={onSubmit}
+        disabled={!leadData.name.trim() || !leadData.email.trim() || !leadData.phone.trim() || !leadData.preferredContact}
+        style={{ flex: 1, background: "linear-gradient(135deg, #C6A15B 0%, #d4b06a 100%)", color: "#0B2A4A", border: "none", borderRadius: "10px", padding: "12px", fontSize: "14px", fontWeight: 700, cursor: "pointer", opacity: (!leadData.name.trim() || !leadData.email.trim() || !leadData.phone.trim() || !leadData.preferredContact) ? 0.4 : 1, transition: "all 0.2s" }}>
+        Connect Me →
+      </button>
+      <button type="button" onClick={onDismiss}
+        style={{ backgroundColor: "rgba(255,255,255,0.04)", color: "rgba(247,247,245,0.6)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "10px", padding: "12px 14px", fontSize: "13px", cursor: "pointer" }}>
+        Not now
+      </button>
+    </div>
+  </div>
+);
+
+// ─── MAIN COMPONENT ───────────────────────────────────────────────────────────
 
 function MortgageConciergeInner() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
-  const [transcript, setTranscript] = useState<
-    { role: "user" | "assistant"; text: string; time: string; eventId?: number }[]
-  >([]);
+  const { lang } = useLanguage();
+
+  const STARTERS = lang === "es"
+    ? [
+        "¿Cuánto puedo pagar?",
+        "¿Cómo obtengo una pre-aprobación?",
+        "¿Cuál es mi primer paso?",
+        "Cuéntame sobre los préstamos FHA",
+      ]
+    : [
+        "What can I afford?",
+        "How do I get pre-approved?",
+        "What's my first step?",
+        "Tell me about FHA loans",
+      ];
+
+  const GREETINGS = lang === "es"
+    ? [
+        "¡Hola! Soy Sarah de Infinite Home Lending. Mi trabajo es ayudarle a tomar la mejor decisión hipotecaria para su situación — ya sea que esté comprando una vivienda, refinanciando, accediendo al patrimonio de su hogar o explorando una hipoteca inversa. ¿Por dónde le gustaría comenzar?",
+        "¡Bienvenido! Soy Sarah, su asesora hipotecaria en Infinite Home Lending. Estoy aquí para ayudarle a navegar sus opciones — desde comprar su hogar ideal hasta refinanciar, acceder a su patrimonio con un HELOC o aprender sobre hipotecas inversas. ¿Qué le trae por aquí hoy?",
+        "¡Hola! Soy Sarah de Infinite Home Lending. Ya sea que esté listo para comprar, pensando en refinanciar, buscando acceder al patrimonio de su vivienda o con curiosidad sobre una hipoteca inversa — estoy aquí para hacer el proceso simple y sin estrés. ¿En qué puedo ayudarle?",
+        "¡Hola y bienvenido! Soy Sarah de Infinite Home Lending. Mi objetivo es ayudarle a encontrar el mejor camino — ya sea comprando una nueva vivienda, refinanciando la actual, explorando un HELOC o considerando una hipoteca inversa. ¿Qué tiene en mente hoy?",
+        "¡Hola! Soy Sarah, su guía hipotecaria personal en Infinite Home Lending. Puedo ayudarle con todo, desde comprar su primera vivienda hasta refinanciar, desbloquear el patrimonio de su hogar o explorar opciones de hipoteca inversa. Sin presión — solo orientación útil. ¿Por dónde le gustaría comenzar?",
+        "¡Hola! Soy Sarah de Infinite Home Lending, atendiendo Maryland, DC y Virginia. Ayudo a compradores y propietarios a encontrar la solución correcta — ya sea un préstamo de compra, una refinanciación, un HELOC o una hipoteca inversa. ¿Qué le gustaría explorar hoy?",
+      ]
+    : [
+        "Hi there! I'm Sarah with Infinite Home Lending. My job is to help you make the best mortgage decision for your situation — whether that's buying a home, refinancing, accessing your home equity, or exploring a reverse mortgage. Where would you like to start?",
+        "Welcome! I'm Sarah, your mortgage concierge at Infinite Home Lending. I'm here to help you navigate your options — from purchasing your dream home to refinancing, tapping into your equity with a HELOC, or learning about reverse mortgages. What brings you here today?",
+        "Hi! Sarah here from Infinite Home Lending. Whether you're ready to buy, thinking about refinancing, looking to access your home equity, or curious about a reverse mortgage — I'm here to make the process simple and stress-free. What can I help you with?",
+        "Hello and welcome! I'm Sarah with Infinite Home Lending. My goal is to help you find the right path forward — whether that means purchasing a new home, refinancing your current one, exploring a HELOC, or considering a reverse mortgage. What's on your mind today?",
+        "Hi there! I'm Sarah, your personal mortgage guide at Infinite Home Lending. I can help with everything from buying your first home to refinancing, unlocking your home equity, or exploring reverse mortgage options. No pressure — just helpful guidance. Where would you like to begin?",
+        "Hi! I'm Sarah with Infinite Home Lending, serving Maryland, DC, and Virginia. I help homebuyers and homeowners find the right solution — whether that's a purchase loan, a refinance, a HELOC, or a reverse mortgage. What would you like to explore today?",
+      ];
+
+  const [screen, setScreen] = useState<Screen>("idle");
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [inputText, setInputText] = useState("");
+  const [isThinking, setIsThinking] = useState(false);
   const [showLeadForm, setShowLeadForm] = useState(false);
   const [leadSubmitted, setLeadSubmitted] = useState(false);
-  const [leadData, setLeadData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    bestDay: "",
-    bestTime: "",
-    preferredContact: "",
+  const [isMicActive, setIsMicActive] = useState(false);
+  const [micSupported, setMicSupported] = useState(false);
+  const [showStarters, setShowStarters] = useState(true);
+  const [isLockdown, setIsLockdown] = useState(false);
+  const [goodbyeMessage, setGoodbyeMessage] = useState("");
+  const [pendingDoc, setPendingDoc] = useState<{ name: string; base64: string; mediaType: string } | null>(null);
+  const [leadData, setLeadData] = useState<LeadData>({
+    name: "", email: "", phone: "", bestDay: "", bestTime: "", preferredContact: "",
   });
-  const leadDataRef = useRef(leadData);
-  leadDataRef.current = leadData;
-  const [isThinking, setIsThinking] = useState(false);
-  const [isCoolingDown, setIsCoolingDown] = useState(false);
-  const [showLeadFormRecovery, setShowLeadFormRecovery] = useState(false);
-  /** Lead capture form visible — silence reminder / automated agent pings suppressed while true */
-  const [isFormOpen, setIsFormOpen] = useState(false);
 
-  const [sessionDropped, setSessionDropped] = useState(false);
-  const sessionDroppedRef = useRef(false);
-  const userEndedRef = useRef(false);
-  const wasConnectedRef = useRef(false);
-
-  const coolingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const thinkingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const isFormOpenRef = useRef(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
   const leadSubmittedRef = useRef(false);
-  const setMicMutedRef = useRef<((muted: boolean) => void) | null>(null);
-  const sendContextualUpdateRef = useRef<((text: string) => void) | null>(null);
-  const statusRef = useRef<"disconnected" | "connecting" | "connected" | "disconnecting">("disconnected");
-  const silenceReminderRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const captureLeadAttemptsRef = useRef(0);
-  const captureLeadTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const triggerLeadFormRef = useRef<(() => void) | null>(null);
-  const leadFormAnchorRef = useRef<HTMLDivElement | null>(null);
-  const agentSpokenForThinkingRef = useRef(false);
-  const prevIsSpeakingForThinkingRef = useRef(false);
+  const abortControllerRef = useRef<AbortController | null>(null);
+  const leadFormShownRef = useRef(false);
+  const greetingRef = useRef("");
+  const isSendingRef = useRef(false);
 
-  const stopSilenceReminder = useCallback(() => {
-    if (silenceReminderRef.current) {
-      clearInterval(silenceReminderRef.current);
-      silenceReminderRef.current = null;
-    }
+  useEffect(() => {
+    const SR = (window as unknown as Window & {
+      SpeechRecognition?: new () => SpeechRecognition;
+      webkitSpeechRecognition?: new () => SpeechRecognition;
+    }).SpeechRecognition || (window as unknown as { webkitSpeechRecognition?: new () => SpeechRecognition }).webkitSpeechRecognition;
+    if (SR) setMicSupported(true);
   }, []);
 
-  const triggerLeadForm = useCallback(() => {
-    if (captureLeadTimeoutRef.current) {
-      clearTimeout(captureLeadTimeoutRef.current);
-      captureLeadTimeoutRef.current = null;
-    }
+  useEffect(() => {
+    if (scrollContainerRef.current) { scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight; }
+  }, [messages, showLeadForm, isThinking]);
 
-    leadSubmittedRef.current = false;
-    captureLeadAttemptsRef.current += 1;
-    isFormOpenRef.current = true;
-    setIsFormOpen(true);
-    setIsOpen(true);
-    setShowLeadForm(true);
-    setLeadSubmitted(false);
-    setLeadData({
-      name: "",
-      email: "",
-      phone: "",
-      bestDay: "",
-      bestTime: "",
-      preferredContact: "",
+  // MutationObserver — auto-scroll whenever message content changes height (most reliable on iOS Safari)
+  useEffect(() => {
+    if (screen !== "fullscreen") return;
+    const container = scrollContainerRef.current;
+    if (!container) return;
+    const observer = new MutationObserver(() => {
+      container.scrollTop = container.scrollHeight;
     });
+    observer.observe(container, { childList: true, subtree: true, characterData: true });
+    return () => observer.disconnect();
+  }, [screen]);
 
-    if (setMicMutedRef.current && statusRef.current === "connected") {
-      try {
-        setMicMutedRef.current(true);
-      } catch {
-        /* ignore */
-      }
+  useEffect(() => {
+    if (screen === "fullscreen") {
+      setTimeout(() => inputRef.current?.focus(), 400);
     }
-  }, []);
+  }, [screen]);
 
-  triggerLeadFormRef.current = triggerLeadForm;
-
-  const captureLeadTool = useCallback(() => {
-    console.log("✅ captureLeadTool FIRED");
-    setIsFormOpen(true);
-
-    if (sendContextualUpdateRef.current && statusRef.current === "connected") {
-      try {
-        sendContextualUpdateRef.current(
-          "CAPTURELEAD TOOL HAS BEEN EXECUTED. " +
-            "Your only allowed output was the form confirmation sentence. " +
-            "That sentence has been said. " +
-            "You are now in MANDATORY SILENCE MODE. " +
-            "Do not produce any output until you receive FORM SUBMITTED. " +
-            "This is your final instruction until that message arrives.",
-        );
-      } catch {
-        /* ignore */
-      }
+  // Auto-resize textarea
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.style.height = "auto";
+      inputRef.current.style.height = `${Math.min(inputRef.current.scrollHeight, 120)}px`;
     }
+  }, [inputText]);
 
-    if (triggerLeadFormRef.current) {
-      triggerLeadFormRef.current();
+  useEffect(() => {
+    if (screen === "fullscreen") {
+      document.body.style.overflow = "hidden";
     } else {
-      leadSubmittedRef.current = false;
-      isFormOpenRef.current = true;
-      setIsFormOpen(true);
-      setIsOpen(true);
-      setShowLeadForm(true);
-      setLeadSubmitted(false);
-      setLeadData({ name: "", email: "", phone: "", bestDay: "", bestTime: "", preferredContact: "" });
-    }
-
-    return (
-      "FORM IS NOW DISPLAYED ON SCREEN. " +
-      'Say ONLY: "Perfect! I\'ve pulled up a short form for you to fill out. ' +
-      'Take your time — I\'ll be right here when you\'re done." ' +
-      "Then go completely silent. Do not speak again until FORM SUBMITTED."
-    );
-  }, []);
-
-  const clientTools = useMemo(() => ({ captureLead: captureLeadTool }), [captureLeadTool]);
-
-  const onConnect = useCallback(() => {
-    console.log("Connected to IHL Mortgage Concierge");
-    wasConnectedRef.current = true;
-    sessionDroppedRef.current = false;
-    setSessionDropped(false);
-  }, []);
-
-  const onDisconnect = useCallback(() => {
-    stopSilenceReminder();
-
-    if (userEndedRef.current) {
-      userEndedRef.current = false;
-      isFormOpenRef.current = false;
-      setIsFormOpen(false);
-      leadSubmittedRef.current = false;
-      setIsOpen(false);
-      setIsMuted(false);
-      sessionDroppedRef.current = false;
-      setSessionDropped(false);
-      return;
-    }
-
-    if (!leadSubmittedRef.current && wasConnectedRef.current) {
-      sessionDroppedRef.current = true;
-      setSessionDropped(true);
-      userEndedRef.current = false;
-      return;
-    }
-
-    isFormOpenRef.current = false;
-    setIsFormOpen(false);
-    leadSubmittedRef.current = false;
-    setIsOpen(false);
-    setIsMuted(false);
-    sessionDroppedRef.current = false;
-    setSessionDropped(false);
-    userEndedRef.current = false;
-  }, [stopSilenceReminder]);
-
-  const onError = useCallback((error: unknown) => {
-    console.error("Assistant error:", error);
-  }, []);
-
-  const onMessage = useCallback((message: { message?: unknown; role?: string; source?: string; event_id?: number }) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const m = message as any;
-    const raw = m.message;
-    const text =
-      typeof raw === "string" ? raw : raw != null && typeof raw !== "object" ? String(raw) : "";
-    console.log("RAW MESSAGE ROLE:", m.role, "SOURCE:", m.source, "TEXT:", text.slice(0, 50));
-
-    if (!text.trim() || text.startsWith("[SYSTEM")) {
-      return;
-    }
-
-    const role = m.role;
-    const source = m.source;
-
-    let isUser: boolean;
-    if (role === "user") isUser = true;
-    else if (role === "agent" || role === "assistant") isUser = false;
-    else if (source === "user") isUser = true;
-    else if (source === "ai" || source === "agent" || source === "assistant") isUser = false;
-    else isUser = false;
-
-    if (isUser) {
-      setIsThinking(true);
-    }
-
-    setTranscript((prev) => {
-      const last = prev[prev.length - 1];
-      if (
-        last &&
-        last.text === text &&
-        last.role === (isUser ? "user" : "assistant")
-      ) {
-        return prev;
-      }
-
-      const recentDuplicate = prev.slice(-3).some((t) => t.text === text);
-      if (recentDuplicate) return prev;
-
-      return [
-        ...prev,
-        {
-          role: isUser ? "user" : "assistant",
-          text,
-          time: new Date().toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
-        },
-      ];
-    });
-  }, []);
-
-  const conversationHookOptions = useMemo(
-    () => ({
-      agentId: AGENT_ID,
-      clientTools,
-      onConnect,
-      onDisconnect,
-      onError,
-      onMessage,
-    }),
-    [clientTools, onConnect, onDisconnect, onError, onMessage],
-  );
-
-  useEffect(() => {
-    const w = window as unknown as { __ihlThinkingStyleRef?: number };
-    w.__ihlThinkingStyleRef = (w.__ihlThinkingStyleRef ?? 0) + 1;
-    if (!document.getElementById(IHL_THINKING_STYLE_ID)) {
-      const style = document.createElement("style");
-      style.id = IHL_THINKING_STYLE_ID;
-      style.textContent = `
-  @keyframes ihlBreathe {
-    0%, 100% {
-      transform: scale(1) translateY(0px);
-      box-shadow:
-        0 8px 24px rgba(198, 161, 91, 0.2),
-        0 0 20px rgba(198, 161, 91, 0.1),
-        inset 0 -6px 16px rgba(0,0,0,0.6),
-        inset 0 6px 12px rgba(198,161,91,0.15);
-    }
-    50% {
-      transform: scale(1.16) translateY(0px);
-      box-shadow:
-        0 0 0 18px rgba(198, 161, 91, 0),
-        0 0 36px rgba(198, 161, 91, 0.5),
-        inset 0 -6px 16px rgba(0,0,0,0.6),
-        inset 0 6px 12px rgba(198,161,91,0.15);
-    }
-  }
-
-  @keyframes ihlFloat {
-    0%, 100% {
-      transform: scale(1) translateY(0px);
-      box-shadow:
-        0 8px 24px rgba(198, 161, 91, 0.2),
-        0 0 20px rgba(198, 161, 91, 0.1),
-        inset 0 -6px 16px rgba(0,0,0,0.6),
-        inset 0 6px 12px rgba(198,161,91,0.15);
-    }
-    50% {
-      transform: scale(1) translateY(-7px);
-      box-shadow:
-        0 18px 36px rgba(198, 161, 91, 0.22),
-        0 0 28px rgba(198, 161, 91, 0.15),
-        inset 0 -6px 16px rgba(0,0,0,0.6),
-        inset 0 6px 12px rgba(198,161,91,0.15);
-    }
-  }
-
-  @keyframes ihlFadeIn {
-    from { opacity: 0; transform: translateY(4px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-`;
-      document.head.appendChild(style);
+      document.body.style.overflow = "";
     }
     return () => {
-      w.__ihlThinkingStyleRef = Math.max(0, (w.__ihlThinkingStyleRef ?? 1) - 1);
-      if (w.__ihlThinkingStyleRef === 0) {
-        document.getElementById(IHL_THINKING_STYLE_ID)?.remove();
-      }
+      document.body.style.overflow = "";
     };
-  }, []);
+  }, [screen]);
 
-  const { startSession, endSession, sendContextualUpdate, sendUserActivity, setVolume, setMuted: setMicMuted, status, isSpeaking } =
-    useConversation(conversationHookOptions);
-
-  const rawConversation = useRawConversation();
-
-  setMicMutedRef.current = setMicMuted;
-  sendContextualUpdateRef.current = sendContextualUpdate;
-  statusRef.current = status;
-
-  const endSessionRef = useRef(endSession);
-  endSessionRef.current = endSession;
-
-  useEffect(() => {
-    return () => {
-      try {
-        endSessionRef.current();
-      } catch {
-        /* ignore */
-      }
-    };
-  }, []);
-
-  const isSpeakingRef = useRef(false);
-  useEffect(() => {
-    isSpeakingRef.current = isSpeaking;
-  }, [isSpeaking]);
-
-  const downloadPDF = useCallback(() => {
-    const doc = new jsPDF();
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const margin = 20;
-    const maxWidth = pageWidth - margin * 2;
-    let y = 20;
-
-    doc.setFillColor(11, 42, 74);
-    doc.rect(0, 0, pageWidth, 40, "F");
-    doc.setTextColor(198, 161, 91);
-    doc.setFontSize(18);
-    doc.setFont("helvetica", "bold");
-    doc.text("Infinite Home Lending", margin, 18);
-    doc.setFontSize(10);
-    doc.setFont("helvetica", "normal");
-    doc.text("Mortgage Conversation Transcript", margin, 28);
-    doc.setTextColor(255, 255, 255);
-    doc.text(
-      new Date().toLocaleDateString("en-US", {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      }),
-      margin,
-      36,
-    );
-
-    y = 55;
-
-    transcript.forEach((entry) => {
-      const isUser = entry.role === "user";
-      const label = isUser ? "You" : PDF_ASSISTANT_LABEL;
-      const labelColor: [number, number, number] = isUser ? [46, 46, 46] : [11, 42, 74];
-
-      doc.setFontSize(9);
-      doc.setFont("helvetica", "bold");
-      doc.setTextColor(...labelColor);
-      doc.text(`${label}  ${entry.time}`, margin, y);
-      y += 6;
-
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(10);
-      doc.setTextColor(46, 46, 46);
-      const lines = doc.splitTextToSize(entry.text, maxWidth);
-      lines.forEach((line) => {
-        if (y > 270) {
-          doc.addPage();
-          y = 20;
-        }
-        doc.text(line, margin, y);
-        y += 6;
-      });
-
-      y += 4;
-    });
-
-    doc.setFillColor(11, 42, 74);
-    doc.rect(0, 282, pageWidth, 15, "F");
-    doc.setTextColor(198, 161, 91);
-    doc.setFontSize(8);
-    doc.text(
-      "Infinite Home Lending · Maryland · DC · Virginia · infinitehomelending.com",
-      margin,
-      290,
-    );
-
-    doc.save(`IHL-Conversation-${Date.now()}.pdf`);
-  }, [transcript]);
-
-  const scoreLead = () => {
+  const scoreLead = useCallback(() => {
+    const text = messages.map(m => m.content.toLowerCase()).join(" ");
     let score = 0;
-    const transcriptText = transcript
-      .map((t) => t.text.toLowerCase())
-      .join(" ");
+    if (text.match(/ready|soon|next few months|spring|summer|this year/)) score += 3;
+    if (text.match(/planning|early stage|just started/)) score += 1;
+    if (text.match(/working with|have an agent|my agent/)) score += 2;
+    if (text.match(/credit score|pulled my credit/)) score += 2;
+    if (text.match(/budget|price range|afford|looking at homes/)) score += 2;
+    if (text.match(/first time|first home|never bought/)) score += 1;
+    if (text.match(/purchase|buy|buying/)) score += 1;
+    if (messages.length >= 6) score += 2;
+    if (score >= 8) return { grade: "HOT", emoji: "🔥", color: "#DC2626", bg: "#FEF2F2", priority: "HIGH PRIORITY — Contact within 2 hours" };
+    if (score >= 4) return { grade: "WARM", emoji: "🌡️", color: "#D97706", bg: "#FFFBEB", priority: "WARM LEAD — Contact within 24 hours" };
+    return { grade: "NEUTRAL", emoji: "🤍", color: "#6B7280", bg: "#F9FAFB", priority: "NURTURE — Add to follow-up sequence" };
+  }, [messages]);
 
-    if (
-      transcriptText.includes("next few months") ||
-      transcriptText.includes("ready") ||
-      transcriptText.includes("soon") ||
-      transcriptText.includes("spring") ||
-      transcriptText.includes("summer") ||
-      transcriptText.includes("this year")
-    ) {
-      score += 3;
-    } else if (
-      transcriptText.includes("planning") ||
-      transcriptText.includes("early stage") ||
-      transcriptText.includes("just started")
-    ) {
-      score += 1;
+  const streamFromApi = useCallback(async (
+    apiMessages: { role: "user" | "assistant"; content: string | ContentBlock[] }[],
+    onChunk: (text: string) => void,
+    onDone: () => void,
+    signal?: AbortSignal
+  ) => {
+    const response = await fetch(`${getApiBaseUrl()}/api/sarah-chat`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: apiMessages, lang }),
+      signal,
+    });
+    if (!response.ok) throw new Error("API error");
+    const reader = response.body!.getReader();
+    const decoder = new TextDecoder();
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      const chunk = decoder.decode(value);
+      for (const line of chunk.split("\n")) {
+        if (!line.startsWith("data: ")) continue;
+        try {
+          const data = JSON.parse(line.slice(6));
+          if (data.text) onChunk(data.text);
+          // data.ping = keepalive heartbeat, ignore
+        } catch { /* ignore */ }
+      }
+    }
+    // Call onDone after reader closes (stream fully consumed)
+    onDone();
+  }, [lang]);
+
+  const checkForGoodbye = useCallback((fullText: string) => {
+    if (!leadSubmittedRef.current) return;
+    const lower = fullText.toLowerCase();
+    const isGoodbye = lower.includes("good luck") || lower.includes("have a great") ||
+      lower.includes("best of luck") || lower.includes("take care") ||
+      lower.includes("goodbye") || lower.includes("talk to you soon") ||
+      lower.includes("we'll be in touch") || lower.includes("we look forward") ||
+      lower.includes("congratulations") || lower.includes("wonderful day") ||
+      lower.includes("have a wonderful") || lower.includes("exciting step") ||
+      lower.includes("have a great day") || lower.includes("best wishes");
+    if (isGoodbye) {
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        setTimeout(() => {
+          setGoodbyeMessage(fullText);
+          setScreen("goodbye");
+          setTimeout(() => {
+            setScreen("idle");
+            setMessages([]);
+          }, 4000);
+        }, 600);
+      }, 1500);
+    }
+  }, []);
+
+  const sendMessage = useCallback(async (text: string, doc?: { name: string; base64: string; mediaType: string } | null) => {
+    if ((!text.trim() && !doc) || isThinking || isLockdown || isSendingRef.current) return;
+    isSendingRef.current = true;
+    setShowStarters(false);
+
+    let userContent: string | ContentBlock[];
+    if (doc) {
+      const blocks: ContentBlock[] = [];
+      if (doc.mediaType === "application/pdf") {
+        blocks.push({ type: "document", source: { type: "base64", media_type: doc.mediaType, data: doc.base64 } });
+      } else {
+        blocks.push({ type: "image", source: { type: "base64", media_type: doc.mediaType, data: doc.base64 } });
+      }
+      if (text.trim()) blocks.push({ type: "text", text: text.trim() });
+      else blocks.push({ type: "text", text: "Please review this document and help me understand what it means for my mortgage situation." });
+      userContent = blocks;
+    } else {
+      userContent = text.trim();
     }
 
-    if (
-      transcriptText.includes("working with") ||
-      transcriptText.includes("have an agent") ||
-      transcriptText.includes("my agent")
-    ) {
-      score += 2;
-    }
-
-    if (
-      transcriptText.includes("credit score") ||
-      transcriptText.includes("pulled my credit") ||
-      transcriptText.includes("checked my credit")
-    ) {
-      score += 2;
-    }
-
-    if (
-      transcriptText.includes("budget") ||
-      transcriptText.includes("price range") ||
-      transcriptText.includes("afford") ||
-      transcriptText.includes("looking at homes")
-    ) {
-      score += 2;
-    }
-
-    if (
-      transcriptText.includes("first time") ||
-      transcriptText.includes("first home") ||
-      transcriptText.includes("never bought")
-    ) {
-      score += 1;
-    }
-
-    if (
-      transcriptText.includes("purchase") ||
-      transcriptText.includes("buy") ||
-      transcriptText.includes("buying")
-    ) {
-      score += 1;
-    }
-
-    if (transcript.length >= 6) {
-      score += 2;
-    }
-
-    if (score >= 8) {
-      return {
-        grade: "HOT",
-        emoji: "🔥",
-        color: "#DC2626",
-        bg: "#FEF2F2",
-        priority: "HIGH PRIORITY — Contact within 2 hours",
-      };
-    }
-    if (score >= 4) {
-      return {
-        grade: "WARM",
-        emoji: "🌡️",
-        color: "#D97706",
-        bg: "#FFFBEB",
-        priority: "WARM LEAD — Contact within 24 hours",
-      };
-    }
-    return {
-      grade: "NEUTRAL",
-      emoji: "🤍",
-      color: "#6B7280",
-      bg: "#F9FAFB",
-      priority: "NURTURE — Add to follow-up sequence",
+    const userMessage: Message = {
+      role: "user",
+      content: text.trim() || (doc ? `📎 ${doc.name}` : ""),
+      time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      docName: doc?.name,
     };
-  };
 
-  const handleLeadSubmit = async () => {
-    console.log("handleLeadSubmit called — leadData:", JSON.stringify(leadData));
-    console.log("leadSubmittedRef.current:", leadSubmittedRef.current);
+    setMessages(prev => [...prev, userMessage]);
+    setInputText("");
+    setPendingDoc(null);
+    setIsThinking(true);
 
-    if (
-      !leadData.name.trim() ||
-      !leadData.email.trim() ||
-      !leadData.phone.trim() ||
-      !leadData.preferredContact
-    ) {
-      console.log("Guard failed — missing fields:", {
-        name: !!leadData.name.trim(),
-        email: !!leadData.email.trim(),
-        phone: !!leadData.phone.trim(),
-        preferredContact: !!leadData.preferredContact,
+    const placeholder: Message = {
+      role: "assistant", content: "",
+      time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      streaming: true,
+    };
+    setMessages(prev => [...prev, placeholder]);
+
+    try {
+      abortControllerRef.current = new AbortController();
+
+      const apiMsgs = messages
+        .filter(m => !m.content.includes("FORM_SUBMITTED"))
+        .map(m => ({ role: m.role, content: m.content }));
+
+      if (doc) {
+        apiMsgs.push({ role: "user", content: userContent as any });
+      } else {
+        apiMsgs.push({ role: "user", content: text.trim() });
+      }
+
+      let fullText = "";
+
+      await streamFromApi(
+        apiMsgs,
+        (chunk) => {
+          setIsThinking(false);
+          fullText += chunk;
+          setMessages(prev => {
+            const updated = [...prev];
+            updated[updated.length - 1] = { ...updated[updated.length - 1], content: fullText, streaming: true };
+            return updated;
+          });
+        },
+        () => {
+          setMessages(prev => {
+            const updated = [...prev];
+            updated[updated.length - 1] = { ...updated[updated.length - 1], streaming: false };
+            return updated;
+          });
+          checkForGoodbye(fullText);
+        },
+        abortControllerRef.current.signal
+      );
+
+      if (fullText.includes("SHOW_LEAD_FORM") && !leadFormShownRef.current) {
+        leadFormShownRef.current = true;
+        const cleanText = fullText.replace("SHOW_LEAD_FORM", "").trim();
+        setMessages(prev => {
+          const updated = [...prev];
+          updated[updated.length - 1] = { ...updated[updated.length - 1], content: cleanText, streaming: false };
+          return updated;
+        });
+        setTimeout(() => { setShowLeadForm(true); setIsLockdown(true); }, 600);
+      }
+    } catch (error: any) {
+      if (error.name === "AbortError") return;
+      setMessages(prev => {
+        const updated = [...prev];
+        updated[updated.length - 1] = { ...updated[updated.length - 1], content: "I'm sorry, I ran into a connection issue. Please try again.", streaming: false };
+        return updated;
       });
-      return;
+    } finally {
+      setIsThinking(false);
+      isSendingRef.current = false;
     }
-    if (leadSubmittedRef.current) {
-      console.log("Guard failed — already submitted");
-      return;
-    }
+  }, [messages, isThinking, isLockdown, streamFromApi, checkForGoodbye]);
 
-    stopSilenceReminder();
+  const handleFileUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const allowed = ["application/pdf", "image/jpeg", "image/png", "image/webp"];
+    if (!allowed.includes(file.type)) { alert("Please upload a PDF or image file (JPG, PNG, WebP)."); return; }
+    if (file.size > 10 * 1024 * 1024) { alert("File size must be under 10MB."); return; }
+    const reader = new FileReader();
+    reader.onload = () => {
+      const base64 = (reader.result as string).split(",")[1];
+      setPendingDoc({ name: file.name, base64, mediaType: file.type });
+    };
+    reader.readAsDataURL(file);
+    e.target.value = "";
+  }, []);
+
+  const handleMic = useCallback(() => {
+    if (!micSupported || isLockdown) return;
+    const SR = (window as unknown as Window & {
+      SpeechRecognition?: new () => SpeechRecognition;
+      webkitSpeechRecognition?: new () => SpeechRecognition;
+    }).SpeechRecognition || (window as unknown as { webkitSpeechRecognition?: new () => SpeechRecognition }).webkitSpeechRecognition;
+    if (!SR) return;
+    if (isMicActive) { recognitionRef.current?.stop(); setIsMicActive(false); return; }
+    const recognition = new SR();
+    recognition.continuous = false;
+    recognition.interimResults = true;
+    recognition.lang = "en-US";
+    recognition.onstart = () => setIsMicActive(true);
+    recognition.onend = () => setIsMicActive(false);
+    recognition.onerror = () => setIsMicActive(false);
+    recognition.onresult = (event: SpeechRecognitionEvent) => {
+      const transcript = Array.from(event.results).map(r => r[0].transcript).join("");
+      setInputText(transcript);
+      if (event.results[event.results.length - 1].isFinal) {
+        recognition.stop();
+        if (!isSendingRef.current) {
+          sendMessage(transcript);
+          setInputText("");
+        }
+      }
+    };
+    recognitionRef.current = recognition;
+    recognition.start();
+  }, [isMicActive, micSupported, sendMessage, isLockdown]);
+
+  const handleOpenWidget = useCallback(() => {
+    const greeting = GREETINGS[Math.floor(Math.random() * GREETINGS.length)];
+    greetingRef.current = greeting;
+    setShowStarters(true);
+    setShowLeadForm(false);
+    setLeadSubmitted(false);
+    setIsLockdown(false);
+    leadFormShownRef.current = false;
+    leadSubmittedRef.current = false;
+    setGoodbyeMessage("");
+    setLeadData({ name: "", email: "", phone: "", bestDay: "", bestTime: "", preferredContact: "" });
+    setMessages([{
+      role: "assistant",
+      content: greeting,
+      time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+    }]);
+    setScreen("widget");
+  }, [lang]);
+
+  const handleEnterFullscreen = useCallback(() => {
+    setScreen("fullscreen");
+  }, []);
+
+  const handleEndConversation = useCallback(() => {
+    abortControllerRef.current?.abort();
+    recognitionRef.current?.stop();
+    setIsMicActive(false);
+    setIsLockdown(false);
+    setScreen("idle");
+    setMessages([]);
+  }, []);
+
+  const handleLeadSubmit = useCallback(async () => {
+    if (!leadData.name.trim() || !leadData.email.trim() || !leadData.phone.trim() || !leadData.preferredContact) return;
+    if (leadSubmittedRef.current) return;
+    leadSubmittedRef.current = true;
 
     const lead = scoreLead();
-    const transcriptSummary = transcript
-      .map((t) => `${t.role === "user" ? "Visitor" : "Luna"} (${t.time}): ${t.text}`)
+    const transcriptSummary = messages
+      .filter(m => !m.content.includes("FORM_SUBMITTED"))
+      .map(m => `${m.role === "user" ? "Visitor" : "Sarah"} (${m.time}): ${m.content}`)
       .join("\n");
 
     try {
@@ -538,827 +777,329 @@ function MortgageConciergeInner() {
         lead_color: lead.color,
         lead_bg: lead.bg,
         lead_priority: lead.priority,
-        date: new Date().toLocaleDateString("en-US", {
-          weekday: "long",
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        }),
+        date: new Date().toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" }),
         time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         transcript: transcriptSummary,
       });
     } catch (error) {
       console.error("Failed to send lead email:", error);
+      leadSubmittedRef.current = false;
       return;
     }
 
-    const nameSnap = leadData.name.trim();
-    const preferredSnap = leadData.preferredContact.trim();
-    const daySnap = leadData.bestDay;
-    const timeSnap = leadData.bestTime;
-
-    if (!nameSnap || !preferredSnap) {
-      return;
-    }
-
-    isFormOpenRef.current = false;
-    setIsFormOpen(false);
-    leadSubmittedRef.current = true;
     setLeadSubmitted(true);
     setShowLeadForm(false);
+    setIsLockdown(false);
 
-    if (statusRef.current === "connected" && !isSpeakingRef.current) {
-      try {
-        setMicMuted(false);
-      } catch {
-        /* ignore */
-      }
-    }
+    const formSubmittedMsg = `FORM_SUBMITTED. Visitor name: ${leadData.name}. Preferred contact: ${leadData.preferredContact}. Best day: ${leadData.bestDay || "flexible"}. Best time: ${leadData.bestTime || "flexible"}. Please respond warmly using their first name, confirm an IHL advisor will reach out on their preferred schedule via their preferred method, and close warmly.`;
 
-    if (statusRef.current === "connected") {
-      try {
-        sendContextualUpdate(
-          `FORM SUBMITTED. The visitor ${nameSnap} has just clicked Connect Me and submitted their contact form. ` +
-            `Their name is ${nameSnap}. ` +
-            `They prefer to be contacted by ${preferredSnap}` +
-            `${daySnap && daySnap !== "Not specified" ? ` on ${daySnap}` : ""}` +
-            `${timeSnap && timeSnap !== "Not specified" ? ` during ${timeSnap}` : ""}. ` +
-            `Please immediately thank ${nameSnap} warmly by their first name, confirm an IHL advisor will reach out on their preferred day and time via ${preferredSnap}, and wish them well on their homebuying journey.`,
-        );
-      } catch {
-        /* ignore */
-      }
-    }
-  };
+    const historyForApi = [
+      ...messages.filter(m => !m.content.includes("FORM_SUBMITTED")).map(m => ({ role: m.role, content: m.content })),
+      { role: "user" as const, content: formSubmittedMsg },
+    ];
 
-  const handleOpen = useCallback(() => {
-    userEndedRef.current = false;
-    wasConnectedRef.current = false;
-    sessionDroppedRef.current = false;
-    setSessionDropped(false);
-    if (captureLeadTimeoutRef.current) {
-      clearTimeout(captureLeadTimeoutRef.current);
-      captureLeadTimeoutRef.current = null;
-    }
-    captureLeadAttemptsRef.current = 0;
-    setShowLeadFormRecovery(false);
-    stopSilenceReminder();
-    agentSpokenForThinkingRef.current = false;
-    prevIsSpeakingForThinkingRef.current = false;
-    setIsThinking(false);
-    setTranscript([]);
-    setShowLeadForm(false);
-    setLeadSubmitted(false);
-    setLeadData({ name: "", email: "", phone: "", bestDay: "", bestTime: "", preferredContact: "" });
-    isFormOpenRef.current = false;
-    setIsFormOpen(false);
-    leadSubmittedRef.current = false;
-    setIsCoolingDown(false);
-    setIsOpen(true);
-    startSession({ agentId: AGENT_ID, connectionType: "websocket" });
-  }, [startSession, stopSilenceReminder]);
+    const thankYouPlaceholder: Message = {
+      role: "assistant", content: "",
+      time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      streaming: true,
+    };
+    setMessages(prev => [...prev, thankYouPlaceholder]);
+    setIsThinking(true);
 
-  const handleClose = useCallback(() => {
-    userEndedRef.current = true;
-    endSession();
-    setIsOpen(false);
-  }, [endSession]);
+    try {
+      let fullText = "";
+      await streamFromApi(
+        historyForApi,
+        (chunk) => {
+          setIsThinking(false);
+          fullText += chunk;
+          setMessages(prev => {
+            const updated = [...prev];
+            updated[updated.length - 1] = { ...updated[updated.length - 1], content: fullText, streaming: true };
+            return updated;
+          });
+        },
+        () => {
+          setMessages(prev => {
+            const updated = [...prev];
+            updated[updated.length - 1] = { ...updated[updated.length - 1], streaming: false };
+            return updated;
+          });
+        }
+      );
 
-  const handleReconnect = useCallback(() => {
-    setSessionDropped(false);
-    sessionDroppedRef.current = false;
-    wasConnectedRef.current = false;
-    startSession({ agentId: AGENT_ID, connectionType: "websocket" });
-  }, [startSession]);
-
-  const isConnected = status === "connected";
-  const isConnecting = status === "connecting";
-
-  useLayoutEffect(() => {
-    if (!showLeadForm || leadSubmitted) return;
-    leadFormAnchorRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, [showLeadForm, leadSubmitted]);
-
-  useEffect(() => {
-    if (!showLeadForm) return;
-
-    const verifyTimer = setTimeout(() => {
-      if (isFormOpenRef.current && !leadSubmittedRef.current) {
-        if (!document.getElementById("ihl-lead-form") && captureLeadAttemptsRef.current < 3) {
-          const d = leadDataRef.current;
-          const hasUserInput =
-            (d.name && d.name.trim() !== "") ||
-            (d.email && d.email.trim() !== "") ||
-            (d.phone && d.phone.trim() !== "") ||
-            !!d.bestDay ||
-            !!d.bestTime ||
-            !!d.preferredContact;
-          if (hasUserInput) {
-            console.log(
-              "Form verify: ihl-lead-form not found but user has entered data — skip triggerLeadForm retry (avoids wiping form)",
-            );
-            return;
-          }
-          console.log("Form may not have rendered — retrying...");
-          triggerLeadForm();
+      // Auto-close after goodbye
+      if (fullText) {
+        const lower = fullText.toLowerCase();
+        const isGoodbye = lower.includes("good luck") || lower.includes("have a great") ||
+          lower.includes("best of luck") || lower.includes("take care") ||
+          lower.includes("goodbye") || lower.includes("talk to you soon") ||
+          lower.includes("we'll be in touch") || lower.includes("we look forward") ||
+          lower.includes("congratulations") || lower.includes("wonderful day") ||
+          lower.includes("have a wonderful") || lower.includes("exciting step") ||
+          lower.includes("have a great day") || lower.includes("best wishes");
+        if (isGoodbye) {
+          setTimeout(() => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+            setTimeout(() => {
+              setGoodbyeMessage(fullText);
+              setScreen("goodbye");
+              setTimeout(() => {
+                setScreen("idle");
+                setMessages([]);
+              }, 4000);
+            }, 600);
+          }, 1500);
         }
       }
-    }, 2000);
-
-    return () => clearTimeout(verifyTimer);
-  }, [showLeadForm, triggerLeadForm]);
-
-  useEffect(() => {
-    const handleVisibility = () => {
-      if (
-        document.visibilityState === "visible" &&
-        isFormOpenRef.current &&
-        !leadSubmittedRef.current &&
-        !showLeadForm
-      ) {
-        setShowLeadForm(true);
-      }
-    };
-
-    document.addEventListener("visibilitychange", handleVisibility);
-    return () => document.removeEventListener("visibilitychange", handleVisibility);
-  }, [showLeadForm]);
-
-  useEffect(() => {
-    if (!isConnected || leadSubmitted) {
-      setShowLeadFormRecovery(false);
-      return;
-    }
-    if (showLeadForm) {
-      setShowLeadFormRecovery(false);
-      return;
-    }
-    if (!isFormOpenRef.current) {
-      setShowLeadFormRecovery(false);
-      return;
-    }
-    const t = setTimeout(() => {
-      if (isFormOpenRef.current && !showLeadForm) {
-        setShowLeadFormRecovery(true);
-      }
-    }, 3000);
-    return () => clearTimeout(t);
-  }, [isConnected, leadSubmitted, showLeadForm]);
-
-  useEffect(() => {
-    if (!isSpeaking && !isThinking && isConnected) {
-      setIsCoolingDown(true);
-      if (coolingTimeoutRef.current) clearTimeout(coolingTimeoutRef.current);
-      coolingTimeoutRef.current = setTimeout(() => {
-        setIsCoolingDown(false);
-      }, 1200);
-    } else {
-      if (coolingTimeoutRef.current) clearTimeout(coolingTimeoutRef.current);
-      setIsCoolingDown(false);
-    }
-    return () => {
-      if (coolingTimeoutRef.current) clearTimeout(coolingTimeoutRef.current);
-    };
-  }, [isSpeaking, isThinking, isConnected]);
-
-  useEffect(() => {
-    if (isSpeaking) {
-      agentSpokenForThinkingRef.current = true;
+    } catch { /* ignore */ } finally {
       setIsThinking(false);
-    } else if (
-      prevIsSpeakingForThinkingRef.current &&
-      isConnected &&
-      status === "connected" &&
-      agentSpokenForThinkingRef.current
-    ) {
-      setIsThinking(true);
-      const gapTimer = setTimeout(() => {
-        setIsThinking(false);
-      }, 800);
-      prevIsSpeakingForThinkingRef.current = isSpeaking;
-      return () => clearTimeout(gapTimer);
     }
-    prevIsSpeakingForThinkingRef.current = isSpeaking;
-  }, [isSpeaking, isConnected, status]);
+  }, [leadData, messages, scoreLead, streamFromApi]);
 
-  useEffect(() => {
-    if (status !== "connected") {
-      setIsThinking(false);
-      agentSpokenForThinkingRef.current = false;
-      prevIsSpeakingForThinkingRef.current = false;
-    }
-  }, [status]);
+  const downloadPDF = useCallback(() => {
+    const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const margin = 20;
+    const maxWidth = pageWidth - margin * 2;
+    let y = 20;
+    doc.setFillColor(11, 42, 74);
+    doc.rect(0, 0, pageWidth, 40, "F");
+    doc.setTextColor(198, 161, 91);
+    doc.setFontSize(18);
+    doc.setFont("helvetica", "bold");
+    doc.text("Infinite Home Lending", margin, 18);
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    doc.text("Mortgage Conversation Transcript", margin, 28);
+    doc.setTextColor(255, 255, 255);
+    doc.text(new Date().toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" }), margin, 36);
+    y = 55;
+    messages.forEach(entry => {
+      if (entry.content.includes("FORM_SUBMITTED")) return;
+      const isUser = entry.role === "user";
+      const label = isUser ? "You" : PDF_ASSISTANT_LABEL;
+      const labelColor: [number, number, number] = isUser ? [46, 46, 46] : [11, 42, 74];
+      doc.setFontSize(9); doc.setFont("helvetica", "bold"); doc.setTextColor(...labelColor);
+      doc.text(`${label}  ${entry.time}`, margin, y); y += 6;
+      doc.setFont("helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(46, 46, 46);
+      const lines = doc.splitTextToSize(entry.content, maxWidth);
+      lines.forEach((line: string) => { if (y > 270) { doc.addPage(); y = 20; } doc.text(line, margin, y); y += 6; });
+      y += 4;
+    });
+    doc.setFillColor(11, 42, 74); doc.rect(0, 282, pageWidth, 15, "F");
+    doc.setTextColor(198, 161, 91); doc.setFontSize(8);
+    doc.text("Infinite Home Lending · Maryland · DC · Virginia · infinitehomelending.com", margin, 290);
+    doc.save(`IHL-Conversation-${Date.now()}.pdf`);
+  }, [messages]);
 
-  useEffect(() => {
-    if (!isConnected) {
-      setIsMuted(false);
-    }
-  }, [isConnected]);
+  const handleSend = useCallback(() => {
+    sendMessage(inputText, pendingDoc);
+  }, [inputText, pendingDoc, sendMessage]);
 
-  useEffect(() => {
-    if (status !== "connected") return;
-    if (isFormOpenRef.current) return;
-    try {
-      if (isSpeaking) {
-        setMicMuted(true);
-        // Luna is speaking — only explicit Stop button should end her turn; mic stays muted
-      } else {
-        setMicMuted(false);
-      }
-    } catch {
-      // ignore
-    }
-  }, [isSpeaking, status, setMicMuted]);
-
-  useEffect(() => {
-    return () => {
-      if (thinkingTimeoutRef.current) {
-        clearTimeout(thinkingTimeoutRef.current);
-        thinkingTimeoutRef.current = null;
-      }
-      if (coolingTimeoutRef.current) clearTimeout(coolingTimeoutRef.current);
-      if (captureLeadTimeoutRef.current) clearTimeout(captureLeadTimeoutRef.current);
-      stopSilenceReminder();
-    };
-  }, [stopSilenceReminder]);
+  // ─── RENDER ───────────────────────────────────────────────────────────────
 
   return (
     <>
-      {!isOpen && (
-        <button
-          type="button"
-          onClick={handleOpen}
-          className="fixed bottom-6 right-6 z-50"
-          style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
-        >
-          <style>{`
-            @keyframes ihlRingExpand {
-              0% { transform: scale(0.85); opacity: 0.5; }
-              100% { transform: scale(1.55); opacity: 0; }
-            }
-            @keyframes ihlOrbPulse {
-              0%, 100% { box-shadow: 0 0 24px rgba(198,161,91,0.3); }
-              50% { box-shadow: 0 0 48px rgba(198,161,91,0.6); }
-            }
-            @keyframes ihlBtnFloat {
-              0%, 100% { transform: translateY(0px); }
-              50% { transform: translateY(-6px); }
-            }
-            .ihl-ring { position: absolute; border-radius: 50%; border: 2px solid rgba(198,161,91,0.55); animation: ihlRingExpand 2.8s ease-out infinite; pointer-events: none; z-index: 49; }
-          `}</style>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', animation: 'ihlBtnFloat 3.5s ease-in-out infinite' }}>
-            <div style={{ position: 'relative', width: '80px', height: '80px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <div className="ihl-ring" style={{ width: '80px', height: '80px', animationDelay: '0s' }} />
-              <div className="ihl-ring" style={{ width: '80px', height: '80px', animationDelay: '0.8s' }} />
-              <div className="ihl-ring" style={{ width: '80px', height: '80px', animationDelay: '1.6s' }} />
-              <div style={{
-                width: '80px', height: '80px', borderRadius: '50%',
-                background: 'radial-gradient(circle at 30% 28%, rgba(255,240,190,0.95) 0%, rgba(198,161,91,0.9) 15%, rgba(15,55,100,0.95) 38%, rgba(5,25,55,0.98) 65%, rgba(2,8,22,1) 100%)',
-                border: '3px solid rgba(198,161,91,0.95)',
-                animation: 'ihlOrbPulse 2.5s ease-in-out infinite',
-                boxShadow: '0 0 0 4px rgba(11,42,74,0.4), 0 8px 32px rgba(0,0,0,0.5)',
-                position: 'relative', zIndex: 2,
-              }} />
+      <style>{`
+        @keyframes sarahBtnFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+        @keyframes sarahBtnPulse{0%,100%{box-shadow:0 0 24px rgba(198,161,91,0.3)}50%{box-shadow:0 0 52px rgba(198,161,91,0.75)}}
+        @keyframes sarahBtnRing{0%{transform:scale(0.85);opacity:0.6}100%{transform:scale(1.65);opacity:0}}
+        @keyframes sarahMsgIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes sarahCursor{0%,100%{opacity:1}50%{opacity:0}}
+        @keyframes sarahMicPulse{0%,100%{box-shadow:0 0 0 0 rgba(198,161,91,0.5)}50%{box-shadow:0 0 0 12px rgba(198,161,91,0)}}
+        @keyframes sarahOrbBreathe{0%,100%{transform:scale(1);box-shadow:0 0 20px rgba(198,161,91,0.2)}50%{transform:scale(1.22);box-shadow:0 0 40px rgba(198,161,91,0.6)}}
+        @keyframes sarahGlow{0%,100%{opacity:0.4}50%{opacity:1}}
+        @keyframes sarahStarterIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+        @keyframes sarahWidgetExpand{from{transform:scale(0.95);opacity:0.8}to{transform:scale(1);opacity:1}}
+        @keyframes sarahFullscreenIn{from{opacity:0;transform:scale(0.98)}to{opacity:1;transform:scale(1)}}
+        @keyframes sarahGoodbyeIn{from{opacity:0;transform:translateY(30px) scale(0.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+      `}</style>
+
+      {/* SCREEN 1 — Idle orb */}
+      {screen === "idle" && (
+        <button type="button" onClick={handleOpenWidget} className="fixed bottom-4 right-4 z-50"
+          style={{ background: "none", border: "none", padding: 0, cursor: "pointer" }}>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px", animation: "sarahBtnFloat 3.5s ease-in-out infinite" }}>
+            <div style={{ position: "relative", width: "70px", height: "70px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              {[0, 0.9, 1.8].map((delay, i) => (
+                <div key={i} style={{ position: "absolute", width: "70px", height: "70px", borderRadius: "50%", border: "2px solid rgba(198,161,91,0.5)", animation: `sarahBtnRing 2.8s ease-out ${delay}s infinite`, pointerEvents: "none" }} />
+              ))}
+              <div style={{ width: "70px", height: "70px", borderRadius: "50%", background: ORB_BG, border: "3px solid rgba(198,161,91,0.95)", animation: "sarahBtnPulse 2.5s ease-in-out infinite", boxShadow: "0 0 0 4px rgba(11,42,74,0.4), 0 8px 32px rgba(0,0,0,0.5)", position: "relative", zIndex: 2 }} />
             </div>
-            <span style={{ color: '#C6A15B', fontSize: '13px', fontWeight: 600, letterSpacing: '0.3px', whiteSpace: 'nowrap', textShadow: '0 2px 8px rgba(0,0,0,0.5)' }}>
-              Ask Luna
-            </span>
+            <span style={{ color: "#C6A15B", fontSize: "12px", fontWeight: 700, letterSpacing: "0.5px", whiteSpace: "nowrap", textShadow: "0 2px 8px rgba(0,0,0,0.6)", textTransform: "uppercase" }}>Ask Sarah</span>
           </div>
         </button>
       )}
 
-      {isOpen && (
-        <div
-          className="relative fixed bottom-6 right-6 z-50 flex w-80 flex-col overflow-hidden rounded-2xl shadow-2xl"
-          style={{ backgroundColor: "#0B2A4A", maxHeight: "720px" }}
-          role="dialog"
-          aria-label="IHL Mortgage Concierge"
-        >
-          <div
-            className="flex items-center justify-between px-4 py-3 border-b"
-            style={{ borderColor: "#C6A15B33" }}
-          >
-            <div className="flex items-center gap-2">
-              <div
-                className="w-2 h-2 rounded-full"
-                style={{
-                  backgroundColor: isConnected ? "#22c55e" : isConnecting ? "#C6A15B" : "#6b7280",
-                }}
-              />
-              <span className="text-sm font-semibold" style={{ color: "#C6A15B" }}>
-                IHL Mortgage Concierge
-              </span>
-            </div>
-            <div className="flex items-center">
-              {transcript.length > 0 && (
-                <button
-                  type="button"
-                  onClick={downloadPDF}
-                  className="text-xs opacity-60 hover:opacity-100 transition-opacity mr-2"
-                  style={{ color: "#C6A15B" }}
-                  title="Download conversation as PDF"
-                >
-                  ↓ Save
-                </button>
-              )}
-              {isConnected && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    const next = !isMuted;
-                    setIsMuted(next);
-                    setVolume({ volume: next ? 0 : 1 });
-                  }}
-                  className="text-xs opacity-60 hover:opacity-100 transition-opacity mr-2"
-                  style={{ color: "#F7F7F5" }}
-                  title={isMuted ? "Unmute Luna" : "Mute Luna"}
-                >
-                  {isMuted ? "🔇" : "🔊"}
-                </button>
-              )}
-              <button
-                type="button"
-                onClick={handleClose}
-                className="text-xs opacity-60 hover:opacity-100 transition-opacity"
-                style={{ color: "#F7F7F5" }}
-              >
-                ✕ End
-              </button>
-            </div>
-          </div>
-
-          <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden">
-            {sessionDropped && (
-              <div
-                className="absolute inset-0 z-30 flex flex-col items-center justify-center gap-4 px-6 text-center"
-                style={{
-                  backgroundColor: "#0B2A4A",
-                  borderTop: "1px solid rgba(198, 161, 91, 0.15)",
-                }}
-              >
-                <p className="text-sm font-medium" style={{ color: "#C6A15B" }}>
-                  Connection lost — your conversation is saved.
-                </p>
-                <button
-                  type="button"
-                  onClick={handleReconnect}
-                  className="rounded-lg px-6 py-2.5 text-xs font-semibold uppercase tracking-wide transition-opacity hover:opacity-90"
-                  style={{
-                    background: "linear-gradient(135deg, #C6A15B 0%, #b48e48 100%)",
-                    color: "#0B2A4A",
-                    border: "none",
-                    cursor: "pointer",
-                    boxShadow: "0 4px 24px rgba(198,161,91,0.25)",
-                    minWidth: "200px",
-                  }}
-                >
-                  Reconnect
-                </button>
-                <button
-                  type="button"
-                  onClick={handleClose}
-                  className="text-xs underline-offset-2 transition-opacity hover:opacity-90"
-                  style={{
-                    color: "rgba(247,247,245,0.55)",
-                    background: "none",
-                    border: "none",
-                    cursor: "pointer",
-                    textDecoration: "underline",
-                  }}
-                >
-                  Start over
-                </button>
-              </div>
-            )}
-
-          <div
-            className="relative flex flex-col items-center justify-center pt-5 pb-3"
-            style={{ flexShrink: 0 }}
-          >
-            <div
-              style={{
-                position: "relative",
-                width: "64px",
-                height: "64px",
-                flexShrink: 0,
-              }}
-            >
-              {(isThinking || isSpeaking) && isConnected && (
-                <div
-                  style={{
-                    position: "absolute",
-                    inset: "-6px",
-                    borderRadius: "50%",
-                    background: "radial-gradient(circle, rgba(198,161,91,0.15) 0%, transparent 70%)",
-                    animation: "ihlBreathe 2s ease-in-out infinite",
-                    pointerEvents: "none",
-                  }}
-                />
-              )}
-
-              <div
-                style={{
-                  width: "64px",
-                  height: "64px",
-                  borderRadius: "50%",
-                  background: `radial-gradient(circle at 30% 28%,
-      rgba(255, 240, 190, 0.95) 0%,
-      rgba(198, 161, 91, 0.8)  15%,
-      rgba(15,  55,  100, 0.9) 38%,
-      rgba(5,   25,  55,  0.97) 65%,
-      rgba(2,   8,   22,  1)   100%
-    )`,
-                  border: "1.5px solid rgba(198, 161, 91, 0.7)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  position: "relative",
-                  overflow: "hidden",
-                  opacity: isConnected ? 1 : 0.35,
-                  transition: "opacity 0.4s ease",
-                  animation: isConnected
-                    ? (isThinking || isSpeaking || isCoolingDown)
-                      ? "ihlBreathe 2s ease-in-out infinite"
-                      : "ihlFloat 3.5s ease-in-out infinite"
-                    : "none",
-                }}
-              >
-                <div
-                  style={{
-                    position: "absolute",
-                    top: "10px",
-                    left: "13px",
-                    width: "22px",
-                    height: "14px",
-                    borderRadius: "50%",
-                    background: "rgba(255, 255, 255, 0.28)",
-                    filter: "blur(4px)",
-                    transform: "rotate(-20deg)",
-                    pointerEvents: "none",
-                    zIndex: 2,
-                  }}
-                />
-
-                <div
-                  style={{
-                    position: "absolute",
-                    bottom: "10px",
-                    right: "10px",
-                    width: "14px",
-                    height: "10px",
-                    borderRadius: "50%",
-                    background: "rgba(198, 161, 91, 0.4)",
-                    filter: "blur(5px)",
-                    pointerEvents: "none",
-                    zIndex: 2,
-                  }}
-                />
-              </div>
-            </div>
-
-          </div>
-
-          <div className="flex-1 min-h-0 overflow-y-auto">
-            {isConnected &&
-              showLeadFormRecovery &&
-              !showLeadForm &&
-              !leadSubmitted && (
-                <div className="flex flex-col items-center px-4 py-4 gap-3">
-                  <p className="text-xs text-center" style={{ color: "#F7F7F5", opacity: 0.75 }}>
-                    Loading your form...
-                  </p>
-                  <button
-                    type="button"
-                    onClick={triggerLeadForm}
-                    className="px-4 py-2 rounded-lg text-xs font-semibold transition-opacity hover:opacity-80"
-                    style={{ backgroundColor: "#C6A15B22", color: "#C6A15B", border: "1px solid #C6A15B44" }}
-                  >
-                    Tap here if form doesn&apos;t appear
-                  </button>
-                </div>
-              )}
-
-            {showLeadForm && !leadSubmitted && (
-              <div id="ihl-lead-form" className="flex flex-col px-4 py-2 gap-2" ref={leadFormAnchorRef}>
-                <p className="text-sm font-semibold" style={{ color: "#C6A15B" }}>
-                  Connect with a Mortgage Advisor
-                </p>
-                <p className="text-xs" style={{ color: "#F7F7F5", opacity: 0.75 }}>
-                  An IHL advisor will reach out on your preferred day and time.
-                </p>
-
-                <input
-                  type="text"
-                  placeholder="Full name"
-                  value={leadData.name}
-                  onChange={(e) => setLeadData({ ...leadData, name: e.target.value })}
-                  className="rounded-lg px-3 py-2 text-sm outline-none"
-                  style={{ backgroundColor: "#0d3560", color: "#F7F7F5", border: "1px solid #C6A15B44" }}
-                />
-
-                <input
-                  type="email"
-                  placeholder="Email address"
-                  value={leadData.email}
-                  onChange={(e) => setLeadData({ ...leadData, email: e.target.value })}
-                  className="rounded-lg px-3 py-2 text-sm outline-none"
-                  style={{ backgroundColor: "#0d3560", color: "#F7F7F5", border: "1px solid #C6A15B44" }}
-                />
-
-                <input
-                  type="tel"
-                  placeholder="Phone number"
-                  value={leadData.phone}
-                  onChange={(e) => setLeadData({ ...leadData, phone: e.target.value })}
-                  className="rounded-lg px-3 py-2 text-sm outline-none"
-                  style={{ backgroundColor: "#0d3560", color: "#F7F7F5", border: "1px solid #C6A15B44" }}
-                />
-
-                <select
-                  value={leadData.bestDay}
-                  onChange={(e) => setLeadData({ ...leadData, bestDay: e.target.value })}
-                  className="rounded-lg px-3 py-2 text-sm outline-none"
-                  style={{
-                    backgroundColor: "#0d3560",
-                    color: leadData.bestDay ? "#F7F7F5" : "#F7F7F580",
-                    border: "1px solid #C6A15B44",
-                  }}
-                >
-                  <option value="" disabled>
-                    Best day to reach you
-                  </option>
-                  <option value="Monday">Monday</option>
-                  <option value="Tuesday">Tuesday</option>
-                  <option value="Wednesday">Wednesday</option>
-                  <option value="Thursday">Thursday</option>
-                  <option value="Friday">Friday</option>
-                  <option value="Saturday">Saturday</option>
-                  <option value="Any weekday">Any weekday</option>
-                  <option value="Any day">Any day works</option>
-                </select>
-
-                <select
-                  value={leadData.bestTime}
-                  onChange={(e) => setLeadData({ ...leadData, bestTime: e.target.value })}
-                  className="rounded-lg px-3 py-2 text-sm outline-none"
-                  style={{
-                    backgroundColor: "#0d3560",
-                    color: leadData.bestTime ? "#F7F7F5" : "#F7F7F580",
-                    border: "1px solid #C6A15B44",
-                  }}
-                >
-                  <option value="" disabled>
-                    Best time to reach you
-                  </option>
-                  <option value="Morning (8am – 11am)">Morning (8am – 11am)</option>
-                  <option value="Midday (11am – 1pm)">Midday (11am – 1pm)</option>
-                  <option value="Afternoon (1pm – 5pm)">Afternoon (1pm – 5pm)</option>
-                  <option value="Evening (5pm – 7pm)">Evening (5pm – 7pm)</option>
-                  <option value="Anytime">Anytime works</option>
-                </select>
-
-                <select
-                  value={leadData.preferredContact}
-                  onChange={(e) => setLeadData({ ...leadData, preferredContact: e.target.value })}
-                  className="rounded-lg px-3 py-2 text-sm outline-none"
-                  style={{
-                    backgroundColor: "#0d3560",
-                    color: leadData.preferredContact ? "#F7F7F5" : "#F7F7F580",
-                    border: "1px solid #C6A15B44",
-                  }}
-                >
-                  <option value="" disabled>
-                    Preferred contact method
-                  </option>
-                  <option value="Phone call">Phone call</option>
-                  <option value="Text message">Text message</option>
-                  <option value="Email">Email</option>
-                  <option value="Any">Any — whatever&apos;s easiest</option>
-                </select>
-
-                <div className="flex gap-2">
-                  <button
-                    type="button"
-                    onClick={handleLeadSubmit}
-                    disabled={
-                      !leadData.name.trim() ||
-                      !leadData.email.trim() ||
-                      !leadData.phone.trim() ||
-                      !leadData.preferredContact ||
-                      leadSubmittedRef.current ||
-                      leadSubmitted
-                    }
-                    className="flex-1 py-2 rounded-lg text-sm font-semibold transition-opacity hover:opacity-80 disabled:opacity-40"
-                    style={{ backgroundColor: "#C6A15B", color: "#0B2A4A" }}
-                  >
-                    Connect Me
-                  </button>
-                  <button
-                    type="button"
+      {/* SCREEN 2 — Widget */}
+      {screen === "widget" && (
+        <div className="fixed z-50 flex flex-col rounded-2xl overflow-hidden"
+          style={{
+            bottom: IS_MOBILE() ? "16px" : "24px",
+            right: IS_MOBILE() ? "16px" : "24px",
+            width: "420px",
+            maxWidth: "calc(100vw - 48px)",
+            maxHeight: "min(700px, calc(100dvh - 100px))",
+            background: "linear-gradient(160deg, #0a2540 0%, #0B2A4A 40%, #0a1f35 100%)",
+            boxShadow: "0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(198,161,91,0.15)",
+            animation: "sarahWidgetExpand 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards",
+          }}>
+          <SarahHeader onEnd={handleEndConversation} messageCount={messages.length} />
+          <div style={{ padding: "18px 18px 12px", display: "flex", flexDirection: "column", gap: "14px" }}>
+            {messages.slice(0, 1).map((msg, i) => (
+              <React.Fragment key={i}>
+                <MessageBubble msg={msg} index={i} />
+              </React.Fragment>
+            ))}
+            {showStarters && (
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+                {STARTERS.map((starter, i) => (
+                  <button key={i} type="button"
                     onClick={() => {
-                      stopSilenceReminder();
-                      isFormOpenRef.current = false;
-                      setIsFormOpen(false);
-                      leadSubmittedRef.current = false;
-                      setShowLeadForm(false);
-                      if (status === "connected") {
-                        try {
-                          setMicMuted(false);
-                        } catch {
-                          /* ignore */
-                        }
-                      }
+                      setScreen("fullscreen");
+                      setTimeout(() => sendMessage(starter), 400);
                     }}
-                    className="px-3 py-2 rounded-lg text-sm transition-opacity hover:opacity-80"
-                    style={{ backgroundColor: "#0d3560", color: "#F7F7F5", border: "1px solid #C6A15B44" }}
-                  >
-                    Not now
+                    style={{ backgroundColor: "rgba(198,161,91,0.08)", border: "1px solid rgba(198,161,91,0.25)", borderRadius: "20px", padding: "7px 14px", color: "#C6A15B", fontSize: "12.5px", fontWeight: 500, cursor: "pointer", transition: "all 0.2s", animation: `sarahStarterIn 0.4s ease ${i * 0.08}s both` }}>
+                    {starter}
                   </button>
-                </div>
-              </div>
-            )}
-
-            {leadSubmitted && (
-              <div className="flex flex-col items-center px-4 py-4 gap-3">
-                <div style={{ color: "#C6A15B", fontSize: "20px" }}>✓</div>
-                <p className="text-sm font-semibold text-center" style={{ color: "#C6A15B" }}>
-                  Thank you, {leadData.name.split(" ")[0]}!
-                </p>
-                <p className="text-xs text-center" style={{ color: "#F7F7F5", opacity: 0.85 }}>
-                  It was truly a pleasure helping you today. An IHL mortgage advisor will be reaching out to you on{" "}
-                  <strong style={{ color: "#C6A15B" }}>{leadData.bestDay || "your preferred day"}</strong> during{" "}
-                  <strong style={{ color: "#C6A15B" }}>{leadData.bestTime || "your preferred time"}</strong> via{" "}
-                  {leadData.preferredContact.toLowerCase()}. We look forward to helping you make your homeownership
-                  goals a reality!
-                </p>
-                <button
-                  type="button"
-                  onClick={async () => {
-                    try {
-                      await endSession();
-                    } catch {
-                      /* ignore */
-                    }
-                    setIsOpen(false);
-                  }}
-                  className="w-full py-2 rounded-lg text-sm font-semibold text-center transition-opacity hover:opacity-80"
-                  style={{ backgroundColor: "#0d3560", color: "#F7F7F5", border: "1px solid #C6A15B44" }}
-                >
-                  End Conversation
-                </button>
-              </div>
-            )}
-
-            {!showLeadForm && !leadSubmitted && (
-              <div className="flex flex-col items-center justify-center px-4 py-4 gap-2">
-                {!isConnected && !isConnecting && (
-                  <p className="text-xs text-center" style={{ color: "#F7F7F5", opacity: 0.5 }}>
-                    Ready to connect
-                  </p>
-                )}
-                {isConnecting && (
-                  <p className="text-xs text-center" style={{ color: "#F7F7F5", opacity: 0.6 }}>
-                    Connecting...
-                  </p>
-                )}
+                ))}
               </div>
             )}
           </div>
-
-          {isConnected && (
-            <div style={{ borderTop: "1px solid #C6A15B22", flexShrink: 0 }}>
-            <div className="px-4 pb-2 flex items-center justify-center gap-2">
-              <span className="text-xs text-center" style={{ color: "#F7F7F5", opacity: 0.5 }}>
-                🎤 Speak with Luna
-              </span>
-            </div>
-            <div className="flex items-center gap-2 px-4 pb-2">
-              <div
-                className="w-2 h-2 rounded-full flex-shrink-0"
-                style={{
-                  backgroundColor: isSpeaking ? "#C6A15B" : isMuted ? "#6b7280" : "#22c55e",
-                  boxShadow: isSpeaking ? "0 0 6px #C6A15B" : isMuted ? "none" : "0 0 6px #22c55e",
-                }}
-              />
-              <span className="text-xs" style={{ color: "#F7F7F5", opacity: 0.6 }}>
-                {isSpeaking
-                  ? "Luna is speaking..."
-                  : isMuted
-                    ? "Mic muted"
-                    : "Mic active"}
-              </span>
-
-              {isSpeaking && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    try {
-                      const c = rawConversation as (typeof rawConversation) & {
-                        output?: { interrupt?: (resetDuration?: number) => void };
-                      };
-                      if (c?.output && typeof c.output.interrupt === "function") {
-                        c.output.interrupt(0);
-                        sendUserActivity();
-                      } else {
-                        setVolume({ volume: 0 });
-                        setTimeout(() => {
-                          try {
-                            setVolume({ volume: 1 });
-                          } catch {
-                            /* ignore */
-                          }
-                        }, 100);
-                        sendUserActivity();
-                      }
-                    } catch {
-                      /* ignore */
-                    }
-                  }}
-                  title="Stop Luna"
-                  onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#C6A15B44";
-                    (e.currentTarget as HTMLButtonElement).style.borderColor = "#C6A15B";
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#C6A15B22";
-                    (e.currentTarget as HTMLButtonElement).style.borderColor = "#C6A15B66";
-                  }}
-                  style={{
-                    width: "18px",
-                    height: "18px",
-                    borderRadius: "4px",
-                    backgroundColor: "#C6A15B22",
-                    border: "1px solid #C6A15B66",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    cursor: "pointer",
-                    transition: "all 0.2s ease",
-                    flexShrink: 0,
-                    marginLeft: "2px",
-                  }}
-                >
-                  <div
-                    style={{
-                      width: "6px",
-                      height: "6px",
-                      borderRadius: "1px",
-                      backgroundColor: "#C6A15B",
-                    }}
-                  />
-                </button>
-              )}
-            </div>
-            </div>
-          )}
-
-          {isConnected && (
-            <div
-              style={{
-                margin: "0 12px 8px",
-                background: "rgba(198, 161, 91, 0.06)",
-                border: "1px solid rgba(198, 161, 91, 0.15)",
-                borderRadius: "6px",
-                padding: "6px 10px",
-                display: "flex",
-                gap: "6px",
-                alignItems: "flex-start",
-              }}
-            >
-              <div
-                style={{
-                  width: "12px",
-                  height: "12px",
-                  borderRadius: "50%",
-                  background: "rgba(198, 161, 91, 0.2)",
-                  border: "1px solid rgba(198, 161, 91, 0.4)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  flexShrink: 0,
-                  marginTop: "1px",
-                }}
-              >
-                <span style={{ color: "#C6A15B", fontSize: "8px", fontWeight: "bold", lineHeight: 1 }}>i</span>
+          {/* Tap-to-chat area */}
+          <div style={{ padding: "10px 16px 16px", flexShrink: 0, background: "rgba(0,0,0,0.15)" }}>
+            <div onClick={handleEnterFullscreen} style={{ display: "flex", gap: "8px", alignItems: "center", cursor: "pointer" }}>
+              <button type="button" style={{ width: "40px", height: "40px", borderRadius: "50%", border: "none", backgroundColor: "rgba(198,161,91,0.1)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, cursor: "pointer" }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C6A15B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+                </svg>
+              </button>
+              <div style={{ flex: 1, display: "flex", alignItems: "center", backgroundColor: "rgba(255,255,255,0.05)", border: "1px solid rgba(198,161,91,0.18)", borderRadius: "14px", padding: "12px 16px", minHeight: "44px" }}>
+                <span style={{ color: "rgba(247,247,245,0.35)", fontSize: "14px", flex: 1 }}>Ask Sarah anything...</span>
               </div>
-              <p
-                style={{
-                  color: "rgba(247, 247, 245, 0.4)",
-                  fontSize: "9px",
-                  lineHeight: "1.4",
-                  margin: 0,
-                }}
-              >
-                Luna is our Virtual IHL Mortgage Concierge — not a licensed advisor. Information is educational only. Consult a licensed mortgage professional before making decisions.
-              </p>
+              <div style={{ width: "40px", height: "40px", borderRadius: "50%", backgroundColor: "rgba(198,161,91,0.1)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#C6A15B">
+                  <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                  <path d="M19 10v2a7 7 0 0 1-14 0v-2" stroke="#C6A15B" strokeWidth="2" fill="none" strokeLinecap="round"/>
+                  <line x1="12" y1="19" x2="12" y2="23" stroke="#C6A15B" strokeWidth="2" strokeLinecap="round"/>
+                  <line x1="8" y1="23" x2="16" y2="23" stroke="#C6A15B" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+              </div>
+              <div style={{ width: "40px", height: "40px", borderRadius: "50%", backgroundColor: "rgba(198,161,91,0.1)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(198,161,91,0.4)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                </svg>
+              </div>
             </div>
-          )}
-
-          <div className="px-4 py-3 text-center border-t" style={{ borderColor: "#C6A15B33" }}>
-            <p className="text-xs" style={{ color: "#C6A15B", opacity: 0.6 }}>
-              Infinite Home Lending · Your Mortgage Guide
+            <p style={{ color: "rgba(247,247,245,0.2)", fontSize: "10px", textAlign: "center", marginTop: "8px" }}>
+              Sarah is our IHL Mortgage Concierge — not a licensed advisor. Information is educational only.
             </p>
           </div>
+        </div>
+      )}
+
+      {/* SCREEN 3 — Fullscreen chat */}
+      {screen === "fullscreen" && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 9999,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            background: "rgba(0,0,0,0.6)",
+            backdropFilter: "blur(12px)",
+            WebkitBackdropFilter: "blur(12px)",
+            padding: "20px",
+          }}
+          onClick={(e) => { if (e.target === e.currentTarget) handleEndConversation(); }}
+        >
+          {/* Inner chat panel — full height on mobile, constrained on desktop */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              width: "100%",
+              height: "100%",
+              maxWidth: "900px",
+              maxHeight: "100dvh",
+              background: "linear-gradient(160deg, #0a2540 0%, #0B2A4A 50%, #071a2e 100%)",
+              // On desktop (md+), add rounded corners and limit height
+              borderRadius: "0",
+              overflow: "hidden",
+            }}
+            className="md:max-h-[90vh] md:rounded-2xl md:mx-8"
+          >
+            <SarahHeader onEnd={handleEndConversation} onSave={downloadPDF} messageCount={messages.length} />
+
+            {/* Messages */}
+            <div ref={scrollContainerRef} style={{ flex: 1, overflowY: "auto", padding: "18px", display: "flex", flexDirection: "column", gap: "16px", scrollbarWidth: "thin", scrollbarColor: "rgba(198,161,91,0.15) transparent" }}>
+              {messages.map((msg, i) => (
+                <React.Fragment key={i}>
+                  <MessageBubble msg={msg} index={i} scrollRef={scrollContainerRef} />
+                </React.Fragment>
+              ))}
+
+              {isThinking && (
+                <div style={{ display: "flex", alignItems: "flex-start", gap: "10px", animation: "sarahMsgIn 0.3s ease forwards" }}>
+                  <div style={{ width: "28px", height: "28px", borderRadius: "50%", flexShrink: 0, marginTop: "2px", background: ORB_BG, border: "1.5px solid rgba(198,161,91,0.6)", animation: "sarahOrbBreathe 1.6s ease-in-out infinite" }} />
+                </div>
+              )}
+
+              {showLeadForm && !leadSubmitted && (
+                <LeadForm
+                  leadData={leadData}
+                  setLeadData={setLeadData}
+                  onSubmit={handleLeadSubmit}
+                  onDismiss={() => { setShowLeadForm(false); setIsLockdown(false); }}
+                />
+              )}
+
+              <div ref={messagesEndRef} />
+            </div>
+
+            <InputBar
+              inputText={inputText}
+              setInputText={setInputText}
+              isThinking={isThinking}
+              isLockdown={isLockdown}
+              isMicActive={isMicActive}
+              micSupported={micSupported}
+              pendingDoc={pendingDoc}
+              setPendingDoc={() => setPendingDoc(null)}
+              inputRef={inputRef}
+              fileInputRef={fileInputRef}
+              onSend={handleSend}
+              onMic={handleMic}
+              onFileUpload={handleFileUpload}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* SCREEN 4 — Goodbye widget */}
+      {screen === "goodbye" && (
+        <div className="fixed z-50 flex flex-col rounded-2xl overflow-hidden"
+          style={{ bottom: "12px", left: "12px", right: "12px", width: "auto", maxWidth: "520px", margin: "0 auto", background: "linear-gradient(160deg, #0a2540 0%, #0B2A4A 40%, #0a1f35 100%)", boxShadow: "0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(198,161,91,0.15)", animation: "sarahGoodbyeIn 0.5s cubic-bezier(0.34, 1.4, 0.64, 1) forwards" }}>
+          <div style={{ padding: "16px 18px", borderBottom: "1px solid rgba(198,161,91,0.12)", background: "linear-gradient(135deg, rgba(198,161,91,0.08) 0%, transparent 100%)", display: "flex", alignItems: "center", gap: "10px" }}>
+            <div style={{ width: "38px", height: "38px", borderRadius: "50%", background: ORB_BG, border: "2px solid rgba(198,161,91,0.6)" }} />
+            <div>
+              <p style={{ color: "#C6A15B", fontSize: "15px", fontWeight: 700 }}>Sarah</p>
+              <p style={{ color: "rgba(247,247,245,0.4)", fontSize: "11px" }}>IHL Mortgage Concierge</p>
+            </div>
+          </div>
+          <div style={{ padding: "20px 18px 24px", display: "flex", flexDirection: "column", gap: "12px" }}>
+            <div style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
+              <div style={{ width: "28px", height: "28px", borderRadius: "50%", flexShrink: 0, marginTop: "2px", background: ORB_BG, border: "1.5px solid rgba(198,161,91,0.5)" }} />
+              <div style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(198,161,91,0.12)", borderRadius: "4px 16px 16px 16px", padding: "14px 16px", color: "rgba(247,247,245,0.92)", fontSize: "14px", lineHeight: "1.7", borderLeft: "3px solid rgba(198,161,91,0.4)", flex: 1 }}>
+                {goodbyeMessage}
+              </div>
+            </div>
+            <p style={{ color: "rgba(247,247,245,0.2)", fontSize: "10px", textAlign: "center", marginTop: "4px" }}>
+              Infinite Home Lending · Your Mortgage Guide
+            </p>
           </div>
         </div>
       )}
@@ -1368,8 +1109,6 @@ function MortgageConciergeInner() {
 
 export default function MortgageConcierge() {
   const location = useLocation();
-  if (location.pathname.startsWith("/deal-desk")) {
-    return null;
-  }
+  if (location.pathname.startsWith("/deal-desk")) return null;
   return <MortgageConciergeInner />;
 }

@@ -13,6 +13,7 @@ import {
 import { Line } from "react-chartjs-2";
 import type { ReverseResult } from "../../../hooks/useReverseMath";
 import { chartYFmt, fmt } from "../../../hooks/useReverseMath";
+import { useLanguage } from "../../../i18n/LanguageContext";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Filler, Legend);
 
@@ -22,9 +23,16 @@ type Props = {
 };
 
 export function ReverseEquityChart({ results, chartKey }: Props) {
+  const { t } = useLanguage();
+  const eqTitle = t("tool.reverse.eqChart.title");
+  const lblHome = t("tool.reverse.eqChart.homeVal");
+  const lblLoan = t("tool.reverse.eqChart.loanBal");
+  const lblEquity = t("tool.reverse.eqChart.equity");
+  const yrPrefix = t("tool.reverse.charts.yr");
+
   const { data, options } = useMemo(() => {
     const yearlyData = results.yearlyData;
-    const labels = yearlyData.map((d) => "Yr " + d.yr);
+    const labels = yearlyData.map((d) => yrPrefix + d.yr);
     const skipN = Math.max(1, Math.floor(20 / 8));
     const tickLabels = labels.map((l, i) => (i % skipN === 0 ? l : ""));
 
@@ -36,7 +44,7 @@ export function ReverseEquityChart({ results, chartKey }: Props) {
       labels,
       datasets: [
         {
-          label: "Home value (appreciating)",
+          label: lblHome,
           data: homeVals,
           borderColor: "#0B2A4A",
           backgroundColor: "rgba(11,42,74,0.04)",
@@ -46,7 +54,7 @@ export function ReverseEquityChart({ results, chartKey }: Props) {
           fill: true,
         },
         {
-          label: "Loan balance (growing)",
+          label: lblLoan,
           data: loanBals,
           borderColor: "#C6A15B",
           backgroundColor: "transparent",
@@ -57,7 +65,7 @@ export function ReverseEquityChart({ results, chartKey }: Props) {
           fill: false,
         },
         {
-          label: "Remaining equity",
+          label: lblEquity,
           data: equities,
           borderColor: "#3B6D11",
           backgroundColor: "rgba(59,109,17,0.06)",
@@ -80,8 +88,8 @@ export function ReverseEquityChart({ results, chartKey }: Props) {
           callbacks: {
             label(ctx: { datasetIndex?: number; parsed: { y: number } }) {
               const y = Math.max(0, ctx.parsed.y);
-              const labelsL = ["Home value", "Loan balance", "Equity"];
-              return (labelsL[ctx.datasetIndex ?? 0] ?? "") + ": " + fmt(y);
+              const short = [lblHome, lblLoan, lblEquity];
+              return (short[ctx.datasetIndex ?? 0] ?? "") + ": " + fmt(y);
             },
           },
         },
@@ -110,15 +118,15 @@ export function ReverseEquityChart({ results, chartKey }: Props) {
     };
 
     return { data: dataObj, options: optionsObj };
-  }, [results]);
+  }, [results, lblHome, lblLoan, lblEquity, yrPrefix]);
 
   return (
     <div>
-      <h3 className="font-[Georgia,serif] text-lg font-medium text-[#0B2A4A]">Equity and loan balance over 20 years</h3>
+      <h3 className="font-[Georgia,serif] text-lg font-medium text-[#0B2A4A]">{eqTitle}</h3>
       <div className="mt-3 flex flex-wrap gap-4 text-[11px] text-[#888780]">
         <span className="inline-flex items-center gap-2">
           <span className="inline-block h-2.5 w-2.5 rounded-sm bg-[#0B2A4A]" aria-hidden />
-          Home value (appreciating)
+          {lblHome}
         </span>
         <span className="inline-flex items-center gap-2">
           <span
@@ -126,11 +134,11 @@ export function ReverseEquityChart({ results, chartKey }: Props) {
             style={{ borderStyle: "dashed" }}
             aria-hidden
           />
-          Loan balance (growing)
+          {lblLoan}
         </span>
         <span className="inline-flex items-center gap-2">
           <span className="inline-block h-2.5 w-2.5 rounded-sm bg-[#3B6D11]" aria-hidden />
-          Remaining equity
+          {lblEquity}
         </span>
       </div>
       <div key={chartKey} className="relative mt-3 h-[220px] w-full">

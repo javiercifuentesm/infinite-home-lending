@@ -1,4 +1,5 @@
 import type { OfferOptimizerInputs } from "../../../hooks/useOfferOptimizerMath";
+import { DollarInput, PercentInput } from "../../tools/shared/FormattedInput";
 
 type Props = {
   inputs: OfferOptimizerInputs;
@@ -24,13 +25,11 @@ export function OOPropertyInputs({ inputs, onChange }: Props) {
           <label htmlFor="oo-salePrice" className={label}>
             Sale price ($)
           </label>
-          <input
+          <DollarInput
             id="oo-salePrice"
-            type="number"
             min={0}
-            step={5000}
             value={inputs.salePrice}
-            onChange={(e) => set("salePrice", Math.max(0, parseFloat(e.target.value) || 0))}
+            onChange={(n) => set("salePrice", Math.max(0, n))}
             className={input}
           />
         </div>
@@ -38,13 +37,11 @@ export function OOPropertyInputs({ inputs, onChange }: Props) {
           <label htmlFor="oo-concession" className={label}>
             Seller concession budget ($)
           </label>
-          <input
+          <DollarInput
             id="oo-concession"
-            type="number"
             min={0}
-            step={1000}
             value={inputs.concessionBudget}
-            onChange={(e) => set("concessionBudget", Math.max(0, parseFloat(e.target.value) || 0))}
+            onChange={(n) => set("concessionBudget", Math.max(0, n))}
             className={input}
           />
           <p className="mt-1 text-[11px] text-slate-500">Total dollars available for concession</p>
@@ -53,13 +50,11 @@ export function OOPropertyInputs({ inputs, onChange }: Props) {
           <label htmlFor="oo-payoff" className={label}>
             Seller&apos;s mortgage payoff ($)
           </label>
-          <input
+          <DollarInput
             id="oo-payoff"
-            type="number"
             min={0}
-            step={1000}
             value={inputs.payoff}
-            onChange={(e) => set("payoff", Math.max(0, parseFloat(e.target.value) || 0))}
+            onChange={(n) => set("payoff", Math.max(0, n))}
             className={input}
           />
           <p className="mt-1 text-[11px] text-slate-500">For net proceeds calculation</p>
@@ -68,13 +63,12 @@ export function OOPropertyInputs({ inputs, onChange }: Props) {
           <label htmlFor="oo-commission" className={label}>
             Agent commission (%)
           </label>
-          <input
+          <PercentInput
             id="oo-commission"
-            type="number"
             min={0}
             step={0.25}
             value={inputs.commission}
-            onChange={(e) => set("commission", Math.max(0, parseFloat(e.target.value) || 0))}
+            onChange={(n) => set("commission", Math.max(0, n))}
             className={input}
           />
           <p className="mt-1 text-[11px] text-slate-500">Total — both sides combined</p>

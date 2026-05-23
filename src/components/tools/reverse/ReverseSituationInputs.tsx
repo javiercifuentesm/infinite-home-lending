@@ -1,4 +1,6 @@
 import type { ReverseInputs } from "../../../hooks/useReverseMath";
+import { useLanguage } from "../../../i18n/LanguageContext";
+import { DollarInput } from "../shared/FormattedInput";
 
 type Props = {
   inputs: ReverseInputs;
@@ -10,7 +12,11 @@ function num(v: string, fallback: number): number {
   return Number.isFinite(n) ? n : fallback;
 }
 
+const fieldClass =
+  "min-h-[44px] w-full rounded-lg border border-[var(--color-border-tertiary,#e2e8f0)] bg-white px-3 py-2.5 text-[15px] tabular-nums text-[#0B2A4A] outline-none focus:ring-2 focus:ring-[#C6A15B]/40 md:min-h-[40px]";
+
 export function ReverseSituationInputs({ inputs, onChange }: Props) {
+  const { t } = useLanguage();
   const patch = (p: Partial<ReverseInputs>) => onChange({ ...inputs, ...p });
 
   const coWarn =
@@ -29,47 +35,31 @@ export function ReverseSituationInputs({ inputs, onChange }: Props) {
           </svg>
         </span>
         <div>
-          <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--color-text-tertiary)]">Your situation</p>
-          <h2 className="font-[Georgia,serif] text-lg font-semibold text-[#0B2A4A]">Home &amp; borrower</h2>
+          <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--color-text-tertiary)]">{t("tool.reverse.situation.eyebrow")}</p>
+          <h2 className="font-[Georgia,serif] text-lg font-semibold text-[#0B2A4A]">{t("tool.reverse.situation.heading")}</h2>
         </div>
       </div>
 
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
         <label className="block">
           <span className="mb-1.5 block text-[11px] font-bold uppercase tracking-wide text-[var(--color-text-tertiary)]">
-            Home value ($)
+            {t("tool.reverse.situation.hv")}
           </span>
-          <input
-            id="homeVal"
-            type="number"
-            step={5000}
-            min={0}
-            className="min-h-[44px] w-full rounded-lg border border-[var(--color-border-tertiary)] px-3 py-2.5 text-[15px] tabular-nums text-[#0B2A4A] md:min-h-[40px]"
-            value={inputs.homeVal}
-            onChange={(e) => patch({ homeVal: num(e.target.value, inputs.homeVal) })}
-          />
-          <p className="mt-1.5 text-[13px] leading-snug text-[var(--color-text-tertiary)]">Current estimated market value</p>
+          <DollarInput id="homeVal" value={inputs.homeVal} min={0} className={fieldClass} onChange={(n) => patch({ homeVal: n })} />
+          <p className="mt-1.5 text-[13px] leading-snug text-[var(--color-text-tertiary)]">{t("tool.reverse.situation.hvNote")}</p>
         </label>
 
         <label className="block">
           <span className="mb-1.5 block text-[11px] font-bold uppercase tracking-wide text-[var(--color-text-tertiary)]">
-            Mortgage balance ($)
+            {t("tool.reverse.situation.mb")}
           </span>
-          <input
-            id="mortBal"
-            type="number"
-            step={1000}
-            min={0}
-            className="min-h-[44px] w-full rounded-lg border border-[var(--color-border-tertiary)] px-3 py-2.5 text-[15px] tabular-nums text-[#0B2A4A] md:min-h-[40px]"
-            value={inputs.mortBal}
-            onChange={(e) => patch({ mortBal: num(e.target.value, inputs.mortBal) })}
-          />
-          <p className="mt-1.5 text-[13px] leading-snug text-[var(--color-text-tertiary)]">0 if home is paid off</p>
+          <DollarInput id="mortBal" value={inputs.mortBal} min={0} className={fieldClass} onChange={(n) => patch({ mortBal: n })} />
+          <p className="mt-1.5 text-[13px] leading-snug text-[var(--color-text-tertiary)]">{t("tool.reverse.situation.mbNote")}</p>
         </label>
 
         <label className="block">
           <span className="mb-1.5 block text-[11px] font-bold uppercase tracking-wide text-[var(--color-text-tertiary)]">
-            Age of youngest borrower
+            {t("tool.reverse.situation.age")}
           </span>
           <input
             id="age"
@@ -77,16 +67,16 @@ export function ReverseSituationInputs({ inputs, onChange }: Props) {
             min={62}
             max={95}
             step={1}
-            className="min-h-[44px] w-full rounded-lg border border-[var(--color-border-tertiary)] px-3 py-2.5 text-[15px] tabular-nums text-[#0B2A4A] md:min-h-[40px]"
+            className={fieldClass}
             value={inputs.age}
             onChange={(e) => patch({ age: Math.round(num(e.target.value, inputs.age)) })}
           />
-          <p className="mt-1.5 text-[13px] leading-snug text-[var(--color-text-tertiary)]">Must be 62+ for HECM</p>
+          <p className="mt-1.5 text-[13px] leading-snug text-[var(--color-text-tertiary)]">{t("tool.reverse.situation.ageNote")}</p>
         </label>
 
         <label className="block">
           <span className="mb-1.5 block text-[11px] font-bold uppercase tracking-wide text-[var(--color-text-tertiary)]">
-            Co-borrower age (optional)
+            {t("tool.reverse.situation.coAge")}
           </span>
           <input
             id="coAge"
@@ -94,8 +84,8 @@ export function ReverseSituationInputs({ inputs, onChange }: Props) {
             min={62}
             max={95}
             step={1}
-            placeholder="Leave blank if none"
-            className="min-h-[44px] w-full rounded-lg border border-[var(--color-border-tertiary)] px-3 py-2.5 text-[15px] tabular-nums text-[#0B2A4A] md:min-h-[40px]"
+            placeholder={t("tool.reverse.situation.coAgePlaceholder")}
+            className={fieldClass}
             value={inputs.coAge ?? ""}
             onChange={(e) => {
               const raw = e.target.value.trim();
@@ -103,9 +93,9 @@ export function ReverseSituationInputs({ inputs, onChange }: Props) {
               else patch({ coAge: Math.round(num(raw, 70)) });
             }}
           />
-          <p className="mt-1.5 text-[13px] leading-snug text-[var(--color-text-tertiary)]">Used to determine effective qualifying age</p>
+          <p className="mt-1.5 text-[13px] leading-snug text-[var(--color-text-tertiary)]">{t("tool.reverse.situation.coAgeNote")}</p>
           {coWarn ? (
-            <p className="mt-2 text-[13px] font-medium text-[#854F0B]">Co-borrower must also be 62+ for HECM eligibility.</p>
+            <p className="mt-2 text-[13px] font-medium text-[#854F0B]">{t("tool.reverse.situation.coAgeWarn")}</p>
           ) : null}
         </label>
       </div>

@@ -1,4 +1,5 @@
 import { CREDIT_ACTIONS } from "../../../data/creditActions";
+import { useLanguage } from "../../../i18n/LanguageContext";
 
 type Props = {
   selected: Set<string>;
@@ -14,12 +15,19 @@ function CheckIcon() {
 }
 
 export function CreditActionGrid({ selected, onToggle }: Props) {
+  const { t } = useLanguage();
+
   return (
     <div>
-      <p className="mb-3 text-[13px] font-semibold text-[#0B2A4A]">Select the moves you&apos;re willing to make</p>
+      <p className="mb-3 text-[13px] font-semibold text-[#0B2A4A]">{t("tool.credit.actions.lead")}</p>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         {CREDIT_ACTIONS.map((action) => {
           const isOn = selected.has(action.id);
+          const name = t(`tool.credit.action.${action.id}.name` as never);
+          const detail = t(`tool.credit.action.${action.id}.detail` as never);
+          const pts = t("tool.credit.actions.ptsRange")
+            .replace("{lo}", String(action.pts[0]))
+            .replace("{hi}", String(action.pts[1]));
           return (
             <button
               key={action.id}
@@ -40,11 +48,9 @@ export function CreditActionGrid({ selected, onToggle }: Props) {
                 {isOn ? <CheckIcon /> : null}
               </span>
               <span className="min-w-0">
-                <span className="block text-[12px] font-medium text-[#0B2A4A]">{action.name}</span>
-                <span className="mt-0.5 block text-[11px] font-medium text-[#3B6D11]">
-                  +{action.pts[0]}–{action.pts[1]} points
-                </span>
-                <span className="mt-1 block text-[10px] leading-snug text-slate-500">{action.detail}</span>
+                <span className="block text-[12px] font-medium text-[#0B2A4A]">{name}</span>
+                <span className="mt-0.5 block text-[11px] font-medium text-[#3B6D11]">{pts}</span>
+                <span className="mt-1 block text-[10px] leading-snug text-slate-500">{detail}</span>
               </span>
             </button>
           );

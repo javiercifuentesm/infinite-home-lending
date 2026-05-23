@@ -1,4 +1,5 @@
 import type { ClientQualifierInputs } from "../../../hooks/useClientQualifierMath";
+import { PercentInput } from "../../tools/shared/FormattedInput";
 
 const label = "mb-1.5 block font-sans text-[12px] font-semibold text-[#0B2A4A]";
 const input =
@@ -24,26 +25,24 @@ export function CQMarketInputs({ inputs, onChange }: Props) {
           <label htmlFor="cq-rate" className={label}>
             Current market rate (%)
           </label>
-          <input
+          <PercentInput
             id="cq-rate"
-            type="number"
             step={0.125}
             className={input}
-            value={inputs.marketRate || ""}
-            onChange={(e) => set("marketRate", Number.parseFloat(e.target.value) || 0)}
+            value={inputs.marketRate}
+            onChange={(n) => set("marketRate", n)}
           />
         </div>
         <div>
           <label htmlFor="cq-ptax" className={label}>
             Property tax rate (%/yr)
           </label>
-          <input
+          <PercentInput
             id="cq-ptax"
-            type="number"
             step={0.1}
             className={input}
-            value={inputs.ptaxRate || ""}
-            onChange={(e) => set("ptaxRate", Number.parseFloat(e.target.value) || 0)}
+            value={inputs.ptaxRate}
+            onChange={(n) => set("ptaxRate", n)}
           />
           <p className="mt-1 font-sans text-[11px] text-slate-500">MD avg ~1.1%, VA avg ~0.8%, DC avg ~0.85%</p>
         </div>

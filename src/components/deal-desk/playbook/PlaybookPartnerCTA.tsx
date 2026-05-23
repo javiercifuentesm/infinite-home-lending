@@ -14,7 +14,7 @@ export function PlaybookPartnerCTA() {
             <span className="text-xl" aria-hidden>
               🔧
             </span>
-            <p className="font-sans text-[13px] leading-relaxed text-white/85">All 5 Deal Desk tools — free forever for partner agents</p>
+            <p className="font-sans text-[13px] leading-relaxed text-white/85">All 12 Deal Desk tools — free forever for partner agents</p>
           </div>
           <div className="flex gap-3">
             <span className="text-xl" aria-hidden>

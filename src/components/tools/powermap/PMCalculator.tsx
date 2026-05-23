@@ -1,6 +1,7 @@
 import { useState, type CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import { runCalculation, type PowerMapInputs } from "../../../hooks/usePowerMapMath";
+import { useLanguage } from "../../../i18n/LanguageContext";
 import { SmartToolIntro } from "../SmartToolIntro";
 import { PMFinancialInputs } from "./PMFinancialInputs";
 import { PMImprovementSliders } from "./PMImprovementSliders";
@@ -25,6 +26,7 @@ const defaultInputs: PowerMapInputs = {
 };
 
 export default function PMCalculator() {
+  const { t } = useLanguage();
   const [inputs, setInputs] = useState<PowerMapInputs>(defaultInputs);
   const results = runCalculation(inputs);
 
@@ -40,12 +42,8 @@ export default function PMCalculator() {
         } as CSSProperties
       }
     >
-      <SmartToolIntro title="The Homebuying Power Map">
-        <p>
-          Most calculators tell you what you can afford today — and stop there. This one shows you where you&apos;ll be in 90
-          days, 6 months, and 12 months as your financial picture improves, mapped against real MD-DC-VA market data so you can see
-          exactly which neighborhoods become accessible as you build toward homeownership.
-        </p>
+      <SmartToolIntro title={t("tool.pm.title")}>
+        <p>{t("tool.pm.intro")}</p>
       </SmartToolIntro>
 
       <section className="mt-10 space-y-8">
@@ -65,17 +63,11 @@ export default function PMCalculator() {
             to="/tools/wealth-tracker"
             className="font-semibold text-[#0B2A4A] underline decoration-[#C6A15B]/50 underline-offset-[3px] transition-colors hover:text-[#B48E48]"
           >
-            See the 30-year wealth picture for this home →
+            {t("tool.pm.wealthLink")}
           </Link>
         </p>
 
-        <p className="text-center text-[10px] leading-relaxed text-slate-500">
-          Buying power estimates use standard DTI methodology (43% maximum) and current market rate assumptions. MD-DC-VA market data
-          reflects 2025 median sold prices from regional market reports. Market accessibility shown is based on median prices and
-          may not reflect all available inventory at any price point. Down payment assistance programs vary by county, income,
-          and household size — ask your advisor about eligibility. This tool is for educational purposes and does not constitute
-          a loan offer.
-        </p>
+        <p className="text-center text-[10px] leading-relaxed text-slate-500">{t("tool.pm.disclaimer")}</p>
       </section>
     </div>
   );

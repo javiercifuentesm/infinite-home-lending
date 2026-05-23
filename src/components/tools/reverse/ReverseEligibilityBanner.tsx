@@ -1,5 +1,6 @@
 import type { ReverseInputs, ReverseResult } from "../../../hooks/useReverseMath";
 import { fmt } from "../../../hooks/useReverseMath";
+import { useLanguage } from "../../../i18n/LanguageContext";
 
 type Props = {
   inputs: ReverseInputs;
@@ -7,11 +8,23 @@ type Props = {
 };
 
 export function ReverseEligibilityBanner({ inputs, results }: Props) {
+  const { t } = useLanguage();
   const { eligible, grossPL, netPL, closingCosts, mipUpfront, effectiveAge } = results;
   const { age, homeVal, mortBal, intRate, coAge } = inputs;
   const rolled = closingCosts + mipUpfront;
 
   if (eligible) {
+    const mbExtra = mortBal > 0 ? t("tool.reverse.elig.mbExtra").replace("{mb}", fmt(mortBal)) : "";
+    const coExtra = coAge != null ? t("tool.reverse.elig.coExtra").replace("{co}", String(coAge)) : "";
+    const body = t("tool.reverse.elig.eligibleBody")
+      .replace("{age}", String(age))
+      .replace("{hv}", fmt(homeVal))
+      .replace("{rate}", intRate.toFixed(2))
+      .replace("{net}", fmt(netPL))
+      .replace("{mbExtra}", mbExtra)
+      .replace("{coExtra}", coExtra)
+      .replace("{rolled}", fmt(rolled));
+
     return (
       <div
         className="rounded-xl border-l-4 p-5 sm:p-6"
@@ -21,14 +34,10 @@ export function ReverseEligibilityBanner({ inputs, results }: Props) {
         }}
       >
         <p className="font-[Georgia,serif] text-[15px] font-medium leading-snug" style={{ color: "#27500A" }}>
-          You appear eligible — estimated principal limit: {fmt(grossPL)}
+          {t("tool.reverse.elig.eligibleTitle").replace("{pl}", fmt(grossPL))}
         </p>
         <p className="mt-2 text-[13px] leading-[1.55]" style={{ color: "#3B6D11" }}>
-          Based on your age ({age}), home value ({fmt(homeVal)}), and current rates (~{intRate.toFixed(2)}%), you may access
-          approximately {fmt(netPL)} in net proceeds after paying off your existing mortgage
-          {mortBal > 0 ? ` of ${fmt(mortBal)}` : ""}.
-          {coAge != null ? ` Co-borrower age of ${coAge} is used for the calculation.` : ""} Closing costs and MIP (
-          {fmt(rolled)}) are estimated and rolled into the loan.
+          {body}
         </p>
       </div>
     );
@@ -36,15 +45,13 @@ export function ReverseEligibilityBanner({ inputs, results }: Props) {
 
   let body: string;
   if (age < 62) {
-    body = "The youngest borrower must be at least 62 to qualify for a HECM.";
+    body = t("tool.reverse.elig.age62");
   } else if (coAge != null && coAge > 0 && coAge < 62) {
-    body =
-      "With a co-borrower under 62, HECM eligibility typically does not apply as shown. Please review ages with a specialist.";
+    body = t("tool.reverse.elig.coUnder62");
   } else if (mortBal >= grossPL * 0.6) {
-    body =
-      "Your existing mortgage balance may exceed what the reverse mortgage can pay off. A proprietary (jumbo) reverse mortgage or other options may still apply.";
+    body = t("tool.reverse.elig.mbHigh");
   } else {
-    body = "Please review your inputs — home value or mortgage balance may need adjustment.";
+    body = t("tool.reverse.elig.generic");
   }
 
   return (
@@ -56,12 +63,12 @@ export function ReverseEligibilityBanner({ inputs, results }: Props) {
       }}
     >
       <p className="font-[Georgia,serif] text-[15px] font-medium leading-snug" style={{ color: "#791F1F" }}>
-        Eligibility concern — let&apos;s look at the details
+        {t("tool.reverse.elig.concernTitle")}
       </p>
       <p className="mt-2 text-[13px] leading-[1.55]" style={{ color: "#A32D2D" }}>
         {body}
       </p>
-      <p className="mt-2 text-[12px] text-[#791F1F]/90">Effective age used for PLF estimate: {effectiveAge}.</p>
+      <p className="mt-2 text-[12px] text-[#791F1F]/90">{t("tool.reverse.elig.effectiveAge").replace("{age}", String(effectiveAge))}</p>
     </div>
   );
 }

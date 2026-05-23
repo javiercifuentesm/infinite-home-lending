@@ -1,5 +1,6 @@
 import type { YearlySnapshot } from "../../hooks/useBuyVsRentMath";
 import { fmtK } from "../../hooks/useBuyVsRentMath";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 type Props = {
   snapshot: YearlySnapshot;
@@ -8,18 +9,23 @@ type Props = {
 };
 
 export function BuyVsRentVerdictBanner({ snapshot, viewYear, crossoverYr }: Props) {
+  const { t } = useLanguage();
   const buy = snapshot.buyNetWealth;
   const rent = snapshot.rentPortfolio;
   const diff = Math.abs(buy - rent);
   const buyLeads = buy > rent;
 
   const bodyCrossoverBuy = crossoverYr
-    ? `Buying crossed ahead of renting at year ${crossoverYr}. After that point, every year of ownership widens the gap. The longer you stay, the stronger the case for buying becomes.`
-    : "Buying has been the stronger financial path from day one in this scenario.";
+    ? t("tool.bvr.verdict.bodyCrossoverBuy").replace("{yr}", String(crossoverYr))
+    : t("tool.bvr.verdict.bodyNoCrossoverBuy");
 
   const bodyCrossoverRent = crossoverYr
-    ? `Buying takes the lead at year ${crossoverYr}. If you plan to stay past that point, the financial case for buying strengthens significantly.`
-    : "In this scenario, renting and investing the difference leads through the 30-year window. The decision may still favor buying for non-financial reasons.";
+    ? t("tool.bvr.verdict.bodyCrossoverRent").replace("{yr}", String(crossoverYr))
+    : t("tool.bvr.verdict.bodyNoCrossoverRent");
+
+  const headlineBuyLeads = `${t("tool.bvr.verdict.buyLeadsPre")} ${viewYear}${t("tool.bvr.verdict.buyLeadsMid")} ${fmtK(diff)} ${t("tool.bvr.verdict.buyLeadsPost")}`;
+  const headlineClose = `${t("tool.bvr.verdict.closePre")} ${viewYear}${t("tool.bvr.verdict.closeMid")} ${fmtK(diff)}${t("tool.bvr.verdict.closePost")}`;
+  const headlineRentLeads = `${t("tool.bvr.verdict.rentLeadsPre")} ${viewYear}${t("tool.bvr.verdict.rentLeadsMid")} ${fmtK(diff)}${t("tool.bvr.verdict.rentLeadsPost")}`;
 
   if (buyLeads) {
     return (
@@ -31,7 +37,7 @@ export function BuyVsRentVerdictBanner({ snapshot, viewYear, crossoverYr }: Prop
         }}
       >
         <p className="font-[Georgia,serif] text-[17px] font-medium leading-snug" style={{ color: "#27500A" }}>
-          At year {viewYear}, buying puts you {fmtK(diff)} ahead.
+          {headlineBuyLeads}
         </p>
         <p className="mt-2 text-[14px] leading-relaxed" style={{ color: "#3B6D11" }}>
           {bodyCrossoverBuy}
@@ -50,7 +56,7 @@ export function BuyVsRentVerdictBanner({ snapshot, viewYear, crossoverYr }: Prop
         }}
       >
         <p className="font-[Georgia,serif] text-[17px] font-medium leading-snug" style={{ color: "#633806" }}>
-          At year {viewYear}, the gap is close — within {fmtK(diff)}.
+          {headlineClose}
         </p>
         <p className="mt-2 text-[14px] leading-relaxed" style={{ color: "#854F0B" }}>
           {bodyCrossoverRent}
@@ -68,7 +74,7 @@ export function BuyVsRentVerdictBanner({ snapshot, viewYear, crossoverYr }: Prop
       }}
     >
       <p className="font-[Georgia,serif] text-[17px] font-medium leading-snug" style={{ color: "#0C447C" }}>
-        At year {viewYear}, renting + investing leads by {fmtK(diff)}.
+        {headlineRentLeads}
       </p>
       <p className="mt-2 text-[14px] leading-relaxed" style={{ color: "#185FA5" }}>
         {bodyCrossoverRent}

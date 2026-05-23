@@ -1,4 +1,6 @@
 import type { PowerMapInputs } from "../../../hooks/usePowerMapMath";
+import { useLanguage } from "../../../i18n/LanguageContext";
+import { DollarInput } from "../shared/FormattedInput";
 
 type Props = {
   inputs: PowerMapInputs;
@@ -6,10 +8,11 @@ type Props = {
 };
 
 const labelClass = "mb-1.5 block font-[Lato,system-ui,sans-serif] text-[12px] font-semibold text-[#0B2A4A]";
-const inputClass =
-  "w-full rounded-md border border-slate-200/90 bg-white px-3 py-2 font-[Lato,system-ui,sans-serif] text-[14px] text-slate-900 shadow-sm focus:border-[#C6A15B] focus:outline-none focus:ring-1 focus:ring-[#C6A15B]/40";
+const fieldClass =
+  "w-full rounded-md border border-slate-200/90 bg-white px-3 py-2 font-[Lato,system-ui,sans-serif] text-[14px] text-slate-900 shadow-sm tabular-nums focus:border-[#C6A15B] focus:outline-none focus:ring-1 focus:ring-[#C6A15B]/40";
 
 export function PMFinancialInputs({ inputs, onChange }: Props) {
+  const { t } = useLanguage();
   const set = <K extends keyof PowerMapInputs>(key: K, value: PowerMapInputs[K]) =>
     onChange({ ...inputs, [key]: value });
 
@@ -19,86 +22,60 @@ export function PMFinancialInputs({ inputs, onChange }: Props) {
         <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#185FA5] text-[11px] font-bold text-white">
           1
         </span>
-        <h2 className="font-[Georgia,serif] text-[15px] font-medium text-[#0B2A4A]">Your financial position today</h2>
+        <h2 className="font-[Georgia,serif] text-[15px] font-medium text-[#0B2A4A]">{t("tool.pm.inputs.heading")}</h2>
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label htmlFor="pm-income" className={labelClass}>
-            Annual income ($)
+            {t("tool.pm.inputs.income")}
           </label>
-          <input
-            id="pm-income"
-            type="number"
-            min={0}
-            step={1000}
-            value={inputs.income}
-            onChange={(e) => set("income", Math.max(0, parseFloat(e.target.value) || 0))}
-            className={inputClass}
-          />
+          <DollarInput id="pm-income" value={inputs.income} min={0} className={fieldClass} onChange={(n) => set("income", Math.max(0, n))} />
         </div>
         <div>
           <label htmlFor="pm-debts" className={labelClass}>
-            Monthly debts ($)
+            {t("tool.pm.inputs.debts")}
           </label>
-          <input
-            id="pm-debts"
-            type="number"
-            min={0}
-            step={50}
-            value={inputs.debts}
-            onChange={(e) => set("debts", Math.max(0, parseFloat(e.target.value) || 0))}
-            className={inputClass}
-          />
-          <p className="mt-1 text-[11px] text-slate-500">Car, student loans, credit cards</p>
+          <DollarInput id="pm-debts" value={inputs.debts} min={0} className={fieldClass} onChange={(n) => set("debts", Math.max(0, n))} />
+          <p className="mt-1 text-[11px] text-slate-500">{t("tool.pm.inputs.debtsNote")}</p>
         </div>
         <div>
           <label htmlFor="pm-score" className={labelClass}>
-            Credit score
+            {t("tool.pm.inputs.score")}
           </label>
           <select
             id="pm-score"
             value={inputs.scoreBase}
             onChange={(e) => set("scoreBase", parseInt(e.target.value, 10))}
-            className={inputClass}
+            className={fieldClass}
           >
-            <option value={580}>580–619 — below average</option>
-            <option value={620}>620–639 — fair</option>
-            <option value={640}>640–659 — fair</option>
-            <option value={660}>660–679 — fair</option>
-            <option value={680}>680–699 — good</option>
-            <option value={700}>700–719 — good</option>
-            <option value={720}>720–739 — very good</option>
-            <option value={740}>740+ — excellent</option>
+            <option value={580}>{t("tool.pm.inputs.score580")}</option>
+            <option value={620}>{t("tool.pm.inputs.score620")}</option>
+            <option value={640}>{t("tool.pm.inputs.score640")}</option>
+            <option value={660}>{t("tool.pm.inputs.score660")}</option>
+            <option value={680}>{t("tool.pm.inputs.score680")}</option>
+            <option value={700}>{t("tool.pm.inputs.score700")}</option>
+            <option value={720}>{t("tool.pm.inputs.score720")}</option>
+            <option value={740}>{t("tool.pm.inputs.score740")}</option>
           </select>
         </div>
         <div>
           <label htmlFor="pm-savings" className={labelClass}>
-            Down payment savings ($)
+            {t("tool.pm.inputs.savings")}
           </label>
-          <input
-            id="pm-savings"
-            type="number"
-            min={0}
-            step={1000}
-            value={inputs.savings}
-            onChange={(e) => set("savings", Math.max(0, parseFloat(e.target.value) || 0))}
-            className={inputClass}
-          />
+          <DollarInput id="pm-savings" value={inputs.savings} min={0} className={fieldClass} onChange={(n) => set("savings", Math.max(0, n))} />
         </div>
         <div className="sm:col-span-2">
           <label htmlFor="pm-savings-rate" className={labelClass}>
-            Monthly savings rate ($)
+            {t("tool.pm.inputs.savingsRate")}
           </label>
-          <input
+          <DollarInput
             id="pm-savings-rate"
-            type="number"
-            min={0}
-            step={50}
             value={inputs.savingsRate}
-            onChange={(e) => set("savingsRate", Math.max(0, parseFloat(e.target.value) || 0))}
-            className={inputClass}
+            min={0}
+            className={fieldClass}
+            onChange={(n) => set("savingsRate", Math.max(0, n))}
           />
-          <p className="mt-1 text-[11px] text-slate-500">How much you save per month</p>
+          <p className="mt-1 text-[11px] text-slate-500">{t("tool.pm.inputs.savingsRateNote")}</p>
         </div>
       </div>
     </section>

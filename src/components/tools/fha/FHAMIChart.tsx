@@ -13,6 +13,7 @@ import {
 import { Line } from "react-chartjs-2";
 import type { FHAResult } from "../../../hooks/useFHAMath";
 import { chartCostYFmt, fmt } from "../../../hooks/useFHAMath";
+import { useLanguage } from "../../../i18n/LanguageContext";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Filler, Legend);
 
@@ -22,6 +23,13 @@ type Props = {
 };
 
 export function FHAMIChart({ results, chartKey }: Props) {
+  const { t } = useLanguage();
+  const miTitle = t("tool.fha.miChart.title");
+  const legendConv = t("tool.fha.miChart.convPMI");
+  const legendFha = t("tool.fha.miChart.fhaMIP");
+  const perMo = t("tool.fha.miChart.perMo");
+  const yrPrefix = t("tool.fha.charts.yr");
+
   const { data, options } = useMemo(() => {
     const { labels, convMiArr, fhaMiArr } = results;
     const n = labels.length;
@@ -29,7 +37,7 @@ export function FHAMIChart({ results, chartKey }: Props) {
 
     const ticks = labels.map((_, i) => {
       const yr = i + 1;
-      if (yr % skipN === 0 || yr === n) return "Yr " + yr;
+      if (yr % skipN === 0 || yr === n) return yrPrefix + yr;
       return "";
     });
 
@@ -37,7 +45,7 @@ export function FHAMIChart({ results, chartKey }: Props) {
       labels: labels.map((_, i) => String(i + 1)),
       datasets: [
         {
-          label: "Conventional PMI",
+          label: legendConv,
           data: convMiArr,
           borderColor: "#0B2A4A",
           backgroundColor: "transparent",
@@ -48,7 +56,7 @@ export function FHAMIChart({ results, chartKey }: Props) {
           borderDash: [5, 3],
         },
         {
-          label: "FHA MIP",
+          label: legendFha,
           data: fhaMiArr,
           borderColor: "#3B6D11",
           backgroundColor: "rgba(59,109,17,0.08)",
@@ -72,8 +80,8 @@ export function FHAMIChart({ results, chartKey }: Props) {
               return labels[i] ?? "";
             },
             label(ctx: { datasetIndex?: number; parsed: { y: number } }) {
-              const lab = ctx.datasetIndex === 0 ? "Conventional PMI" : "FHA MIP";
-              return lab + ": " + fmt(Math.max(0, ctx.parsed.y)) + "/mo";
+              const lab = ctx.datasetIndex === 0 ? legendConv : legendFha;
+              return lab + ": " + fmt(Math.max(0, ctx.parsed.y)) + perMo;
             },
           },
         },
@@ -103,19 +111,19 @@ export function FHAMIChart({ results, chartKey }: Props) {
     };
 
     return { data: dataObj, options: optionsObj };
-  }, [results]);
+  }, [results, legendConv, legendFha, perMo, yrPrefix]);
 
   return (
     <div>
-      <h3 className="font-[Georgia,serif] text-lg font-medium text-[#0B2A4A]">Monthly mortgage insurance cost over time</h3>
+      <h3 className="font-[Georgia,serif] text-lg font-medium text-[#0B2A4A]">{miTitle}</h3>
       <div className="mt-3 flex flex-wrap gap-6 text-[11px] text-[#888780]">
         <span className="inline-flex items-center gap-2">
           <span className="inline-block h-0 w-3 border-t-2 border-dashed border-[#0B2A4A]" aria-hidden />
-          Conventional PMI
+          {legendConv}
         </span>
         <span className="inline-flex items-center gap-2">
           <span className="inline-block h-2.5 w-2.5 rounded-sm bg-[#3B6D11]" aria-hidden />
-          FHA MIP
+          {legendFha}
         </span>
       </div>
       <div key={chartKey} className="relative mt-3 h-[180px] w-full">

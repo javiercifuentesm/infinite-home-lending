@@ -1,5 +1,6 @@
 import type { FHAResult } from "../../../hooks/useFHAMath";
 import { fmtK } from "../../../hooks/useFHAMath";
+import { useLanguage } from "../../../i18n/LanguageContext";
 
 type Props = {
   results: FHAResult;
@@ -7,6 +8,7 @@ type Props = {
 };
 
 export function FHAVerdictBanner({ results, dpInput }: Props) {
+  const { t } = useLanguage();
   const {
     convWins,
     close,
@@ -23,41 +25,51 @@ export function FHAVerdictBanner({ results, dpInput }: Props) {
   const lowDp = dpPercentFha < 10;
 
   if (close) {
+    const body = convWins
+      ? t("tool.fha.verdict.closeBodyLess").replace("{stay}", String(stay)).replace("{diff}", fmtK(diff))
+      : t("tool.fha.verdict.closeBodySame").replace("{stay}", String(stay));
     return (
       <div
         className="rounded-xl border border-[var(--color-border-tertiary)] p-5 sm:p-6"
         style={{ background: "var(--color-background-warning, #FEF9E8)", borderLeftWidth: 4, borderLeftColor: "#854F0B" }}
       >
-        <p className="font-[Georgia,serif] text-[15px] font-medium text-[#633806]">The costs are close — the right answer depends on your plans.</p>
-        <p className="mt-2 text-[13px] leading-relaxed text-[#854F0B]">
-          Over your {stay}-year timeline, Conventional costs {convWins ? `${fmtK(diff)} less` : "about the same"} as FHA. When the gap is
-          this small, your credit score trajectory, flexibility needs, and how long you&apos;ll stay are the deciding factors. Neither loan is
-          clearly wrong here.
-        </p>
+        <p className="font-[Georgia,serif] text-[15px] font-medium text-[#633806]">{t("tool.fha.verdict.closeTitle")}</p>
+        <p className="mt-2 text-[13px] leading-relaxed text-[#854F0B]">{body}</p>
       </div>
     );
   }
 
   if (convWins) {
+    const pmiFragment = pmiFree ? t("tool.fha.verdict.pmiFreeFrag") : t("tool.fha.verdict.pmiFrag");
+    const lowDpNote = lowDp ? t("tool.fha.verdict.lowDpFrag") : "";
+    const crossoverSentence = crossoverYear
+      ? t("tool.fha.verdict.crossoverAt").replace("{yr}", String(crossoverYear))
+      : t("tool.fha.verdict.cheaperYearOne");
+    const body = t("tool.fha.verdict.convSavesBody")
+      .replace("{cs}", String(cs))
+      .replace("{dp}", String(dpInput))
+      .replace("{pmiFragment}", pmiFragment)
+      .replace("{lowDpNote}", lowDpNote)
+      .replace("{crossoverSentence}", crossoverSentence);
+
     return (
       <div
         className="rounded-xl border border-[var(--color-border-tertiary)] p-5 sm:p-6"
         style={{ background: "var(--color-background-info, #E8F4FC)", borderLeftWidth: 4, borderLeftColor: "#185FA5" }}
       >
         <p className="font-[Georgia,serif] text-[15px] font-medium text-[#0C447C]">
-          Conventional saves you {fmtK(diff)} over {stay} years in your situation.
+          {t("tool.fha.verdict.convSavesTitle").replace("{diff}", fmtK(diff)).replace("{stay}", String(stay))}
         </p>
-        <p className="mt-2 text-[13px] leading-relaxed text-[#185FA5]">
-          With a {cs}+ credit score and {dpInput}% down, Conventional&apos;s {pmiFree ? "PMI-free " : "PMI "}
-          structure costs less than FHA&apos;s lifetime MIP
-          {lowDp ? " (which never cancels on your loan)" : ""}.{" "}
-          {crossoverYear
-            ? `Conventional takes the cost lead at year ${crossoverYear}.`
-            : "Conventional is cheaper from year one."}
-        </p>
+        <p className="mt-2 text-[13px] leading-relaxed text-[#185FA5]">{body}</p>
       </div>
     );
   }
+
+  const flexPhrase = cs < 680 ? t("tool.fha.verdict.fhaFlexPhrase") : "";
+  const base = t("tool.fha.verdict.fhaSavesBodyBase").replace("{flexPhrase}", flexPhrase).replace("{stay}", String(stay));
+  const tail = crossoverYear
+    ? t("tool.fha.verdict.fhaCrossoverAfter").replace("{yr}", String(crossoverYear))
+    : t("tool.fha.verdict.fhaStrongFit");
 
   return (
     <div
@@ -65,14 +77,11 @@ export function FHAVerdictBanner({ results, dpInput }: Props) {
       style={{ background: "var(--color-background-success, #EAF3DE)", borderLeftWidth: 4, borderLeftColor: "#3B6D11" }}
     >
       <p className="font-[Georgia,serif] text-[15px] font-medium text-[#27500A]">
-        FHA saves you {fmtK(diff)} over {stay} years in your situation.
+        {t("tool.fha.verdict.fhaSavesTitle").replace("{diff}", fmtK(diff)).replace("{stay}", String(stay))}
       </p>
       <p className="mt-2 text-[13px] leading-relaxed text-[#3B6D11]">
-        FHA&apos;s lower rate{cs < 680 ? " and more flexible qualification requirements" : ""} outweigh the MIP cost over your {stay}-year
-        timeline.{" "}
-        {crossoverYear
-          ? `Conventional becomes cheaper after year ${crossoverYear} — if you plan to stay longer, revisiting then could make sense.`
-          : "FHA is the stronger financial fit for your timeline."}
+        {base}
+        {tail}
       </p>
     </div>
   );

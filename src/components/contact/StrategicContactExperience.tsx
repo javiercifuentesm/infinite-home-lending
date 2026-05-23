@@ -38,10 +38,13 @@ import {
 } from "./ReversePathFlow";
 import { getOrCreateLeadClientId, MortgageStatementUpload } from "./MortgageStatementUpload";
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion";
-import { KNOWLEDGE_ROUTES, type KnowledgeRouteId } from "../../data/knowledgeCenterRoutes";
+import { getKnowledgeRoutes, type KnowledgeRouteId } from "../../data/knowledgeCenterRoutes";
 import { normalizeCountyForPayload } from "../../data/purchaseLocations";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
+
+type ContactMethodId = "phone" | "email";
 
 /**
  * Vertically center an element in the visible viewport below the fixed site header.
@@ -215,19 +218,6 @@ function scrollDetailsStepWithRetry(stepId: string, behavior: ScrollBehavior, at
   });
 }
 
-const CONTACT_METHOD_OPTIONS = [
-  { id: "phone", label: "Phone call" },
-  { id: "email", label: "Email" },
-] as const;
-
-const PHONE_DAY_OPTIONS = [
-  { id: "mon", label: "Monday" },
-  { id: "tue", label: "Tuesday" },
-  { id: "wed", label: "Wednesday" },
-  { id: "thu", label: "Thursday" },
-  { id: "fri", label: "Friday" },
-] as const;
-
 /** Values for <select name="phoneTime"> — matches display labels */
 const PHONE_TIME_SELECT_VALUES = [
   "9:00 AM",
@@ -244,29 +234,6 @@ const PHONE_TIME_SELECT_VALUES = [
 ] as const;
 
 export type UserIntent = "buy" | "refi" | "heloc" | "reverse" | "plan" | "explore" | null;
-
-const STEP1_OPTIONS = [
-  { id: "buy", label: "I'm planning to buy a home", intent: "buy" as const },
-  { id: "refi", label: "I'm thinking about refinancing", intent: "refi" as const },
-  { id: "heloc", label: "I want to access my home equity", intent: "heloc" as const },
-  { id: "reverse", label: "I'm exploring a reverse mortgage", intent: "reverse" as const },
-  { id: "possible", label: "I want to understand what's possible", intent: "plan" as const },
-  { id: "guidance", label: "I just need guidance", intent: "explore" as const },
-] as const;
-
-const STEP2_OPTIONS = [
-  { id: "exploring", label: "Just starting to explore" },
-  { id: "looking", label: "Actively looking" },
-  { id: "process", label: "Already in the process" },
-  { id: "unsure", label: "Not sure yet" },
-] as const;
-
-const STEP3_OPTIONS = [
-  { id: "payment", label: "Monthly payment clarity" },
-  { id: "strategy", label: "Long-term financial strategy" },
-  { id: "approved", label: "Getting approved with confidence" },
-  { id: "options", label: "Understanding all my options" },
-] as const;
 
 /** Maps contact reason tile → API / advisor routing path */
 function mapReasonIdToLeadPath(reasonId: string | null): string {
@@ -329,6 +296,44 @@ export function StrategicContactExperience() {
   const [searchParams] = useSearchParams();
   const reducedMotion = usePrefersReducedMotion();
   const scrollBehavior: ScrollBehavior = reducedMotion ? "auto" : "smooth";
+  const { t, lang } = useLanguage();
+
+  const CONTACT_METHOD_OPTIONS: { id: ContactMethodId; label: string }[] = [
+    { id: "phone", label: t("contact.step.method.phone") },
+    { id: "email", label: t("contact.step.method.email") },
+  ];
+
+  const PHONE_DAY_OPTIONS = [
+    { id: "mon", label: t("contact.step.day.mon") },
+    { id: "tue", label: t("contact.step.day.tue") },
+    { id: "wed", label: t("contact.step.day.wed") },
+    { id: "thu", label: t("contact.step.day.thu") },
+    { id: "fri", label: t("contact.step.day.fri") },
+  ];
+
+  const STEP1_OPTIONS = [
+    { id: "buy", label: t("contact.step0.buy"), intent: "buy" as const },
+    { id: "refi", label: t("contact.step0.refi"), intent: "refi" as const },
+    { id: "heloc", label: t("contact.step0.heloc"), intent: "heloc" as const },
+    { id: "reverse", label: t("contact.step0.reverse"), intent: "reverse" as const },
+    { id: "possible", label: t("contact.step0.possible"), intent: "plan" as const },
+    { id: "guidance", label: t("contact.step0.guidance"), intent: "explore" as const },
+  ];
+
+  const STEP2_OPTIONS = [
+    { id: "exploring", label: t("contact.step.standing.exploring") },
+    { id: "looking", label: t("contact.step.standing.looking") },
+    { id: "process", label: t("contact.step.standing.process") },
+    { id: "unsure", label: t("contact.step.standing.unsure") },
+  ];
+
+  const STEP3_OPTIONS = [
+    { id: "payment", label: t("contact.step.priority.payment") },
+    { id: "strategy", label: t("contact.step.priority.strategy") },
+    { id: "approved", label: t("contact.step.priority.approved") },
+    { id: "options", label: t("contact.step.priority.options") },
+  ];
+
   const heroRef = useRef<HTMLElement | null>(null);
 
   /** Skip scroll on first paint; then scroll when step or intent sub-step advances. */
@@ -376,7 +381,7 @@ export function StrategicContactExperience() {
   const [reasonId, setReasonId] = useState<string | null>(null);
   const [standingId, setStandingId] = useState<string | null>(null);
   const [priorityId, setPriorityId] = useState<string | null>(null);
-  const [contactMethod, setContactMethod] = useState<(typeof CONTACT_METHOD_OPTIONS)[number]["id"] | null>(null);
+  const [contactMethod, setContactMethod] = useState<ContactMethodId | null>(null);
   const [phoneDay, setPhoneDay] = useState<string | null>(null);
   const [phoneTime, setPhoneTime] = useState("");
   const [notes, setNotes] = useState("");
@@ -424,8 +429,9 @@ export function StrategicContactExperience() {
     }
     if (topic === "advisory") {
       const path = searchParams.get("knowledgePath") as KnowledgeRouteId | null;
-      if (path && path in KNOWLEDGE_ROUTES) {
-        const label = KNOWLEDGE_ROUTES[path].label;
+      const knowledgeRoutes = getKnowledgeRoutes(lang);
+      if (path && path in knowledgeRoutes) {
+        const label = knowledgeRoutes[path].label;
         return `I'm exploring the "${label}" topic in the Knowledge Center and would like to see how it applies to my situation.`;
       }
     }
@@ -652,21 +658,21 @@ export function StrategicContactExperience() {
     if (!reasonId) return null;
     const found = STEP1_OPTIONS.find((o) => o.id === reasonId);
     return found?.intent ?? null;
-  }, [reasonId]);
+  }, [reasonId, STEP1_OPTIONS]);
 
   const { totalSteps, stageLabels, uploadInset, standingStepIndex, phoneStepIndex } = useMemo(() => {
     const uInset = hasMortgageStatementUploadLane(reasonId) ? 1 : 0;
     const standing = 1 + uInset;
     const phonePathActive = contactMethod === "phone" && step >= 4 + uInset;
-    const labels = ["Why you're here"];
+    const labels = [t("contact.stage.why")];
     if (hasMortgageStatementUploadLane(reasonId)) {
-      labels.push("Optional document");
+      labels.push(t("contact.stage.document"));
     }
-    labels.push("Where things stand", "What matters", "How we reach you");
+    labels.push(t("contact.stage.standing"), t("contact.stage.matters"), t("contact.stage.reach"));
     if (phonePathActive) {
       return {
         totalSteps: 6 + uInset,
-        stageLabels: [...labels, "Best time to connect", "Your details"],
+        stageLabels: [...labels, t("contact.stage.bestTime"), t("contact.stage.details")],
         uploadInset: uInset,
         standingStepIndex: standing,
         phoneStepIndex: standing + 3,
@@ -674,12 +680,12 @@ export function StrategicContactExperience() {
     }
     return {
       totalSteps: 5 + uInset,
-      stageLabels: [...labels, "Your details"],
+      stageLabels: [...labels, t("contact.stage.details")],
       uploadInset: uInset,
       standingStepIndex: standing,
       phoneStepIndex: standing + 3,
     };
-  }, [contactMethod, step, reasonId]);
+  }, [contactMethod, step, reasonId, t]);
 
   const progressPct = useMemo(() => ((step + 1) / totalSteps) * 100, [step, totalSteps]);
 
@@ -1263,15 +1269,36 @@ export function StrategicContactExperience() {
     setSubmitInProgress(true);
 
     const answers: Record<string, string> = {};
-    const standingLabel = STEP2_OPTIONS.find((o) => o.id === standingId)?.label;
-    if (standingLabel) answers["Where things stand"] = standingLabel;
-    const priorityLabel = STEP3_OPTIONS.find((o) => o.id === priorityId)?.label;
-    if (priorityLabel) answers["What matters most"] = priorityLabel;
-    const methodLabel = CONTACT_METHOD_OPTIONS.find((o) => o.id === contactMethod)?.label;
-    if (methodLabel) answers["Preferred contact"] = methodLabel;
-    if (contactMethod === "phone" && phoneDay) {
-      const dayLabel = PHONE_DAY_OPTIONS.find((o) => o.id === phoneDay)?.label;
-      if (dayLabel) answers["Best day to call"] = dayLabel;
+
+    const STANDING_EN: Record<string, string> = {
+      exploring: "Just starting to explore",
+      looking: "Actively looking",
+      process: "Already in the process",
+      unsure: "Not sure yet",
+    };
+    const PRIORITY_EN: Record<string, string> = {
+      payment: "Monthly payment clarity",
+      strategy: "Long-term financial strategy",
+      approved: "Getting approved with confidence",
+      options: "Understanding all my options",
+    };
+    const METHOD_EN: Record<string, string> = {
+      phone: "Phone call",
+      email: "Email",
+    };
+    const DAY_EN: Record<string, string> = {
+      mon: "Monday",
+      tue: "Tuesday",
+      wed: "Wednesday",
+      thu: "Thursday",
+      fri: "Friday",
+    };
+
+    if (standingId && STANDING_EN[standingId]) answers["Where things stand"] = STANDING_EN[standingId];
+    if (priorityId && PRIORITY_EN[priorityId]) answers["What matters most"] = PRIORITY_EN[priorityId];
+    if (contactMethod && METHOD_EN[contactMethod]) answers["Preferred contact"] = METHOD_EN[contactMethod];
+    if (contactMethod === "phone" && phoneDay && DAY_EN[phoneDay]) {
+      answers["Best day to call"] = DAY_EN[phoneDay];
     }
     if (contactMethod === "phone" && phoneTime.trim()) {
       answers["Best time to call"] = phoneTime.trim();
@@ -1298,22 +1325,23 @@ export function StrategicContactExperience() {
           hasUploadedStatement,
           fileKey: mortgageStatementFileKey ?? undefined,
           clientId: leadClientId,
+          submittedLang: lang,
         }),
       });
       let data: { ok?: boolean; error?: string } = {};
       try {
         data = (await res.json()) as { ok?: boolean; error?: string };
       } catch {
-        setSubmitError("Something went wrong. Please try again.");
+        setSubmitError(t("contact.error.generic"));
         return;
       }
       if (!res.ok) {
-        setSubmitError(data.error ?? "Something went wrong. Please try again.");
+        setSubmitError(data.error ?? t("contact.error.generic"));
         return;
       }
       setSubmitted(true);
     } catch {
-      setSubmitError("We couldn’t reach the server. Check your connection and try again.");
+      setSubmitError(t("contact.error.network"));
     } finally {
       setSubmitInProgress(false);
     }
@@ -1424,24 +1452,36 @@ export function StrategicContactExperience() {
             {...confirmItemMotion(0)}
             className="font-heading mb-4 text-3xl font-semibold leading-[1.15] tracking-[-0.02em] text-white md:text-4xl"
           >
-            Clarity is already in motion!
+            {t("contact.success.heading")}
           </motion.h2>
           <motion.p {...confirmItemMotion(1)} className="mx-auto mb-5 max-w-[520px] font-sans text-[15px] leading-relaxed text-white/85">
-            We&apos;ve received your information and will review everything before reaching out with next steps.
+            {t("contact.success.body1")}
           </motion.p>
           <motion.div {...confirmItemMotion(2)} className="mx-auto mb-7 max-w-[520px]">
             <p className="font-sans text-[14px] leading-relaxed text-white/90">
-              <span className="font-semibold text-[#C6A15B]">Within 24 hours or less</span>, one of our Mortgage Advisors will personally reach out to you
-              with clear and structured next steps.
+              {contactMethod === "phone" && phoneDay && phoneTime.trim() ? (
+                <>
+                  <span className="font-semibold text-[#C6A15B]">
+                    {t("contact.success.scheduledPrefix")}
+                    {PHONE_DAY_OPTIONS.find((o) => o.id === phoneDay)?.label}
+                    {t("contact.success.scheduledAt")}
+                    {phoneTime}
+                  </span>
+                  {t("contact.success.scheduledPost")}
+                </>
+              ) : (
+                <>
+                  <span className="font-semibold text-[#C6A15B]">{t("contact.success.body2pre")}</span>
+                  {t("contact.success.body2post")}
+                </>
+              )}
             </p>
             <div className="response-message mt-5 font-sans font-medium text-white/95">
-              <p className="mb-2">You made the right move starting here!</p>
-              <p className="font-normal">
-                We&apos;re excited to connect with you and help you move forward with clarity and confidence.
-              </p>
+              <p className="mb-2">{t("contact.success.move1")}</p>
+              <p className="font-normal">{t("contact.success.move2")}</p>
             </div>
             <p className="mt-5 font-sans text-[12px] leading-relaxed tracking-[0.04em] text-white/65">
-              No pressure. No credit pull. No obligation.
+              {t("contact.success.disclaimer")}
             </p>
           </motion.div>
           <motion.div {...confirmItemMotion(3)} className="contact-info-block mt-8 text-center">
@@ -1455,7 +1495,7 @@ export function StrategicContactExperience() {
             </a>
           </motion.div>
           <motion.p {...confirmItemMotion(4, 0.08)} className="quote-final">
-            The right mortgage isn&apos;t found. It&apos;s structured.
+            {t("contact.success.quote")}
           </motion.p>
         </div>
       </section>
@@ -1494,7 +1534,7 @@ export function StrategicContactExperience() {
                 id="strategic-contact-heading"
                 className="text-balance text-center font-heading text-[1.5rem] font-semibold tracking-[-0.03em] text-[#0B2A4A] sm:text-[1.65rem] lg:text-[1.85rem]"
               >
-                Let&apos;s take a moment to understand what matters most to you!
+                {t("contact.form.title")}
               </h1>
 
               <div className="contact-progress mt-8" role="navigation" aria-label="Stages">
@@ -1550,7 +1590,7 @@ export function StrategicContactExperience() {
                     reverseFlowStep === "inactive" && (
                     <motion.div id="contact-step-0" key="s0-reason" className="form-step space-y-4" {...stepMotion}>
                       <h2 className="text-balance font-heading text-lg font-semibold text-[#0B2A4A] sm:text-xl">
-                        What&apos;s bringing you here today?
+                        {t("contact.step0.question")}
                       </h2>
                       <div className="option-group grid grid-cols-1 gap-3">
                         {STEP1_OPTIONS.map((opt) => (
@@ -1637,19 +1677,19 @@ export function StrategicContactExperience() {
                   {step === standingStepIndex && (
                     <motion.div id={`contact-step-${step}`} key="s1-standing" className="form-step space-y-4" {...stepMotion}>
                       <h2 className="text-balance font-heading text-lg font-semibold text-[#0B2A4A] sm:text-xl">
-                        Where do things stand right now?
+                        {t("contact.step.standing.question")}
                       </h2>
                       <div className="option-group grid grid-cols-1 gap-3">
-                        {STEP2_OPTIONS.map((t) => (
+                        {STEP2_OPTIONS.map((opt) => (
                           <button
-                            key={t.id}
+                            key={opt.id}
                             type="button"
-                            onClick={() => setStandingId(t.id)}
+                            onClick={() => setStandingId(opt.id)}
                             className={`card-option contact-card-transition py-4 text-center font-sans text-[15px] font-semibold text-[#0B2A4A] ${
-                              standingId === t.id ? "card-option--selected" : ""
+                              standingId === opt.id ? "card-option--selected" : ""
                             }`}
                           >
-                            {t.label}
+                            {opt.label}
                           </button>
                         ))}
                       </div>
@@ -1659,19 +1699,19 @@ export function StrategicContactExperience() {
                   {step === standingStepIndex + 1 && (
                     <motion.div id={`contact-step-${step}`} key="s2" className="form-step space-y-4" {...stepMotion}>
                       <h2 className="text-balance font-heading text-lg font-semibold text-[#0B2A4A] sm:text-xl">
-                        What matters most as you move forward?
+                        {t("contact.step.priority.question")}
                       </h2>
                       <div className="option-group grid grid-cols-1 gap-3">
-                        {STEP3_OPTIONS.map((t) => (
+                        {STEP3_OPTIONS.map((opt) => (
                           <button
-                            key={t.id}
+                            key={opt.id}
                             type="button"
-                            onClick={() => setPriorityId(t.id)}
+                            onClick={() => setPriorityId(opt.id)}
                             className={`card-option contact-card-transition py-4 text-center font-sans text-[15px] font-semibold text-[#0B2A4A] ${
-                              priorityId === t.id ? "card-option--selected" : ""
+                              priorityId === opt.id ? "card-option--selected" : ""
                             }`}
                           >
-                            {t.label}
+                            {opt.label}
                           </button>
                         ))}
                       </div>
@@ -1681,7 +1721,7 @@ export function StrategicContactExperience() {
                   {step === standingStepIndex + 2 && (
                     <motion.div id={`contact-step-${step}`} key="s3" className="form-step space-y-4" {...stepMotion}>
                       <h2 className="text-balance font-heading text-lg font-semibold text-[#0B2A4A] sm:text-xl">
-                        How would you like us to reach you?
+                        {t("contact.step.method.question")}
                       </h2>
                       <div className="option-group grid grid-cols-1 gap-3">
                         {CONTACT_METHOD_OPTIONS.map((opt) => (
@@ -1704,19 +1744,19 @@ export function StrategicContactExperience() {
                     <motion.div id={`contact-step-${step}-phone`} key="s4-phone" className="form-step space-y-8" {...stepMotion}>
                       <div id="contact-anchor-day" className="w-full space-y-4">
                         <h2 className="text-balance font-heading text-lg font-semibold text-[#0B2A4A] sm:text-xl">
-                          What day works best for you?
+                          {t("contact.step.day.question")}
                         </h2>
                         <div className="day-grid">
-                          {PHONE_DAY_OPTIONS.map((t) => (
+                          {PHONE_DAY_OPTIONS.map((opt) => (
                             <button
-                              key={t.id}
+                              key={opt.id}
                               type="button"
-                              onClick={() => setPhoneDay(t.id)}
+                              onClick={() => setPhoneDay(opt.id)}
                               className={`card-option contact-card-transition py-4 text-center font-sans text-[15px] font-semibold text-[#0B2A4A] ${
-                                phoneDay === t.id ? "card-option--selected" : ""
+                                phoneDay === opt.id ? "card-option--selected" : ""
                               }`}
                             >
-                              {t.label}
+                              {opt.label}
                             </button>
                           ))}
                         </div>
@@ -1733,11 +1773,11 @@ export function StrategicContactExperience() {
                             transition={reducedMotion ? { duration: 0 } : { duration: 0.35, ease: EASE }}
                           >
                             <h2 className="text-balance font-heading text-lg font-semibold text-[#0B2A4A] sm:text-xl">
-                              What time works best for you?
+                              {t("contact.step.time.question")}
                             </h2>
                             <div className="option-group w-full">
                               <label htmlFor="sc-phone-time" className="sr-only">
-                                Select a time
+                                {t("contact.step.time.placeholder")}
                               </label>
                               <select
                                 id="sc-phone-time"
@@ -1745,12 +1785,12 @@ export function StrategicContactExperience() {
                                 value={phoneTime}
                                 onChange={(e) => setPhoneTime(e.target.value)}
                                 className="time-picker"
-                                aria-label="Preferred call time"
+                                aria-label={t("contact.step.time.question")}
                               >
-                                <option value="">Select a time</option>
-                                {PHONE_TIME_SELECT_VALUES.map((t) => (
-                                  <option key={t} value={t}>
-                                    {t}
+                                <option value="">{t("contact.step.time.placeholder")}</option>
+                                {PHONE_TIME_SELECT_VALUES.map((timeLabel) => (
+                                  <option key={timeLabel} value={timeLabel}>
+                                    {timeLabel}
                                   </option>
                                 ))}
                               </select>
@@ -1769,12 +1809,12 @@ export function StrategicContactExperience() {
                       {...stepMotion}
                     >
                       <h2 className="text-balance text-center font-display text-[1.05rem] font-medium leading-snug tracking-[-0.02em] text-[#0B2A4A] sm:text-[1.125rem] lg:text-[1.3rem]">
-                        Let&apos;s get you connected!
+                        {t("contact.step.details.title")}
                       </h2>
                       <div className="option-group mx-auto space-y-4">
                         <div className="space-y-2">
                           <label htmlFor="sc-notes" className="font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">
-                            Anything you&apos;d like us to know before we connect? (Optional)
+                            {t("contact.step.details.notes.label")}
                           </label>
                           <textarea
                             id="sc-notes"
@@ -1782,13 +1822,13 @@ export function StrategicContactExperience() {
                             rows={4}
                             value={notes}
                             onChange={(e) => setNotes(e.target.value)}
-                            placeholder="Share anything that would help us better understand your situation..."
+                            placeholder={t("contact.step.details.notes.placeholder")}
                             className="w-full resize-y rounded-xl border border-[#E5E7EB] bg-white px-4 py-3.5 font-sans text-[15px] text-navy outline-none transition-colors focus:border-[#C6A15B] focus:ring-2 focus:ring-[#C6A15B]/25"
                           />
                         </div>
                         <div className="space-y-2">
                           <label htmlFor="sc-first" className="font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">
-                            Name
+                            {t("contact.step.details.name.label")}
                           </label>
                           <input
                             id="sc-first"
@@ -1798,12 +1838,12 @@ export function StrategicContactExperience() {
                             value={firstName}
                             onChange={(e) => setFirstName(e.target.value)}
                             className="w-full rounded-xl border border-[#E5E7EB] bg-white px-4 py-3.5 font-sans text-[15px] text-navy outline-none transition-colors focus:border-[#C6A15B] focus:ring-2 focus:ring-[#C6A15B]/25"
-                            placeholder="Your name"
+                            placeholder={t("contact.step.details.name.placeholder")}
                           />
                         </div>
                         <div className="space-y-2">
                           <label htmlFor="sc-email" className="font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">
-                            Email
+                            {t("contact.step.details.email.label")}
                           </label>
                           <input
                             id="sc-email"
@@ -1818,17 +1858,18 @@ export function StrategicContactExperience() {
                                 ? "border-red-400/80 focus:border-red-500"
                                 : "border-[#E5E7EB] focus:border-[#C6A15B]"
                             }`}
-                            placeholder="you@email.com"
+                            placeholder={t("contact.step.details.email.placeholder")}
                           />
                           {email.length > 0 && !emailValid(email) ? (
                             <p className="font-sans text-[13px] text-red-600" role="alert">
-                              Enter a valid email address.
+                              {t("contact.step.details.email.error")}
                             </p>
                           ) : null}
                         </div>
                         <div className="space-y-2">
                           <label htmlFor="sc-phone" className="font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">
-                            Phone <span className="font-normal text-slate-400">(optional)</span>
+                            {t("contact.step.details.phone.label")}{" "}
+                            <span className="font-normal text-slate-400">{t("contact.step.details.phone.optional")}</span>
                           </label>
                           <input
                             id="sc-phone"
@@ -1837,7 +1878,7 @@ export function StrategicContactExperience() {
                             value={phone}
                             onChange={(e) => setPhone(formatPhoneNumber(e.target.value))}
                             className="w-full rounded-xl border border-[#E5E7EB] bg-white px-4 py-3.5 font-sans text-[15px] text-navy outline-none transition-colors focus:border-[#C6A15B] focus:ring-2 focus:ring-[#C6A15B]/25"
-                            placeholder="(301) 555-0100"
+                            placeholder={t("contact.step.details.phone.placeholder")}
                           />
                         </div>
                       </div>
@@ -1873,7 +1914,7 @@ export function StrategicContactExperience() {
                       className="inline-flex items-center gap-2 self-start font-sans text-[13px] font-semibold text-slate-500 underline-offset-4 transition-colors hover:text-[#0B2A4A]"
                     >
                       <ArrowLeft className="h-4 w-4" aria-hidden />
-                      Back
+                      {t("contact.btn.back")}
                     </button>
                   ) : null}
 
@@ -1884,7 +1925,7 @@ export function StrategicContactExperience() {
                       disabled={!canContinue()}
                       className="continue-btn contact-flagship-cta btn-primary min-h-[52px] w-full max-w-[320px] sm:min-w-[280px]"
                     >
-                      Continue
+                      {t("contact.btn.continue")}
                     </button>
                   ) : (
                     <button
@@ -1896,7 +1937,7 @@ export function StrategicContactExperience() {
                           : ""
                       }`}
                     >
-                      {submitInProgress ? "Sending…" : "Connect with us!"}
+                      {submitInProgress ? t("contact.btn.sending") : t("contact.btn.connect")}
                     </button>
                   )}
                 </div>

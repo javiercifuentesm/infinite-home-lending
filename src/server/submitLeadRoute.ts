@@ -132,8 +132,22 @@ function extractClientSnapshotFields(answers: Record<string, unknown>): {
   contactPreference: string;
   bestTime: string;
 } {
-  const stage = findAnswerByHints(answers, [/stage/, /where.*you.*in/, /timeline(?!.*close)/, /step in/]);
-  const priority = findAnswerByHints(answers, [/priority/, /urgenc/, /how soon/]);
+  const stage = findAnswerByHints(answers, [
+    /stage/,
+    /where.*things.*stand/,
+    /where.*stand/,
+    /things stand/,
+    /where.*you.*in/,
+    /timeline(?!.*close)/,
+    /step in/,
+  ]);
+  const priority = findAnswerByHints(answers, [
+    /priority/,
+    /urgenc/,
+    /how soon/,
+    /what matters/,
+    /matters most/,
+  ]);
   const contactPreference = findAnswerByHints(answers, [
     /contact.*prefer/,
     /preferred.*contact/,
@@ -141,7 +155,22 @@ function extractClientSnapshotFields(answers: Record<string, unknown>): {
     /best.*way.*contact/,
     /phone.*or.*email/,
   ]);
-  const bestTime = findAnswerByHints(answers, [/best.*time/, /day.*time/, /when.*call/, /availability/, /meet/]);
+  const bestDay = findAnswerByHints(answers, [
+    /best.*day/,
+    /day.*call/,
+    /preferred.*day/,
+  ]);
+  const bestTimeRaw = findAnswerByHints(answers, [
+    /best.*time/,
+    /when.*call/,
+    /availability/,
+    /meet/,
+  ]);
+  const bestTime =
+    bestDay && bestTimeRaw
+      ? `${bestDay} at ${bestTimeRaw}`
+      : bestDay || bestTimeRaw;
+
   const dash = (s: string) => (s.trim() ? s : "—");
   return {
     stage: dash(stage),
@@ -320,22 +349,6 @@ export type OpportunitySnapshot = {
   readiness: string;
   summary: string;
 };
-
-function opportunityForwardMomentumLine(path: string): string {
-  if (path === "purchase") {
-    return "Outrun the list—control the next step before they shop past you.";
-  }
-  if (path === "refinance" || path === "heloc") {
-    return "Keep the gaps between touches short. Momentum is the product.";
-  }
-  if (path === "reverse") {
-    return "Tighten the loop after eligibility. Days not weeks from there.";
-  }
-  if (path === "plan" || path === "explore") {
-    return "End every touch with a next date. No maybes.";
-  }
-  return "Keep the gaps between touches short. Momentum is the product.";
-}
 
 function summarizeOpportunitySnapshot(params: {
   path: string;
@@ -893,6 +906,43 @@ function formatFullIntakeCellHtml(key: string, value: unknown, answers: Record<s
   return escapeHtml(safe).replace(/\n/g, "<br/>");
 }
 
+function calculateLeadScore(params: {
+  path: string;
+  opportunitySnapshot: OpportunitySnapshot;
+  engagementLevel: EngagementLevel;
+  hasUploadedStatement: boolean;
+  answers: Record<string, unknown>;
+}): number {
+  const { path, opportunitySnapshot, engagementLevel, hasUploadedStatement, answers } = params;
+
+  let score = 0;
+
+  // Strength (0–30)
+  if (opportunitySnapshot.strength === "Strong") score += 30;
+  else score += 15;
+
+  // Readiness (0–25)
+  if (opportunitySnapshot.readiness === "High") score += 25;
+  else score += 12;
+
+  // Statement uploaded (0–20)
+  if (hasUploadedStatement) score += 20;
+
+  // Engagement (0–15)
+  if (engagementLevel === "high") score += 15;
+  else score += 8;
+
+  // Path bonus — structured data present (0–10)
+  const structured = parseRefinanceStructured(answers);
+  const hasStructuredData =
+    structured !== null &&
+    Boolean(structured.address || structured.estimatedValue || structured.loanBalance || structured.rate);
+  const bonusPaths = new Set(["refinance", "heloc", "purchase", "reverse"]);
+  if (bonusPaths.has(path) && hasStructuredData) score += 10;
+
+  return Math.min(100, score);
+}
+
 function buildEmailHtml(params: {
   name: string;
   email: string;
@@ -903,62 +953,37 @@ function buildEmailHtml(params: {
   hasUploadedStatement: boolean;
   /** Presigned GET URL for uploaded PDF; not a public S3 URL. */
   documentUrl: string | null;
+  submittedLang: "en" | "es";
 }): string {
-  const { name, email, phone, path, answers, entries, hasUploadedStatement, documentUrl } = params;
-
-  const sectionTitleAction = (title: string) => `
-  <div style="font-size:13px;font-weight:600;color:#64748b;margin-bottom:8px;text-transform:uppercase;">
-    ${escapeHtml(title)}
-  </div>
-`;
-
-  const sectionTitleMuted = (title: string) => `
-  <div style="font-size:12px;font-weight:600;color:#64748b;margin-bottom:7px;text-transform:uppercase;">
-    ${escapeHtml(title)}
-  </div>
-`;
-
-  const emailSection = (content: string) => `
-  <div style="padding:24px 24px;border-top:1px solid #e2e8f0;line-height:1.7;">
-    ${content}
-  </div>
-`;
-
-  /** Flow break: decision & action, then reference data. */
-  const emailSectionAfterStrategy = (content: string) => `
-  <div style="margin-top:32px;padding:24px 24px;border-top:1px solid #e2e8f0;line-height:1.7;">
-    ${content}
-  </div>
-`;
-
-  const emailSectionDocument = (content: string) => `
-  <div style="padding:18px 24px 24px;border-top:1px solid #e8edf2;line-height:1.7;">
-    ${content}
-  </div>
-`;
-
-  const actionZoneStyle =
-    "background:#EEF4FF;border:1px solid #dbeafe;border-radius:12px;padding:26px 28px;box-shadow:0 2px 8px rgba(15,23,42,0.07),0 1px 2px rgba(15,23,42,0.04);";
+  const { name, email, phone, path, answers, entries, hasUploadedStatement, documentUrl, submittedLang } =
+    params;
 
   const snap = extractClientSnapshotFields(answers);
   const opportunitySnapshot = createOpportunitySnapshot({ path, answers, hasUploadedStatement });
   const situationSummary = buildSituationSummary(path, answers);
   const advisorInsight = buildAdvisorInsight({ path, hasUploadedStatement, answers });
   const engagementLevel = classifyEngagement(answers, path);
+  const leadScore = calculateLeadScore({
+    path,
+    opportunitySnapshot,
+    engagementLevel,
+    hasUploadedStatement,
+    answers,
+  });
   const refinance = parseRefinanceStructured(answers);
 
-  const opportunityCardStyle =
-    "background:#EEF4FF;border-radius:12px;padding:22px 24px;border:1px solid #cbd5f5;box-shadow:0 1px 2px rgba(15,23,42,0.04);";
-  const tableRow = (label: string, value: string) =>
-    `<tr><td style="padding:8px 0;font-size:13px;color:#64748b;width:38%;vertical-align:top;line-height:1.7;">${escapeHtml(label)}</td><td style="padding:8px 0;font-size:14px;color:#0f172a;vertical-align:top;line-height:1.7;">${escapeHtml(value)}</td></tr>`;
+  const formatMoney = (v: string) => {
+    const n = Number(v.replace(/\D/g, ""));
+    return Number.isFinite(n) && n > 0 ? `$${n.toLocaleString("en-US")}` : v || "—";
+  };
 
   const propertyRows: [string, string][] = refinance
     ? [
         ["Goal", inferRefinanceGoalLabel(answers)],
         ["Address", refinance.address || "—"],
-        ["Estimated value", refinance.estimatedValue || "—"],
-        ["Balance", refinance.loanBalance || "—"],
-        ["Rate", refinance.rate || "—"],
+        ["Estimated value", formatMoney(refinance.estimatedValue)],
+        ["Balance", formatMoney(refinance.loanBalance)],
+        ["Rate", refinance.rate ? `${refinance.rate}%` : "—"],
       ]
     : path === "refinance" || path === "heloc"
       ? [
@@ -966,6 +991,9 @@ function buildEmailHtml(params: {
           ["Structured loan details", "Not captured as structured fields—confirm on first touch."],
         ]
       : [["Summary", "Not provided or not applicable for this intake."]];
+
+  const tableRow = (label: string, value: string) =>
+    `<tr><td style="padding:8px 0;font-size:13px;color:#64748b;width:38%;vertical-align:top;line-height:1.7;">${escapeHtml(label)}</td><td style="padding:8px 0;font-size:14px;color:#0f172a;vertical-align:top;line-height:1.7;">${escapeHtml(value)}</td></tr>`;
 
   const statementBlock =
     hasUploadedStatement && !documentUrl
@@ -1021,48 +1049,10 @@ function buildEmailHtml(params: {
         ? "Move with direction."
         : "Wait for clarity—then move.";
 
-  const leadEvaluationInner = `
-      <p style="margin:0 0 6px 0;">
-        <span style="font-size:22px;font-weight:800;letter-spacing:0.08em;color:${leadCategoryColor};display:block;">${escapeHtml(leadCategoryLabel)}</span>
-      </p>
-      <p style="margin:0 0 6px 0;font-size:15px;font-weight:600;color:#020617;line-height:1.7;">${escapeHtml(leadReasonSentence)}</p>
-      <p style="margin:0 0 14px 0;font-size:14px;font-weight:500;color:#334155;line-height:1.7;">${escapeHtml(leadPostureLine)}</p>
-      <p style="margin:0;font-size:12px;color:#64748b;line-height:1.7;">${escapeHtml(thisShouldMoveLine)}</p>`;
-
-  const actionZoneHtml = `
-<div style="${actionZoneStyle}">
-  ${sectionTitleAction("Lead Evaluation")}
-  ${leadEvaluationInner}
-</div>`;
-
   const conversationBlockHtml = `<div style="background:#F1F5F9;padding:10px 12px;border-radius:8px;">
         <p style="margin:0;font-size:15px;font-weight:500;color:#020617;line-height:1.65;">${escapeHtml(mainLine)}</p>
         ${followUpLine ? `<p style="margin:4px 0 0;font-size:15px;font-weight:500;color:#020617;line-height:1.65;">${escapeHtml(followUpLine)}</p>` : ""}
       </div>`;
-
-  const clientSnapshotBlock = `${sectionTitleMuted("Client Snapshot")}
-    <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;">
-      ${tableRow("Name", name)}
-      <tr><td style="padding:8px 0;font-size:13px;color:#64748b;width:38%;vertical-align:top;line-height:1.7;">Email</td><td style="padding:8px 0;font-size:14px;vertical-align:top;line-height:1.7;"><a href="mailto:${escapeHtml(email)}" style="color:#0f172a;text-decoration:none;">${escapeHtml(email)}</a></td></tr>
-      ${tableRow("Phone", phone || "—")}
-      ${tableRow("Where they are", snap.stage)}
-      ${tableRow("Priority", snap.priority)}
-      ${tableRow("Best time to connect", snap.bestTime)}
-    </table>`;
-
-  const keyInsightsBlock = `${sectionTitleMuted("Key Insights")}
-    <ul style="margin:0;padding:0 0 0 20px;font-size:14px;color:#334155;line-height:1.7;">
-      <li style="margin-bottom:10px;line-height:1.7;"><strong style="color:#0f172a;">Path:</strong> ${escapeHtml(pathDisplayName(path))}</li>
-      <li style="margin-bottom:10px;line-height:1.7;"><strong style="color:#0f172a;">Opportunity:</strong> ${escapeHtml(opportunitySnapshot.title)} — Strength ${escapeHtml(opportunitySnapshot.strength)}, Readiness ${escapeHtml(opportunitySnapshot.readiness)}</li>
-      <li style="margin-bottom:10px;line-height:1.7;"><strong style="color:#0f172a;">Engagement:</strong> ${escapeHtml(engagement.headline)}</li>
-      <li style="margin-bottom:0;line-height:1.7;"><strong style="color:#0f172a;">Statement:</strong> ${hasUploadedStatement ? "Uploaded" : "Not uploaded"}</li>
-    </ul>`;
-
-  const propertyHtml = `${sectionTitleMuted("Property & Loan")}
-    <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;">
-      ${propertyRows.map(([label, val]) => tableRow(label, val)).join("")}
-    </table>
-    ${statementBlock}`;
 
   const showOpportunityUrgency =
     opportunitySnapshot.readiness === "High" || opportunitySnapshot.strength === "Strong";
@@ -1071,103 +1061,7 @@ function buildEmailHtml(params: {
     ? `<div style="font-size:13px;color:#1d4ed8;margin-top:8px;line-height:1.7;">Timing matters here—move early.</div>`
     : "";
 
-  let opportunityConfidenceHtml = "";
-  if (strengthStrong && readinessHigh) {
-    opportunityConfidenceHtml = `<div style="font-size:13px;color:#0f172a;margin-top:6px;line-height:1.7;">Strong file with headroom. Client is ready to engage.</div>`;
-  } else if (strengthStrong) {
-    opportunityConfidenceHtml = `<div style="font-size:13px;color:#0f172a;margin-top:6px;line-height:1.7;">High-quality lane with real room to optimize.</div>`;
-  } else if (readinessHigh) {
-    opportunityConfidenceHtml = `<div style="font-size:13px;color:#0f172a;margin-top:6px;line-height:1.7;">Ready to engage—reach first and set the pace.</div>`;
-  }
-
   const opportunitySummaryInner = emphasizeOpportunitySummaryHtml(opportunitySnapshot.summary);
-  const opportunityForwardLineHtml = `<p style="margin:8px 0 0;font-size:13px;color:#475569;line-height:1.7;">${escapeHtml(
-    opportunityForwardMomentumLine(path),
-  )}</p>`;
-
-  const opportunityCardInnerHtml = `<div style="${opportunityCardStyle}">
-      <div style="font-size:15px;font-weight:600;margin-bottom:6px;color:#0f172a;">
-        Opportunity Assessment
-      </div>
-      <p style="margin:0 0 10px;font-size:16px;font-weight:700;color:#0f172a;line-height:1.32;">${escapeHtml(opportunitySnapshot.title)}</p>
-      <p style="margin:8px 0 0;font-size:13px;color:#334155;line-height:1.7;"><strong style="color:#0f172a;">Strength:</strong> ${escapeHtml(opportunitySnapshot.strength)}</p>
-      <p style="margin:6px 0 0;font-size:13px;color:#334155;line-height:1.7;"><strong style="color:#0f172a;">Readiness:</strong> ${escapeHtml(opportunitySnapshot.readiness)}</p>
-      ${opportunityConfidenceHtml}
-      <p style="margin:10px 0 0;font-size:15px;font-weight:600;color:#1e293b;line-height:1.7;">${opportunitySummaryInner}</p>
-      ${opportunityForwardLineHtml}
-      ${opportunityUrgencyHtml}
-      ${
-        documentUrl
-          ? `<div style="font-size:12px;color:#475569;margin-top:8px;line-height:1.7;">Supporting document available — use it to tighten your approach.</div>`
-          : ""
-      }
-    </div>
-    <p style="margin:12px 0 6px;font-size:12px;font-weight:600;color:#64748b;line-height:1.6;">Here's what to say:</p>
-    ${conversationBlockHtml}`;
-
-  const opportunityFlowHtml = `${sectionTitleMuted("Opportunity Snapshot")}${opportunityCardInnerHtml}`;
-
-  const documentBlockHtml = documentUrl
-    ? `
-  <div style="
-    margin-top:14px;
-    padding:16px 18px;
-    border:1px solid #E0E7FF;
-    border-radius:12px;
-    background:#EBEFFC;
-  ">
-    <div style="
-      font-size:12px;
-      letter-spacing:0.08em;
-      text-transform:uppercase;
-      color:#64748B;
-      margin-bottom:8px;
-    ">
-      Client Document
-    </div>
-
-    <a href="${escapeHtml(documentUrl)}" target="_blank" rel="noopener noreferrer" style="
-      font-size:14px;
-      font-weight:600;
-      color:#1D4ED8;
-      text-decoration:none;
-    ">
-      View mortgage statement →
-    </a>
-
-    <div style="font-size:13px;color:#0F172A;margin-top:10px;line-height:1.7;">
-      Use this to anchor your first move—focus on what can be improved immediately.
-    </div>
-    <div style="font-size:13px;color:#334155;margin-top:6px;line-height:1.7;">
-      This gives you a faster path to a clear recommendation.
-    </div>
-
-    <div style="font-size:12px;color:#94A3B8;margin-top:8px;line-height:1.65;">
-      Secure access (time-limited)
-    </div>
-  </div>
-  `
-    : "";
-
-  const situationHtml = `${sectionTitleMuted("Situation Summary")}
-    <p style="margin:0;font-size:14px;color:#334155;line-height:1.7;">${escapeHtml(situationSummary)}</p>`;
-
-  const advisorHtml = `${sectionTitleMuted("Advisor Insight")}
-    <div style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#94a3b8;margin-bottom:6px;">Why this works</div>
-    <div style="border-top:2px solid #e2e8f0;padding-top:14px;">
-      <p style="margin:0;font-size:14px;color:#334155;line-height:1.7;">${escapeHtml(advisorInsight)}</p>
-    </div>`;
-
-  const engagementHtml = `${sectionTitleMuted("Engagement Signal")}
-    <p style="margin:0 0 4px;font-size:13px;font-weight:700;color:#1e3a5f;line-height:1.7;">${escapeHtml(engagement.headline)}</p>
-    <p style="margin:0;font-size:14px;color:#334155;line-height:1.7;">${escapeHtml(engagement.body)}</p>`;
-
-  const recommendedHtml = `${sectionTitleMuted("Recommended Next Steps")}
-    <ul style="margin:0;padding:0 0 0 20px;font-size:14px;color:#334155;line-height:1.7;">
-      <li style="margin-bottom:10px;font-weight:700;color:#020617;">State their range before you model.</li>
-      <li style="margin-bottom:10px;">Open on a call.</li>
-      <li style="margin-bottom:0;">Lock the follow-up on the way out.</li>
-    </ul>`;
 
   const seenKeyNorm = new Set<string>();
   const dedupedEntries = entries.filter(([key]) => {
@@ -1192,42 +1086,255 @@ function buildEmailHtml(params: {
     })
     .join("");
 
-  const fullIntakeBlock = `${sectionTitleMuted("Full Client Responses")}
-    <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;">
-      ${fullIntakeRows || `<tr><td colspan="2" style="padding:10px 0;font-size:12px;color:#94a3b8;line-height:1.65;">No intake fields captured.</td></tr>`}
-    </table>`;
+  const scoreColor =
+    leadScore >= 75 ? "#dc2626" : leadScore >= 50 ? "#d97706" : "#475569";
 
-  const finalAdvisorNoteBlock = `<p style="margin:20px 0 0 0;font-size:12px;color:#94a3b8;line-height:1.55;text-align:center;">Run this exactly once—then adapt based on response.</p>`;
+  const headerBar = `
+<div style="background:#0b1f3a;color:white;border-radius:12px 12px 0 0;overflow:hidden;">
+  <div style="padding:16px 24px;border-bottom:1px solid rgba(198,161,91,0.25);display:flex;align-items:center;justify-content:space-between;">
+    <div style="font-size:15px;font-weight:600;color:#ffffff;letter-spacing:-0.01em;">
+      Advisor Intelligence Report — ${escapeHtml(path.toUpperCase())}
+    </div>
+    <div style="font-size:12px;color:rgba(255,255,255,0.4);">
+      ${escapeHtml(name)} · ${new Date().toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}
+    </div>
+  </div>
+  <div style="padding:12px 24px;display:flex;gap:0;align-items:center;">
+    <div style="padding-right:20px;border-right:1px solid rgba(255,255,255,0.1);">
+      <div style="font-size:10px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:3px;">Lead Score</div>
+      <div style="font-size:26px;font-weight:700;color:${scoreColor};line-height:1;">${leadScore}</div>
+    </div>
+    <div style="padding:0 20px;border-right:1px solid rgba(255,255,255,0.1);">
+      <div style="font-size:10px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:3px;">Lead</div>
+      <div style="font-size:13px;font-weight:600;color:${leadCategoryColor};">${escapeHtml(leadCategoryLabel)}</div>
+    </div>
+    <div style="padding:0 20px;border-right:1px solid rgba(255,255,255,0.1);">
+      <div style="font-size:10px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:3px;">Strength</div>
+      <div style="font-size:13px;font-weight:600;color:#c6a15b;">${escapeHtml(opportunitySnapshot.strength)}</div>
+    </div>
+    <div style="padding:0 20px;border-right:1px solid rgba(255,255,255,0.1);">
+      <div style="font-size:10px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:3px;">Readiness</div>
+      <div style="font-size:13px;font-weight:600;color:#c6a15b;">${escapeHtml(opportunitySnapshot.readiness)}</div>
+    </div>
+    <div style="padding:0 20px;border-right:${hasUploadedStatement ? "1px solid rgba(255,255,255,0.1)" : "none"};">
+      <div style="font-size:10px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:3px;">Call window</div>
+      <div style="font-size:13px;font-weight:600;color:#c6a15b;">${escapeHtml(snap.bestTime !== "—" ? snap.bestTime : "Email preferred")}</div>
+    </div>
+    ${hasUploadedStatement ? `
+    <div style="padding:0 0 0 20px;">
+      <div style="font-size:10px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:3px;">Statement</div>
+      <div style="font-size:13px;font-weight:600;color:#10b981;">Secured</div>
+    </div>` : ""}
+    ${submittedLang === "es" ? `
+    <div style="padding:0 0 0 20px;border-left:1px solid rgba(255,255,255,0.1);margin-left:0;">
+      <div style="font-size:10px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:3px;">Client language</div>
+      <div style="font-size:13px;font-weight:600;color:#f59e0b;">Español</div>
+    </div>` : ""}
+  </div>
+</div>`;
 
-  const footerBlock = `<p style="margin:0;font-size:11px;color:#94a3b8;line-height:1.55;">Infinite Home Lending &middot; Internal advisory briefing &middot; Do not forward as marketing.</p>`;
+  const documentSectionHtml = documentUrl ? `
+<div style="padding:20px 24px;border-bottom:1px solid #e2e8f0;">
+  <div style="font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;">Secured document — your competitive edge</div>
+  <div style="background:#0b1f3a;border:1px solid rgba(198,161,91,0.5);border-radius:10px;padding:18px 20px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+      <div style="width:32px;height:32px;background:rgba(198,161,91,0.15);border:1px solid rgba(198,161,91,0.3);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <span style="font-size:14px;">📄</span>
+      </div>
+      <span style="font-size:11px;color:#c6a15b;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;">Mortgage statement on file</span>
+    </div>
+    <div style="font-size:15px;font-weight:600;color:#ffffff;margin-bottom:8px;">You have the full picture before the call.</div>
+    <div style="font-size:13px;color:rgba(255,255,255,0.65);line-height:1.65;margin-bottom:12px;">
+      Use it to anchor your opening — show them what you already know and lead with specificity, not a brochure. This is your edge.
+    </div>
+    <a href="${escapeHtml(documentUrl)}" target="_blank" rel="noopener noreferrer"
+      style="display:inline-block;font-size:13px;font-weight:600;color:#c6a15b;text-decoration:none;border-bottom:1px solid rgba(198,161,91,0.4);padding-bottom:1px;">
+      View mortgage statement →
+    </a>
+    <div style="margin-top:8px;font-size:11px;color:rgba(255,255,255,0.35);">Secure access · Time-limited · Internal use only</div>
+  </div>
+</div>` : "";
 
-  const headerBar = `<div style="background:#0b1f3a;color:white;padding:20px;font-size:18px;font-weight:600;">
-  Advisor Intelligence Report — ${escapeHtml(path.toUpperCase())}
+  const firstContactPlaybook = `
+<div style="padding:20px 24px;border-bottom:1px solid #e2e8f0;">
+  <div style="font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;">First contact playbook</div>
+  <div style="display:flex;flex-direction:column;gap:8px;">
+    <div style="display:flex;align-items:flex-start;gap:12px;background:#f8fafc;border-radius:8px;padding:10px 14px;">
+      <span style="font-size:11px;font-weight:700;color:#c6a15b;flex-shrink:0;min-width:20px;">01</span>
+      <span style="font-size:13px;color:#0f172a;line-height:1.5;">${hasUploadedStatement ? "Open with the statement — anchor what can be improved immediately. They shared it for a reason." : "Open with a specific number from their intake — anchor the conversation before you sell structure."}</span>
+    </div>
+    <div style="display:flex;align-items:flex-start;gap:12px;background:#f8fafc;border-radius:8px;padding:10px 14px;">
+      <span style="font-size:11px;font-weight:700;color:#c6a15b;flex-shrink:0;min-width:20px;">02</span>
+      <span style="font-size:13px;color:#0f172a;line-height:1.5;">Name the real constraint before you sell structure. Rate is downstream of purpose.</span>
+    </div>
+    <div style="display:flex;align-items:flex-start;gap:12px;background:#f8fafc;border-radius:8px;padding:10px 14px;">
+      <span style="font-size:11px;font-weight:700;color:#c6a15b;flex-shrink:0;min-width:20px;">03</span>
+      <span style="font-size:13px;color:#0f172a;line-height:1.5;">Deliver two defensible options with clear tradeoffs — not a rate sheet.</span>
+    </div>
+    <div style="display:flex;align-items:flex-start;gap:12px;background:#f8fafc;border-radius:8px;padding:10px 14px;">
+      <span style="font-size:11px;font-weight:700;color:#c6a15b;flex-shrink:0;min-width:20px;">04</span>
+      <span style="font-size:13px;color:#0f172a;line-height:1.5;">Lock the follow-up before you hang up. Momentum is the product.</span>
+    </div>
+  </div>
+</div>`;
+
+  const leadEvaluationSection = `
+<div style="padding:20px 24px;border-bottom:1px solid #e2e8f0;">
+  <div style="font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;">Lead evaluation</div>
+  <div style="background:#EEF4FF;border:1px solid #dbeafe;border-radius:10px;padding:18px 20px;">
+    <div style="margin-bottom:8px;">
+      <span style="font-size:22px;font-weight:800;letter-spacing:0.08em;color:${leadCategoryColor};">${escapeHtml(leadCategoryLabel)}</span>
+    </div>
+    <div style="font-size:15px;font-weight:600;color:#020617;margin-bottom:6px;line-height:1.5;">${escapeHtml(leadReasonSentence)}</div>
+    <div style="font-size:13px;color:#334155;margin-bottom:6px;line-height:1.5;">${escapeHtml(leadPostureLine)}</div>
+    <div style="font-size:12px;color:#64748b;">${escapeHtml(thisShouldMoveLine)}</div>
+  </div>
+</div>`;
+
+  const opportunitySection = `
+<div style="padding:20px 24px;border-bottom:1px solid #e2e8f0;">
+  <div style="font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;">Opportunity snapshot</div>
+  <div style="background:#EEF4FF;border:1px solid #cbd5f5;border-radius:10px;padding:18px 20px;">
+    <div style="font-size:15px;font-weight:600;color:#0f172a;margin-bottom:6px;">${escapeHtml(opportunitySnapshot.title)}</div>
+    <div style="font-size:13px;color:#334155;margin-bottom:4px;"><strong style="color:#0f172a;">Strength:</strong> ${escapeHtml(opportunitySnapshot.strength)}</div>
+    <div style="font-size:13px;color:#334155;margin-bottom:10px;"><strong style="color:#0f172a;">Readiness:</strong> ${escapeHtml(opportunitySnapshot.readiness)}</div>
+    <div style="font-size:14px;font-weight:600;color:#1e293b;line-height:1.5;margin-bottom:8px;">${opportunitySummaryInner}</div>
+    ${opportunityUrgencyHtml}
+  </div>
+  <div style="margin-top:12px;padding:14px 16px;background:#f8fafc;border-radius:8px;">
+    <div style="font-size:11px;font-weight:600;color:#64748b;margin-bottom:6px;">Here's what to say:</div>
+    ${conversationBlockHtml}
+  </div>
+</div>`;
+
+  const clientSnapshotSection = `
+<div style="padding:20px 24px;border-bottom:1px solid #e2e8f0;">
+  <div style="font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;">Client snapshot</div>
+  <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;">
+    ${tableRow("Name", name)}
+    <tr><td style="padding:8px 0;font-size:13px;color:#64748b;width:38%;vertical-align:top;line-height:1.7;">Email</td><td style="padding:8px 0;font-size:14px;vertical-align:top;line-height:1.7;"><a href="mailto:${escapeHtml(email)}" style="color:#0f172a;text-decoration:none;">${escapeHtml(email)}</a></td></tr>
+    ${tableRow("Phone", phone || "—")}
+    ${tableRow("Where they are", snap.stage)}
+    ${tableRow("Priority", snap.priority)}
+    ${tableRow("Best time to connect", snap.bestTime)}
+  </table>
+</div>`;
+
+  const keyInsightsSection = `
+<div style="padding:20px 24px;border-bottom:1px solid #e2e8f0;">
+  <div style="font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;">Key insights</div>
+  <ul style="margin:0;padding:0 0 0 20px;font-size:14px;color:#334155;line-height:1.7;">
+    <li style="margin-bottom:10px;"><strong style="color:#0f172a;">Path:</strong> ${escapeHtml(pathDisplayName(path))}</li>
+    <li style="margin-bottom:10px;"><strong style="color:#0f172a;">Opportunity:</strong> ${escapeHtml(opportunitySnapshot.title)} — Strength ${escapeHtml(opportunitySnapshot.strength)}, Readiness ${escapeHtml(opportunitySnapshot.readiness)}</li>
+    <li style="margin-bottom:10px;"><strong style="color:#0f172a;">Engagement:</strong> ${escapeHtml(engagement.headline)}</li>
+    <li style="margin-bottom:0;"><strong style="color:#0f172a;">Statement:</strong> ${hasUploadedStatement ? "Uploaded" : "Not uploaded"}</li>
+  </ul>
+</div>`;
+
+  const propertySection = `
+<div style="padding:20px 24px;border-bottom:1px solid #e2e8f0;">
+  <div style="font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;">Property & loan</div>
+  <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;">
+    ${propertyRows.map(([label, val]) => tableRow(label, val)).join("")}
+  </table>
+  ${statementBlock}
+</div>`;
+
+  const situationSection = `
+<div style="padding:20px 24px;border-bottom:1px solid #e2e8f0;">
+  <div style="font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;">Situation summary</div>
+  <p style="margin:0;font-size:14px;color:#334155;line-height:1.7;">${escapeHtml(situationSummary)}</p>
+</div>`;
+
+  const advisorSection = `
+<div style="padding:20px 24px;border-bottom:1px solid #e2e8f0;">
+  <div style="font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;">Advisor insight</div>
+  <div style="font-size:10px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:#94a3b8;margin-bottom:10px;">Why this works</div>
+  <div style="border-top:2px solid #e2e8f0;padding-top:12px;">
+    <p style="margin:0;font-size:14px;color:#334155;line-height:1.7;">${escapeHtml(advisorInsight)}</p>
+  </div>
+</div>`;
+
+  const engagementSection = `
+<div style="padding:20px 24px;border-bottom:1px solid #e2e8f0;">
+  <div style="font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;">Engagement signal</div>
+  <p style="margin:0 0 4px;font-size:13px;font-weight:700;color:#1e3a5f;line-height:1.7;">${escapeHtml(engagement.headline)}</p>
+  <p style="margin:0;font-size:14px;color:#334155;line-height:1.7;">${escapeHtml(engagement.body)}</p>
+</div>`;
+
+  const recommendedSection = `
+<div style="padding:20px 24px;border-bottom:1px solid #e2e8f0;">
+  <div style="font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;">Recommended next steps</div>
+  <ul style="margin:0;padding:0 0 0 20px;font-size:14px;color:#334155;line-height:1.7;">
+    <li style="margin-bottom:10px;font-weight:700;color:#020617;">State their range before you model.</li>
+    <li style="margin-bottom:10px;">Open on a call.</li>
+    <li style="margin-bottom:0;">Lock the follow-up on the way out.</li>
+  </ul>
+</div>`;
+
+  const spanishContextSection =
+    submittedLang === "es"
+      ? `
+<div style="padding:20px 24px;border-bottom:1px solid #e2e8f0;">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+    <div style="font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;">Client responses — submitted in Spanish</div>
+    <span style="font-size:10px;font-weight:700;background:#FEF3C7;color:#92400E;padding:2px 8px;border-radius:99px;letter-spacing:0.06em;">ESPAÑOL</span>
+  </div>
+  <div style="background:#FFFBEB;border:1px solid #FDE68A;border-radius:8px;padding:14px 16px;margin-bottom:12px;">
+    <p style="margin:0 0 6px;font-size:13px;font-weight:600;color:#92400E;">This client submitted in Spanish.</p>
+    <p style="margin:0;font-size:13px;color:#78350F;line-height:1.6;">Consider opening the call in Spanish or asking for their language preference. The responses below are shown as submitted.</p>
+  </div>
+  <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;">
+    ${fullIntakeRows || `<tr><td colspan="2" style="padding:10px 0;font-size:12px;color:#94a3b8;">No intake fields captured.</td></tr>`}
+  </table>
+</div>`
+      : "";
+
+  const fullIntakeSection =
+    submittedLang === "es"
+      ? `
+<div style="padding:20px 24px;border-bottom:1px solid #e2e8f0;">
+  <div style="font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;">Full client responses</div>
+  <p style="margin:0;font-size:13px;color:#94a3b8;font-style:italic;">See "Submitted in Spanish" section above for client's original responses.</p>
+</div>`
+      : `
+<div style="padding:20px 24px;border-bottom:1px solid #e2e8f0;">
+  <div style="font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px;">Full client responses</div>
+  <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;">
+    ${fullIntakeRows || `<tr><td colspan="2" style="padding:10px 0;font-size:12px;color:#94a3b8;line-height:1.65;">No intake fields captured.</td></tr>`}
+  </table>
+</div>`;
+
+  const footerSection = `
+<div style="padding:16px 24px;">
+  <p style="margin:0 0 8px;font-size:12px;color:#94a3b8;text-align:center;">Run this exactly once—then adapt based on response.</p>
+  <p style="margin:0;font-size:11px;color:#94a3b8;line-height:1.55;text-align:center;">Infinite Home Lending · Internal advisory briefing · Do not forward as marketing.</p>
 </div>`;
 
   const innerCard = `
-  <div style="max-width:700px; margin:0 auto; background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; overflow:hidden;">
-    ${headerBar}
-    ${emailSection(actionZoneHtml)}
-    ${emailSection(opportunityFlowHtml)}
-    ${documentBlockHtml ? emailSectionDocument(documentBlockHtml) : ""}
-    ${emailSection(advisorHtml)}
-    ${emailSectionAfterStrategy(clientSnapshotBlock)}
-    ${emailSection(keyInsightsBlock)}
-    ${emailSection(propertyHtml)}
-    ${emailSection(situationHtml)}
-    ${emailSection(engagementHtml)}
-    ${emailSection(recommendedHtml)}
-    ${emailSection(fullIntakeBlock)}
-    ${emailSection(finalAdvisorNoteBlock)}
-    ${emailSection(footerBlock)}
-  </div>`;
+<div style="max-width:700px;margin:0 auto;background:#ffffff;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;">
+  ${headerBar}
+  ${leadEvaluationSection}
+  ${opportunitySection}
+  ${documentSectionHtml}
+  ${firstContactPlaybook}
+  ${advisorSection}
+  ${clientSnapshotSection}
+  ${keyInsightsSection}
+  ${propertySection}
+  ${situationSection}
+  ${engagementSection}
+  ${recommendedSection}
+  ${spanishContextSection}
+  ${fullIntakeSection}
+  ${footerSection}
+</div>`;
 
   return `<!DOCTYPE html>
 <html lang="en">
 <head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/></head>
 <body style="margin:0;padding:0;">
-<div style="background:#f8fafc; padding:40px 20px; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+<div style="background:#f8fafc;padding:40px 20px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
 ${innerCard}
 </div>
 </body>
@@ -1257,6 +1364,9 @@ export function createSubmitLeadRouter(): Router {
       const hasUploadedStatement = Boolean(body.hasUploadedStatement);
       const fileKey =
         typeof body.fileKey === "string" && body.fileKey.trim().length > 0 ? body.fileKey.trim() : null;
+
+      const submittedLang =
+        typeof body.submittedLang === "string" && body.submittedLang === "es" ? "es" : "en";
 
       const answersRaw =
         body.answers !== null && typeof body.answers === "object" && !Array.isArray(body.answers)
@@ -1301,6 +1411,7 @@ export function createSubmitLeadRouter(): Router {
         entries,
         hasUploadedStatement,
         documentUrl,
+        submittedLang,
       });
       console.log("STEP 2: After buildEmailHtml");
 

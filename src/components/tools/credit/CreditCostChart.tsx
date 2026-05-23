@@ -11,6 +11,7 @@ import {
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 import type { CreditCalcResult } from "../../../hooks/useCreditMath";
+import { useLanguage } from "../../../i18n/LanguageContext";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Filler);
 
@@ -27,14 +28,20 @@ type Props = {
 };
 
 export function CreditCostChart({ results, curScore, chartKey }: Props) {
+  const { t } = useLanguage();
   const { chartLabels, curCumArr, tgtCumArr, effectiveTgt } = results;
+  const chartTitle = t("tool.credit.costChart.title");
+  const lblCurrent = `${t("tool.credit.costChart.current")} (${curScore}+)`;
+  const lblTarget = `${t("tool.credit.costChart.target")} (${effectiveTgt}+)`;
+  const tipCur = t("tool.credit.costChart.tooltipCurrent");
+  const tipTgt = t("tool.credit.costChart.tooltipTarget");
 
   const { data, options } = useMemo(() => {
     const dataObj = {
       labels: chartLabels,
       datasets: [
         {
-          label: `Current score (${curScore}+)`,
+          label: lblCurrent,
           data: curCumArr,
           borderColor: "#A32D2D",
           backgroundColor: "rgba(163,45,45,0.06)",
@@ -44,7 +51,7 @@ export function CreditCostChart({ results, curScore, chartKey }: Props) {
           fill: true,
         },
         {
-          label: `Target score (${effectiveTgt}+)`,
+          label: lblTarget,
           data: tgtCumArr,
           borderColor: "#3B6D11",
           backgroundColor: "rgba(59,109,17,0.06)",
@@ -64,7 +71,7 @@ export function CreditCostChart({ results, curScore, chartKey }: Props) {
         tooltip: {
           callbacks: {
             label(ctx: { datasetIndex?: number; parsed: { y: number } }) {
-              const lab = ctx.datasetIndex === 0 ? "Current" : "Target";
+              const lab = ctx.datasetIndex === 0 ? tipCur : tipTgt;
               return lab + ": " + chartYFmt(ctx.parsed.y);
             },
           },
@@ -87,21 +94,19 @@ export function CreditCostChart({ results, curScore, chartKey }: Props) {
     };
 
     return { data: dataObj, options: optionsObj };
-  }, [chartLabels, curCumArr, tgtCumArr, curScore, effectiveTgt]);
+  }, [chartLabels, curCumArr, tgtCumArr, lblCurrent, lblTarget, tipCur, tipTgt]);
 
   return (
     <div className="rounded-lg border border-[var(--color-border-tertiary,#e2e8f0)] bg-white px-4 py-5 sm:px-6">
-      <h3 className="font-[Georgia,serif] text-[13px] font-medium text-[#0B2A4A]">
-        Total interest paid — current score vs. target score
-      </h3>
+      <h3 className="font-[Georgia,serif] text-[13px] font-medium text-[#0B2A4A]">{chartTitle}</h3>
       <div className="mt-4 flex flex-wrap items-center gap-6 text-[12px]">
         <span className="inline-flex items-center gap-2">
           <span className="inline-block h-3 w-3 rounded-sm bg-[#A32D2D]" aria-hidden />
-          <span className="text-slate-600">Current score ({curScore}+)</span>
+          <span className="text-slate-600">{lblCurrent}</span>
         </span>
         <span className="inline-flex items-center gap-2">
           <span className="inline-block h-3 w-3 rounded-sm bg-[#3B6D11]" aria-hidden />
-          <span className="text-slate-600">Target score ({effectiveTgt}+)</span>
+          <span className="text-slate-600">{lblTarget}</span>
         </span>
       </div>
       <div key={chartKey} className="relative mt-4 h-[200px] w-full">

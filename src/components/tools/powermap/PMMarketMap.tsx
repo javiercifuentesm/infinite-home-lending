@@ -1,19 +1,31 @@
 import type { PowerMapResults } from "../../../hooks/usePowerMapMath";
 import { fmtK } from "../../../hooks/usePowerMapMath";
+import { useLanguage } from "../../../i18n/LanguageContext";
 
 type Props = { results: PowerMapResults };
 
 export function PMMarketMap({ results }: Props) {
-  const { currentPrice, improvedPrice, marketsWithStatus, unlockedCount, improvedCount } = results;
+  const { t } = useLanguage();
+  const { currentPrice, marketsWithStatus, unlockedCount, improvedCount } = results;
 
   const sub =
     currentPrice < 350000
-      ? `Currently, your buying power of ${fmtK(currentPrice)} is building toward your first accessible markets. With your improvements, ${improvedCount} more market${improvedCount === 1 ? "" : "s"} open up.`
-      : `Your current buying power of ${fmtK(currentPrice)} unlocks ${unlockedCount} market${unlockedCount === 1 ? "" : "s"} today. Your improvement plan unlocks ${improvedCount} more.`;
+      ? t("tool.pm.map.subBuilding")
+          .replace("{current}", fmtK(currentPrice))
+          .replace("{improved}", String(improvedCount))
+          .replace("{mword}", improvedCount === 1 ? t("tool.pm.map.market") : t("tool.pm.map.markets"))
+      : t("tool.pm.map.subUnlocked")
+          .replace("{current}", fmtK(currentPrice))
+          .replace("{n}", String(unlockedCount))
+          .replace(
+            "{uword}",
+            unlockedCount === 1 ? t("tool.pm.map.market") : t("tool.pm.map.markets"),
+          )
+          .replace("{improved}", String(improvedCount));
 
   return (
     <div className="rounded-xl border border-slate-200/90 bg-white p-5 shadow-sm sm:p-6">
-      <h3 className="font-[Georgia,serif] text-[13px] font-medium text-[#0B2A4A]">MD-DC-VA Market Access Map</h3>
+      <h3 className="font-[Georgia,serif] text-[13px] font-medium text-[#0B2A4A]">{t("tool.pm.map.title")}</h3>
       <p className="mt-2 text-[11px] leading-relaxed text-slate-500">{sub}</p>
 
       <div className="mt-6 flex flex-col gap-3">
@@ -61,9 +73,9 @@ export function PMMarketMap({ results }: Props) {
                 ))}
               </div>
               <p className={`mt-2 text-[10px] font-medium ${locked ? "text-slate-500" : "text-[#27500A]"}`}>
-                {m.status === "locked" && `🔒 ${fmtK(shortfall)} more needed`}
-                {m.status === "unlocked" && "✓ Within your current buying power"}
-                {m.status === "improved" && "→ Unlocked by your improvement plan"}
+                {m.status === "locked" && t("tool.pm.map.lockedLine").replace("{shortfall}", fmtK(shortfall))}
+                {m.status === "unlocked" && t("tool.pm.map.unlockedLine")}
+                {m.status === "improved" && t("tool.pm.map.improvedLine")}
               </p>
               {!locked && m.note ? <p className="mt-1.5 text-[10px] leading-snug text-slate-500">{m.note}</p> : null}
             </div>

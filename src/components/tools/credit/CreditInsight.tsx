@@ -1,5 +1,6 @@
 import type { CreditCalcResult } from "../../../hooks/useCreditMath";
 import { fmt, fmtK } from "../../../hooks/useCreditMath";
+import { useLanguage } from "../../../i18n/LanguageContext";
 
 type Props = {
   results: CreditCalcResult;
@@ -8,18 +9,24 @@ type Props = {
 };
 
 export function CreditInsight({ results, curScore, isTopTier }: Props) {
+  const { t } = useLanguage();
   const { lifetimeSavings, ptsDiff, effectiveTgt, dollarPerPoint } = results;
 
   let body: string;
   if (isTopTier) {
-    body =
-      "You’re already in the top rate tier — the rate you’re offered is effectively the best available. The focus now shifts from score improvement to loan structuring: down payment optimization, loan type selection, and rate lock timing are where the remaining opportunity lives.";
+    body = t("tool.credit.insight.topTier");
   } else if (lifetimeSavings > 50_000) {
-    body = `${fmtK(lifetimeSavings)} is a real number — not a marketing claim. Improving your credit from ${curScore} to ${effectiveTgt} before you buy is the highest-return financial move available to you right now. No investment, no side hustle, no cost-cutting delivers ${fmtK(dollarPerPoint)} per point of effort with this kind of certainty. The question isn't whether to do it. It's how to do it in the shortest time.`;
+    body = t("tool.credit.insight.highSave")
+      .replace("{lifetimeSavings}", fmtK(lifetimeSavings))
+      .replace("{curScore}", String(curScore))
+      .replace("{effectiveTgt}", String(effectiveTgt))
+      .replace("{dpp}", fmtK(dollarPerPoint));
   } else if (ptsDiff <= 30) {
-    body = `Only ${ptsDiff} points separate you from a meaningfully better rate — and that gap is often closeable in 60–90 days with one or two targeted moves. Paying a credit card balance below 30% utilization alone has driven 30+ point improvements in a single billing cycle for many borrowers. The return on that one action, in your situation, is ${fmtK(lifetimeSavings)}.`;
+    body = t("tool.credit.insight.smallGap")
+      .replace("{ptsDiff}", String(ptsDiff))
+      .replace("{lifetimeSavings}", fmtK(lifetimeSavings));
   } else {
-    body = `At $${fmt(dollarPerPoint)} per point, improving your credit score is one of the most efficient financial moves you can make before buying a home. Unlike saving for a larger down payment — which requires cash you may not have — credit improvement is largely a behavior change and a timeline decision. An advisor can map your specific path.`;
+    body = t("tool.credit.insight.default").replace("{dpp}", `$${fmt(dollarPerPoint)}`);
   }
 
   return (

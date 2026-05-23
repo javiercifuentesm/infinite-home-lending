@@ -1,6 +1,28 @@
 import { Router } from "express";
 
+export type FeedItem = {
+  id: string;
+  source: string;
+  title: string;
+  summary: string;
+  url: string;
+  publishedAt: string;
+  tag: { emoji: string; label: string };
+};
+
 const FRED_API_KEY = process.env.FRED_API_KEY ?? "";
+
+function decodeHtmlEntities(str: string): string {
+  return str
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&amp;/g, "&")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&nbsp;/g, " ")
+    .replace(/<[^>]+>/g, "") // strip any remaining HTML tags
+    .trim();
+}
 
 function nexioTag(title: string): { emoji: string; label: string } {
   const t = title.toLowerCase();
@@ -107,15 +129,12 @@ async function fetchGoogleNewsRss(feedUrl: string, sourceLabel: string): Promise
       const link = xml.match(/<link>(.*?)<\/link>/)?.[1] ?? "#";
       const pubDate = xml.match(/<pubDate>(.*?)<\/pubDate>/)?.[1] ?? "";
       const descRaw = xml.match(/<description>(.*?)<\/description>/)?.[1] ?? "";
-      const desc = descRaw
-        .replace(/<!\[CDATA\[(.*?)\]\]>/s, "$1")
-        .replace(/<[^>]+>/g, "")
-        .slice(0, 200);
+      const desc = descRaw.replace(/<!\[CDATA\[(.*?)\]\]>/s, "$1");
       const item = {
         id: `${sourceLabel}-${i}`,
         source: sourceLabel,
         title: title.trim(),
-        summary: desc.trim(),
+        summary: decodeHtmlEntities(desc).slice(0, 200),
         url: link.trim(),
         publishedAt: pubDate,
       };
@@ -157,7 +176,7 @@ async function fetchHudRss(): Promise<
         id: `hud-${i}`,
         source: "HUD · Press Release",
         title: title.trim(),
-        summary: descRaw.replace(/<[^>]+>/g, "").slice(0, 200).trim(),
+        summary: decodeHtmlEntities(descRaw).slice(0, 200),
         url: link.trim(),
         publishedAt: pubDate,
       };
@@ -201,3 +220,5 @@ export function createIntelligenceLoopRouter() {
 
   return router;
 }
+
+export { fetchFredRate, fetchGoogleNewsRss, fetchHudRss };

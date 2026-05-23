@@ -5,6 +5,7 @@ import {
   type PaymentFreq,
   type ScheduleResult,
 } from "../../hooks/useAcceleratorMath";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 type Props = {
   monthsSaved: number;
@@ -39,30 +40,35 @@ export function AcceleratorMilestones({
   extraAmt,
   freq,
 }: Props) {
+  const { t } = useLanguage();
   const items: { title: string; sub: string }[] = [];
 
   if (monthsSaved >= 12) {
+    const yearWord = yearsSaved === 1 ? t("tool.accelerator.milestones.year") : t("tool.accelerator.milestones.years");
     const timeTitle =
       moSaved > 0
-        ? `${yearsSaved} year${yearsSaved !== 1 ? "s" : ""} and ${moSaved} months off your mortgage`
-        : `${yearsSaved} year${yearsSaved !== 1 ? "s" : ""} off your mortgage`;
+        ? `${yearsSaved} ${yearWord} ${t("tool.accelerator.milestones.and")} ${moSaved} ${t("tool.accelerator.milestones.monthsOff")}`
+        : `${yearsSaved} ${yearWord} ${t("tool.accelerator.milestones.off")}`;
     items.push({
       title: timeTitle,
-      sub: `You'll own your home free and clear in ${accelPayoff} years instead of ${basePayoff}.`,
+      sub: t("tool.accelerator.milestones.ownSub").replace("{accel}", String(accelPayoff)).replace("{base}", String(basePayoff)),
     });
   }
 
   if (intSaved >= 5000) {
     items.push({
-      title: `${fmt(intSaved)} in interest you keep`,
-      sub: `That money stays in your pocket rather than going to the lender. Most people find this number more surprising than the time savings.`,
+      title: `${fmt(intSaved)} ${t("tool.accelerator.milestones.intKeep")}`,
+      sub: t("tool.accelerator.milestones.intSub"),
     });
   }
 
   if (effectiveReturn > 0) {
+    const returnLabel = t("tool.accelerator.milestones.returnLabel");
     items.push({
-      title: `~${effectiveReturn.toFixed(1)}% guaranteed effective return`,
-      sub: `Every extra dollar toward principal earns a return equal to your interest rate — risk-free. It's one of the most reliable uses of discretionary cash in personal finance.`,
+      title: t("tool.accelerator.milestones.returnTitle")
+        .replace("{pct}", effectiveReturn.toFixed(1))
+        .replace("{returnLabel}", returnLabel),
+      sub: t("tool.accelerator.milestones.returnSub"),
     });
   }
 
@@ -71,23 +77,28 @@ export function AcceleratorMilestones({
     const halfSched = buildSchedule(principal, rate, termMonths, halfMo, 0);
     const halfSaved = base.months - halfSched.months;
     if (halfSaved > 0) {
+      const halfYrs = Math.floor(halfSaved / 12);
       items.push({
-        title: `Even ${fmt(Math.round(extraAmt / 2))}/month saves ${Math.floor(halfSaved / 12)} years`,
-        sub: `The relationship between extra payments and time saved is non-linear. Small amounts still move the needle significantly.`,
+        title: t("tool.accelerator.milestones.halfTitle")
+          .replace("{amount}", fmt(Math.round(extraAmt / 2)))
+          .replace("{perMo}", t("tool.accelerator.milestones.slashPerMo"))
+          .replace("{n}", String(halfYrs))
+          .replace("{years}", t("tool.accelerator.milestones.years")),
+        sub: t("tool.accelerator.milestones.halfSub"),
       });
     }
   }
 
   if (accel.months < base.months && freq !== "onetime") {
     items.push({
-      title: "Equity builds faster — opening more options",
-      sub: `Paying off your loan faster accelerates equity growth, which improves your position for future refinancing, a HELOC, or a move-up purchase.`,
+      title: t("tool.accelerator.milestones.equityTitle"),
+      sub: t("tool.accelerator.milestones.equitySub"),
     });
   }
 
   return (
     <div className="rounded-xl border border-[var(--color-border-tertiary)] bg-white p-5 sm:p-6">
-      <h3 className="font-[Georgia,serif] text-lg font-medium text-[#0B2A4A]">What your extra payments unlock</h3>
+      <h3 className="font-[Georgia,serif] text-lg font-medium text-[#0B2A4A]">{t("tool.accelerator.milestones.title")}</h3>
       <ul className="mt-4 space-y-4">
         {items.map((it) => (
           <li key={it.title} className="flex gap-3">

@@ -39,7 +39,6 @@ import { AgentV2Provider } from "./context/AgentV2Provider";
 import MortgageConcierge from "./components/MortgageConcierge";
 import AnalyticsDashboard from "./pages/AnalyticsDashboard";
 
-// Scroll to top on route change
 const ScrollToTop = () => {
   const { pathname } = useLocation();
   useEffect(() => {
@@ -58,55 +57,53 @@ export default function App() {
   return (
     <Router>
       <ConversationProvider>
-      <MortgageAgentProvider>
-        <AgentV2Provider>
-        <ScrollToTop />
-        <MortgageConcierge />
-        <div className="min-h-screen bg-white font-sans text-slate-900 selection:bg-slate-900 selection:text-white">
-          <Navbar />
-          <main>
-            <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/solutions" element={<Solutions />} />
-            {/* Both slugs render the page (nav + legacy bookmarks) */}
-            <Route path="/how-we-work" element={<HowItWorks />} />
-            <Route path="/how-it-works" element={<HowItWorks />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/smart-tools" element={<SmartTools />} />
-            <Route path="/knowledge-center" element={<KnowledgeCenter />} />
-            <Route path="/analytics" element={<AnalyticsDashboard />} />
-            <Route path="/loan-structure-simulator" element={<LoanSimulator />} />
-            <Route path="/buy-vs-wait" element={<BuyVsWaitAnalyzer />} />
-            <Route path="/refinance-real-math" element={<RefinanceRealMath />} />
-            <Route path="/tools/true-cost-of-waiting" element={<TrueCostOfWaiting />} />
-            <Route path="/tools/buy-vs-rent" element={<BuyVsRent />} />
-            <Route path="/tools/principal-accelerator" element={<PrincipalAccelerator />} />
-            <Route path="/tools/reverse-mortgage-planner" element={<ReverseMortgagePlanner />} />
-            <Route path="/tools/heloc-planner" element={<HelocPlanner />} />
-            <Route path="/tools/conventional-vs-fha" element={<ConventionalVsFHA />} />
-            <Route path="/tools/credit-score-roi" element={<CreditScoreROI />} />
-            <Route path="/tools/self-employed-qualifier" element={<SelfEmployedQualifier />} />
-            <Route path="/tools/rate-lock-engine" element={<RateLockEngine />} />
-            <Route path="/tools/homebuying-power-map" element={<HomebuyingPowerMap />} />
-            <Route path="/tools/wealth-tracker" element={<WealthTracker />} />
-            <Route path="/deal-desk/playbook" element={<DealDeskPlaybook />} />
-            <Route path="/deal-desk/offer-optimizer" element={<OfferOptimizer />} />
-            <Route path="/deal-desk/client-qualifier" element={<ClientQualifier />} />
-            <Route path="/deal-desk/listing-boost" element={<ListingBoost />} />
-            <Route path="/deal-desk/assumable-calculator" element={<AssumableCalculator />} />
-            <Route path="/deal-desk/net-sheet" element={<SellerNetSheet />} />
-            <Route path="/deal-desk/loan-matchmaker" element={<LoanMatchmaker />} />
-            <Route path="/deal-desk/nar-scripts" element={<NARScripts />} />
-            <Route path="/deal-desk/deal-rescue" element={<DealRescue />} />
-            {/* Hub route must come after more specific /deal-desk/* paths */}
-            <Route path="/deal-desk" element={<DealDeskEntry />} />
-            </Routes>
-          </main>
-          <FooterWhenNotAnalytics />
-        </div>
-        </AgentV2Provider>
-      </MortgageAgentProvider>
+        <MortgageAgentProvider>
+          <AgentV2Provider>
+            <ScrollToTop />
+            <MortgageConcierge />
+            <div className="min-h-screen bg-white font-sans text-slate-900 selection:bg-slate-900 selection:text-white">
+              <Navbar />
+              <main>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/solutions" element={<Solutions />} />
+                  <Route path="/how-we-work" element={<HowItWorks />} />
+                  <Route path="/how-it-works" element={<HowItWorks />} />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route path="/smart-tools" element={<SmartTools />} />
+                  <Route path="/knowledge-center" element={<KnowledgeCenter />} />
+                  <Route path="/analytics" element={<AnalyticsDashboard />} />
+                  <Route path="/loan-structure-simulator" element={<LoanSimulator />} />
+                  <Route path="/buy-vs-wait" element={<BuyVsWaitAnalyzer />} />
+                  <Route path="/refinance-real-math" element={<RefinanceRealMath />} />
+                  <Route path="/tools/true-cost-of-waiting" element={<TrueCostOfWaiting />} />
+                  <Route path="/tools/buy-vs-rent" element={<BuyVsRent />} />
+                  <Route path="/tools/principal-accelerator" element={<PrincipalAccelerator />} />
+                  <Route path="/tools/reverse-mortgage-planner" element={<ReverseMortgagePlanner />} />
+                  <Route path="/tools/heloc-planner" element={<HelocPlanner />} />
+                  <Route path="/tools/conventional-vs-fha" element={<ConventionalVsFHA />} />
+                  <Route path="/tools/credit-score-roi" element={<CreditScoreROI />} />
+                  <Route path="/tools/self-employed-qualifier" element={<SelfEmployedQualifier />} />
+                  <Route path="/tools/rate-lock-engine" element={<RateLockEngine />} />
+                  <Route path="/tools/homebuying-power-map" element={<HomebuyingPowerMap />} />
+                  <Route path="/tools/wealth-tracker" element={<WealthTracker />} />
+                  <Route path="/deal-desk/playbook" element={<DealDeskPlaybook />} />
+                  <Route path="/deal-desk/offer-optimizer" element={<OfferOptimizer />} />
+                  <Route path="/deal-desk/client-qualifier" element={<ClientQualifier />} />
+                  <Route path="/deal-desk/listing-boost" element={<ListingBoost />} />
+                  <Route path="/deal-desk/assumable-calculator" element={<AssumableCalculator />} />
+                  <Route path="/deal-desk/net-sheet" element={<SellerNetSheet />} />
+                  <Route path="/deal-desk/loan-matchmaker" element={<LoanMatchmaker />} />
+                  <Route path="/deal-desk/nar-scripts" element={<NARScripts />} />
+                  <Route path="/deal-desk/deal-rescue" element={<DealRescue />} />
+                  <Route path="/deal-desk" element={<DealDeskEntry />} />
+                </Routes>
+              </main>
+              <FooterWhenNotAnalytics />
+            </div>
+          </AgentV2Provider>
+        </MortgageAgentProvider>
       </ConversationProvider>
     </Router>
   );

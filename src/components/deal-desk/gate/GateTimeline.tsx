@@ -46,7 +46,7 @@ export function GateTimeline() {
     <section className="gate-timeline">
       <div className="gate-timeline__inner">
         <header className="gate-timeline__header gate-fade">
-          <h2 className="gate-timeline__title">Five tools. Five moments that move deals.</h2>
+          <h2 className="gate-timeline__title">12 tools. Every moment that moves a deal.</h2>
           <p className="gate-timeline__sub">
             Each tool is built for a specific point in the deal cycle — from listing appointment to closing table.
           </p>

@@ -1,13 +1,6 @@
-export type UseCaseKey = "reno" | "debt" | "edu" | "emergency" | "invest" | "other";
+import { useLanguage } from "../../../i18n/LanguageContext";
 
-const OPTIONS: { key: UseCaseKey; label: string }[] = [
-  { key: "reno", label: "Home renovation" },
-  { key: "debt", label: "Debt consolidation" },
-  { key: "edu", label: "Education" },
-  { key: "emergency", label: "Emergency reserve" },
-  { key: "invest", label: "Investment / rental" },
-  { key: "other", label: "Other / not sure" },
-];
+export type UseCaseKey = "reno" | "debt" | "edu" | "emergency" | "invest" | "other";
 
 type Props = {
   activeUse: UseCaseKey;
@@ -15,6 +8,16 @@ type Props = {
 };
 
 export function HelocUseCaseSelector({ activeUse, onChange }: Props) {
+  const { t } = useLanguage();
+  const OPTIONS: { key: UseCaseKey; label: string }[] = [
+    { key: "reno", label: t("tool.heloc.useCase.reno") },
+    { key: "debt", label: t("tool.heloc.useCase.debt") },
+    { key: "edu", label: t("tool.heloc.useCase.edu") },
+    { key: "emergency", label: t("tool.heloc.useCase.emergency") },
+    { key: "invest", label: t("tool.heloc.useCase.invest") },
+    { key: "other", label: t("tool.heloc.useCase.other") },
+  ];
+
   return (
     <div className="rounded-xl border border-[var(--color-border-tertiary)] bg-white p-4 shadow-sm sm:p-6">
       <div className="mb-4 flex items-center gap-3">
@@ -25,8 +28,8 @@ export function HelocUseCaseSelector({ activeUse, onChange }: Props) {
           </svg>
         </span>
         <div>
-          <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--color-text-tertiary)]">What are you using it for?</p>
-          <h2 className="font-[Georgia,serif] text-lg font-semibold text-[#0B2A4A]">Use case</h2>
+          <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--color-text-tertiary)]">{t("tool.heloc.useCase.eyebrow")}</p>
+          <h2 className="font-[Georgia,serif] text-lg font-semibold text-[#0B2A4A]">{t("tool.heloc.useCase.heading")}</h2>
         </div>
       </div>
       <div className="flex flex-wrap gap-2">

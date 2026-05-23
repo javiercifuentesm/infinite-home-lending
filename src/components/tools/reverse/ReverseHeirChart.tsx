@@ -11,6 +11,7 @@ import {
 import { Bar } from "react-chartjs-2";
 import type { ReverseResult } from "../../../hooks/useReverseMath";
 import { chartYFmt, fmt } from "../../../hooks/useReverseMath";
+import { useLanguage } from "../../../i18n/LanguageContext";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -22,15 +23,20 @@ type Props = {
 };
 
 export function ReverseHeirChart({ results, chartKey }: Props) {
+  const { t } = useLanguage();
+  const heirTitle = t("tool.reverse.heirChart.title");
+  const heirLabel = t("tool.reverse.heirChart.label");
+  const yearPrefix = t("tool.reverse.heirChart.year");
+
   const { data, options } = useMemo(() => {
-    const labels = results.heirData.map((d) => "Year " + d.yr);
+    const labels = results.heirData.map((d) => yearPrefix + d.yr);
     const values = results.heirData.map((d) => Math.max(0, d.equity));
 
     const dataObj = {
       labels,
       datasets: [
         {
-          label: "Equity to heirs",
+          label: heirLabel,
           data: values,
           backgroundColor: BAR_COLORS,
           borderRadius: 4,
@@ -71,13 +77,11 @@ export function ReverseHeirChart({ results, chartKey }: Props) {
     };
 
     return { data: dataObj, options: optionsObj };
-  }, [results]);
+  }, [results, heirLabel, yearPrefix]);
 
   return (
     <div>
-      <h3 className="font-[Georgia,serif] text-lg font-medium text-[#0B2A4A]">
-        What your heirs see — equity projection at years 5, 10, 15, 20
-      </h3>
+      <h3 className="font-[Georgia,serif] text-lg font-medium text-[#0B2A4A]">{heirTitle}</h3>
       <div key={chartKey + "-heir"} className="relative mt-3 h-[180px] w-full">
         <Bar data={data} options={options as never} />
       </div>

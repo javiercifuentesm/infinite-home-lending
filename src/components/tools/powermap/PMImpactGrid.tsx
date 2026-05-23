@@ -1,5 +1,6 @@
 import type { PowerMapInputs, PowerMapResults } from "../../../hooks/usePowerMapMath";
 import { fmtK } from "../../../hooks/usePowerMapMath";
+import { useLanguage } from "../../../i18n/LanguageContext";
 
 type Props = {
   inputs: PowerMapInputs;
@@ -7,6 +8,7 @@ type Props = {
 };
 
 export function PMImpactGrid({ inputs, results }: Props) {
+  const { t } = useLanguage();
   const {
     creditImpactPrice,
     debtImpactPrice,
@@ -16,42 +18,53 @@ export function PMImpactGrid({ inputs, results }: Props) {
     impRate,
   } = results;
   const { creditImp, debtPayoff, incomeGrowth } = inputs;
+  const pts = t("tool.pm.sliders.points");
+
+  const creditLabel = `${t("tool.pm.impact.credit")} (+${creditImp} ${pts})`;
+  const debtLabel = `${t("tool.pm.impact.debt")} ($${debtPayoff}${t("tool.pm.sliders.moReduced")})`;
+  const incomeLabel = `${t("tool.pm.impact.income")} ($${incomeGrowth.toLocaleString("en-US")}${t("tool.pm.sliders.yr")})`;
 
   const cards = [
     {
+      id: "credit",
       border: "#185FA5",
-      label: `Credit improvement (+${creditImp} pts)`,
+      label: creditLabel,
       value: creditImp > 0 ? `+${fmtK(creditImpactPrice)}` : "$0",
       sub:
-        creditImp > 0 ? `Rate: ${baseRate.toFixed(3)}% → ${impRate.toFixed(3)}%` : "Adjust slider above",
+        creditImp > 0
+          ? `${t("tool.pm.impact.rate")} ${baseRate.toFixed(3)}% → ${impRate.toFixed(3)}%`
+          : t("tool.pm.impact.adjustSlider"),
     },
     {
+      id: "debt",
       border: "#3B6D11",
-      label: `Debt payoff ($${debtPayoff}/mo)`,
+      label: debtLabel,
       value: debtPayoff > 0 ? `+${fmtK(debtImpactPrice)}` : "$0",
-      sub: debtPayoff > 0 ? "DTI improves, more room for mortgage" : "Adjust slider above",
+      sub: debtPayoff > 0 ? t("tool.pm.impact.debtSub") : t("tool.pm.impact.adjustSlider"),
     },
     {
+      id: "savings",
       border: "#C6A15B",
-      label: "12-mo savings projection",
+      label: t("tool.pm.impact.savings"),
       value: fmtK(m12Savings),
-      sub: "Total saved toward down payment in 12 months",
+      sub: t("tool.pm.impact.savingsSub"),
     },
     {
+      id: "income",
       border: "#854F0B",
-      label: `Income growth ($${incomeGrowth.toLocaleString("en-US")}/yr)`,
+      label: incomeLabel,
       value: incomeGrowth > 0 ? `+${fmtK(incomeImpactPrice)}` : "$0",
-      sub: incomeGrowth > 0 ? "More qualifying income, more home" : "Adjust slider above",
+      sub: incomeGrowth > 0 ? t("tool.pm.impact.incomeSub") : t("tool.pm.impact.adjustSlider"),
     },
   ];
 
   return (
     <div>
-      <h3 className="font-[Georgia,serif] text-[15px] font-medium text-[#0B2A4A]">How each improvement moves the needle</h3>
+      <h3 className="font-[Georgia,serif] text-[15px] font-medium text-[#0B2A4A]">{t("tool.pm.impact.title")}</h3>
       <div className="mt-4 grid gap-3 sm:grid-cols-2">
         {cards.map((c) => (
           <div
-            key={c.label}
+            key={c.id}
             className="rounded-lg border border-slate-200/80 bg-slate-50/90 p-4 pl-5"
             style={{ borderLeftWidth: "3px", borderLeftColor: c.border }}
           >

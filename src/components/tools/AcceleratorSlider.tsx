@@ -1,12 +1,7 @@
+import { useMemo } from "react";
 import type { PaymentFreq } from "../../hooks/useAcceleratorMath";
 import type { AcceleratorFormState } from "./AcceleratorInputs";
-
-const FREQS: { id: PaymentFreq; label: string; badge: string }[] = [
-  { id: "monthly", label: "Monthly", badge: "Monthly extra" },
-  { id: "biweekly", label: "Bi-weekly", badge: "Bi-weekly extra (→ monthly equivalent)" },
-  { id: "annual", label: "Annual lump sum", badge: "Annual lump sum (spread monthly)" },
-  { id: "onetime", label: "One-time payment", badge: "One-time principal reduction" },
-];
+import { useLanguage } from "../../i18n/LanguageContext";
 
 type Props = {
   inputs: AcceleratorFormState;
@@ -14,13 +9,24 @@ type Props = {
 };
 
 export function AcceleratorSlider({ inputs, onChange }: Props) {
+  const { t } = useLanguage();
+  const freqs = useMemo(
+    (): { id: PaymentFreq; label: string; badge: string }[] => [
+      { id: "monthly", label: t("tool.accelerator.freq.monthly"), badge: t("tool.accelerator.badge.monthly") },
+      { id: "biweekly", label: t("tool.accelerator.freq.biweekly"), badge: t("tool.accelerator.badge.biweekly") },
+      { id: "annual", label: t("tool.accelerator.freq.annual"), badge: t("tool.accelerator.badge.annual") },
+      { id: "onetime", label: t("tool.accelerator.freq.onetime"), badge: t("tool.accelerator.badge.onetime") },
+    ],
+    [t],
+  );
+
   const patch = (p: Partial<AcceleratorFormState>) => onChange({ ...inputs, ...p });
-  const badge = FREQS.find((f) => f.id === inputs.freq)?.badge ?? "";
+  const badge = freqs.find((f) => f.id === inputs.freq)?.badge ?? "";
 
   return (
     <div className="rounded-xl border border-[var(--color-border-tertiary)] bg-white p-4 shadow-sm sm:p-5">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-        <h3 className="font-[Georgia,serif] text-lg font-medium text-[#0B2A4A]">Extra payment toward principal</h3>
+        <h3 className="font-[Georgia,serif] text-lg font-medium text-[#0B2A4A]">{t("tool.accelerator.slider.title")}</h3>
         <span className="inline-flex max-w-full rounded-lg bg-[var(--color-background-secondary)] px-2.5 py-1 text-[11px] font-medium text-[#0B2A4A]">
           {badge}
         </span>
@@ -36,7 +42,7 @@ export function AcceleratorSlider({ inputs, onChange }: Props) {
           value={inputs.extra}
           onInput={(e) => patch({ extra: Number((e.target as HTMLInputElement).value) })}
           onChange={(e) => patch({ extra: Number(e.target.value) })}
-          aria-label="Extra payment amount"
+          aria-label={t("tool.accelerator.slider.ariaLabel")}
         />
         <p className="shrink-0 text-center font-[Georgia,serif] text-2xl font-semibold tabular-nums text-[#0B2A4A] sm:min-w-[5.5rem] sm:text-right">
           {new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(
@@ -46,7 +52,7 @@ export function AcceleratorSlider({ inputs, onChange }: Props) {
       </div>
 
       <div className="mt-5 flex flex-wrap gap-2">
-        {FREQS.map(({ id, label }) => {
+        {freqs.map(({ id, label }) => {
           const active = inputs.freq === id;
           return (
             <button

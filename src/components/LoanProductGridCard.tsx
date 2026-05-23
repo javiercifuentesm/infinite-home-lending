@@ -12,14 +12,15 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import type { LoanCategoryId, LoanProductData } from "./LoanProductCard";
+import { useLanguage } from "../i18n/LanguageContext";
 
 /** Max bullets under highlight line */
 const CARD_BULLET_CAP = 3;
 
-const CATEGORY_POSITION: Record<LoanCategoryId, string> = {
-  purchase: "Purchase",
-  refinance: "Refinance",
-  equity: "Home equity",
+const CATEGORY_I18N_KEY: Record<LoanCategoryId, string> = {
+  purchase: "solutions.category.purchase",
+  refinance: "solutions.category.refinance",
+  equity: "solutions.category.equity",
 };
 
 /** Insight callout: warm fill, soft radius, gold accent; `**phrase**` for emphasis */
@@ -90,10 +91,11 @@ export function LoanProductGridCard({
   guidedDimmed = false,
   recentlyViewed = false,
 }: LoanProductGridCardProps) {
+  const { t } = useLanguage();
   const productTag = product.tags?.[0];
   const bullets = product.highlights.slice(0, CARD_BULLET_CAP);
   const Icon = LOAN_ICONS[product.id] ?? Landmark;
-  const categoryLabel = CATEGORY_POSITION[product.category];
+  const categoryLabel = t(CATEGORY_I18N_KEY[product.category]);
   const featured = Boolean(product.featuredCard);
 
   const inactiveShell = (() => {
@@ -167,7 +169,7 @@ export function LoanProductGridCard({
         </ul>
 
         <span className="flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-gold pt-0.5">
-          Explore this option
+          {t("solutions.learnMore")}
           <ChevronRight
             className="w-3.5 h-3.5 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5 motion-reduce:group-hover:translate-x-0"
             strokeWidth={2}

@@ -1,6 +1,7 @@
 import type { ChangeEvent, Dispatch, SetStateAction } from "react";
 import { motion, type HTMLMotionProps } from "motion/react";
 import { CurrencyInput } from "./PurchasePathFlow";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 export type RefinanceFlowStep =
   | "inactive"
@@ -38,34 +39,6 @@ export const initialRefinanceData = (): RefinanceDataState => ({
   debtConsolidation: "",
 });
 
-const GOAL_OPTIONS = [
-  { id: "lower_payment", label: "Lower my monthly payment" },
-  { id: "reduce_rate", label: "Reduce my interest rate" },
-  { id: "cash_out", label: "Access cash from my home" },
-  { id: "consolidate_debt", label: "Consolidate debt" },
-  { id: "unsure", label: "Not sure yet" },
-] as const;
-
-const TIMELINE_OPTIONS = [
-  { id: "lt1", label: "Less than 1 year ago" },
-  { id: "y1_3", label: "1–3 years ago" },
-  { id: "y3_5", label: "3–5 years ago" },
-  { id: "y5p", label: "5+ years ago" },
-  { id: "unsure", label: "Not sure" },
-] as const;
-
-const CASH_OUT_OPTIONS = [
-  { id: "yes" as const, label: "Yes" },
-  { id: "no" as const, label: "No" },
-  { id: "unsure" as const, label: "Not sure" },
-] as const;
-
-const DEBT_OPTIONS = [
-  { id: "yes" as const, label: "Yes" },
-  { id: "no" as const, label: "No" },
-  { id: "maybe" as const, label: "Maybe" },
-] as const;
-
 /** Digits + one decimal; single trailing % — conversational rate entry */
 export function formatRate(value: string): string {
   const noPct = value.replace(/%/g, "");
@@ -99,12 +72,6 @@ function refiStepDomId(step: Exclude<RefinanceFlowStep, "inactive" | "complete">
   return getRefinanceStepScrollId(step);
 }
 
-const microLine = (
-  <p className="mx-auto max-w-[32rem] px-2 text-center font-sans text-[12px] leading-relaxed text-[#6B7280] sm:text-[13px]">
-    Optional — share what you can. We&apos;ll guide you either way.
-  </p>
-);
-
 const skipBtnClass =
   "purchase-skip-btn w-full border-0 bg-transparent p-2 font-sans text-[13px] text-[#6B7280] transition-colors hover:text-[#0B2A4A]";
 
@@ -132,6 +99,42 @@ export function RefinancePathStep({
   onSkip,
   onStepInteraction,
 }: Props) {
+  const { t } = useLanguage();
+
+  const GOAL_OPTIONS = [
+    { id: "lower_payment", label: t("contact.refi.goal.lowerPayment") },
+    { id: "reduce_rate", label: t("contact.refi.goal.reduceRate") },
+    { id: "cash_out", label: t("contact.refi.goal.cashOut") },
+    { id: "consolidate_debt", label: t("contact.refi.goal.consolidate") },
+    { id: "unsure", label: t("contact.refi.goal.unsure") },
+  ];
+
+  const TIMELINE_OPTIONS = [
+    { id: "lt1", label: t("contact.refi.timeline.lt1") },
+    { id: "y1_3", label: t("contact.refi.timeline.y1_3") },
+    { id: "y3_5", label: t("contact.refi.timeline.y3_5") },
+    { id: "y5p", label: t("contact.refi.timeline.y5p") },
+    { id: "unsure", label: t("contact.refi.timeline.unsure") },
+  ];
+
+  const CASH_OUT_OPTIONS = [
+    { id: "yes" as const, label: t("contact.refi.cashOut.yes") },
+    { id: "no" as const, label: t("contact.refi.cashOut.no") },
+    { id: "unsure" as const, label: t("contact.refi.cashOut.unsure") },
+  ];
+
+  const DEBT_OPTIONS = [
+    { id: "yes" as const, label: t("contact.refi.debt.yes") },
+    { id: "no" as const, label: t("contact.refi.debt.no") },
+    { id: "maybe" as const, label: t("contact.refi.debt.maybe") },
+  ];
+
+  const microLine = (
+    <p className="mx-auto max-w-[32rem] px-2 text-center font-sans text-[12px] leading-relaxed text-[#6B7280] sm:text-[13px]">
+      {t("contact.refi.microLine")}
+    </p>
+  );
+
   const inputClass =
     "purchase-input-field w-full rounded-xl border border-[#E5E7EB] bg-white px-4 py-3.5 font-sans text-navy outline-none transition-colors focus:border-[#C6A15B] focus:shadow-[0_0_0_2px_rgba(198,161,91,0.15)]";
 
@@ -139,11 +142,11 @@ export function RefinancePathStep({
     return (
       <motion.div id={refiStepDomId("intro")} key="refi-intro" className="form-step space-y-6" {...stepMotion}>
         <p className="mx-auto max-w-[34rem] text-center font-sans text-[13px] leading-relaxed text-slate-500 sm:text-[14px]">
-          The more we understand about your current situation, the better we can guide you.
-          <span className="mt-2 block text-slate-500/95">You can share as much or as little as you&apos;d like.</span>
+          {t("contact.refi.intro.body1")}
+          <span className="mt-2 block text-slate-500/95">{t("contact.refi.intro.body2")}</span>
         </p>
         <button type="button" className={skipBtnClass} onClick={onSkip}>
-          Skip for now
+          {t("contact.refi.skip")}
         </button>
       </motion.div>
     );
@@ -153,7 +156,7 @@ export function RefinancePathStep({
     return (
       <motion.div id={refiStepDomId("goal")} key="refi-goal" className="form-step space-y-5" {...stepMotion}>
         <h2 className="text-balance text-center font-heading text-lg font-semibold text-[#0B2A4A] sm:text-xl">
-          What would you like to accomplish?
+          {t("contact.refi.goal.question")}
         </h2>
         {microLine}
         <div className="option-group grid grid-cols-1 gap-3">
@@ -174,7 +177,7 @@ export function RefinancePathStep({
           ))}
         </div>
         <button type="button" className={skipBtnClass} onClick={onSkip}>
-          Skip for now
+          {t("contact.refi.skip")}
         </button>
       </motion.div>
     );
@@ -184,12 +187,12 @@ export function RefinancePathStep({
     return (
       <motion.div id={refiStepDomId("address")} key="refi-address" className="form-step space-y-5" {...stepMotion}>
         <h2 className="text-balance text-center font-heading text-lg font-semibold text-[#0B2A4A] sm:text-xl">
-          What&apos;s the property address?
+          {t("contact.refi.address.question")}
         </h2>
         {microLine}
         <div className="option-group mx-auto w-full max-w-[520px] space-y-2 text-left">
           <label htmlFor="sc-refi-address" className="font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">
-            Address <span className="font-normal text-slate-400">(optional)</span>
+            {t("contact.refi.address.label")} <span className="font-normal text-slate-400">{t("contact.refi.address.optional")}</span>
           </label>
           <input
             id="sc-refi-address"
@@ -201,12 +204,12 @@ export function RefinancePathStep({
               setRefinanceData((d) => ({ ...d, address: e.target.value }));
               onStepInteraction?.();
             }}
-            placeholder="Street, city, state"
+            placeholder={t("contact.refi.address.placeholder")}
             className={`${inputClass} text-center`}
           />
         </div>
         <button type="button" className={skipBtnClass} onClick={onSkip}>
-          Skip for now
+          {t("contact.refi.skip")}
         </button>
       </motion.div>
     );
@@ -216,7 +219,7 @@ export function RefinancePathStep({
     return (
       <motion.div id={refiStepDomId("balance")} key="refi-balance" className="form-step space-y-4" {...stepMotion}>
         <h2 className="text-balance text-center font-heading text-lg font-semibold text-[#0B2A4A] sm:text-xl">
-          About how much do you currently owe?
+          {t("contact.refi.balance.question")}
         </h2>
         {microLine}
         <div className="option-group mx-auto w-full max-w-[320px]">
@@ -236,7 +239,7 @@ export function RefinancePathStep({
           />
         </div>
         <button type="button" className={skipBtnClass} onClick={onSkip}>
-          Skip for now
+          {t("contact.refi.skip")}
         </button>
       </motion.div>
     );
@@ -246,7 +249,7 @@ export function RefinancePathStep({
     return (
       <motion.div id={refiStepDomId("rate")} key="refi-rate" className="form-step space-y-4" {...stepMotion}>
         <h2 className="text-balance text-center font-heading text-lg font-semibold text-[#0B2A4A] sm:text-xl">
-          What&apos;s your current interest rate?
+          {t("contact.refi.rate.question")}
         </h2>
         {microLine}
         <div className="option-group mx-auto w-full max-w-[320px]">
@@ -270,7 +273,7 @@ export function RefinancePathStep({
           />
         </div>
         <button type="button" className={skipBtnClass} onClick={onSkip}>
-          Skip for now
+          {t("contact.refi.skip")}
         </button>
       </motion.div>
     );
@@ -280,10 +283,10 @@ export function RefinancePathStep({
     return (
       <motion.div id={refiStepDomId("timeline")} key="refi-timeline" className="form-step space-y-5" {...stepMotion}>
         <h2 className="text-balance text-center font-heading text-lg font-semibold text-[#0B2A4A] sm:text-xl">
-          When did you purchase your home?
+          {t("contact.refi.timeline.question")}
         </h2>
         <p className="mx-auto max-w-[28rem] text-center font-sans text-[12px] leading-relaxed text-slate-500 sm:text-[13px]">
-          Helps estimate equity and break-even timing.
+          {t("contact.refi.timeline.body")}
         </p>
         {microLine}
         <div className="option-group grid grid-cols-1 gap-3">
@@ -304,7 +307,7 @@ export function RefinancePathStep({
           ))}
         </div>
         <button type="button" className={skipBtnClass} onClick={onSkip}>
-          Skip for now
+          {t("contact.refi.skip")}
         </button>
       </motion.div>
     );
@@ -314,7 +317,7 @@ export function RefinancePathStep({
     return (
       <motion.div id={refiStepDomId("value")} key="refi-value" className="form-step space-y-4" {...stepMotion}>
         <h2 className="text-balance text-center font-heading text-lg font-semibold text-[#0B2A4A] sm:text-xl">
-          What do you think your home is worth today?
+          {t("contact.refi.value.question")}
         </h2>
         {microLine}
         <div className="option-group mx-auto w-full max-w-[320px]">
@@ -334,7 +337,7 @@ export function RefinancePathStep({
           />
         </div>
         <button type="button" className={skipBtnClass} onClick={onSkip}>
-          Skip for now
+          {t("contact.refi.skip")}
         </button>
       </motion.div>
     );
@@ -344,7 +347,7 @@ export function RefinancePathStep({
     return (
       <motion.div id={refiStepDomId("cashOut")} key="refi-cash" className="form-step space-y-5" {...stepMotion}>
         <h2 className="text-balance text-center font-heading text-lg font-semibold text-[#0B2A4A] sm:text-xl">
-          Would you like to access funds from your home equity?
+          {t("contact.refi.cashOut.question")}
         </h2>
         {microLine}
         <div className="option-group grid grid-cols-1 gap-3">
@@ -365,7 +368,7 @@ export function RefinancePathStep({
           ))}
         </div>
         <button type="button" className={skipBtnClass} onClick={onSkip}>
-          Skip for now
+          {t("contact.refi.skip")}
         </button>
       </motion.div>
     );
@@ -375,7 +378,7 @@ export function RefinancePathStep({
     return (
       <motion.div id={refiStepDomId("debt")} key="refi-debt" className="form-step space-y-5" {...stepMotion}>
         <h2 className="text-balance text-center font-heading text-lg font-semibold text-[#0B2A4A] sm:text-xl">
-          Are you looking to consolidate debt?
+          {t("contact.refi.debt.question")}
         </h2>
         {microLine}
         <div className="option-group grid grid-cols-1 gap-3">
@@ -396,7 +399,7 @@ export function RefinancePathStep({
           ))}
         </div>
         <button type="button" className={skipBtnClass} onClick={onSkip}>
-          Skip for now
+          {t("contact.refi.skip")}
         </button>
       </motion.div>
     );

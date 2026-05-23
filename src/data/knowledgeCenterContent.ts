@@ -1,5 +1,7 @@
 /** Educational blurbs for Knowledge Center — advisory framing, not blog posts. */
 
+import { CLARITY_CARDS_ES, GLOSSARY_ENTRIES_ES, KNOWLEDGE_PILLARS_ES } from "./knowledgeCenterContent.es";
+
 export type PillarBlock = {
   id: string;
   title: string;
@@ -167,3 +169,15 @@ export const GLOSSARY_ENTRIES: GlossaryEntry[] = [
   { term: "Refinance", letter: "R", definition: "Replacing your mortgage with a new one — often to change rate, term, or access equity." },
   { term: "Underwriting", letter: "U", definition: "The lender’s process of verifying your information and approving the loan." },
 ];
+
+export function getKnowledgePillars(lang?: string): PillarBlock[] {
+  return lang === "es" ? KNOWLEDGE_PILLARS_ES : KNOWLEDGE_PILLARS;
+}
+
+export function getClarityCards(lang?: string): ClarityCard[] {
+  return lang === "es" ? CLARITY_CARDS_ES : CLARITY_CARDS;
+}
+
+export function getGlossaryEntries(lang?: string): GlossaryEntry[] {
+  return lang === "es" ? GLOSSARY_ENTRIES_ES : GLOSSARY_ENTRIES;
+}

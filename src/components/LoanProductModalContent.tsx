@@ -1,9 +1,8 @@
 import { ChevronDown } from "lucide-react";
 import { useId, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
+import { useLanguage } from "../i18n/LanguageContext";
 import type { LoanProductData } from "./LoanProductCard";
-
-const SECONDARY_CTA = { label: "Speak with an advisor", to: "/contact" as const };
 
 type CollapsibleSectionProps = {
   sectionId: string;
@@ -64,20 +63,23 @@ type LoanProductModalContentProps = {
  * Identical structure for every loan type.
  */
 export function LoanProductModalContent({ product, titleId }: LoanProductModalContentProps) {
+  const { t } = useLanguage();
+  const SECONDARY_CTA = { label: t("solutions.modal.secondaryCta"), to: "/contact" as const };
+
   const baseId = useId();
   const d = product.modalDetail;
   const { expanded } = product;
 
   const glanceRows: { label: string; value: string }[] = [
-    { label: "Best for", value: d.atAGlance.bestFor },
+    { label: t("solutions.modal.bestFor"), value: d.atAGlance.bestFor },
   ];
   if (d.atAGlance.minCredit) {
-    glanceRows.push({ label: "Minimum credit", value: d.atAGlance.minCredit });
+    glanceRows.push({ label: t("solutions.modal.minCredit"), value: d.atAGlance.minCredit });
   }
   if (d.atAGlance.downPayment) {
-    glanceRows.push({ label: "Down payment", value: d.atAGlance.downPayment });
+    glanceRows.push({ label: t("solutions.modal.downPayment"), value: d.atAGlance.downPayment });
   }
-  glanceRows.push({ label: "Key advantage", value: d.atAGlance.keyAdvantage });
+  glanceRows.push({ label: t("solutions.modal.keyAdvantage"), value: d.atAGlance.keyAdvantage });
 
   return (
     <div className="space-y-8 pb-2">
@@ -91,7 +93,7 @@ export function LoanProductModalContent({ product, titleId }: LoanProductModalCo
 
       <div className="rounded-[4px] border border-slate-200/90 bg-white p-5 md:p-6 shadow-[0_4px_24px_rgba(10,25,47,0.04)]">
         <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-3">
-          When this makes sense
+          {t("solutions.modal.whenMakesSense")}
         </p>
         <ul className="text-sm text-slate-600 leading-relaxed font-light list-disc pl-5 space-y-2">
           {d.whenMakesSenseBullets.map((line, i) => (
@@ -101,7 +103,7 @@ export function LoanProductModalContent({ product, titleId }: LoanProductModalCo
       </div>
 
       <div className="rounded-[4px] border border-slate-200/90 bg-surface/60 p-5 md:p-6">
-        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-4">At a glance</p>
+        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-4">{t("solutions.modal.atAGlance")}</p>
         <dl className="space-y-3.5">
           {glanceRows.map((row) => (
             <div key={row.label} className="grid grid-cols-1 sm:grid-cols-[minmax(0,7.5rem)_1fr] gap-1 sm:gap-4 sm:items-baseline">
@@ -113,7 +115,7 @@ export function LoanProductModalContent({ product, titleId }: LoanProductModalCo
       </div>
 
       <div className="rounded-[4px] border border-slate-200/90">
-        <CollapsibleSection sectionId={`${baseId}-overview`} title="Overview">
+        <CollapsibleSection sectionId={`${baseId}-overview`} title={t("solutions.modal.overview")}>
           <div className="space-y-4 text-sm text-slate-600 font-light leading-relaxed">
             {d.overviewParagraphs.map((para, i) => (
               <p key={i}>{para}</p>
@@ -121,7 +123,7 @@ export function LoanProductModalContent({ product, titleId }: LoanProductModalCo
           </div>
         </CollapsibleSection>
 
-        <CollapsibleSection sectionId={`${baseId}-who`} title="Who This Is Typically Used For">
+        <CollapsibleSection sectionId={`${baseId}-who`} title={t("solutions.modal.whoFor")}>
           <ul className="text-sm text-slate-600 font-medium leading-relaxed list-disc pl-5 space-y-2">
             {d.whoTypically.map((line, i) => (
               <li key={i}>{line}</li>
@@ -129,7 +131,7 @@ export function LoanProductModalContent({ product, titleId }: LoanProductModalCo
           </ul>
         </CollapsibleSection>
 
-        <CollapsibleSection sectionId={`${baseId}-req`} title="Key Requirements">
+        <CollapsibleSection sectionId={`${baseId}-req`} title={t("solutions.modal.requirements")}>
           <ul className="text-sm text-slate-600 font-medium leading-relaxed list-disc pl-5 space-y-2">
             {d.keyRequirements.map((line, i) => (
               <li key={i}>{line}</li>
@@ -137,7 +139,7 @@ export function LoanProductModalContent({ product, titleId }: LoanProductModalCo
           </ul>
         </CollapsibleSection>
 
-        <CollapsibleSection sectionId={`${baseId}-why`} title="Why Clients Choose It">
+        <CollapsibleSection sectionId={`${baseId}-why`} title={t("solutions.modal.whyChoose")}>
           <ul className="text-sm text-slate-600 font-medium leading-relaxed list-disc pl-5 space-y-2">
             {d.whyClientsChoose.map((line, i) => (
               <li key={i}>{line}</li>
@@ -145,7 +147,7 @@ export function LoanProductModalContent({ product, titleId }: LoanProductModalCo
           </ul>
         </CollapsibleSection>
 
-        <CollapsibleSection sectionId={`${baseId}-mind`} title="What to Keep in Mind">
+        <CollapsibleSection sectionId={`${baseId}-mind`} title={t("solutions.modal.keepInMind")}>
           <ul className="text-sm text-slate-600 font-medium leading-relaxed list-disc pl-5 space-y-2">
             {d.whatToKeepInMind.map((line, i) => (
               <li key={i}>{line}</li>
@@ -160,9 +162,9 @@ export function LoanProductModalContent({ product, titleId }: LoanProductModalCo
             to="/tools/reverse-mortgage-planner"
             className="font-semibold text-navy underline decoration-gold/40 hover:text-gold"
           >
-            Use the Retirement Planner →
+            {t("solutions.modal.reverseLink")}
           </Link>{" "}
-          Compare strategies, your income gap, and inheritance projections side by side.
+          {t("solutions.modal.reversePost")}
         </p>
       ) : null}
       {product.id === "heloc" ? (
@@ -171,9 +173,9 @@ export function LoanProductModalContent({ product, titleId }: LoanProductModalCo
             to="/tools/heloc-planner"
             className="font-semibold text-navy underline decoration-gold/40 hover:text-gold"
           >
-            Use the HELOC Smart Planner →
+            {t("solutions.modal.helocLink")}
           </Link>{" "}
-          Model the draw-to-repayment journey, rate scenarios, and how a HELOC compares to a home equity loan or cash-out refi.
+          {t("solutions.modal.helocPost")}
         </p>
       ) : null}
       {product.id === "conventional" || product.id === "fha" ? (
@@ -183,19 +185,19 @@ export function LoanProductModalContent({ product, titleId }: LoanProductModalCo
               to="/tools/conventional-vs-fha"
               className="font-semibold text-navy underline decoration-gold/40 hover:text-gold"
             >
-              Compare Conventional vs. FHA →
+              {t("solutions.modal.fhaLink")}
             </Link>{" "}
-            See the MI crossover year, cumulative cost over your stay, and the FHA-to-Conventional refi strategy with your numbers.
+            {t("solutions.modal.fhaPost")}
           </p>
           <p className="text-sm text-slate-600 leading-relaxed font-light">
-            Self-employed? Use our{" "}
+            {t("solutions.modal.selfEmployedPre")}{" "}
             <Link
               to="/tools/self-employed-qualifier"
               className="font-semibold text-navy underline decoration-gold/40 hover:text-gold"
             >
-              Self-Employed Mortgage Qualifier →
+              {t("solutions.modal.selfEmployedLink")}
             </Link>{" "}
-            to model Schedule C, bank statement, and planning paths the way underwriters do.
+            {t("solutions.modal.selfEmployedPost")}
           </p>
         </>
       ) : null}

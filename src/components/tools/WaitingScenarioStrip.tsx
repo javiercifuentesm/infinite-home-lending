@@ -1,4 +1,5 @@
-import { fmt, fmtK, scenarioLabel } from "../../hooks/useWaitingMath";
+import { fmt, fmtK, scenarioLabelI18n } from "../../hooks/useWaitingMath";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 type Props = {
   waitMonths: number;
@@ -7,6 +8,7 @@ type Props = {
 };
 
 export function WaitingScenarioStrip({ waitMonths, scenarioData, onSelect }: Props) {
+  const { t } = useLanguage();
   const active = Math.max(1, Math.floor(waitMonths));
 
   return (
@@ -26,11 +28,12 @@ export function WaitingScenarioStrip({ waitMonths, scenarioData, onSelect }: Pro
             } bg-[var(--tcw-surface,#fff)]`}
           >
             <p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--tcw-text-muted,#64748b)]">
-              {scenarioLabel(mo)}
+              {scenarioLabelI18n(mo, t)}
             </p>
             <p className="mt-2 font-[Georgia,serif] text-[17px] font-medium text-[#A32D2D]">{fmtK(row.totalCost)}</p>
             <p className="mt-1 text-[10px] text-[var(--tcw-text-muted,#64748b)]">
-              {fmt(row.monthlyCostRate)}/mo
+              {fmt(row.monthlyCostRate)}
+              {t("tool.waiting.strip.perMo")}
             </p>
           </button>
         );

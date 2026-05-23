@@ -12,7 +12,7 @@ export function useDealDeskAuth() {
     if (VALID_CODES.map((c) => c.toUpperCase()).includes(normalized)) {
       const expires = new Date();
       expires.setDate(expires.getDate() + COOKIE_DAYS);
-      document.cookie = `${COOKIE_NAME}=valid; expires=${expires.toUTCString()}; path=/`;
+      document.cookie = `${COOKIE_NAME}=valid; expires=${expires.toUTCString()}; path=/; SameSite=Lax`;
       return true;
     }
     return false;

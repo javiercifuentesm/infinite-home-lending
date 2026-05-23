@@ -1,5 +1,6 @@
 import type { ReverseInputs, ReverseResult } from "../../../hooks/useReverseMath";
 import { fmt, fmtK } from "../../../hooks/useReverseMath";
+import { useLanguage } from "../../../i18n/LanguageContext";
 
 export type StratId = "lump" | "tenure" | "term" | "loc";
 
@@ -10,62 +11,65 @@ type Props = {
   onSelectStrat: (id: StratId) => void;
 };
 
-const STRATS: {
-  id: StratId;
-  badge: string;
-  badgeClass: string;
-  name: string;
-  desc: string;
-  best: string;
-}[] = [
-  {
-    id: "lump",
-    badge: "Lump sum",
-    badgeClass: "bg-[#FAEEDA] text-[#633806]",
-    name: "One-time lump sum",
-    desc: "Receive all proceeds at closing. Fixed rate. Best for paying off debt, funding large purchases, or emergency reserves.",
-    best: "Best if: you have immediate large financial needs",
-  },
-  {
-    id: "tenure",
-    badge: "Monthly income",
-    badgeClass: "bg-[#EAF3DE] text-[#27500A]",
-    name: "Lifetime monthly payments",
-    desc: "Guaranteed monthly payment for as long as you live in the home. Payment continues even if balance exceeds home value.",
-    best: "Best if: you need steady income to cover monthly expenses",
-  },
-  {
-    id: "term",
-    badge: "Term payments",
-    badgeClass: "bg-[#E6F1FB] text-[#0C447C]",
-    name: "Fixed-term payments (10 yr)",
-    desc: "Higher monthly payments for a fixed period (e.g., 10 years to bridge until a pension or Social Security increase kicks in).",
-    best: "Best if: you need income for a specific window of time",
-  },
-  {
-    id: "loc",
-    badge: "Most flexible",
-    badgeClass: "bg-[rgba(198,161,91,0.15)] text-[#854F0B]",
-    name: "Line of credit",
-    desc: "Access funds when needed. Unused credit grows at rate + 0.5% — it gets LARGER over time. Protects against future market downturns.",
-    best: "Best if: you want a financial safety net that grows",
-  },
-];
-
 export function ReverseStrategyGrid({ inputs, results, activeStrat, onSelectStrat }: Props) {
+  const { t } = useLanguage();
   const { netPL, tenurePayment, termPayment } = results;
   const rateLabel = (inputs.intRate + 0.5).toFixed(1);
+
+  const STRATS: {
+    id: StratId;
+    badge: string;
+    badgeClass: string;
+    name: string;
+    desc: string;
+    best: string;
+  }[] = [
+    {
+      id: "lump",
+      badge: t("tool.reverse.strategy.lump.badge"),
+      badgeClass: "bg-[#FAEEDA] text-[#633806]",
+      name: t("tool.reverse.strategy.lump.name"),
+      desc: t("tool.reverse.strategy.lump.desc"),
+      best: t("tool.reverse.strategy.lump.best"),
+    },
+    {
+      id: "tenure",
+      badge: t("tool.reverse.strategy.tenure.badge"),
+      badgeClass: "bg-[#EAF3DE] text-[#27500A]",
+      name: t("tool.reverse.strategy.tenure.name"),
+      desc: t("tool.reverse.strategy.tenure.desc"),
+      best: t("tool.reverse.strategy.tenure.best"),
+    },
+    {
+      id: "term",
+      badge: t("tool.reverse.strategy.term.badge"),
+      badgeClass: "bg-[#E6F1FB] text-[#0C447C]",
+      name: t("tool.reverse.strategy.term.name"),
+      desc: t("tool.reverse.strategy.term.desc"),
+      best: t("tool.reverse.strategy.term.best"),
+    },
+    {
+      id: "loc",
+      badge: t("tool.reverse.strategy.loc.badge"),
+      badgeClass: "bg-[rgba(198,161,91,0.15)] text-[#854F0B]",
+      name: t("tool.reverse.strategy.loc.name"),
+      desc: t("tool.reverse.strategy.loc.desc"),
+      best: t("tool.reverse.strategy.loc.best"),
+    },
+  ];
+
+  const perMo = t("tool.reverse.strategy.perMo");
 
   const amountFor = (id: StratId): string => {
     switch (id) {
       case "lump":
         return fmt(netPL);
       case "tenure":
-        return fmt(tenurePayment) + "/mo";
+        return fmt(tenurePayment) + perMo;
       case "term":
-        return fmt(termPayment) + "/mo";
+        return fmt(termPayment) + perMo;
       case "loc":
-        return fmtK(netPL) + " growing at " + rateLabel + "%";
+        return t("tool.reverse.strategy.locAmount").replace("{amt}", fmtK(netPL)).replace("{rate}", rateLabel);
       default:
         return "";
     }
@@ -73,7 +77,7 @@ export function ReverseStrategyGrid({ inputs, results, activeStrat, onSelectStra
 
   return (
     <div>
-      <h3 className="font-[Georgia,serif] text-lg font-medium text-[#0B2A4A]">Compare payout strategies</h3>
+      <h3 className="font-[Georgia,serif] text-lg font-medium text-[#0B2A4A]">{t("tool.reverse.strategy.title")}</h3>
       <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
         {STRATS.map((s) => {
           const active = activeStrat === s.id;

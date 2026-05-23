@@ -12,7 +12,6 @@ const SCROLL_MAP = [
   { time: 0, sectionId: "gate-hero", label: "hero" },
   { time: 14, sectionId: "gate-tools", label: "tools" },
   { time: 35, sectionId: "gate-why", label: "why" },
-  { time: 62, sectionId: "gate-timeline", label: "timeline" },
   { time: 115, sectionId: "gate-diff", label: "differentiators" },
   { time: 133, sectionId: "gate-access", label: "access" },
 ] as const;

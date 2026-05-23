@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Compass, MessageCircle, Shield, Sparkles } from "lucide-react";
 import { IHLLogo } from "../components/IHLLogo";
 import { PageContainer } from "../components/PageContainer";
+import { useLanguage } from "../i18n/LanguageContext";
 
 /** Hero: Mid-Atlantic suburban aerial — brick and siding, streets and driveways (watermark trimmed). */
 const IMG_HERO_RESIDENTIAL = "/about/about-hero-aerial.png";
@@ -17,43 +18,18 @@ const IMG_APPROACH_HOME = "/about/about-single-family.png";
 const FOUNDER_PUBLIC_SRC = "/about/javier-cifuentes-founder.jpg";
 const COFOUNDER_PUBLIC_SRC = "/about/alma-jaramillo-portrait.jpg";
 
-const MORTGAGE_WANTS_GRID = [
-  {
-    title: "Straight answers",
-    body: "Plain language and honest context—not a wall of jargon when the stakes are high.",
-    Icon: MessageCircle,
-  },
-  {
-    title: "Room to explore",
-    body: "Real options to compare so you can move forward with confidence, not guesswork.",
-    Icon: Compass,
-  },
-  {
-    title: "Guidance that fits",
-    body: "Advice shaped to your situation—not a one-size script that ignores the nuances.",
-    Icon: Sparkles,
-  },
-  {
-    title: "A plan you can trust",
-    body: "A structure that still makes sense years from now—whether it&apos;s your first home or your next chapter.",
-    Icon: Shield,
-  },
-] as const;
+const MORTGAGE_WANTS_GRID = (t: (k: string) => string) => [
+  { title: t("about.wants.straightAnswers.title"), body: t("about.wants.straightAnswers.body"), Icon: MessageCircle },
+  { title: t("about.wants.roomToExplore.title"), body: t("about.wants.roomToExplore.body"), Icon: Compass },
+  { title: t("about.wants.guidanceThatFits.title"), body: t("about.wants.guidanceThatFits.body"), Icon: Sparkles },
+  { title: t("about.wants.planYouCanTrust.title"), body: t("about.wants.planYouCanTrust.body"), Icon: Shield },
+];
 
-const CORE_VALUES = [
-  {
-    title: "Strategic Thinking",
-    body: "We approach every mortgage as a financial decision — aligning structure with your long-term direction.",
-  },
-  {
-    title: "Clear Communication",
-    body: "We keep you informed at every step, so you always know where things stand and what comes next.",
-  },
-  {
-    title: "Disciplined Execution",
-    body: "We manage every loan with precision, structure, and attention to detail from start to finish.",
-  },
-] as const;
+const CORE_VALUES = (t: (k: string) => string) => [
+  { title: t("about.coreValues.strategic.title"), body: t("about.coreValues.strategic.body") },
+  { title: t("about.coreValues.communication.title"), body: t("about.coreValues.communication.body") },
+  { title: t("about.coreValues.execution.title"), body: t("about.coreValues.execution.body") },
+];
 
 function LeadershipPortrait(props: {
   src: string;
@@ -126,6 +102,11 @@ function LeadershipPortrait(props: {
 
 export default function About() {
   const reduceMotion = useReducedMotion();
+  const { t, lang } = useLanguage();
+
+  useEffect(() => {
+    document.title = t("about.eyebrow") + " | Infinite Home Lending";
+  }, [lang, t]);
 
   return (
     <PageContainer>
@@ -140,21 +121,20 @@ export default function About() {
                 transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
               >
                 <span className="type-eyebrow inline-block px-5 py-2 bg-surface text-gold rounded-[4px] mb-7 border border-slate-100">
-                  About Infinite Home Lending
+                  {t("about.eyebrow")}
                 </span>
                 <h1 className="type-display mb-7 max-w-[22ch] text-[2.65rem] sm:text-5xl md:text-6xl lg:text-[4.1rem] xl:text-[4.35rem] leading-[1.05]">
-                  A more thoughtful way to approach home financing
+                  {t("about.hero.title")}
                 </h1>
-                <p className="type-body-lg mb-10 max-w-2xl">
-                  Most mortgage decisions are made around numbers alone. We believe they should be built around your
-                  life.
+                <p className="type-body text-slate-600 text-lg leading-[1.65] mb-10 max-w-2xl">
+                  {t("about.hero.body")}
                 </p>
                 <div className="flex flex-col sm:flex-row gap-8">
                   <Link
                     to="/contact?topic=loan-strategy"
                     className="btn-primary flex items-center justify-center gap-3 group"
                   >
-                    Start with strategy
+                    {t("about.startPreApproval")}
                     <ArrowRight size={20} className="transition-transform group-hover:translate-x-1" aria-hidden />
                   </Link>
                 </div>
@@ -200,15 +180,14 @@ export default function About() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20 items-center">
             <div className="max-w-xl lg:py-4">
               <h2 className="type-editorial-section-title text-[1.85rem] sm:text-3xl lg:text-[2.35rem] mb-8 leading-[1.08] max-w-[22ch]">
-                A more intentional path forward
+                {t("about.narrative.title")}
               </h2>
               <div className="space-y-5">
-                <p className="type-body text-slate-600">
-                  Most home financing today feels transactional — built for speed, not fit.
+                <p className="type-body text-slate-600 leading-[1.72]">
+                  {t("about.narrative.body1")}
                 </p>
-                <p className="type-body text-slate-600">
-                  For something as important as a home, that falls short. We believe the work should be built around your
-                  goals, timeline, and where you&apos;re headed — not just the next approval.
+                <p className="type-body text-slate-600 leading-[1.72]">
+                  {t("about.narrative.body2")}
                 </p>
               </div>
             </div>
@@ -231,7 +210,7 @@ export default function About() {
                 />
                 <blockquote className="type-editorial-pullquote mb-0 m-0 border-l-2 border-gold/40 pl-5 relative z-10">
                   <p className="m-0">
-                    A home loan should fit the life you&apos;re building — not just the numbers on a page.
+                    {t("about.narrative.pullQuote")}
                   </p>
                 </blockquote>
               </article>
@@ -256,19 +235,17 @@ export default function About() {
             </div>
             <div className="order-2 max-w-xl min-w-0">
               <h2 className="type-editorial-section-title text-[1.85rem] sm:text-3xl lg:text-[2.35rem] mb-8 leading-[1.08] max-w-[22ch]">
-                We don&apos;t just find loans. We structure decisions.
+                {t("about.approach.title")}
               </h2>
               <div className="space-y-5">
                 <p className="type-body text-slate-600">
-                  We start by understanding your full financial picture — not just what you qualify for, but what actually
-                  makes sense.
+                  {t("about.approach.body1")}
                 </p>
                 <p className="type-body text-slate-600">
-                  From there, we structure financing options that align with your priorities — so you see not only what
-                  you can do, but what you should do.
+                  {t("about.approach.body2")}
                 </p>
                 <p className="type-body text-navy text-[15px] lg:text-base font-medium">
-                  The right structure doesn&apos;t just get you approved — it sets you up for what comes next.
+                  {t("about.approach.body3")}
                 </p>
               </div>
             </div>
@@ -281,15 +258,14 @@ export default function About() {
           <div className="max-w-2xl mx-auto text-center border-l-[3px] border-l-gold/35 pl-6 sm:pl-8 py-2">
             <div className="mx-auto mb-8 h-px w-12 bg-gold/45" aria-hidden />
             <h2 className="type-editorial-section-title text-[1.85rem] sm:text-3xl lg:text-[2.35rem] mb-8 leading-[1.08] max-w-[22ch] mx-auto">
-              Not all loans are created equal
+              {t("about.loanStructure.title")}
             </h2>
             <div className="space-y-5 text-left">
               <p className="type-body text-slate-600">
-                Two borrowers can qualify for the same loan — and still make very different decisions. The difference is
-                structure: term, payment flexibility, and how the pieces fit your plans.
+                {t("about.loanStructure.body1")}
               </p>
               <p className="type-body text-slate-600">
-                That&apos;s where we spend our time — before you commit.
+                {t("about.loanStructure.body2")}
               </p>
             </div>
           </div>
@@ -301,15 +277,14 @@ export default function About() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20 lg:items-center">
             <div className="max-w-xl min-w-0">
               <h2 className="type-editorial-section-title text-[1.85rem] sm:text-3xl lg:text-[2.35rem] mb-8 leading-[1.08] max-w-[22ch]">
-                The cost of getting it wrong
+                {t("about.costOfWrong.title")}
               </h2>
               <div className="space-y-5">
                 <p className="type-body text-slate-600">
-                  The full weight of a mortgage rarely hits on closing day. It shows up later — in flexibility, opportunity,
-                  and whether your financing still fits as life changes.
+                  {t("about.costOfWrong.body1")}
                 </p>
                 <p className="type-body text-slate-600">
-                  We&apos;d rather surface that tradeoff before you sign than help you unwind it years down the road.
+                  {t("about.costOfWrong.body2")}
                 </p>
               </div>
             </div>
@@ -321,13 +296,13 @@ export default function About() {
                 />
                 <div className="relative z-10 mx-auto max-w-[min(100%,22rem)] text-center flex flex-col justify-center my-auto">
                   <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.22em] text-white/50 mb-6">
-                    Reality most people miss
+                    {t("about.costOfWrong.calloutLabel")}
                   </p>
                   <p className="font-heading text-[1.75rem] sm:text-[2.125rem] lg:text-[2.35rem] text-white font-semibold leading-[1.2] tracking-[-0.03em]">
-                    The impact of a mortgage decision
+                    {t("about.costOfWrong.calloutTitle")}
                   </p>
                   <p className="font-heading text-[1.35rem] sm:text-[1.65rem] lg:text-[1.85rem] text-white/72 italic leading-[1.5] tracking-[-0.02em] mt-3">
-                    is often felt later — not upfront.
+                    {t("about.costOfWrong.calloutSub")}
                   </p>
                 </div>
               </div>
@@ -340,10 +315,10 @@ export default function About() {
         <div className="max-w-7xl mx-auto px-6">
           <header className="max-w-3xl mb-14 lg:mb-20">
             <h2 className="type-editorial-section-title text-[1.85rem] sm:text-3xl lg:text-[2.35rem] mb-4 leading-[1.08] text-navy">
-              Our Leadership
+              {t("about.title")}
             </h2>
-            <p className="type-body text-slate-600 text-[17px] leading-[1.7] max-w-2xl">
-              Experience, perspective, and a shared commitment to doing things differently.
+            <p className="type-body text-slate-600 text-[1.0625rem] leading-[1.72] max-w-2xl">
+              {t("about.subtitle")}
             </p>
           </header>
 
@@ -356,7 +331,7 @@ export default function About() {
             transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
           >
             <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-navy/40 mb-6">
-              Founder
+              {t("about.founder")}
             </p>
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 xl:gap-16 lg:items-start">
               <div className="lg:col-span-5 order-2 lg:order-1 flex w-full justify-center lg:justify-start self-start mt-0 mb-2 sm:mb-3 lg:mb-0">
@@ -369,55 +344,23 @@ export default function About() {
                 />
               </div>
               <div className="lg:col-span-7 order-1 lg:order-2 min-w-0 self-start text-left py-0 px-0 sm:px-2 lg:pl-0 lg:pr-8 lg:pt-0 lg:pb-2">
-                <p className="text-[17px] leading-[1.7] text-slate-600 font-sans mb-8 max-w-[42rem]">
-                  When we started Infinite Home Lending, it came from a simple observation.
+                <p className="type-body text-slate-600 mb-8 max-w-[42rem] text-[1.0625rem] leading-[1.72]">
+                  {t("about.founderMessage.opening")}
                 </p>
-                <div className="space-y-5 text-[17px] leading-[1.7] text-slate-600 font-sans text-pretty [overflow-wrap:break-word] [word-break:normal] max-w-[42rem]">
-                  <p>
-                    After more than two decades in the mortgage industry—leading teams, navigating different market
-                    cycles, and working through thousands of real client scenarios—we saw a consistent pattern. Too many
-                    people were making one of the most important financial decisions of their lives without clarity,
-                    without enough options, and without a real strategy behind it. It wasn&apos;t that people weren&apos;t
-                    asking the right questions; it&apos;s that the process itself wasn&apos;t built to support them. Too
-                    often, the incentives in the broader mortgage ecosystem still reward speed and volume over fit, which
-                    can leave borrowers moving forward without the full picture they deserve.
-                  </p>
-                  <p>
-                    Most mortgage experiences are designed to close loans, not to guide decisions. And that difference
-                    matters more than most people realize when the stakes are this high: a mortgage is not a one-time
-                    product. It is a lever that affects how you build equity, how you absorb financial shocks, and how
-                    much flexibility you retain when life changes.
-                  </p>
+                <div className="space-y-5 text-slate-600 font-sans text-pretty [overflow-wrap:break-word] [word-break:normal] max-w-[42rem] text-[1.0625rem] leading-[1.72]">
+                  <p>{t("about.founderMessage.p1")}</p>
+                  <p>{t("about.founderMessage.p2")}</p>
                   <blockquote className="font-heading text-[1.15rem] sm:text-[1.2rem] italic text-navy/90 leading-[1.65] border-l-[3px] border-gold/35 pl-5 pr-2 my-6 py-1 mx-0">
-                    <p className="mb-0">
-                      Because you&apos;re not just choosing a loan. You&apos;re choosing how your life moves forward—how
-                      flexible your future is, how confident you feel in your decisions, and how prepared you are when life
-                      inevitably changes.
-                    </p>
+                    <p className="mb-0">{t("about.founderMessage.pullQuote")}</p>
                   </blockquote>
-                  <p>
-                    Over the years, we&apos;ve seen how the structure of a loan can either support someone&apos;s
-                    long-term plans—or quietly limit them. And in many cases, that impact isn&apos;t fully understood until
-                    much later, when it is harder to adjust.
-                  </p>
-                  <p>
-                    That&apos;s why we built Infinite Home Lending differently. We focus on structure before product,
-                    understanding before commitment, and guidance that actually reflects your goals—not just what fits into a
-                    system. As an independent brokerage, we are positioned to align with the borrower, not with a single
-                    lender&apos;s menu, so we can be direct about tradeoffs and about what holds up over time.
-                  </p>
-                  <p>
-                    Our role is simple: to help you understand your options, think through your decisions, and move forward
-                    with confidence.
-                  </p>
-                  <p>
-                    That&apos;s the standard we hold ourselves to, and that&apos;s the experience we aim to deliver to every
-                    client we work with.
-                  </p>
+                  <p>{t("about.founderMessage.p3")}</p>
+                  <p>{t("about.founderMessage.p4")}</p>
+                  <p>{t("about.founderMessage.p5")}</p>
+                  <p>{t("about.founderMessage.p6")}</p>
                 </div>
                 <div className="mt-8 pt-6 border-t border-slate-200/70 text-left">
                   <p className="font-heading text-lg text-navy font-medium tracking-[-0.02em]">— Javier Cifuentes</p>
-                  <p className="type-body-sm text-slate-500 mt-2 font-normal">Founder &amp; Managing Member</p>
+                  <p className="type-body-sm text-slate-500 mt-2 font-normal">{t("about.founder")}</p>
                 </div>
               </div>
             </div>
@@ -431,10 +374,10 @@ export default function About() {
             transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
           >
             <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-navy/40 mb-6">
-              Co-Founder
+              {t("about.coFounder")}
             </p>
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 xl:gap-16 lg:items-start">
-              <div className="lg:col-span-5 order-1 lg:order-2 flex w-full justify-center lg:justify-end self-start mt-0 mb-2 sm:mb-3 lg:mb-0">
+              <div className="lg:col-span-5 order-2 lg:order-2 flex w-full justify-center lg:justify-end self-start mt-0 mb-2 sm:mb-3 lg:mb-0">
                 <LeadershipPortrait
                   variant="premium"
                   src={COFOUNDER_PUBLIC_SRC}
@@ -443,47 +386,24 @@ export default function About() {
                   placeholderFilename="alma-jaramillo-portrait.jpg"
                 />
               </div>
-              <div className="lg:col-span-7 order-2 lg:order-1 min-w-0 self-start text-left py-0 px-0 sm:px-2 lg:pr-2 lg:pl-8 lg:pt-0 lg:pb-2">
-                <p className="text-[17px] leading-[1.7] text-slate-600 font-sans mb-8 max-w-[42rem]">
-                  In every loan I&apos;ve worked on, there&apos;s a point where the numbers stop being just numbers and the
-                  decision becomes real.
+              <div className="lg:col-span-7 order-1 lg:order-1 min-w-0 self-start text-left py-0 px-0 sm:px-2 lg:pr-2 lg:pl-8 lg:pt-0 lg:pb-2">
+                <p className="type-body text-slate-600 mb-8 max-w-[42rem] text-[1.0625rem] leading-[1.72]">
+                  {t("about.coFounderMessage.opening")}
                 </p>
-                <div className="space-y-5 text-[17px] leading-[1.7] text-slate-600 font-sans text-pretty [overflow-wrap:break-word] [word-break:normal] max-w-[42rem]">
-                  <p>
-                    It&apos;s a family preparing for a new chapter, a client trying to make the right choice with
-                    incomplete information, or someone whose financial situation doesn&apos;t fit neatly into a standard
-                    process and requires a deeper level of understanding.
-                  </p>
-                  <p>That&apos;s where our role truly begins.</p>
-                  <p>
-                    Over the past 20+ years, I&apos;ve worked with a wide range of borrowers, including self-employed
-                    clients, layered credit profiles, and scenarios that require patience, precision, and thoughtful
-                    structuring rather than a rushed outcome.
-                  </p>
-                  <p>
-                    What I&apos;ve seen consistently is that when people feel heard and fully understand their options,
-                    they make better decisions—not necessarily faster, but with greater clarity and confidence.
-                  </p>
-                  <p>The difference is in how the process is approached.</p>
-                  <p>
-                    It&apos;s reflected in the conversations that happen early, the details that are carefully evaluated,
-                    and the ability to structure a loan in a way that aligns with how someone actually lives—not just what
-                    guidelines allow on paper.
-                  </p>
-                  <p>That&apos;s the standard I bring to every client interaction.</p>
-                  <p>
-                    At Infinite Home Lending, we don&apos;t approach this process as a checklist. We approach it as a
-                    responsibility—to guide, to simplify, and to ensure that every decision is made with full context,
-                    both for today and for what comes next.
-                  </p>
-                  <p>
-                    When that level of clarity is present, clients feel more confident, and the outcome becomes something
-                    they can truly stand behind.
-                  </p>
+                <div className="space-y-5 text-slate-600 font-sans text-pretty [overflow-wrap:break-word] [word-break:normal] max-w-[42rem] text-[1.0625rem] leading-[1.72]">
+                  <p>{t("about.coFounderMessage.p1")}</p>
+                  <p>{t("about.coFounderMessage.p2")}</p>
+                  <p>{t("about.coFounderMessage.p3")}</p>
+                  <p>{t("about.coFounderMessage.p4")}</p>
+                  <p>{t("about.coFounderMessage.p5")}</p>
+                  <p>{t("about.coFounderMessage.p6")}</p>
+                  <p>{t("about.coFounderMessage.p7")}</p>
+                  <p>{t("about.coFounderMessage.p8")}</p>
+                  <p>{t("about.coFounderMessage.p9")}</p>
                 </div>
                 <div className="mt-8 pt-6 border-t border-slate-200/70 text-left">
                   <p className="font-heading text-lg text-navy font-medium tracking-[-0.02em]">— Alma Jaramillo</p>
-                  <p className="type-body-sm text-slate-500 mt-2 font-normal">Co-Founder</p>
+                  <p className="type-body-sm text-slate-500 mt-2 font-normal">{t("about.coFounder")}</p>
                 </div>
               </div>
             </div>
@@ -503,26 +423,25 @@ export default function About() {
                 id="clarity-manifesto-heading"
                 className="font-heading font-semibold text-[1.85rem] sm:text-[2.25rem] lg:text-[2.65rem] xl:text-[2.85rem] text-navy leading-[1.12] tracking-[-0.035em] mb-8 lg:mb-10 text-balance"
               >
-                Clarity changes everything.
+                {t("about.clarity.heading")}
               </p>
               <p className="text-[1.0625rem] sm:text-[1.125rem] lg:text-[1.1875rem] leading-[1.65] text-slate-600 font-sans max-w-2xl mx-auto text-pretty">
-                When you understand your options, everything else becomes easier—the decisions, the timing, the confidence
-                to move forward.
+                {t("about.clarity.body")}
               </p>
             </div>
 
             <h2 className="type-editorial-section-title text-[1.85rem] sm:text-3xl lg:text-[2.35rem] mb-5 lg:mb-6 leading-[1.08] max-w-[24ch] text-navy mx-auto">
-              What people really want from a mortgage experience
+              {t("about.clarity.wantsTitle")}
             </h2>
-            <p className="text-[17px] leading-[1.7] text-slate-600 font-sans max-w-[42rem] mx-auto mb-12 lg:mb-14 text-pretty">
-              Most people aren&apos;t looking for more noise.
+            <p className="type-body text-slate-600 max-w-[42rem] mx-auto mb-12 lg:mb-14 text-pretty text-[1.0625rem] leading-[1.72]">
+              {t("about.clarity.wantsBody")}
               <span className="block mt-3">
-                They&apos;re looking for clarity, confidence, and someone who actually understands their situation.
+                {t("about.clarity.wantsBody2")}
               </span>
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 lg:gap-10 w-full max-w-[52rem] mx-auto text-left">
-              {MORTGAGE_WANTS_GRID.map(({ title, body, Icon }) => (
+              {MORTGAGE_WANTS_GRID(t).map(({ title, body, Icon }) => (
                 <div
                   key={title}
                   className="flex h-full flex-col gap-4 rounded-[4px] border border-slate-200/90 bg-white p-6 lg:p-8 shadow-[0_8px_28px_rgba(10,25,47,0.04)] transition-[transform,box-shadow] duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_20px_48px_rgba(10,25,47,0.1)] motion-reduce:hover:translate-y-0"
@@ -534,7 +453,7 @@ export default function About() {
                     <h3 className="font-heading text-lg sm:text-xl text-navy tracking-[-0.02em] leading-snug mb-2">
                       {title}
                     </h3>
-                    <p className="text-[15px] lg:text-[16px] leading-[1.7] text-slate-600 font-sans">{body}</p>
+                    <p className="type-body text-[15px] lg:text-base leading-[1.7]">{body}</p>
                   </div>
                 </div>
               ))}
@@ -545,7 +464,7 @@ export default function About() {
                 <span className="text-gold/45 not-italic select-none text-[1.35em] leading-none align-top" aria-hidden>
                   &ldquo;
                 </span>
-                That&apos;s the bar we believe every borrower deserves.
+                {t("about.clarity.pullQuote")}
                 <span className="text-gold/45 not-italic select-none text-[1.35em] leading-none align-top" aria-hidden>
                   &rdquo;
                 </span>
@@ -560,7 +479,7 @@ export default function About() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="max-w-3xl mx-auto text-center pb-8 lg:pb-10">
             <h2 className="type-section-title-lg text-[2rem] sm:text-[2.35rem] lg:text-[2.65rem] max-w-[24ch] mx-auto leading-[1.18] tracking-[-0.03em] text-navy">
-              More options. Deeper understanding.
+              {t("about.independent.title")}
             </h2>
           </div>
           <div className="flex flex-col items-center gap-8 pt-2">
@@ -570,11 +489,10 @@ export default function About() {
               <div className="h-px flex-1 bg-gradient-to-l from-transparent to-slate-300/80" aria-hidden />
             </div>
             <div className="max-w-2xl mx-auto text-center space-y-4">
-              <p className="type-body text-slate-600">Most lenders can only offer what they have.</p>
-              <p className="type-body text-navy text-[15px] lg:text-base font-medium">We&apos;re built differently.</p>
-              <p className="type-body text-slate-600">
-                As an independent brokerage, we work across a broad network of lending partners — so we can structure
-                financing around your situation instead of forcing it into a narrow menu.
+              <p className="type-body text-slate-600 leading-[1.72]">{t("about.independent.body1")}</p>
+              <p className="type-body text-navy text-[15px] lg:text-base font-medium leading-[1.72]">{t("about.independent.body2")}</p>
+              <p className="type-body text-slate-600 leading-[1.72]">
+                {t("about.independent.body3")}
               </p>
             </div>
           </div>
@@ -584,7 +502,7 @@ export default function About() {
       <section className="section-y bg-white overflow-hidden border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10 items-stretch">
-            {CORE_VALUES.map((item) => (
+            {CORE_VALUES(t).map((item) => (
               <div
                 key={item.title}
                 className="relative p-10 lg:p-12 rounded-[4px] bg-white border border-slate-200/90 shadow-[0_14px_40px_rgba(10,25,47,0.05)]"
@@ -592,7 +510,7 @@ export default function About() {
                 <h3 className="mb-5 font-heading font-semibold text-navy text-xl sm:text-2xl tracking-[-0.02em] leading-snug">
                   {item.title}
                 </h3>
-                <p className="type-body text-slate-600 text-[15px] lg:text-base">{item.body}</p>
+                <p className="type-body text-slate-600 text-[15px] lg:text-base leading-[1.7]">{item.body}</p>
               </div>
             ))}
           </div>
@@ -607,17 +525,17 @@ export default function About() {
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="max-w-2xl mx-auto text-center">
             <h2 className="type-section-title-lg text-white mb-6 text-[2rem] sm:text-4xl lg:text-[3rem] leading-[1.15] tracking-[-0.03em]">
-              Ready for a mortgage experience built around your life?
+              {t("about.finalCta.title")}
             </h2>
             <p className="font-sans text-lg sm:text-xl text-slate-400 mb-12 max-w-xl mx-auto leading-[1.65]">
-              No pressure. Just a clear, structured path forward.
+              {t("about.finalCta.body")}
             </p>
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-6 sm:gap-7">
               <Link
                 to="/contact"
                 className="btn-gold inline-flex items-center justify-center gap-2.5 shadow-[0_10px_40px_rgba(197,160,89,0.28)] hover:shadow-[0_18px_52px_rgba(197,160,89,0.45)] hover:-translate-y-0.5 motion-reduce:hover:translate-y-0 transition-all duration-300 relative overflow-hidden group/btn"
               >
-                <span className="relative z-10">Start Your Pre-Approval</span>
+                <span className="relative z-10">{t("about.startPreApproval")}</span>
                 <ArrowRight
                   size={18}
                   className="relative z-10 transition-transform duration-300 group-hover/btn:translate-x-0.5"
@@ -629,7 +547,7 @@ export default function About() {
                 to="/contact?topic=loan-strategy"
                 className="text-center text-sm font-semibold text-white/85 border-b border-white/25 pb-0.5 hover:text-white hover:border-white/50 transition-colors duration-300 sm:py-[1.125rem]"
               >
-                Prefer to talk strategy first?
+                {t("about.finalCta.talkStrategy")}
               </Link>
             </div>
           </div>

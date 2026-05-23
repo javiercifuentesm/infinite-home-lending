@@ -1,6 +1,7 @@
 import type { Dispatch, SetStateAction } from "react";
 import { motion, type HTMLMotionProps } from "motion/react";
 import { CurrencyInput } from "./PurchasePathFlow";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 export type HelocFlowStep =
   | "inactive"
@@ -29,49 +30,6 @@ export const initialHelocData = (): HelocDataState => ({
   creditProfile: "",
   timeline: "",
 });
-
-const PURPOSE_OPTIONS = [
-  { id: "home_improvements", label: "Home improvements" },
-  { id: "debt_consolidation", label: "Debt consolidation" },
-  { id: "flexible_funds", label: "Access to flexible funds" },
-  { id: "major_expense", label: "Major expense (education, medical, or life events)" },
-  { id: "unsure", label: "Not sure yet" },
-] as const;
-
-const ACCESS_OPTIONS = [
-  { id: "under_25k", label: "Under $25,000" },
-  { id: "range_25_75", label: "$25,000 – $75,000" },
-  { id: "range_75_150", label: "$75,000 – $150,000" },
-  { id: "over_150k", label: "$150,000+" },
-  { id: "unsure", label: "Not sure yet" },
-] as const;
-
-const CREDIT_OPTIONS = [
-  { id: "excellent", label: "Excellent (720+)" },
-  { id: "good", label: "Good (680–720)" },
-  { id: "fair", label: "Fair (620–680)" },
-  { id: "unsure", label: "Not sure" },
-] as const;
-
-const TIMELINE_OPTIONS = [
-  { id: "exploring", label: "Exploring options" },
-  { id: "few_months", label: "Within the next few months" },
-  { id: "ready_soon", label: "Ready soon" },
-  { id: "quick", label: "Need access quickly" },
-] as const;
-
-const microLine = (
-  <p className="mx-auto max-w-[32rem] px-2 text-center font-sans text-[12px] leading-relaxed text-[#6B7280] sm:text-[13px]">
-    Optional — share what you can. We&apos;ll guide you either way.
-  </p>
-);
-
-/** Global optional disclaimer — same tone as purchase/refi microcopy. */
-const helocGlobalDisclaimer = (
-  <p className="mx-auto max-w-[36rem] px-2 text-center font-sans text-[12px] leading-relaxed text-[#6B7280] sm:text-[13px]">
-    The more you share, the better we can prepare to guide you — but everything here is optional.
-  </p>
-);
 
 const skipBtnClass =
   "skip-button purchase-skip-btn w-full border-0 bg-transparent p-2 font-sans text-[13px] text-[#6B7280] transition-colors hover:text-[#0B2A4A]";
@@ -132,6 +90,50 @@ export function HelocPathStep({
   onAdvanceAfterTileAnswer,
   onCompleteFlow,
 }: Props) {
+  const { t } = useLanguage();
+
+  const PURPOSE_OPTIONS = [
+    { id: "home_improvements", label: t("contact.heloc.purpose.improvements") },
+    { id: "debt_consolidation", label: t("contact.heloc.purpose.debt") },
+    { id: "flexible_funds", label: t("contact.heloc.purpose.flexible") },
+    { id: "major_expense", label: t("contact.heloc.purpose.major") },
+    { id: "unsure", label: t("contact.heloc.purpose.unsure") },
+  ];
+
+  const ACCESS_OPTIONS = [
+    { id: "under_25k", label: t("contact.heloc.amount.under25") },
+    { id: "range_25_75", label: t("contact.heloc.amount.25_75") },
+    { id: "range_75_150", label: t("contact.heloc.amount.75_150") },
+    { id: "over_150k", label: t("contact.heloc.amount.over150") },
+    { id: "unsure", label: t("contact.heloc.amount.unsure") },
+  ];
+
+  const CREDIT_OPTIONS = [
+    { id: "excellent", label: t("contact.heloc.credit.excellent") },
+    { id: "good", label: t("contact.heloc.credit.good") },
+    { id: "fair", label: t("contact.heloc.credit.fair") },
+    { id: "unsure", label: t("contact.heloc.credit.unsure") },
+  ];
+
+  const TIMELINE_OPTIONS = [
+    { id: "exploring", label: t("contact.heloc.timeline.exploring") },
+    { id: "few_months", label: t("contact.heloc.timeline.fewMonths") },
+    { id: "ready_soon", label: t("contact.heloc.timeline.readySoon") },
+    { id: "quick", label: t("contact.heloc.timeline.quick") },
+  ];
+
+  const microLine = (
+    <p className="mx-auto max-w-[32rem] px-2 text-center font-sans text-[12px] leading-relaxed text-[#6B7280] sm:text-[13px]">
+      {t("contact.heloc.microLine")}
+    </p>
+  );
+
+  const helocGlobalDisclaimer = (
+    <p className="mx-auto max-w-[36rem] px-2 text-center font-sans text-[12px] leading-relaxed text-[#6B7280] sm:text-[13px]">
+      {t("contact.heloc.globalDisclaimer")}
+    </p>
+  );
+
   if (helocFlowStep === "purpose") {
     return (
       <motion.div
@@ -141,11 +143,11 @@ export function HelocPathStep({
         {...stepMotion}
       >
         <p className="mx-auto max-w-[34rem] text-center font-sans text-[13px] leading-relaxed text-slate-600 sm:text-[14px]">
-          We&apos;ll use this to structure the smartest way to access your equity — not just any option.
+          {t("contact.heloc.purpose.intro")}
         </p>
         {helocGlobalDisclaimer}
         <h2 className="text-balance text-center font-heading text-lg font-semibold text-[#0B2A4A] sm:text-xl">
-          What are you looking to accomplish with your home equity?
+          {t("contact.heloc.purpose.question")}
         </h2>
         {microLine}
         <div className="option-group grid grid-cols-1 gap-3">
@@ -166,7 +168,7 @@ export function HelocPathStep({
           ))}
         </div>
         <button type="button" className={skipBtnClass} onClick={onSkip}>
-          Skip for now
+          {t("contact.heloc.skip")}
         </button>
       </motion.div>
     );
@@ -182,10 +184,10 @@ export function HelocPathStep({
       >
         {helocGlobalDisclaimer}
         <h2 className="text-balance text-center font-heading text-lg font-semibold text-[#0B2A4A] sm:text-xl">
-          Do you have an idea of what your property is worth?
+          {t("contact.heloc.value.question")}
         </h2>
         <p className="mx-auto max-w-[30rem] text-center font-sans text-[12px] leading-relaxed text-slate-500 sm:text-[13px]">
-          An estimate is perfectly fine — we&apos;ll help refine it if needed.
+          {t("contact.heloc.value.body")}
         </p>
         {microLine}
         <div className="option-group mx-auto w-full max-w-[320px]">
@@ -205,7 +207,7 @@ export function HelocPathStep({
           />
         </div>
         <button type="button" className={skipBtnClass} onClick={onSkip}>
-          Skip for now
+          {t("contact.heloc.skip")}
         </button>
       </motion.div>
     );
@@ -221,10 +223,10 @@ export function HelocPathStep({
       >
         {helocGlobalDisclaimer}
         <h2 className="text-balance text-center font-heading text-lg font-semibold text-[#0B2A4A] sm:text-xl">
-          What&apos;s your current mortgage balance?
+          {t("contact.heloc.balance.question")}
         </h2>
         <p className="mx-auto max-w-[30rem] text-center font-sans text-[12px] leading-relaxed text-slate-500 sm:text-[13px]">
-          Optional — helps us estimate your available equity.
+          {t("contact.heloc.balance.body")}
         </p>
         {microLine}
         <div className="option-group mx-auto w-full max-w-[320px]">
@@ -244,7 +246,7 @@ export function HelocPathStep({
           />
         </div>
         <button type="button" className={skipBtnClass} onClick={onSkip}>
-          Skip for now
+          {t("contact.heloc.skip")}
         </button>
       </motion.div>
     );
@@ -260,7 +262,7 @@ export function HelocPathStep({
       >
         {helocGlobalDisclaimer}
         <h2 className="text-balance text-center font-heading text-lg font-semibold text-[#0B2A4A] sm:text-xl">
-          How much access to your equity are you considering?
+          {t("contact.heloc.amount.question")}
         </h2>
         {microLine}
         <div className="option-group grid grid-cols-1 gap-3">
@@ -281,7 +283,7 @@ export function HelocPathStep({
           ))}
         </div>
         <button type="button" className={skipBtnClass} onClick={onSkip}>
-          Skip for now
+          {t("contact.heloc.skip")}
         </button>
       </motion.div>
     );
@@ -297,10 +299,10 @@ export function HelocPathStep({
       >
         {helocGlobalDisclaimer}
         <h2 className="text-balance text-center font-heading text-lg font-semibold text-[#0B2A4A] sm:text-xl">
-          Do you have a general sense of your credit?
+          {t("contact.heloc.credit.question")}
         </h2>
         <p className="mx-auto max-w-[30rem] text-center font-sans text-[12px] leading-relaxed text-slate-500 sm:text-[13px]">
-          A rough sense is plenty — no exact score needed.
+          {t("contact.heloc.credit.body")}
         </p>
         {microLine}
         <div className="option-group grid grid-cols-1 gap-3">
@@ -321,7 +323,7 @@ export function HelocPathStep({
           ))}
         </div>
         <button type="button" className={skipBtnClass} onClick={onSkip}>
-          Skip for now
+          {t("contact.heloc.skip")}
         </button>
       </motion.div>
     );
@@ -337,7 +339,7 @@ export function HelocPathStep({
       >
         {helocGlobalDisclaimer}
         <h2 className="text-balance text-center font-heading text-lg font-semibold text-[#0B2A4A] sm:text-xl">
-          How soon are you looking to move forward?
+          {t("contact.heloc.timeline.question")}
         </h2>
         {microLine}
         <div className="option-group grid grid-cols-1 gap-3">
@@ -358,7 +360,7 @@ export function HelocPathStep({
           ))}
         </div>
         <button type="button" className={skipBtnClass} onClick={onSkip}>
-          Skip for now
+          {t("contact.heloc.skip")}
         </button>
       </motion.div>
     );

@@ -1,5 +1,6 @@
 import { forwardRef, useEffect } from "react";
 import { motion, type MotionValue } from "motion/react";
+import { useLanguage } from "../../i18n/LanguageContext";
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion";
 
 export const CONTACT_HERO_WEBP = "/images/contact/hero-entry.webp";
@@ -20,6 +21,7 @@ export const ContactHeroEntry = forwardRef<HTMLElement, Props>(function ContactH
 ) {
   const reduced = usePrefersReducedMotion();
   const ease = [0.22, 1, 0.36, 1] as const;
+  const { t } = useLanguage();
 
   useEffect(() => {
     const link = document.createElement("link");
@@ -69,10 +71,10 @@ export const ContactHeroEntry = forwardRef<HTMLElement, Props>(function ContactH
           transition={reduced ? { duration: 0 } : { duration: 0.55, delay: 0.3, ease }}
         >
           <h2 className="hero-entry-headline font-heading text-[1.85rem] font-semibold leading-[1.08] tracking-[-0.03em] text-white sm:text-[2.35rem] lg:text-[2.75rem]">
-            This is where it begins.
+            {t("contact.hero.headline")}
           </h2>
           <p className="hero-entry-subline mt-4 max-w-xl font-sans text-[16px] leading-relaxed text-white/90 sm:text-[1.0625rem]">
-            Not just a loan — a decision that shapes what comes next.
+            {t("contact.hero.subline")}
           </p>
         </motion.div>
         <motion.button
@@ -83,7 +85,7 @@ export const ContactHeroEntry = forwardRef<HTMLElement, Props>(function ContactH
           animate={{ opacity: 1, y: 0 }}
           transition={reduced ? { duration: 0 } : { duration: 0.45, delay: 0.38, ease }}
         >
-          Start with clarity
+          {t("contact.hero.cta")}
         </motion.button>
       </div>
     </motion.section>

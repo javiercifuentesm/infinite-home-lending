@@ -1,4 +1,5 @@
 import type { ClientQualifierInputs } from "../../../hooks/useClientQualifierMath";
+import { DollarInput } from "../../tools/shared/FormattedInput";
 
 const label = "mb-1.5 block font-sans text-[12px] font-semibold text-[#0B2A4A]";
 const input =
@@ -37,27 +38,13 @@ export function CQBuyerInputs({ inputs, onChange }: Props) {
           <label htmlFor="cq-income" className={label}>
             Annual income ($)
           </label>
-          <input
-            id="cq-income"
-            type="number"
-            step={1000}
-            className={input}
-            value={inputs.income || ""}
-            onChange={(e) => set("income", Number.parseFloat(e.target.value) || 0)}
-          />
+          <DollarInput id="cq-income" className={input} value={inputs.income} onChange={(n) => set("income", n)} />
         </div>
         <div>
           <label htmlFor="cq-debts" className={label}>
             Monthly debts ($)
           </label>
-          <input
-            id="cq-debts"
-            type="number"
-            step={50}
-            className={input}
-            value={inputs.debts || ""}
-            onChange={(e) => set("debts", Number.parseFloat(e.target.value) || 0)}
-          />
+          <DollarInput id="cq-debts" className={input} value={inputs.debts} onChange={(n) => set("debts", n)} />
           <p className={note}>Car, student loans, credit cards — minimum payments</p>
         </div>
         <div className="min-w-[150px]">

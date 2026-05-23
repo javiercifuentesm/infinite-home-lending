@@ -1,10 +1,13 @@
 import { useCallback, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useDealDeskAuth } from "../../../hooks/useDealDeskAuth";
 
-export function GateAccess() {
+type GateAccessProps = {
+  onAuth?: () => void;
+};
+
+export function GateAccess({ onAuth }: GateAccessProps) {
   const { validateCode } = useDealDeskAuth();
-  const navigate = useNavigate();
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [code, setCode] = useState("");
@@ -34,7 +37,8 @@ export function GateAccess() {
         setSuccess(true);
         inputRef.current?.classList.add("ok");
         window.setTimeout(() => {
-          navigate("/deal-desk", { replace: true });
+          onAuth?.();
+          window.location.href = "/deal-desk";
         }, 800);
       } else {
         setShowError(true);
@@ -44,7 +48,7 @@ export function GateAccess() {
         }, 600);
       }
     }, 600);
-  }, [code, loading, success, validateCode, navigate]);
+  }, [code, loading, success, validateCode, onAuth]);
 
   const onInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const el = e.target;
@@ -77,7 +81,7 @@ export function GateAccess() {
 
   const benefits = [
     "All 12 Deal Desk tools — instant access",
-    "Nexio AI Strategic Partner on every page",
+    "Nexio — The Deal Desk Virtual Assistant on every page — stress-test deals, interpret guidelines, bilingual drafts, broker-grade intelligence",
     "Direct line to our Mortgage Advisors on every deal",
     "No referral quotas — no exclusivity requirements",
     "90-day browser session — enter once, use freely",

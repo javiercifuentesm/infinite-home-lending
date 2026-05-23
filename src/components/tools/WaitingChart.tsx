@@ -12,6 +12,7 @@ import {
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 import type { WaitingCalcResult } from "../../hooks/useWaitingMath";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Filler, Legend);
 
@@ -31,14 +32,18 @@ type Props = {
 };
 
 export function WaitingChart({ chartData, chartMonths, chartKey }: Props) {
+  const { t } = useLanguage();
+
   const { data, options } = useMemo(() => {
-    const labels = chartData.map((_, i) => `Mo ${i + 1}`);
+    const labels = chartData.map((_, i) => t("tool.waiting.chart.monthLabel").replace("{n}", String(i + 1)));
+    const tooltipTotal = t("tool.waiting.chart.tooltipTotal");
+    const tooltipMonthly = t("tool.waiting.chart.tooltipMonthly");
     return {
       data: {
         labels,
         datasets: [
           {
-            label: "Cumulative cost",
+            label: t("tool.waiting.chart.datasetTotal"),
             data: chartData.map((d) => d.totalCost),
             borderColor: "#A32D2D",
             backgroundColor: "rgba(163,45,45,0.06)",
@@ -49,7 +54,7 @@ export function WaitingChart({ chartData, chartMonths, chartKey }: Props) {
             yAxisID: "y",
           },
           {
-            label: "Monthly rate",
+            label: t("tool.waiting.chart.datasetMonthly"),
             data: chartData.map((d) => d.monthlyCostRate),
             borderColor: "#C6A15B",
             backgroundColor: "transparent",
@@ -71,7 +76,7 @@ export function WaitingChart({ chartData, chartMonths, chartKey }: Props) {
             callbacks: {
               label(ctx: { datasetIndex?: number; parsed: { y: number } }) {
                 const y = ctx.parsed.y;
-                return (ctx.datasetIndex === 0 ? "Cumulative: " : "Monthly rate: ") + yTickFmt(y);
+                return (ctx.datasetIndex === 0 ? tooltipTotal : tooltipMonthly) + yTickFmt(y);
               },
             },
           },
@@ -102,19 +107,19 @@ export function WaitingChart({ chartData, chartMonths, chartKey }: Props) {
         },
       },
     };
-  }, [chartData, chartMonths]);
+  }, [chartData, chartMonths, t]);
 
   return (
     <div className="rounded-xl border border-[var(--tcw-border,#e2e8f0)] bg-[var(--tcw-surface,#fff)] p-4 sm:p-5">
-      <h3 className="font-[Georgia,serif] text-lg font-medium text-[#0B2A4A]">How the cost grows over time</h3>
+      <h3 className="font-[Georgia,serif] text-lg font-medium text-[#0B2A4A]">{t("tool.waiting.chart.title")}</h3>
       <div className="mt-3 flex flex-wrap items-center gap-6 text-[11px]">
         <span className="inline-flex items-center gap-2 text-[#888780]">
           <span className="inline-block h-2.5 w-2.5 rounded-sm bg-[#A32D2D]" aria-hidden />
-          Cumulative cost of waiting
+          {t("tool.waiting.chart.cumulative")}
         </span>
         <span className="inline-flex items-center gap-2 text-[#C6A15B]">
           <span className="inline-block h-0.5 w-8 border-t border-dashed border-[#C6A15B]" aria-hidden />
-          Monthly cost rate
+          {t("tool.waiting.chart.monthlyRate")}
         </span>
       </div>
       <div key={chartKey} className="relative mt-4 h-[200px] w-full">

@@ -13,6 +13,7 @@ import {
 import { Line } from "react-chartjs-2";
 import type { YearlySnapshot } from "../../hooks/useBuyVsRentMath";
 import { yFmt } from "../../hooks/useBuyVsRentMath";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Filler, Legend);
 
@@ -24,8 +25,17 @@ type Props = {
 const skipN = 3;
 
 export function BuyVsRentCharts({ yearlyData, chartInputKey }: Props) {
+  const { t } = useLanguage();
+  const legendBuyWealth = t("tool.bvr.charts.legendBuyWealth");
+  const legendRentPortfolio = t("tool.bvr.charts.legendRentPortfolio");
+  const legendBuyCost = t("tool.bvr.charts.legendBuyCost");
+  const legendRent = t("tool.bvr.charts.legendRent");
+  const tooltipBuy = t("tool.bvr.charts.tooltipBuy");
+  const tooltipRent = t("tool.bvr.charts.tooltipRent");
+  const yrPrefix = t("tool.bvr.charts.yr");
+
   const wealth = useMemo(() => {
-    const labels = yearlyData.map((d) => "Yr " + d.yr);
+    const labels = yearlyData.map((d) => yrPrefix + d.yr);
     const tickLabels = labels.map((l, i) => (i % skipN === 0 ? l : ""));
     const buyW = yearlyData.map((d) => d.buyNetWealth);
     const rentW = yearlyData.map((d) => d.rentPortfolio);
@@ -36,7 +46,7 @@ export function BuyVsRentCharts({ yearlyData, chartInputKey }: Props) {
         labels,
         datasets: [
           {
-            label: "Buying",
+            label: legendBuyWealth,
             data: buyW,
             borderColor: "#0B2A4A",
             backgroundColor: "rgba(11,42,74,0.06)",
@@ -46,7 +56,7 @@ export function BuyVsRentCharts({ yearlyData, chartInputKey }: Props) {
             tension: 0.3,
           },
           {
-            label: "Renting + investing",
+            label: legendRentPortfolio,
             data: rentW,
             borderColor: "#C6A15B",
             backgroundColor: "rgba(198,161,91,0.06)",
@@ -66,7 +76,7 @@ export function BuyVsRentCharts({ yearlyData, chartInputKey }: Props) {
             callbacks: {
               label(ctx: { datasetIndex?: number; parsed: { y: number } }) {
                 const y = ctx.parsed.y;
-                const who = ctx.datasetIndex === 0 ? "Buying" : "Renting + investing";
+                const who = ctx.datasetIndex === 0 ? tooltipBuy : tooltipRent;
                 return who + ": " + yFmt(y);
               },
             },
@@ -95,10 +105,10 @@ export function BuyVsRentCharts({ yearlyData, chartInputKey }: Props) {
         },
       },
     };
-  }, [yearlyData]);
+  }, [yearlyData, legendBuyWealth, legendRentPortfolio, tooltipBuy, tooltipRent, yrPrefix]);
 
   const monthly = useMemo(() => {
-    const labels = yearlyData.map((d) => "Yr " + d.yr);
+    const labels = yearlyData.map((d) => yrPrefix + d.yr);
     const tickLabels = labels.map((l, i) => (i % skipN === 0 ? l : ""));
     const buyC = yearlyData.map((d) => d.monthlyBuyCost);
     const rentC = yearlyData.map((d) => d.monthlyRent);
@@ -109,7 +119,7 @@ export function BuyVsRentCharts({ yearlyData, chartInputKey }: Props) {
         labels,
         datasets: [
           {
-            label: "Buy",
+            label: legendBuyCost,
             data: buyC,
             borderColor: "#0B2A4A",
             backgroundColor: "transparent",
@@ -119,7 +129,7 @@ export function BuyVsRentCharts({ yearlyData, chartInputKey }: Props) {
             fill: false,
           },
           {
-            label: "Rent",
+            label: legendRent,
             data: rentC,
             borderColor: "#C6A15B",
             backgroundColor: "transparent",
@@ -138,7 +148,9 @@ export function BuyVsRentCharts({ yearlyData, chartInputKey }: Props) {
           tooltip: {
             callbacks: {
               label(ctx: { datasetIndex?: number; parsed: { y: number } }) {
-                return yFmt(ctx.parsed.y);
+                const y = ctx.parsed.y;
+                const who = ctx.datasetIndex === 0 ? tooltipBuy : tooltipRent;
+                return who + ": " + yFmt(y);
               },
             },
           },
@@ -166,20 +178,23 @@ export function BuyVsRentCharts({ yearlyData, chartInputKey }: Props) {
         },
       },
     };
-  }, [yearlyData]);
+  }, [yearlyData, legendBuyCost, legendRent, tooltipBuy, tooltipRent, yrPrefix]);
+
+  const wealthTitle = t("tool.bvr.charts.wealthTitle");
+  const monthlyTitle = t("tool.bvr.charts.monthlyTitle");
 
   return (
     <div className="space-y-8">
       <div>
-        <h3 className="font-[Georgia,serif] text-lg font-medium text-[#0B2A4A]">Net wealth comparison over time</h3>
+        <h3 className="font-[Georgia,serif] text-lg font-medium text-[#0B2A4A]">{wealthTitle}</h3>
         <div className="mt-2 flex flex-wrap gap-6 text-[11px] text-[#888780]">
           <span className="inline-flex items-center gap-2">
             <span className="inline-block h-2.5 w-2.5 rounded-sm bg-[#0B2A4A]" aria-hidden />
-            Buying — net wealth
+            {legendBuyWealth}
           </span>
           <span className="inline-flex items-center gap-2">
             <span className="inline-block h-2.5 w-2.5 rounded-sm bg-[#C6A15B]" aria-hidden />
-            Renting + investing — portfolio value
+            {legendRentPortfolio}
           </span>
         </div>
         <div key={chartInputKey + "-w"} className="relative mt-3 h-[220px] w-full">
@@ -187,15 +202,15 @@ export function BuyVsRentCharts({ yearlyData, chartInputKey }: Props) {
         </div>
       </div>
       <div>
-        <h3 className="font-[Georgia,serif] text-lg font-medium text-[#0B2A4A]">Monthly cost comparison</h3>
+        <h3 className="font-[Georgia,serif] text-lg font-medium text-[#0B2A4A]">{monthlyTitle}</h3>
         <div className="mt-2 flex flex-wrap gap-6 text-[11px] text-[#888780]">
           <span className="inline-flex items-center gap-2">
             <span className="inline-block h-2.5 w-2.5 rounded-sm bg-[#0B2A4A]" aria-hidden />
-            True monthly cost of buying
+            {legendBuyCost}
           </span>
           <span className="inline-flex items-center gap-2">
             <span className="inline-block h-2.5 w-2.5 rounded-sm bg-[#C6A15B]" aria-hidden />
-            Monthly rent
+            {legendRent}
           </span>
         </div>
         <div key={chartInputKey + "-m"} className="relative mt-3 h-[180px] w-full">

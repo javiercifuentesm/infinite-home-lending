@@ -1,4 +1,5 @@
 import type { OfferOptimizerInputs } from "../../../hooks/useOfferOptimizerMath";
+import { DollarInput, PercentInput } from "../../tools/shared/FormattedInput";
 
 type Props = {
   inputs: OfferOptimizerInputs;
@@ -24,14 +25,13 @@ export function OOBuyerInputs({ inputs, onChange }: Props) {
           <label htmlFor="oo-dp" className={label}>
             Buyer down payment (%)
           </label>
-          <input
+          <PercentInput
             id="oo-dp"
-            type="number"
             min={3}
             max={30}
             step={1}
             value={inputs.buyerDP}
-            onChange={(e) => set("buyerDP", Math.min(30, Math.max(3, parseFloat(e.target.value) || 3)))}
+            onChange={(n) => set("buyerDP", Math.min(30, Math.max(3, n)))}
             className={input}
           />
         </div>
@@ -39,12 +39,11 @@ export function OOBuyerInputs({ inputs, onChange }: Props) {
           <label htmlFor="oo-rate" className={label}>
             Current market rate (%)
           </label>
-          <input
+          <PercentInput
             id="oo-rate"
-            type="number"
             step={0.125}
             value={inputs.marketRate}
-            onChange={(e) => set("marketRate", parseFloat(e.target.value) || 0)}
+            onChange={(n) => set("marketRate", n)}
             className={input}
           />
         </div>
@@ -52,13 +51,11 @@ export function OOBuyerInputs({ inputs, onChange }: Props) {
           <label htmlFor="oo-income" className={label}>
             Buyer&apos;s gross monthly income ($)
           </label>
-          <input
+          <DollarInput
             id="oo-income"
-            type="number"
             min={0}
-            step={250}
             value={inputs.buyerIncome}
-            onChange={(e) => set("buyerIncome", Math.max(0, parseFloat(e.target.value) || 0))}
+            onChange={(n) => set("buyerIncome", Math.max(0, n))}
             className={input}
           />
           <p className="mt-1 text-[11px] text-slate-500">Used to show qualification impact</p>
@@ -67,13 +64,11 @@ export function OOBuyerInputs({ inputs, onChange }: Props) {
           <label htmlFor="oo-debts" className={label}>
             Buyer&apos;s monthly debts ($)
           </label>
-          <input
+          <DollarInput
             id="oo-debts"
-            type="number"
             min={0}
-            step={50}
             value={inputs.buyerDebts}
-            onChange={(e) => set("buyerDebts", Math.max(0, parseFloat(e.target.value) || 0))}
+            onChange={(n) => set("buyerDebts", Math.max(0, n))}
             className={input}
           />
           <p className="mt-1 text-[11px] text-slate-500">Car, student loans, credit cards</p>

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, type TouchEvent } fr
 import { Link } from "react-router-dom";
 import { usePrefersReducedMotion } from "../hooks/usePrefersReducedMotion";
 import { buildHeroRotationOrder, type HeroAsset } from "../lib/heroRotation";
+import { useLanguage } from "../i18n/LanguageContext";
 
 /**
  * All hero frames (`/images/hero-v16/*.png`) with explicit type for sequencing.
@@ -39,6 +40,7 @@ const THUMB_RESUME_AFTER_MS = 2500;
 const THUMB_STRIP_PERF_CAP = 24;
 
 export function HeroSection() {
+  const { t } = useLanguage();
   const [index, setIndex] = useState(0);
   const [heroHovered, setHeroHovered] = useState(false);
   /** When true, CSS animation on the track is paused (interaction + post-interaction cooldown). */
@@ -268,21 +270,22 @@ export function HeroSection() {
           <div className="hero-content">
             <div className="hero-text">
               <h1 id="hero-heading" className="hero-headline">
-                Know exactly what you can afford — before you fall in love with a home.
+                <span className="block">{t("home.hero.line1")}</span>
+                <span className="block">{t("home.hero.line2")}</span>
               </h1>
 
-              <p className="hero-subtext">A smarter, calmer way to explore your mortgage options — built around you.</p>
+              <p className="hero-subtext">{t("home.hero.subtitle")}</p>
 
               <div className="hero-cta">
                 <Link to="/contact" className="hero-primary">
-                  Start My Pre-Approval
+                  {t("home.hero.cta1")}
                 </Link>
                 <Link to="/solutions" className="hero-secondary">
-                  Explore Loan Options
+                  {t("home.hero.cta2")}
                 </Link>
               </div>
 
-              <p className="micro-trust">No obligation. No credit impact to start.</p>
+              <p className="micro-trust">{t("home.hero.noObligation")}</p>
             </div>
           </div>
         </div>

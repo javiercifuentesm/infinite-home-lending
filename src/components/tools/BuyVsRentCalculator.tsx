@@ -17,8 +17,10 @@ import { BuyVsRentFactors } from "./BuyVsRentFactors";
 import { BuyVsRentInsight } from "./BuyVsRentInsight";
 import { BuyVsRentCTA } from "./BuyVsRentCTA";
 import { SmartToolIntro } from "./SmartToolIntro";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 export default function BuyVsRentCalculator() {
+  const { t } = useLanguage();
   const [inputs, setInputs] = useState<BuyVsRentInputs>(defaultBuyVsRentInputs);
   const [activeTab, setActiveTab] = useState<BuyTab>("buying");
   const [viewYear, setViewYear] = useState(5);
@@ -37,22 +39,16 @@ export default function BuyVsRentCalculator() {
         } as CSSProperties
       }
     >
-      <SmartToolIntro title="Buy vs. Rent: The Full Picture">
+      <SmartToolIntro title={t("tool.bvr.title")}>
+        <p>{t("tool.bvr.intro1")}</p>
         <p>
-          Most calculators pick a winner and stop there. This one shows you exactly when the crossover happens, what drives
-          it, and what both paths do to your wealth over time — so the answer makes sense for your life, not just the math.
+          {t("tool.bvr.intro2Lead")}{" "}
+          <Link to="/tools/heloc-planner">{t("tool.bvr.helocLink")}</Link> {t("tool.bvr.intro2Trail")}
         </p>
         <p>
-          Already own?{" "}
-          <Link to="/tools/heloc-planner">
-            See the HELOC Planner
-          </Link>{" "}
-          — model tapping equity vs. other options.
-        </p>
-        <p>
-          Want the full six-stream wealth model with opportunity cost?{" "}
+          {t("tool.bvr.intro3Lead")}{" "}
           <Link to="/tools/wealth-tracker" className="font-semibold text-[#0B2A4A] underline decoration-[#C6A15B]/45 underline-offset-[3px]">
-            Run the full 30-year wealth analysis →
+            {t("tool.bvr.wealthLink")}
           </Link>
         </p>
       </SmartToolIntro>
@@ -61,7 +57,7 @@ export default function BuyVsRentCalculator() {
         <BuyVsRentInputTabs activeTab={activeTab} onTabChange={setActiveTab} inputs={inputs} onChange={setInputs} />
 
         <div>
-          <p className="mb-3 text-[13px] font-semibold text-[#0B2A4A]">Explore by year</p>
+          <p className="mb-3 text-[13px] font-semibold text-[#0B2A4A]">{t("tool.bvr.exploreByYear")}</p>
           <BuyVsRentTimelineSelector viewYear={viewYear} onChange={setViewYear} />
         </div>
 
@@ -78,11 +74,7 @@ export default function BuyVsRentCalculator() {
         <BuyVsRentInsight crossoverYr={crossoverYr} />
         <BuyVsRentCTA />
 
-        <p className="text-center text-[10px] leading-relaxed text-[var(--color-text-tertiary)]">
-          For educational purposes only. Does not constitute financial or tax advice. Projections are estimates based on your
-          inputs and assumed growth rates. Actual results will vary. Consult a financial advisor and tax professional for
-          personalized guidance. Contact Infinite Home Lending for mortgage-specific analysis.
-        </p>
+        <p className="text-center text-[10px] leading-relaxed text-[var(--color-text-tertiary)]">{t("tool.bvr.disclaimer")}</p>
       </section>
     </div>
   );

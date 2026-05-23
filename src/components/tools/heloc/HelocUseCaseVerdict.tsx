@@ -1,3 +1,4 @@
+import { useLanguage } from "../../../i18n/LanguageContext";
 import type { UseCaseKey } from "./HelocUseCaseSelector";
 
 type VerdictDef = {
@@ -7,74 +8,70 @@ type VerdictDef = {
   tags: { text: string; bg: string }[];
 };
 
-const DATA: Record<UseCaseKey, VerdictDef> = {
-  reno: {
-    title: "Home renovation",
-    verdict: "Strong fit.",
-    detail:
-      "HELOC interest is tax-deductible when used for home improvements. Flexible draws let you pay contractors as work progresses — you only pay interest on what you've drawn, not the full line. Avoid drawing the full amount upfront.",
-    tags: [
-      { text: "Tax deductible", bg: "#EAF3DE" },
-      { text: "Flexible draws", bg: "#E6F1FB" },
-      { text: "Adds home value", bg: "#EAF3DE" },
-    ],
-  },
-  debt: {
-    title: "Debt consolidation",
-    verdict: "Proceed with caution.",
-    detail:
-      "Trading high-interest debt for HELOC debt can save significantly on interest — but your home is now at risk. Only makes sense if you won't run the original debt back up. Variable rate means your payment can rise. If rates jump 2%, recalculate.",
-    tags: [
-      { text: "Lower rate", bg: "#EAF3DE" },
-      { text: "Risk: home as collateral", bg: "#FCEBEB" },
-      { text: "Variable rate risk", bg: "#FAEEDA" },
-    ],
-  },
-  edu: {
-    title: "Education expenses",
-    verdict: "Consider alternatives first.",
-    detail:
-      "HELOCs can fund education, but federal student loans have built-in protections (income-based repayment, deferment, forgiveness) that home equity debt doesn't. For private loan refinancing at rates above [RATE]%, this may make sense. For federal loans, likely not.",
-    tags: [
-      { text: "Flexible access", bg: "#EAF3DE" },
-      { text: "No federal protections", bg: "#FAEEDA" },
-      { text: "Lower rate possible", bg: "#E6F1FB" },
-    ],
-  },
-  emergency: {
-    title: "Emergency reserve",
-    verdict: "Excellent strategic fit.",
-    detail:
-      "Using a HELOC as a standby emergency fund — rather than drawing it now — is one of the smartest uses of home equity. You pay nothing until you draw, and the line is available when you need it. The risk: if you lose income during an emergency, the HELOC payment adds pressure.",
-    tags: [
-      { text: "Pay nothing until needed", bg: "#EAF3DE" },
-      { text: "Grows as you repay", bg: "#EAF3DE" },
-      { text: "Credit line standby", bg: "#E6F1FB" },
-    ],
-  },
-  invest: {
-    title: "Investment / rental property",
-    verdict: "Higher risk — model carefully.",
-    detail:
-      "Using home equity to fund investments introduces leverage risk. If the investment underperforms or the property is vacant, you still owe the HELOC payment. Only makes sense if your projected return exceeds [RATE]% after tax. Variable rate erosion of returns is real.",
-    tags: [
-      { text: "Leverage amplifies gains AND losses", bg: "#FAEEDA" },
-      { text: "Rate risk", bg: "#FCEBEB" },
-      { text: "Return must exceed [RATE]%", bg: "#E6F1FB" },
-    ],
-  },
-  other: {
-    title: "General use",
-    verdict: "Think it through before drawing.",
-    detail:
-      "Before drawing on a HELOC for non-home-improvement purposes, ask: is the purchase worth securing with your home? Could a 0% intro credit card or personal loan serve this purpose without putting your equity at risk? HELOCs are powerful tools — they deserve a strategic purpose.",
-    tags: [
-      { text: "Home secured", bg: "#FAEEDA" },
-      { text: "Interest may not be deductible", bg: "#FAEEDA" },
-      { text: "Variable rate", bg: "#FAEEDA" },
-    ],
-  },
-};
+function buildVerdictData(t: (key: string) => string): Record<UseCaseKey, VerdictDef> {
+  return {
+    reno: {
+      title: t("tool.heloc.verdict.reno.title"),
+      verdict: t("tool.heloc.verdict.reno.verdict"),
+      detail: t("tool.heloc.verdict.reno.detail"),
+      tags: [
+        { text: t("tool.heloc.verdict.reno.tag1"), bg: "#EAF3DE" },
+        { text: t("tool.heloc.verdict.reno.tag2"), bg: "#E6F1FB" },
+        { text: t("tool.heloc.verdict.reno.tag3"), bg: "#EAF3DE" },
+      ],
+    },
+    debt: {
+      title: t("tool.heloc.verdict.debt.title"),
+      verdict: t("tool.heloc.verdict.debt.verdict"),
+      detail: t("tool.heloc.verdict.debt.detail"),
+      tags: [
+        { text: t("tool.heloc.verdict.debt.tag1"), bg: "#EAF3DE" },
+        { text: t("tool.heloc.verdict.debt.tag2"), bg: "#FCEBEB" },
+        { text: t("tool.heloc.verdict.debt.tag3"), bg: "#FAEEDA" },
+      ],
+    },
+    edu: {
+      title: t("tool.heloc.verdict.edu.title"),
+      verdict: t("tool.heloc.verdict.edu.verdict"),
+      detail: t("tool.heloc.verdict.edu.detail"),
+      tags: [
+        { text: t("tool.heloc.verdict.edu.tag1"), bg: "#EAF3DE" },
+        { text: t("tool.heloc.verdict.edu.tag2"), bg: "#FAEEDA" },
+        { text: t("tool.heloc.verdict.edu.tag3"), bg: "#E6F1FB" },
+      ],
+    },
+    emergency: {
+      title: t("tool.heloc.verdict.emergency.title"),
+      verdict: t("tool.heloc.verdict.emergency.verdict"),
+      detail: t("tool.heloc.verdict.emergency.detail"),
+      tags: [
+        { text: t("tool.heloc.verdict.emergency.tag1"), bg: "#EAF3DE" },
+        { text: t("tool.heloc.verdict.emergency.tag2"), bg: "#EAF3DE" },
+        { text: t("tool.heloc.verdict.emergency.tag3"), bg: "#E6F1FB" },
+      ],
+    },
+    invest: {
+      title: t("tool.heloc.verdict.invest.title"),
+      verdict: t("tool.heloc.verdict.invest.verdict"),
+      detail: t("tool.heloc.verdict.invest.detail"),
+      tags: [
+        { text: t("tool.heloc.verdict.invest.tag1"), bg: "#FAEEDA" },
+        { text: t("tool.heloc.verdict.invest.tag2"), bg: "#FCEBEB" },
+        { text: t("tool.heloc.verdict.invest.tag3"), bg: "#E6F1FB" },
+      ],
+    },
+    other: {
+      title: t("tool.heloc.verdict.other.title"),
+      verdict: t("tool.heloc.verdict.other.verdict"),
+      detail: t("tool.heloc.verdict.other.detail"),
+      tags: [
+        { text: t("tool.heloc.verdict.other.tag1"), bg: "#FAEEDA" },
+        { text: t("tool.heloc.verdict.other.tag2"), bg: "#FAEEDA" },
+        { text: t("tool.heloc.verdict.other.tag3"), bg: "#FAEEDA" },
+      ],
+    },
+  };
+}
 
 type Props = {
   activeUse: UseCaseKey;
@@ -82,11 +79,13 @@ type Props = {
 };
 
 export function HelocUseCaseVerdict({ activeUse, rate }: Props) {
+  const { t } = useLanguage();
+  const DATA = buildVerdictData(t);
   const d = DATA[activeUse];
   const detail = d.detail.replace("[RATE]", rate.toFixed(2));
-  const tags = d.tags.map((t) => ({
-    ...t,
-    text: t.text.replace("[RATE]", rate.toFixed(2)),
+  const tags = d.tags.map((tag) => ({
+    ...tag,
+    text: tag.text.replace("[RATE]", rate.toFixed(2)),
   }));
 
   return (
@@ -96,13 +95,13 @@ export function HelocUseCaseVerdict({ activeUse, rate }: Props) {
       </p>
       <p className="mt-3 text-[12px] leading-[1.5] text-[var(--color-text-tertiary)]">{detail}</p>
       <div className="mt-4 flex flex-wrap gap-2">
-        {tags.map((t) => (
+        {tags.map((tag, i) => (
           <span
-            key={t.text}
+            key={`${activeUse}-tag-${i}`}
             className="rounded-full px-2 py-0.5 text-[10px] font-medium text-[#444]"
-            style={{ background: t.bg }}
+            style={{ background: tag.bg }}
           >
-            {t.text}
+            {tag.text}
           </span>
         ))}
       </div>

@@ -1,8 +1,11 @@
+import { useLanguage } from "../../i18n/LanguageContext";
+
 type Props = {
   crossoverYr: number | null;
 };
 
 export function BuyVsRentCrossoverFlag({ crossoverYr }: Props) {
+  const { t } = useLanguage();
   if (crossoverYr == null) return null;
 
   return (
@@ -19,8 +22,11 @@ export function BuyVsRentCrossoverFlag({ crossoverYr }: Props) {
         <path d="M12 7v5l3 2" strokeLinecap="round" />
       </svg>
       <p>
-        Buying takes the lead at <b>year {crossoverYr}</b> — the crossover point where owning starts building more wealth
-        than renting + investing.
+        {t("tool.bvr.crossover.pre")}{" "}
+        <b>
+          {t("tool.bvr.crossover.year")} {crossoverYr}
+        </b>{" "}
+        {t("tool.bvr.crossover.post")}
       </p>
     </div>
   );

@@ -1,4 +1,5 @@
 import type { RLEInputs, RiskTol } from "../../../hooks/useRLEMath";
+import { useLanguage } from "../../../i18n/LanguageContext";
 
 type Props = {
   inputs: RLEInputs;
@@ -10,6 +11,7 @@ const inputClass =
   "w-full rounded-md border border-slate-200/90 bg-white px-3 py-2 font-[Lato,system-ui,sans-serif] text-[14px] text-slate-900 shadow-sm focus:border-[#C6A15B] focus:outline-none focus:ring-1 focus:ring-[#C6A15B]/40";
 
 export function RLEExtensionInputs({ inputs, onChange }: Props) {
+  const { t } = useLanguage();
   const set = <K extends keyof RLEInputs>(key: K, value: RLEInputs[K]) => onChange({ ...inputs, [key]: value });
 
   return (
@@ -18,12 +20,12 @@ export function RLEExtensionInputs({ inputs, onChange }: Props) {
         <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#3B6D11] text-[11px] font-bold text-white">
           3
         </span>
-        <h2 className="font-[Georgia,serif] text-[15px] font-medium text-[#0B2A4A]">Extension &amp; float-down settings</h2>
+        <h2 className="font-[Georgia,serif] text-[15px] font-medium text-[#0B2A4A]">{t("tool.rle.ext.heading")}</h2>
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label htmlFor="rle-ext" className={labelClass}>
-            Extension fee (% per 15 days)
+            {t("tool.rle.ext.fee")}
           </label>
           <select
             id="rle-ext"
@@ -31,14 +33,14 @@ export function RLEExtensionInputs({ inputs, onChange }: Props) {
             onChange={(e) => set("extFee", parseFloat(e.target.value))}
             className={inputClass}
           >
-            <option value="0.0625">0.0625% per 15 days — low</option>
-            <option value="0.125">0.125% per 15 days — typical</option>
-            <option value="0.25">0.25% per 15 days — higher</option>
+            <option value="0.0625">{t("tool.rle.ext.fee0625")}</option>
+            <option value="0.125">{t("tool.rle.ext.fee125")}</option>
+            <option value="0.25">{t("tool.rle.ext.fee25")}</option>
           </select>
         </div>
         <div>
           <label htmlFor="rle-float-cost" className={labelClass}>
-            Float-down option cost (%)
+            {t("tool.rle.ext.floatCost")}
           </label>
           <select
             id="rle-float-cost"
@@ -46,15 +48,15 @@ export function RLEExtensionInputs({ inputs, onChange }: Props) {
             onChange={(e) => set("floatCost", parseFloat(e.target.value))}
             className={inputClass}
           >
-            <option value="0">No float-down offered</option>
-            <option value="0.125">0.125% — low</option>
-            <option value="0.25">0.25% — standard</option>
-            <option value="0.5">0.50% — premium</option>
+            <option value="0">{t("tool.rle.ext.floatNone")}</option>
+            <option value="0.125">{t("tool.rle.ext.float125")}</option>
+            <option value="0.25">{t("tool.rle.ext.float25")}</option>
+            <option value="0.5">{t("tool.rle.ext.float50")}</option>
           </select>
         </div>
         <div>
           <label htmlFor="rle-float-thresh" className={labelClass}>
-            Float-down threshold (%)
+            {t("tool.rle.ext.floatThresh")}
           </label>
           <select
             id="rle-float-thresh"
@@ -62,15 +64,15 @@ export function RLEExtensionInputs({ inputs, onChange }: Props) {
             onChange={(e) => set("floatThresh", parseFloat(e.target.value))}
             className={inputClass}
           >
-            <option value="0.25">0.25% minimum drop required</option>
-            <option value="0.375">0.375% minimum</option>
-            <option value="0.5">0.50% minimum</option>
+            <option value="0.25">{t("tool.rle.ext.thresh25")}</option>
+            <option value="0.375">{t("tool.rle.ext.thresh375")}</option>
+            <option value="0.5">{t("tool.rle.ext.thresh50")}</option>
           </select>
-          <p className="mt-1 text-[11px] text-slate-500">Minimum rate drop to exercise</p>
+          <p className="mt-1 text-[11px] text-slate-500">{t("tool.rle.ext.threshNote")}</p>
         </div>
         <div>
           <label htmlFor="rle-risk" className={labelClass}>
-            Risk tolerance
+            {t("tool.rle.ext.riskTol")}
           </label>
           <select
             id="rle-risk"
@@ -78,9 +80,9 @@ export function RLEExtensionInputs({ inputs, onChange }: Props) {
             onChange={(e) => set("riskTol", e.target.value as RiskTol)}
             className={inputClass}
           >
-            <option value="low">Low — I hate uncertainty</option>
-            <option value="medium">Medium — I can handle some risk</option>
-            <option value="high">High — I&apos;ll bet on rates dropping</option>
+            <option value="low">{t("tool.rle.ext.riskLow")}</option>
+            <option value="medium">{t("tool.rle.ext.riskMedium")}</option>
+            <option value="high">{t("tool.rle.ext.riskHigh")}</option>
           </select>
         </div>
       </div>

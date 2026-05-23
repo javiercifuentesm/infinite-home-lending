@@ -1,6 +1,7 @@
 import type { Dispatch, SetStateAction } from "react";
 import { motion, type HTMLMotionProps } from "motion/react";
 import { CurrencyInput } from "./PurchasePathFlow";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 export type ReverseFlowStep =
   | "inactive"
@@ -34,46 +35,6 @@ export const initialReverseData = (): ReverseDataState => ({
   obligations: "",
   timeline: "",
 });
-
-const RESIDENCE_OPTIONS = [
-  { id: "primary_yes", label: "Yes, this is my primary home" },
-  { id: "primary_no", label: "No / Not full time" },
-  { id: "primary_unsure", label: "I’m not sure" },
-] as const;
-
-const AGE_OPTIONS = [
-  { id: "62_69", label: "62–69" },
-  { id: "70_79", label: "70–79" },
-  { id: "80_plus", label: "80+" },
-  { id: "prefer_not", label: "Prefer not to say" },
-] as const;
-
-const GOAL_OPTIONS = [
-  { id: "supplement_income", label: "Supplement monthly income" },
-  { id: "reduce_stress", label: "Reduce financial stress" },
-  { id: "stay_home", label: "Stay comfortably in my home long-term" },
-  { id: "upcoming_expenses", label: "Cover upcoming expenses" },
-  { id: "exploring", label: "Just exploring options" },
-] as const;
-
-const OBLIGATIONS_OPTIONS = [
-  { id: "yes", label: "Yes" },
-  { id: "believe_so", label: "I believe so" },
-  { id: "learn_more", label: "I’d like to understand that better" },
-] as const;
-
-const TIMELINE_OPTIONS = [
-  { id: "learning", label: "Just learning for now" },
-  { id: "few_months", label: "In the next few months" },
-  { id: "soon", label: "Soon" },
-  { id: "talk", label: "I’d like to talk with someone" },
-] as const;
-
-const softMicro = (
-  <p className="mx-auto max-w-[32rem] px-2 text-center font-sans text-[12px] leading-relaxed text-[#6B7280] sm:text-[13px]">
-    The more you share, the better we can guide you — but everything here is completely optional.
-  </p>
-);
 
 const skipBtnClass =
   "skip-button purchase-skip-btn w-full border-0 bg-transparent p-2 font-sans text-[13px] text-[#6B7280] transition-colors duration-300 hover:text-[#0B2A4A]";
@@ -136,22 +97,64 @@ export function ReversePathStep({
   onAdvanceAfterTileAnswer,
   onCompleteFlow,
 }: Props) {
+  const { t } = useLanguage();
+
+  const RESIDENCE_OPTIONS = [
+    { id: "primary_yes", label: t("contact.reverse.residence.yes") },
+    { id: "primary_no", label: t("contact.reverse.residence.no") },
+    { id: "primary_unsure", label: t("contact.reverse.residence.unsure") },
+  ];
+
+  const AGE_OPTIONS = [
+    { id: "62_69", label: t("contact.reverse.age.62_69") },
+    { id: "70_79", label: t("contact.reverse.age.70_79") },
+    { id: "80_plus", label: t("contact.reverse.age.80plus") },
+    { id: "prefer_not", label: t("contact.reverse.age.preferNot") },
+  ];
+
+  const GOAL_OPTIONS = [
+    { id: "supplement_income", label: t("contact.reverse.goal.income") },
+    { id: "reduce_stress", label: t("contact.reverse.goal.stress") },
+    { id: "stay_home", label: t("contact.reverse.goal.stay") },
+    { id: "upcoming_expenses", label: t("contact.reverse.goal.expenses") },
+    { id: "exploring", label: t("contact.reverse.goal.exploring") },
+  ];
+
+  const OBLIGATIONS_OPTIONS = [
+    { id: "yes", label: t("contact.reverse.obligations.yes") },
+    { id: "believe_so", label: t("contact.reverse.obligations.believeSo") },
+    { id: "learn_more", label: t("contact.reverse.obligations.learnMore") },
+  ];
+
+  const TIMELINE_OPTIONS = [
+    { id: "learning", label: t("contact.reverse.timeline.learning") },
+    { id: "few_months", label: t("contact.reverse.timeline.fewMonths") },
+    { id: "soon", label: t("contact.reverse.timeline.soon") },
+    { id: "talk", label: t("contact.reverse.timeline.talk") },
+  ];
+
+  const softMicro = (
+    <p className="mx-auto max-w-[32rem] px-2 text-center font-sans text-[12px] leading-relaxed text-[#6B7280] sm:text-[13px]">
+      {t("contact.reverse.softMicro")}
+    </p>
+  );
+
   if (reverseFlowStep === "residence") {
     return (
       <motion.div id={SCROLL_ID.residence} key="reverse-residence" className="form-step space-y-6" {...stepMotion}>
         <div className="mx-auto max-w-[36rem] space-y-4 text-center">
           <p className="font-heading text-[1.05rem] font-semibold leading-snug text-[#0B2A4A] sm:text-[1.15rem]">
-            Let&apos;s explore what&apos;s possible — at your pace.
+            {t("contact.reverse.residence.intro1")}
           </p>
           <p className="font-sans text-[13px] leading-relaxed text-slate-600 sm:text-[14px]">
-            This is simply a conversation to understand your situation and see if a reverse mortgage could be a helpful option for you.
+            {t("contact.reverse.residence.intro2")}
           </p>
           <p className="font-sans text-[12px] leading-relaxed text-[#6B7280] sm:text-[13px]">
-            The more you share, the better we can guide you — but everything here is completely optional.
+            {t("contact.reverse.residence.intro3")}
           </p>
         </div>
         <h2 className="text-balance text-center font-heading text-lg font-semibold text-[#0B2A4A] sm:text-xl">
-          Is this home where you currently live most of the year?
+          {t("contact.reverse.residence.question")}
         </h2>
         {softMicro}
         <div className="option-group grid grid-cols-1 gap-3">
@@ -170,7 +173,7 @@ export function ReversePathStep({
           ))}
         </div>
         <button type="button" className={skipBtnClass} onClick={onSkip}>
-          Skip for now
+          {t("contact.reverse.skip")}
         </button>
       </motion.div>
     );
@@ -180,7 +183,7 @@ export function ReversePathStep({
     return (
       <motion.div id={SCROLL_ID.age} key="reverse-age" className="form-step space-y-6" {...stepMotion}>
         <h2 className="text-balance text-center font-heading text-lg font-semibold text-[#0B2A4A] sm:text-xl">
-          Which of these best describes your stage?
+          {t("contact.reverse.age.question")}
         </h2>
         {softMicro}
         <div className="option-group grid grid-cols-1 gap-3">
@@ -199,7 +202,7 @@ export function ReversePathStep({
           ))}
         </div>
         <button type="button" className={skipBtnClass} onClick={onSkip}>
-          Skip for now
+          {t("contact.reverse.skip")}
         </button>
       </motion.div>
     );
@@ -209,7 +212,7 @@ export function ReversePathStep({
     return (
       <motion.div id={SCROLL_ID.goal} key="reverse-goal" className="form-step space-y-6" {...stepMotion}>
         <h2 className="text-balance text-center font-heading text-lg font-semibold text-[#0B2A4A] sm:text-xl">
-          What would you like this to help you with?
+          {t("contact.reverse.goal.question")}
         </h2>
         {softMicro}
         <div className="option-group grid grid-cols-1 gap-3">
@@ -228,7 +231,7 @@ export function ReversePathStep({
           ))}
         </div>
         <button type="button" className={skipBtnClass} onClick={onSkip}>
-          Skip for now
+          {t("contact.reverse.skip")}
         </button>
       </motion.div>
     );
@@ -238,10 +241,10 @@ export function ReversePathStep({
     return (
       <motion.div id={SCROLL_ID.value} key="reverse-value" className="form-step space-y-6" {...stepMotion}>
         <h2 className="text-balance text-center font-heading text-lg font-semibold text-[#0B2A4A] sm:text-xl">
-          Do you have a sense of your home&apos;s value?
+          {t("contact.reverse.value.question")}
         </h2>
         <p className="mx-auto max-w-[30rem] text-center font-sans text-[12px] leading-relaxed text-slate-500 sm:text-[13px]">
-          A rough sense is enough — we can help you understand more whenever you&apos;re ready.
+          {t("contact.reverse.value.body")}
         </p>
         {softMicro}
         <div className="option-group mx-auto w-full max-w-[320px]">
@@ -268,10 +271,10 @@ export function ReversePathStep({
             onAdvanceAfterTileAnswer?.();
           }}
         >
-          I&apos;m not sure
+          {t("contact.reverse.value.unsure")}
         </button>
         <button type="button" className={skipBtnClass} onClick={onSkip}>
-          Skip for now
+          {t("contact.reverse.skip")}
         </button>
       </motion.div>
     );
@@ -281,10 +284,10 @@ export function ReversePathStep({
     return (
       <motion.div id={SCROLL_ID.balance} key="reverse-balance" className="form-step space-y-6" {...stepMotion}>
         <h2 className="text-balance text-center font-heading text-lg font-semibold text-[#0B2A4A] sm:text-xl">
-          What&apos;s your current mortgage balance?
+          {t("contact.reverse.balance.question")}
         </h2>
         <p className="mx-auto max-w-[30rem] text-center font-sans text-[12px] leading-relaxed text-slate-500 sm:text-[13px]">
-          Optional — it helps us understand your situation more clearly.
+          {t("contact.reverse.balance.body")}
         </p>
         {softMicro}
         <div className="option-group mx-auto w-full max-w-[320px]">
@@ -304,7 +307,7 @@ export function ReversePathStep({
           />
         </div>
         <button type="button" className={skipBtnClass} onClick={onSkip}>
-          Skip for now
+          {t("contact.reverse.skip")}
         </button>
       </motion.div>
     );
@@ -314,7 +317,7 @@ export function ReversePathStep({
     return (
       <motion.div id={SCROLL_ID.obligations} key="reverse-obligations" className="form-step space-y-6" {...stepMotion}>
         <h2 className="text-balance text-center font-heading text-lg font-semibold text-[#0B2A4A] sm:text-xl">
-          Are you comfortable continuing to cover things like property taxes and insurance?
+          {t("contact.reverse.obligations.question")}
         </h2>
         {softMicro}
         <div className="option-group grid grid-cols-1 gap-3">
@@ -333,7 +336,7 @@ export function ReversePathStep({
           ))}
         </div>
         <button type="button" className={skipBtnClass} onClick={onSkip}>
-          Skip for now
+          {t("contact.reverse.skip")}
         </button>
       </motion.div>
     );
@@ -343,7 +346,7 @@ export function ReversePathStep({
     return (
       <motion.div id={SCROLL_ID.timeline} key="reverse-timeline" className="form-step space-y-6" {...stepMotion}>
         <h2 className="text-balance text-center font-heading text-lg font-semibold text-[#0B2A4A] sm:text-xl">
-          When would you like to explore this further?
+          {t("contact.reverse.timeline.question")}
         </h2>
         {softMicro}
         <div className="option-group grid grid-cols-1 gap-3">
@@ -362,7 +365,7 @@ export function ReversePathStep({
           ))}
         </div>
         <button type="button" className={skipBtnClass} onClick={onSkip}>
-          Skip for now
+          {t("contact.reverse.skip")}
         </button>
       </motion.div>
     );

@@ -1,18 +1,14 @@
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "motion/react";
-import { BookOpen, ChevronDown, Menu, X } from "lucide-react";
+import { ChevronDown, Menu, X } from "lucide-react";
 import { useState, useEffect } from "react";
 import { IHLLogo } from "./IHLLogo";
 import { getAllSmartToolPaths, getSmartToolsForHub } from "../data/smartToolsCatalog";
+import { useLanguage } from "../i18n/LanguageContext";
+import { LanguageToggle } from "../i18n/LanguageToggle";
 
 const SMART_TOOLS_HUB = "/smart-tools";
 const SMART_TOOLS_ROUTES = [SMART_TOOLS_HUB, ...getAllSmartToolPaths()] as const;
-
-const smartToolsLinks = getSmartToolsForHub().map((t) => ({
-  name: t.name,
-  path: t.path,
-  blurb: t.navBlurb,
-}));
 
 function isSmartToolsSectionActive(pathname: string): boolean {
   return SMART_TOOLS_ROUTES.some((p) => pathname === p);
@@ -23,12 +19,16 @@ function isDealDeskActive(pathname: string): boolean {
 }
 
 const Navbar = () => {
+  const { t } = useLanguage();
+  const smartToolsLinks = getSmartToolsForHub().map((tool) => ({
+    nameKey: tool.nameKey,
+    path: tool.path,
+    blurbKey: tool.navBlurbKey,
+  }));
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [smartToolsOpen, setSmartToolsOpen] = useState(false);
   const [mobileSmartToolsOpen, setMobileSmartToolsOpen] = useState(false);
-  const [dealDeskOpen, setDealDeskOpen] = useState(false);
-  const [mobileDealDeskOpen, setMobileDealDeskOpen] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -43,19 +43,11 @@ const Navbar = () => {
     setIsOpen(false);
     setMobileSmartToolsOpen(false);
     setSmartToolsOpen(false);
-    setDealDeskOpen(false);
-    setMobileDealDeskOpen(false);
   }, [location.pathname]);
 
   useEffect(() => {
     if (isOpen && isSmartToolsSectionActive(location.pathname)) {
       setMobileSmartToolsOpen(true);
-    }
-  }, [isOpen, location.pathname]);
-
-  useEffect(() => {
-    if (isOpen && isDealDeskActive(location.pathname)) {
-      setMobileDealDeskOpen(true);
     }
   }, [isOpen, location.pathname]);
 
@@ -69,11 +61,11 @@ const Navbar = () => {
     }`;
 
   const navLinks = [
-    { name: "Home", path: "/" },
-    { name: "About", path: "/about" },
-    { name: "Loan Solutions", path: "/solutions" },
-    { name: "How We Work", path: "/how-it-works" },
-    { name: "Contact Us", path: "/contact" },
+    { name: t("nav.home"), path: "/" },
+    { name: t("nav.about"), path: "/about" },
+    { name: t("nav.solutions"), path: "/solutions" },
+    { name: t("nav.howItWorks"), path: "/how-it-works" },
+    { name: t("nav.contact"), path: "/contact" },
   ];
 
   return (
@@ -82,6 +74,39 @@ const Navbar = () => {
         scrolled ? "shadow-sm shadow-navy/5" : ""
       }`}
     >
+      <style>{`
+        @keyframes realtorBadgePulse {
+          0%, 100% {
+            transform: scale(1);
+            box-shadow: 0 2px 8px rgba(198,161,91,0.3);
+          }
+          50% {
+            transform: scale(1.04);
+            box-shadow: 0 4px 20px rgba(198,161,91,0.65);
+          }
+        }
+        .ihl-realtor-nav-glow {
+          display: inline-block;
+          color: #C6A15B !important;
+          font-size: 12px;
+          font-weight: 700;
+          letter-spacing: 0.8px;
+          text-transform: uppercase;
+          padding: 6px 16px;
+          border-radius: 9999px;
+          background: #0B2A4A;
+          outline: 2px solid #C6A15B;
+          outline-offset: 2px;
+          animation: none;
+          border-bottom: none !important;
+          text-shadow: none !important;
+          transition: background 0.2s, color 0.2s;
+        }
+        .ihl-realtor-nav-glow:hover {
+          background: #0a2240;
+          outline-color: #d4b06a;
+        }
+      `}</style>
       <div className="container navbar-inner">
         <div className="flex shrink-0 items-center">
           <Link
@@ -106,126 +131,8 @@ const Navbar = () => {
               to="/knowledge-center"
               className={baseLink(pathname === "/knowledge-center")}
             >
-              Knowledge
+              {t("nav.knowledge")}
             </Link>
-
-            {/* Deal Desk — hub + dropdown */}
-            <div
-              className="relative pb-2"
-              onMouseEnter={() => setDealDeskOpen(true)}
-              onMouseLeave={() => setDealDeskOpen(false)}
-              onFocusCapture={() => setDealDeskOpen(true)}
-              onBlurCapture={(e) => {
-                const next = e.relatedTarget as Node | null;
-                if (next && e.currentTarget.contains(next)) return;
-                setDealDeskOpen(false);
-              }}
-            >
-              <Link
-                to="/deal-desk"
-                className={`inline-flex items-center gap-1 ${baseLink(dealDeskActive)}`}
-                aria-current={dealDeskActive ? "page" : undefined}
-                aria-expanded={dealDeskOpen}
-                aria-haspopup="menu"
-              >
-                <span className="inline-flex items-center gap-1.5">
-                  Deal Desk
-                  <span
-                    className="rounded bg-[#C6A15B]/20 px-1.5 py-0.5 font-sans text-[8px] font-bold uppercase tracking-wider text-[#8b6914]"
-                    title="For real estate professionals"
-                  >
-                    Agent
-                  </span>
-                </span>
-                <ChevronDown
-                  className={`h-3.5 w-3.5 shrink-0 transition-transform duration-200 ${dealDeskOpen ? "rotate-180" : ""}`}
-                  strokeWidth={2}
-                  aria-hidden
-                />
-              </Link>
-
-              <div
-                className={`absolute left-1/2 top-full z-[1001] w-[min(calc(100vw-3rem),14rem)] -translate-x-1/2 pt-2 ${
-                  dealDeskOpen ? "" : "hidden"
-                }`}
-                role="menu"
-                aria-label="Deal Desk"
-                aria-hidden={!dealDeskOpen}
-              >
-                <div className="rounded-[4px] border border-slate-200/90 bg-white py-2 shadow-[0_16px_48px_rgba(10,25,47,0.1)]">
-                  <Link
-                    role="menuitem"
-                    to="/deal-desk"
-                    className={`block px-4 py-2.5 font-sans text-[12px] font-semibold uppercase tracking-[0.1em] text-navy transition-colors hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-gold/30 ${
-                      pathname === "/deal-desk" ? "bg-slate-50" : ""
-                    }`}
-                    onClick={() => setDealDeskOpen(false)}
-                  >
-                    All Tools
-                  </Link>
-                  <Link
-                    role="menuitem"
-                    to="/deal-desk/playbook"
-                    className={`block border-l-[3px] border-[#C6A15B]/70 px-4 py-2.5 pl-[13px] transition-colors hover:bg-[#C6A15B]/[0.08] focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-gold/30 ${
-                      pathname === "/deal-desk/playbook" ? "bg-[#C6A15B]/10" : ""
-                    }`}
-                    onClick={() => setDealDeskOpen(false)}
-                  >
-                    <span className="flex items-start gap-2">
-                      <BookOpen className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#9a7a2a]" aria-hidden />
-                      <span>
-                        <span className="block font-sans text-[12px] font-semibold uppercase tracking-[0.1em] text-navy">
-                          Agent Playbook
-                        </span>
-                        <span className="mt-0.5 block font-sans text-[10px] font-normal normal-case leading-snug tracking-normal text-slate-500">
-                          How the suite works — start here
-                        </span>
-                      </span>
-                    </span>
-                  </Link>
-                  <Link
-                    role="menuitem"
-                    to="/deal-desk/offer-optimizer"
-                    className="block px-4 py-2.5 font-sans text-[12px] font-semibold uppercase tracking-[0.1em] text-navy transition-colors hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-gold/30"
-                    onClick={() => setDealDeskOpen(false)}
-                  >
-                    Offer Optimizer
-                  </Link>
-                  <Link
-                    role="menuitem"
-                    to="/deal-desk/client-qualifier"
-                    className="block px-4 py-2.5 font-sans text-[12px] font-semibold uppercase tracking-[0.1em] text-navy transition-colors hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-gold/30"
-                    onClick={() => setDealDeskOpen(false)}
-                  >
-                    Client Qualifier
-                  </Link>
-                  <Link
-                    role="menuitem"
-                    to="/deal-desk/listing-boost"
-                    className="block px-4 py-2.5 font-sans text-[12px] font-semibold uppercase tracking-[0.1em] text-navy transition-colors hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-gold/30"
-                    onClick={() => setDealDeskOpen(false)}
-                  >
-                    Listing Boost
-                  </Link>
-                  <Link
-                    role="menuitem"
-                    to="/deal-desk/assumable-calculator"
-                    className="block px-4 py-2.5 font-sans text-[12px] font-semibold uppercase tracking-[0.1em] text-navy transition-colors hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-gold/30"
-                    onClick={() => setDealDeskOpen(false)}
-                  >
-                    Assumable Calculator
-                  </Link>
-                  <Link
-                    role="menuitem"
-                    to="/deal-desk/net-sheet"
-                    className="block px-4 py-2.5 font-sans text-[12px] font-semibold uppercase tracking-[0.1em] text-navy transition-colors hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-gold/30"
-                    onClick={() => setDealDeskOpen(false)}
-                  >
-                    Seller Net Sheet
-                  </Link>
-                </div>
-              </div>
-            </div>
 
             {/* Smart Tools — hub link + dropdown */}
             <div
@@ -246,7 +153,7 @@ const Navbar = () => {
                 aria-expanded={smartToolsOpen}
                 aria-haspopup="menu"
               >
-                Smart Tools
+                {t("nav.smartTools")}
                 <ChevronDown
                   className={`h-3.5 w-3.5 shrink-0 transition-transform duration-200 ${smartToolsOpen ? "rotate-180" : ""}`}
                   strokeWidth={2}
@@ -259,7 +166,7 @@ const Navbar = () => {
                   smartToolsOpen ? "" : "hidden"
                 }`}
                 role="menu"
-                aria-label="Smart Tools"
+                aria-label={t("nav.smartTools")}
                 aria-hidden={!smartToolsOpen}
               >
                 <div className="rounded-[4px] border border-slate-200/90 bg-white py-2 shadow-[0_16px_48px_rgba(10,25,47,0.1)]">
@@ -272,10 +179,10 @@ const Navbar = () => {
                       onClick={() => setSmartToolsOpen(false)}
                     >
                       <span className="block font-sans text-[12px] font-semibold uppercase tracking-[0.1em] text-navy">
-                        {item.name}
+                        {t(item.nameKey)}
                       </span>
                       <span className="mt-1 block text-[12px] leading-snug text-slate-500 normal-case tracking-normal font-normal">
-                        {item.blurb}
+                        {t(item.blurbKey)}
                       </span>
                     </Link>
                   ))}
@@ -284,7 +191,17 @@ const Navbar = () => {
             </div>
 
             <Link to="/contact" className={baseLink(pathname === "/contact")}>
-              Contact Us
+              {t("nav.contact")}
+            </Link>
+
+            <LanguageToggle />
+
+            <Link
+              to="/deal-desk"
+              className="inline-flex shrink-0 items-center font-sans outline-none focus-visible:ring-2 focus-visible:ring-gold/45 focus-visible:ring-offset-2 rounded-md"
+              aria-current={dealDeskActive ? "page" : undefined}
+            >
+              <span className="ihl-realtor-nav-glow">{t("nav.forRealtors")}</span>
             </Link>
           </div>
         </div>
@@ -294,7 +211,7 @@ const Navbar = () => {
             to="/contact"
             className="btn-primary !px-10 !py-4 shadow-xl shadow-navy/10 whitespace-nowrap"
           >
-            Start Pre-Approval
+            {t("nav.startPreApproval")}
           </Link>
         </div>
 
@@ -333,88 +250,8 @@ const Navbar = () => {
             onClick={() => setIsOpen(false)}
             className="text-lg font-medium text-slate-900 py-3 border-b border-slate-100/80"
           >
-            Knowledge
+            {t("nav.knowledge")}
           </Link>
-
-          <div className="border-b border-slate-100/80 py-1">
-            <button
-              type="button"
-              className="flex w-full items-center justify-between py-3 text-left text-lg font-medium text-slate-900 min-h-[48px]"
-              aria-expanded={mobileDealDeskOpen}
-              onClick={() => setMobileDealDeskOpen((v) => !v)}
-            >
-              <span className={`flex items-center gap-2 ${dealDeskActive ? "text-navy" : ""}`}>
-                Deal Desk
-                <span className="rounded bg-[#C6A15B]/25 px-1.5 py-0.5 text-[10px] font-bold uppercase text-[#8b6914]">Agent</span>
-              </span>
-              <ChevronDown
-                className={`h-5 w-5 shrink-0 text-slate-500 transition-transform ${mobileDealDeskOpen ? "rotate-180" : ""}`}
-              />
-            </button>
-            {mobileDealDeskOpen && (
-              <div className="pb-3 pl-2 space-y-1 border-l-2 border-[#C6A15B]/25 ml-1">
-                <Link
-                  to="/deal-desk"
-                  onClick={() => setIsOpen(false)}
-                  className={`block py-3 pl-3 text-base ${
-                    pathname === "/deal-desk" ? "font-semibold text-navy" : "text-slate-700"
-                  }`}
-                >
-                  All Tools
-                </Link>
-                <Link
-                  to="/deal-desk/playbook"
-                  onClick={() => setIsOpen(false)}
-                  className={`block border-l-[3px] border-[#C6A15B]/70 py-3 pl-3 ${pathname === "/deal-desk/playbook" ? "bg-[#C6A15B]/10" : ""}`}
-                >
-                  <span className="flex items-start gap-2">
-                    <BookOpen className="mt-1 h-4 w-4 shrink-0 text-[#9a7a2a]" aria-hidden />
-                    <span>
-                      <span className={`block ${pathname === "/deal-desk/playbook" ? "font-semibold text-navy" : "text-slate-700"}`}>
-                        Agent Playbook
-                      </span>
-                      <span className="mt-0.5 block text-[12px] font-normal leading-snug text-slate-500">How the suite works</span>
-                    </span>
-                  </span>
-                </Link>
-                <Link
-                  to="/deal-desk/offer-optimizer"
-                  onClick={() => setIsOpen(false)}
-                  className={`block py-3 pl-3 text-base ${pathname === "/deal-desk/offer-optimizer" ? "font-semibold text-navy" : "text-slate-700"}`}
-                >
-                  Offer Optimizer
-                </Link>
-                <Link
-                  to="/deal-desk/client-qualifier"
-                  onClick={() => setIsOpen(false)}
-                  className={`block py-3 pl-3 text-base ${pathname === "/deal-desk/client-qualifier" ? "font-semibold text-navy" : "text-slate-700"}`}
-                >
-                  Client Qualifier
-                </Link>
-                <Link
-                  to="/deal-desk/listing-boost"
-                  onClick={() => setIsOpen(false)}
-                  className={`block py-3 pl-3 text-base ${pathname === "/deal-desk/listing-boost" ? "font-semibold text-navy" : "text-slate-700"}`}
-                >
-                  Listing Boost
-                </Link>
-                <Link
-                  to="/deal-desk/assumable-calculator"
-                  onClick={() => setIsOpen(false)}
-                  className={`block py-3 pl-3 text-base ${pathname === "/deal-desk/assumable-calculator" ? "font-semibold text-navy" : "text-slate-700"}`}
-                >
-                  Assumable Calculator
-                </Link>
-                <Link
-                  to="/deal-desk/net-sheet"
-                  onClick={() => setIsOpen(false)}
-                  className={`block py-3 pl-3 text-base ${pathname === "/deal-desk/net-sheet" ? "font-semibold text-navy" : "text-slate-700"}`}
-                >
-                  Seller Net Sheet
-                </Link>
-              </div>
-            )}
-          </div>
 
           <div className="border-b border-slate-100/80 py-1">
             <button
@@ -423,7 +260,7 @@ const Navbar = () => {
               aria-expanded={mobileSmartToolsOpen}
               onClick={() => setMobileSmartToolsOpen((v) => !v)}
             >
-              <span className={smartActive ? "text-navy" : ""}>Smart Tools</span>
+              <span className={smartActive ? "text-navy" : ""}>{t("nav.smartTools")}</span>
               <ChevronDown
                 className={`h-5 w-5 shrink-0 text-slate-500 transition-transform ${mobileSmartToolsOpen ? "rotate-180" : ""}`}
               />
@@ -444,7 +281,7 @@ const Navbar = () => {
                     onClick={() => setIsOpen(false)}
                     className={`block py-3 pl-3 text-base ${pathname === item.path ? "font-semibold text-navy" : "text-slate-700"}`}
                   >
-                    {item.name}
+                    {t(item.nameKey)}
                   </Link>
                 ))}
               </div>
@@ -454,9 +291,21 @@ const Navbar = () => {
           <Link
             to="/contact"
             onClick={() => setIsOpen(false)}
-            className="text-lg font-medium text-slate-900 py-3"
+            className="text-lg font-medium text-slate-900 py-3 border-b border-slate-100/80"
           >
-            Contact Us
+            {t("nav.contact")}
+          </Link>
+
+          <div className="flex items-center justify-center py-4 border-b border-slate-100/80">
+            <LanguageToggle />
+          </div>
+
+          <Link
+            to="/deal-desk"
+            onClick={() => setIsOpen(false)}
+            className="flex items-center py-3 border-b border-slate-100/80 font-sans outline-none focus-visible:ring-2 focus-visible:ring-gold/45 focus-visible:ring-offset-2 rounded-md"
+          >
+            <span className="ihl-realtor-nav-glow">{t("nav.forRealtors")}</span>
           </Link>
 
           <Link
@@ -464,7 +313,7 @@ const Navbar = () => {
             onClick={() => setIsOpen(false)}
             className="mt-2 bg-slate-900 text-white px-5 py-3.5 rounded-sm text-center font-medium min-h-[48px] flex items-center justify-center"
           >
-            Start Pre-Approval
+            {t("nav.startPreApproval")}
           </Link>
           </div>
         </motion.div>

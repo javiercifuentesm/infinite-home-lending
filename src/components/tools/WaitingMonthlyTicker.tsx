@@ -1,16 +1,18 @@
 import type { WaitingCalcResult } from "../../hooks/useWaitingMath";
 import { fmt } from "../../hooks/useWaitingMath";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 type Props = {
   data: WaitingCalcResult;
 };
 
 export function WaitingMonthlyTicker({ data }: Props) {
+  const { t } = useLanguage();
   const bars = [
-    { label: "Rent paid to landlord", value: data.rentPaid, color: "#A32D2D" },
-    { label: "Home price increase", value: data.appreciationMissed, color: "#C6A15B" },
-    { label: "Higher upfront costs", value: data.extraDown + data.extraClosing, color: "#854F0B" },
-    { label: "Equity not built", value: data.equityMissed, color: "#888780" },
+    { label: t("tool.waiting.ticker.barRent"), value: data.rentPaid, color: "#A32D2D" },
+    { label: t("tool.waiting.ticker.barAppr"), value: data.appreciationMissed, color: "#C6A15B" },
+    { label: t("tool.waiting.ticker.barUpfront"), value: data.extraDown + data.extraClosing, color: "#854F0B" },
+    { label: t("tool.waiting.ticker.barEquity"), value: data.equityMissed, color: "#888780" },
   ];
   const maxValue = Math.max(...bars.map((b) => b.value), 1);
 
@@ -18,11 +20,11 @@ export function WaitingMonthlyTicker({ data }: Props) {
     <div className="rounded-xl border border-[var(--tcw-border,#e2e8f0)] bg-[var(--tcw-surface,#fff)] p-5 sm:p-6">
       <div className="flex flex-wrap items-baseline justify-between gap-3">
         <p className="max-w-md text-[15px] font-medium leading-snug text-[var(--tcw-text-primary,#0B2A4A)]">
-          Every month you wait costs you approximately
+          {t("tool.waiting.ticker.lead")}
         </p>
         <div className="flex flex-wrap items-baseline gap-1">
           <span className="font-[Georgia,serif] text-3xl font-semibold text-[#A32D2D]">{fmt(data.monthlyCostRate)}</span>
-          <span className="text-[13px] text-[var(--tcw-text-muted,#64748b)]">/month</span>
+          <span className="text-[13px] text-[var(--tcw-text-muted,#64748b)]">{t("tool.waiting.ticker.perMonth")}</span>
         </div>
       </div>
       <div className="mt-8 space-y-5">

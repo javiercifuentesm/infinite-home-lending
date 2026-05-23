@@ -1,40 +1,46 @@
 import type { PowerMapInputs, PowerMapResults } from "../../../hooks/usePowerMapMath";
 import { ACCESSIBILITY_BUFFER, fmtK } from "../../../hooks/usePowerMapMath";
+import { useLanguage } from "../../../i18n/LanguageContext";
 
 type MWithStatus = PowerMapResults["marketsWithStatus"][number];
 
-export function marketsAccessibleAt(price: number, marketsWithStatus: MWithStatus[]): string {
+type TFn = (key: string) => string;
+
+function marketsAccessibleAt(price: number, marketsWithStatus: MWithStatus[], t: TFn): string {
   const names = marketsWithStatus
     .filter((m) => price >= m.price * ACCESSIBILITY_BUFFER)
     .slice(-3)
     .map((m) => m.name)
     .reverse();
-  return names.join(", ") || "Building toward first market access";
+  return names.join(", ") || t("tool.pm.road.buildingFirst");
 }
 
-export function actionsForPeriod(
-  period: "q90" | "m6" | "m12",
-  inputs: PowerMapInputs,
-): string {
+function fmtMoney(n: number): string {
+  return "$" + Math.round(n).toLocaleString("en-US");
+}
+
+function actionsForPeriod(period: "q90" | "m6" | "m12", inputs: PowerMapInputs, t: TFn): string {
   const { creditImp, debtPayoff, savingsBoost, incomeGrowth, scoreBase, savingsRate } = inputs;
   const pct = period === "q90" ? 0.25 : period === "m6" ? 0.5 : 1.0;
   const actions: string[] = [];
 
   if (creditImp > 0) {
     const targetScore = Math.min(760, scoreBase + Math.round(creditImp * pct));
-    actions.push(`Credit target: ${targetScore}+`);
+    actions.push(t("tool.pm.road.actCredit").replace("{score}", String(targetScore)));
   }
   if (debtPayoff > 0) {
-    actions.push(`Eliminate $${Math.round(debtPayoff * pct).toLocaleString("en-US")}/mo in debt`);
+    actions.push(t("tool.pm.road.actDebt").replace("${amt}", fmtMoney(Math.round(debtPayoff * pct))));
   }
   if (savingsBoost > 0) {
-    actions.push(`Save $${(savingsRate + savingsBoost).toLocaleString("en-US")}/mo`);
+    actions.push(
+      t("tool.pm.road.actSave").replace("${amt}", `$${(savingsRate + savingsBoost).toLocaleString("en-US")}`),
+    );
   }
   if (incomeGrowth > 0) {
     const incGain = Math.round(incomeGrowth * pct);
-    actions.push(`Income milestone: +$${incGain.toLocaleString("en-US")}/yr`);
+    actions.push(t("tool.pm.road.actIncome").replace("${amt}", `$${incGain.toLocaleString("en-US")}`));
   }
-  return actions.slice(0, 2).join(" · ") || "Review eligibility with advisor";
+  return actions.slice(0, 2).join(" · ") || t("tool.pm.road.reviewAdvisor");
 }
 
 type Props = {
@@ -43,6 +49,7 @@ type Props = {
 };
 
 export function PMRoadmap({ inputs, results }: Props) {
+  const { t } = useLanguage();
   const {
     currentPrice,
     q90Price,
@@ -59,14 +66,24 @@ export function PMRoadmap({ inputs, results }: Props) {
     marketsWithStatus,
   } = results;
 
-  const todayMarkets = marketsAccessibleAt(currentPrice, marketsWithStatus);
-  const q90Markets = marketsAccessibleAt(q90Price, marketsWithStatus);
-  const m6Markets = marketsAccessibleAt(m6Price, marketsWithStatus);
-  const m12Markets = marketsAccessibleAt(m12Price, marketsWithStatus);
+  const todayMarkets = marketsAccessibleAt(currentPrice, marketsWithStatus, t);
+  const q90Markets = marketsAccessibleAt(q90Price, marketsWithStatus, t);
+  const m6Markets = marketsAccessibleAt(m6Price, marketsWithStatus, t);
+  const m12Markets = marketsAccessibleAt(m12Price, marketsWithStatus, t);
+
+  const qualLine = t("tool.pm.road.qualLine")
+    .replace("{rate}", baseRate.toFixed(3))
+    .replace("{score}", String(scoreBase))
+    .replace("{savings}", fmtK(savings));
+
+  const finalLine = t("tool.pm.road.finalLine")
+    .replace("{score}", String(impScore))
+    .replace("{rate}", impRate.toFixed(3))
+    .replace("{savings}", fmtK(m12Savings));
 
   return (
     <div>
-      <h3 className="font-[Georgia,serif] text-[15px] font-medium text-[#0B2A4A]">Your personalized 12-month roadmap</h3>
+      <h3 className="font-[Georgia,serif] text-[15px] font-medium text-[#0B2A4A]">{t("tool.pm.road.title")}</h3>
       <div className="mt-5 space-y-4">
         {/* Today */}
         <div
@@ -83,13 +100,13 @@ export function PMRoadmap({ inputs, results }: Props) {
           <div className="min-w-0 flex-1">
             <p className="text-[10px] font-semibold uppercase tracking-wide"
               style={{ color: "#0B2A4A" }}>
-              Today — your starting point
+              {t("tool.pm.road.todayLabel")}
             </p>
             <p className="mt-1 font-[Georgia,serif] text-[20px]">{fmtK(currentPrice)}</p>
-            <p className="mt-2 text-[11px] leading-[1.5] text-slate-500">Markets: {todayMarkets}</p>
-            <p className="mt-1 text-[11px] italic text-slate-500">
-              Qualification rate: {baseRate.toFixed(3)}% · Credit score: {scoreBase} · Savings: {fmtK(savings)}
+            <p className="mt-2 text-[11px] leading-[1.5] text-slate-500">
+              {t("tool.pm.road.markets")} {todayMarkets}
             </p>
+            <p className="mt-1 text-[11px] italic text-slate-500">{qualLine}</p>
           </div>
         </div>
 
@@ -106,12 +123,14 @@ export function PMRoadmap({ inputs, results }: Props) {
           </div>
           <div className="min-w-0 flex-1">
             <p className="text-[10px] font-semibold uppercase tracking-wide" style={{ color: "#854F0B" }}>
-              90-day milestone
+              {t("tool.pm.road.m90")}
             </p>
             <p className="mt-1 font-[Georgia,serif] text-[20px]">{fmtK(q90Price)}</p>
-            <p className="mt-2 text-[11px] leading-[1.5] text-slate-500">Markets opening: {q90Markets}</p>
+            <p className="mt-2 text-[11px] leading-[1.5] text-slate-500">
+              {t("tool.pm.road.marketsOpening")} {q90Markets}
+            </p>
             <p className="mt-1 text-[11px] italic text-slate-500">
-              {actionsForPeriod("q90", inputs)} · Savings: ~{fmtK(q90Savings)}
+              {actionsForPeriod("q90", inputs, t)} · {t("tool.pm.road.savingsSep")} ~{fmtK(q90Savings)}
             </p>
           </div>
         </div>
@@ -129,12 +148,14 @@ export function PMRoadmap({ inputs, results }: Props) {
           </div>
           <div className="min-w-0 flex-1">
             <p className="text-[10px] font-semibold uppercase tracking-wide" style={{ color: "#3B6D11" }}>
-              6-month milestone
+              {t("tool.pm.road.m6")}
             </p>
             <p className="mt-1 font-[Georgia,serif] text-[20px]">{fmtK(m6Price)}</p>
-            <p className="mt-2 text-[11px] leading-[1.5] text-slate-500">Markets opening: {m6Markets}</p>
+            <p className="mt-2 text-[11px] leading-[1.5] text-slate-500">
+              {t("tool.pm.road.marketsOpening")} {m6Markets}
+            </p>
             <p className="mt-1 text-[11px] italic text-slate-500">
-              {actionsForPeriod("m6", inputs)} · Savings: ~{fmtK(m6Savings)}
+              {actionsForPeriod("m6", inputs, t)} · {t("tool.pm.road.savingsSep")} ~{fmtK(m6Savings)}
             </p>
           </div>
         </div>
@@ -149,13 +170,13 @@ export function PMRoadmap({ inputs, results }: Props) {
           </div>
           <div className="min-w-0 flex-1">
             <p className="text-[10px] font-semibold uppercase tracking-wide" style={{ color: "#27500A" }}>
-              12-month goal — fully improved
+              {t("tool.pm.road.m12")}
             </p>
             <p className="mt-1 font-[Georgia,serif] text-[20px]">{fmtK(m12Price)}</p>
-            <p className="mt-2 text-[11px] leading-[1.5] text-slate-500">Markets unlocked: {m12Markets}</p>
-            <p className="mt-1 text-[11px] italic text-slate-500">
-              Credit: {impScore} · Rate: {impRate.toFixed(3)}% · Savings: ~{fmtK(m12Savings)} · Ready to buy
+            <p className="mt-2 text-[11px] leading-[1.5] text-slate-500">
+              {t("tool.pm.road.marketsUnlocked")} {m12Markets}
             </p>
+            <p className="mt-1 text-[11px] italic text-slate-500">{finalLine}</p>
           </div>
         </div>
       </div>

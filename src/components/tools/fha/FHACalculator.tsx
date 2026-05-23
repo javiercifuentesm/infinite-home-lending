@@ -15,8 +15,10 @@ import { FHAProfileGrid } from "./FHAProfileGrid";
 import { FHAInsight } from "./FHAInsight";
 import { FHACTA } from "./FHACTA";
 import { SmartToolIntro } from "../SmartToolIntro";
+import { useLanguage } from "../../../i18n/LanguageContext";
 
 export default function FHACalculator() {
+  const { t } = useLanguage();
   const [inputs, setInputs] = useState<FHAInputs>(() => defaultFHAInputs());
 
   const results = useMemo(
@@ -41,12 +43,8 @@ export default function FHACalculator() {
         } as CSSProperties
       }
     >
-      <SmartToolIntro title="Conventional vs. FHA: The Full Cost Comparison">
-        <p>
-          Most comparison tools show you two monthly payments and call it a decision. This one shows you the mortgage insurance crossover year,
-          the FHA-to-Conventional refinance strategy, how your credit score changes the verdict, and a personalized recommendation based on
-          your actual financial profile.
-        </p>
+      <SmartToolIntro title={t("tool.fha.title")}>
+        <p>{t("tool.fha.intro")}</p>
       </SmartToolIntro>
 
       <section className="mt-10 space-y-8">
@@ -59,7 +57,7 @@ export default function FHACalculator() {
               to="/tools/credit-score-roi"
               className="font-semibold text-[#0B2A4A] underline decoration-[#C6A15B]/50 hover:text-[#C6A15B]"
             >
-              Calculate what improving your score would save you →
+              {t("tool.fha.creditLink")}
             </Link>
           </p>
         ) : null}
@@ -78,12 +76,7 @@ export default function FHACalculator() {
         <FHAInsight inputs={inputs} results={results} />
         <FHACTA />
 
-        <p className="text-center text-[10px] leading-relaxed text-[var(--color-text-tertiary)]">
-          Estimates are for educational purposes only. 2026 FHA loan limits: $524,225 (standard) to $1,249,125 (high-cost). Conventional conforming
-          limit: $832,750. FHA MIP rates: 0.55% annually for most 30-year loans with less than 10% down. PMI rates vary by lender, credit score, and
-          LTV. Actual rates and insurance costs depend on lender, borrower profile, and market conditions. Contact Infinite Home Lending for a
-          personalized analysis.
-        </p>
+        <p className="text-center text-[10px] leading-relaxed text-[var(--color-text-tertiary)]">{t("tool.fha.disclaimer")}</p>
       </section>
     </div>
   );

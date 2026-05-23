@@ -1,4 +1,5 @@
 import type { RLEInputs, RateEnv } from "../../../hooks/useRLEMath";
+import { useLanguage } from "../../../i18n/LanguageContext";
 
 type Props = {
   inputs: RLEInputs;
@@ -10,6 +11,7 @@ const inputClass =
   "w-full rounded-md border border-slate-200/90 bg-white px-3 py-2 font-[Lato,system-ui,sans-serif] text-[14px] text-slate-900 shadow-sm focus:border-[#C6A15B] focus:outline-none focus:ring-1 focus:ring-[#C6A15B]/40";
 
 export function RLEScenarioInputs({ inputs, onChange }: Props) {
+  const { t } = useLanguage();
   const set = <K extends keyof RLEInputs>(key: K, value: RLEInputs[K]) => onChange({ ...inputs, [key]: value });
 
   return (
@@ -18,12 +20,12 @@ export function RLEScenarioInputs({ inputs, onChange }: Props) {
         <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#C6A15B] text-[11px] font-bold text-[#633806]">
           2
         </span>
-        <h2 className="font-[Georgia,serif] text-[15px] font-medium text-[#0B2A4A]">Rate movement scenarios</h2>
+        <h2 className="font-[Georgia,serif] text-[15px] font-medium text-[#0B2A4A]">{t("tool.rle.scenario.heading")}</h2>
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label htmlFor="rle-rise" className={labelClass}>
-            Rate rise scenario (%)
+            {t("tool.rle.scenario.rise")}
           </label>
           <select
             id="rle-rise"
@@ -31,17 +33,17 @@ export function RLEScenarioInputs({ inputs, onChange }: Props) {
             onChange={(e) => set("riseScenario", parseFloat(e.target.value))}
             className={inputClass}
           >
-            <option value="0.125">+0.125% (small move)</option>
-            <option value="0.25">+0.25% (common move)</option>
-            <option value="0.375">+0.375% (moderate)</option>
-            <option value="0.5">+0.50% (large move)</option>
-            <option value="0.75">+0.75% (sharp jump)</option>
+            <option value="0.125">{t("tool.rle.scenario.rise125")}</option>
+            <option value="0.25">{t("tool.rle.scenario.rise25")}</option>
+            <option value="0.375">{t("tool.rle.scenario.rise375")}</option>
+            <option value="0.5">{t("tool.rle.scenario.rise50")}</option>
+            <option value="0.75">{t("tool.rle.scenario.rise75")}</option>
           </select>
-          <p className="mt-1 text-[11px] text-slate-500">What if rates rise by this much?</p>
+          <p className="mt-1 text-[11px] text-slate-500">{t("tool.rle.scenario.riseNote")}</p>
         </div>
         <div>
           <label htmlFor="rle-drop" className={labelClass}>
-            Rate drop scenario (%)
+            {t("tool.rle.scenario.drop")}
           </label>
           <select
             id="rle-drop"
@@ -49,16 +51,16 @@ export function RLEScenarioInputs({ inputs, onChange }: Props) {
             onChange={(e) => set("dropScenario", parseFloat(e.target.value))}
             className={inputClass}
           >
-            <option value="0.125">−0.125% (small move)</option>
-            <option value="0.25">−0.25% (common move)</option>
-            <option value="0.375">−0.375% (moderate)</option>
-            <option value="0.5">−0.50% (meaningful)</option>
+            <option value="0.125">{t("tool.rle.scenario.drop125")}</option>
+            <option value="0.25">{t("tool.rle.scenario.drop25")}</option>
+            <option value="0.375">{t("tool.rle.scenario.drop375")}</option>
+            <option value="0.5">{t("tool.rle.scenario.drop50")}</option>
           </select>
-          <p className="mt-1 text-[11px] text-slate-500">What if rates drop by this much?</p>
+          <p className="mt-1 text-[11px] text-slate-500">{t("tool.rle.scenario.dropNote")}</p>
         </div>
         <div className="sm:col-span-2">
           <label htmlFor="rle-env" className={labelClass}>
-            Rate environment
+            {t("tool.rle.scenario.env")}
           </label>
           <select
             id="rle-env"
@@ -66,10 +68,10 @@ export function RLEScenarioInputs({ inputs, onChange }: Props) {
             onChange={(e) => set("rateEnv", e.target.value as RateEnv)}
             className={inputClass}
           >
-            <option value="volatile">Volatile — big swings possible</option>
-            <option value="rising">Rising trend</option>
-            <option value="falling">Slowly falling</option>
-            <option value="stable">Stable / sideways</option>
+            <option value="volatile">{t("tool.rle.scenario.envVolatile")}</option>
+            <option value="rising">{t("tool.rle.scenario.envRising")}</option>
+            <option value="falling">{t("tool.rle.scenario.envFalling")}</option>
+            <option value="stable">{t("tool.rle.scenario.envStable")}</option>
           </select>
         </div>
       </div>
