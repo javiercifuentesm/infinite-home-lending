@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
+import { usePageMetadata } from "../../hooks/usePageMetadata";
+import { PAGE_METADATA } from "../../lib/pageMetadata";
 import { DealDeskHeader } from "../../components/deal-desk/DealDeskHeader";
 import { IHLLogo } from "../../components/IHLLogo";
 import { PlaybookFAQ } from "../../components/deal-desk/playbook/PlaybookFAQ";
@@ -15,41 +17,13 @@ import { PlaybookToolGuides } from "../../components/deal-desk/playbook/Playbook
 import Nexio from "../../components/Nexio";
 import { printPlaybookQuickReference } from "../../utils/generatePlaybookPDF";
 
-const CANONICAL = "https://www.infinitehomelending.com/deal-desk/playbook";
-
 const PHONE_DISPLAY = "(301) 555-0123";
 const NMLS_ID = "2831765";
 
 export default function DealDeskPlaybook() {
   const [pdfLoading, setPdfLoading] = useState(false);
 
-  useEffect(() => {
-    document.title = "The Deal Desk Playbook | Realtor Mortgage Guide | Infinite Home Lending";
-    const setMeta = (attr: "name" | "property", key: string, content: string) => {
-      let el = document.querySelector(`meta[${attr}="${key}"]`);
-      if (!el) {
-        el = document.createElement("meta");
-        el.setAttribute(attr, key);
-        document.head.appendChild(el);
-      }
-      el.setAttribute("content", content);
-    };
-    setMeta(
-      "name",
-      "description",
-      "The complete guide to The Deal Desk tools for MD, DC, and VA real estate agents. Scripts, walkthroughs, and deal strategies for the Offer Optimizer, Client Qualifier, Listing Boost, Assumable Calculator, and Seller Net Sheet. Download the Quick Reference Card.",
-    );
-    let link = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
-    if (!link) {
-      link = document.createElement("link");
-      link.rel = "canonical";
-      document.head.appendChild(link);
-    }
-    link.href = CANONICAL;
-    return () => {
-      document.title = "Infinite Home Lending";
-    };
-  }, []);
+  usePageMetadata(PAGE_METADATA.dealDeskPlaybook);
 
   const handleDownload = useCallback(() => {
     setPdfLoading(true);

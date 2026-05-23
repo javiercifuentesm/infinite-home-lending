@@ -11,6 +11,8 @@ import { GateTour } from "./GateTour";
 import { GateWhy } from "./GateWhy";
 import { DealDeskPartnerCTA } from "../DealDeskPartnerCTA";
 import Nexio from "../../../components/Nexio";
+import { usePageMetadata } from "../../../hooks/usePageMetadata";
+import { PAGE_METADATA } from "../../../lib/pageMetadata";
 
 type DealDeskGateProps = {
   onAuth?: () => void;
@@ -181,6 +183,8 @@ export function DealDeskGate({ onAuth }: DealDeskGateProps) {
   const fmtUsd = (n: number) =>
     n.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
 
+  usePageMetadata(PAGE_METADATA.dealDeskPartnerAccess);
+
   useEffect(() => {
     if (authed) return;
     const el = document.querySelector('meta[name="robots"]') as HTMLMetaElement | null;
@@ -193,8 +197,6 @@ export function DealDeskGate({ onAuth }: DealDeskGateProps) {
       document.head.appendChild(meta);
     }
     meta.setAttribute("content", "noindex, nofollow");
-    const prevTitle = document.title;
-    document.title = "The Deal Desk — Partner Access | Infinite Home Lending";
 
     return () => {
       if (created && meta?.parentNode) {
@@ -203,7 +205,6 @@ export function DealDeskGate({ onAuth }: DealDeskGateProps) {
         if (prevContent !== null) meta.setAttribute("content", prevContent);
         else meta.removeAttribute("content");
       }
-      document.title = prevTitle;
     };
   }, [authed]);
 

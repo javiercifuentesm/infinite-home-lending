@@ -3,9 +3,15 @@ import { ArrowRight } from "lucide-react";
 import { PAGE_CONTENT_RAIL_CLASS } from "../constants/layout";
 import { getSmartToolsForHub } from "../data/smartToolsCatalog";
 import { useLanguage } from "../i18n/LanguageContext";
+import { usePageMetadata } from "../hooks/usePageMetadata";
 
 export default function SmartTools() {
   const { t } = useLanguage();
+  usePageMetadata({
+    title: t("smartTools.meta.title"),
+    description: t("smartTools.meta.description"),
+    canonical: "https://www.infinitehomelending.com/smart-tools",
+  });
   const tools = getSmartToolsForHub();
 
   return (

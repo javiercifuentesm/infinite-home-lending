@@ -11,6 +11,27 @@ export const en = {
   "nav.startPreApproval": "Start Pre-Approval",
   "footer.askSarah": "Ask Sarah",
 
+  "home.meta.title": "Home",
+  "home.meta.description":
+    "Premium mortgage guidance for Maryland, DC, and Virginia. Compare loan options, run smart calculators, and get advice built around your goals—not just a rate.",
+  "about.meta.title": "About Us",
+  "about.meta.description":
+    "Meet Infinite Home Lending—MD, DC, and VA advisors focused on clarity, strategy, and direct guidance from first conversation through closing and beyond.",
+  "solutions.meta.title": "Loan Solutions",
+  "solutions.meta.description":
+    "Compare Conventional, FHA, VA, USDA, refinance, HELOC, and specialty loans for Maryland, DC, and Virginia. Understand tradeoffs before you pick a structure.",
+  "howItWorks.meta.description":
+    "See how Infinite Home Lending guides MD, DC, and VA borrowers from first call to closing—with clear milestones, proactive updates, and advisor-led support.",
+  "contact.meta.title": "Contact Us",
+  "contact.meta.description":
+    "Contact Infinite Home Lending for purchase, refinance, or equity questions in MD, DC, and VA. Share your goals and get clear next steps from licensed advisors.",
+  "smartTools.meta.title": "Smart Tools",
+  "smartTools.meta.description":
+    "Free interactive mortgage calculators for MD, DC, and VA buyers and homeowners. Model payments, equity, waiting costs, and credit impact before you apply.",
+  "knowledge.meta.title": "Knowledge Center",
+  "knowledge.meta.description":
+    "Mortgage guides for Maryland, DC, and Virginia—buying, refinancing, loan types, and numbers explained without jargon. Find clear answers before you decide.",
+
   // Footer
   "footer.tagline": "Premium mortgage guidance built around your life — not just your rate. Serving Maryland, Virginia, and Washington, D.C.",
   "footer.slogan": "Tailored Lending. Infinite Possibilities.",
@@ -1755,6 +1776,7 @@ export const en = {
 
   // How We Work — remaining strings
   "howItWorks.meta.documentTitle": "How We Work | Infinite Home Lending",
+  "howItWorks.meta.title": "How We Work",
   "howItWorks.hero.imageAlt":
     "Townhomes at sunset with pathway, gardens, and distant waterfront skyline",
   "howItWorks.hero.body": "Make confident decisions knowing your loan is structured the right way from the start.",

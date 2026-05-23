@@ -1,6 +1,8 @@
 import { Fragment, useCallback, useState } from "react";
 import { PageContainer } from "../components/PageContainer";
 import { apiUrl } from "../lib/apiBase";
+import { usePageMetadata } from "../hooks/usePageMetadata";
+import { PAGE_METADATA } from "../lib/pageMetadata";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 
@@ -517,6 +519,7 @@ function StatusPicker({ lead, password, onUpdate }: { lead: LeadRow; password: s
 }
 
 export default function AnalyticsDashboard() {
+  usePageMetadata(PAGE_METADATA.analytics);
   const [password, setPassword] = useState("");
   const [leads, setLeads] = useState<LeadRow[] | null>(null);
   const [error, setError] = useState<string | null>(null);

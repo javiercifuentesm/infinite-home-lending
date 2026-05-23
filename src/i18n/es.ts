@@ -11,6 +11,27 @@ export const es = {
   "nav.startPreApproval": "Iniciar Pre-Aprobación",
   "footer.askSarah": "Pregunta a Sarah",
 
+  "home.meta.title": "Inicio",
+  "home.meta.description":
+    "Asesoría hipotecaria premium en Maryland, DC y Virginia. Compare opciones de préstamo, use calculadoras inteligentes y reciba orientación clara según sus metas—no solo una tasa.",
+  "about.meta.title": "Nosotros",
+  "about.meta.description":
+    "Conozca Infinite Home Lending—asesores hipotecarios en MD, DC y VA enfocados en claridad, estrategia y acompañamiento directo desde la primera conversación hasta el cierre.",
+  "solutions.meta.title": "Soluciones de Préstamo",
+  "solutions.meta.description":
+    "Compare préstamos convencionales, FHA, VA, USDA, refinanciamiento, HELOC y opciones especializadas en Maryland, DC y Virginia antes de elegir una estructura.",
+  "howItWorks.meta.description":
+    "Descubra cómo Infinite Home Lending guía a prestatarios en Maryland, DC y Virginia desde la primera llamada hasta el cierre—con hitos claros y apoyo directo del asesor.",
+  "contact.meta.title": "Contáctenos",
+  "contact.meta.description":
+    "Contacte a Infinite Home Lending sobre compra, refinanciamiento o capital en Maryland, DC y Virginia. Comparta sus metas y reciba próximos pasos claros de asesores licenciados.",
+  "smartTools.meta.title": "Herramientas Inteligentes",
+  "smartTools.meta.description":
+    "Calculadoras hipotecarias gratuitas para compradores y propietarios en MD, DC y VA. Modele pagos, patrimonio, costos de esperar e impacto del crédito antes de solicitar.",
+  "knowledge.meta.title": "Centro de Conocimiento",
+  "knowledge.meta.description":
+    "Guías hipotecarias para Maryland, DC y Virginia—compra, refinanciamiento, tipos de préstamo y números explicados sin jerga. Encuentre respuestas claras antes de decidir.",
+
   // Footer
   "footer.tagline": "Asesoría hipotecaria de alto nivel, diseñada alrededor de su vida — no solo de su tasa. Atendemos Maryland, Virginia y Washington, D.C.",
   "footer.slogan": "Préstamos a su medida. Posibilidades infinitas.",
@@ -1755,6 +1776,7 @@ export const es = {
 
   // How We Work — remaining strings
   "howItWorks.meta.documentTitle": "Cómo trabajamos | Infinite Home Lending",
+  "howItWorks.meta.title": "Cómo Trabajamos",
   "howItWorks.hero.imageAlt":
     "Casas adosadas al atardecer con sendero, jardines y horizonte urbano junto al agua al fondo",
   "howItWorks.hero.body": "Tome decisiones con confianza sabiendo que su préstamo está estructurado de la manera correcta desde el inicio.",

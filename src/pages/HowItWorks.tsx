@@ -5,6 +5,7 @@ import { PageContainer } from "../components/PageContainer";
 import { PAGE_CONTENT_RAIL_CLASS } from "../constants/layout";
 import { usePrefersReducedMotion } from "../hooks/usePrefersReducedMotion";
 import { useLanguage } from "../i18n/LanguageContext";
+import { usePageMetadata } from "../hooks/usePageMetadata";
 import {
   ArrowRight,
   ClipboardCheck,
@@ -114,9 +115,11 @@ export default function HowItWorks() {
   });
   const lineScaleY = useTransform(pathProgress, [0, 1], [0, 1]);
 
-  useEffect(() => {
-    document.title = t("howItWorks.meta.documentTitle");
-  }, [lang, t]);
+  usePageMetadata({
+    title: t("howItWorks.meta.title"),
+    description: t("howItWorks.meta.description"),
+    canonical: "https://www.infinitehomelending.com/how-we-work",
+  });
 
   return (
     <PageContainer className="min-w-0 overflow-x-hidden">

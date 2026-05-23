@@ -2,6 +2,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "motion/react";
 import { ArrowRight, Loader2, RefreshCw } from "lucide-react";
+import { usePageMetadata } from "../hooks/usePageMetadata";
+import { PAGE_METADATA } from "../lib/pageMetadata";
 import {
   computeRefinanceRealMath,
   DEFAULT_REFINANCE_INPUTS,
@@ -82,6 +84,7 @@ function verdictPanelClasses(kind: RefinanceVerdictKind): string {
 const DIRTY_HINT_COLOR = "#888780";
 
 export default function RefinanceRealMath() {
+  usePageMetadata(PAGE_METADATA.refinanceRealMath);
   const [draftInputs, setDraftInputs] = useState<RefinanceRealMathInputs>(DEFAULT_REFINANCE_INPUTS);
   const [committedInputs, setCommittedInputs] = useState<RefinanceRealMathInputs>(DEFAULT_REFINANCE_INPUTS);
   const [loading, setLoading] = useState(false);

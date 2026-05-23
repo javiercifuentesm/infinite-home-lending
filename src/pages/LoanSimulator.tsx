@@ -30,6 +30,8 @@ import { HorizonComparisonBars } from "../components/simulator/HorizonComparison
 import { DecisionConfidenceBlock } from "../components/simulator/DecisionConfidenceBlock";
 import { SimulatorGuidedStart } from "../components/simulator/SimulatorGuidedStart";
 import { usePrefersReducedMotion } from "../hooks/usePrefersReducedMotion";
+import { usePageMetadata } from "../hooks/usePageMetadata";
+import { PAGE_METADATA } from "../lib/pageMetadata";
 
 type Mode = "payment" | "affordability";
 
@@ -644,6 +646,7 @@ function HorizonComparisonSummary({
 }
 
 const LoanSimulator = () => {
+  usePageMetadata(PAGE_METADATA.loanStructureSimulator);
   const reducedMotion = usePrefersReducedMotion();
   const [mode, setMode] = useState<Mode>("payment");
   /** Single source of truth for the simulation window (drives all horizon-dependent math + copy). */

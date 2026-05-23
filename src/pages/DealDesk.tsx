@@ -9,8 +9,8 @@ import { IntelligenceLoop } from "../components/deal-desk/IntelligenceLoop";
 import Nexio from "../components/Nexio";
 import { useDealDeskAuth } from "../hooks/useDealDeskAuth";
 import { useDealDeskInactivity } from "../hooks/useDealDeskInactivity";
-
-const CANONICAL = "https://www.infinitehomelending.com/deal-desk";
+import { usePageMetadata } from "../hooks/usePageMetadata";
+import { PAGE_METADATA } from "../lib/pageMetadata";
 
 const PLAYFAIR_FONT_ID = "deal-desk-playfair-font";
 const MESH_STYLE_ID = "deal-desk-mesh-keyframes";
@@ -19,30 +19,9 @@ export default function DealDesk() {
   const { isAuthenticated } = useDealDeskAuth();
   const { showWarning, resetTimer, logout } = useDealDeskInactivity();
 
-  useEffect(() => {
-    document.title = "The Deal Desk | Realtor Partner Tools | Infinite Home Lending";
-    const setMeta = (attr: "name" | "property", key: string, content: string) => {
-      let el = document.querySelector(`meta[${attr}="${key}"]`);
-      if (!el) {
-        el = document.createElement("meta");
-        el.setAttribute(attr, key);
-        document.head.appendChild(el);
-      }
-      el.setAttribute("content", content);
-    };
-    setMeta(
-      "name",
-      "description",
-      "Five deal-math tools built for MD, DC, and VA real estate agents. Model buydowns, qualify buyers, build net sheets, and structure smarter offers — in real time, at the deal table. Partner with Infinite Home Lending.",
-    );
-    let canonicalLink = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
-    if (!canonicalLink) {
-      canonicalLink = document.createElement("link");
-      canonicalLink.rel = "canonical";
-      document.head.appendChild(canonicalLink);
-    }
-    canonicalLink.href = CANONICAL;
+  usePageMetadata(PAGE_METADATA.dealDesk);
 
+  useEffect(() => {
     if (!document.getElementById(PLAYFAIR_FONT_ID)) {
       const fontLink = document.createElement("link");
       fontLink.id = PLAYFAIR_FONT_ID;
@@ -66,7 +45,6 @@ export default function DealDesk() {
     }
 
     return () => {
-      document.title = "Infinite Home Lending";
       document.getElementById(MESH_STYLE_ID)?.remove();
       document.getElementById(PLAYFAIR_FONT_ID)?.remove();
     };

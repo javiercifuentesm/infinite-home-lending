@@ -1,6 +1,8 @@
 import { useCallback, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Scale } from "lucide-react";
+import { usePageMetadata } from "../hooks/usePageMetadata";
+import { PAGE_METADATA } from "../lib/pageMetadata";
 import {
   computeBuyVsWait,
   classifyBuyVsWaitOutcome,
@@ -133,6 +135,7 @@ function BvwMoneyField({
 }
 
 export default function BuyVsWaitAnalyzer() {
+  usePageMetadata(PAGE_METADATA.buyVsWaitAnalyzer);
   const [draftInputs, setDraftInputs] = useState<BuyVsWaitInputs>(defaultInputs);
   const [committedInputs, setCommittedInputs] = useState<BuyVsWaitInputs>(defaultInputs);
   const [calcBusy, setCalcBusy] = useState(false);

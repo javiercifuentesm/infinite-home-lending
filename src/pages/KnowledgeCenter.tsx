@@ -25,6 +25,7 @@ import {
   searchKnowledgeCenter,
 } from "../data/knowledgeCenterRoutes";
 import { useLanguage } from "../i18n/LanguageContext";
+import { usePageMetadata } from "../hooks/usePageMetadata";
 
 const ENTRY_IMAGE_BY_ROUTE: Record<KnowledgeRouteId, { src: string; objectClass: string }> = {
   "start-here": { src: "/knowledge/knowledge-start-here.png", objectClass: "object-[center_38%]" },
@@ -110,9 +111,11 @@ export default function KnowledgeCenter() {
     setFaqShowAll(false);
   }, [selectedRoute]);
 
-  useEffect(() => {
-    document.title = t("knowledge.eyebrow") + " | Infinite Home Lending";
-  }, [t]);
+  usePageMetadata({
+    title: t("knowledge.meta.title"),
+    description: t("knowledge.meta.description"),
+    canonical: "https://www.infinitehomelending.com/knowledge-center",
+  });
 
   useEffect(() => {
     const onDoc = (e: MouseEvent) => {

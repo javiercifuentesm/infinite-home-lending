@@ -6,6 +6,7 @@ import { LoanProductGridCard } from "../components/LoanProductGridCard";
 import { getLoanProductById, LOAN_GRID_ROWS } from "../data/loanProducts";
 import { PageContainer } from "../components/PageContainer";
 import { useLanguage } from "../i18n/LanguageContext";
+import { usePageMetadata } from "../hooks/usePageMetadata";
 
 type GuidedPath = "buy" | "equity" | "explore";
 
@@ -20,6 +21,11 @@ function matchesGuided(loanId: string, path: GuidedPath | null): boolean {
 
 const Solutions = () => {
   const { t, lang } = useLanguage();
+  usePageMetadata({
+    title: t("solutions.meta.title"),
+    description: t("solutions.meta.description"),
+    canonical: "https://www.infinitehomelending.com/solutions",
+  });
   const [modalProductId, setModalProductId] = useState<string | null>(null);
   const [guidedPath, setGuidedPath] = useState<GuidedPath | null>(null);
   const [recentlyClosedId, setRecentlyClosedId] = useState<string | null>(null);

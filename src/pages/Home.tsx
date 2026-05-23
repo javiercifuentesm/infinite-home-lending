@@ -23,6 +23,7 @@ import { useRef, useState } from "react";
 import { PageContainer } from "../components/PageContainer";
 import { HeroSection } from "../components/HeroSection";
 import { useLanguage } from "../i18n/LanguageContext";
+import { usePageMetadata } from "../hooks/usePageMetadata";
 
 /** Normalized scroll [0,1] — milestone thresholds are on this scale (deterministic, not end-of-section). */
 const PROCESS_STEP_THRESHOLDS = [0.08, 0.28, 0.48, 0.66, 0.82] as const;
@@ -41,6 +42,11 @@ const REVIEW_TAB_SPECS = [
 
 const Home = () => {
   const { t } = useLanguage();
+  usePageMetadata({
+    title: t("home.meta.title"),
+    description: t("home.meta.description"),
+    canonical: "https://www.infinitehomelending.com/",
+  });
   const [expandedIdx, setExpandedIdx] = useState<number | null>(null);
   const reducedMotion = usePrefersReducedMotion();
   const processRef = useRef<HTMLElement>(null);

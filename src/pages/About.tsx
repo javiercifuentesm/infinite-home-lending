@@ -5,6 +5,7 @@ import { ArrowRight, Compass, MessageCircle, Shield, Sparkles } from "lucide-rea
 import { IHLLogo } from "../components/IHLLogo";
 import { PageContainer } from "../components/PageContainer";
 import { useLanguage } from "../i18n/LanguageContext";
+import { usePageMetadata } from "../hooks/usePageMetadata";
 
 /** Hero: Mid-Atlantic suburban aerial — brick and siding, streets and driveways (watermark trimmed). */
 const IMG_HERO_RESIDENTIAL = "/about/about-hero-aerial.png";
@@ -104,9 +105,11 @@ export default function About() {
   const reduceMotion = useReducedMotion();
   const { t, lang } = useLanguage();
 
-  useEffect(() => {
-    document.title = t("about.eyebrow") + " | Infinite Home Lending";
-  }, [lang, t]);
+  usePageMetadata({
+    title: t("about.meta.title"),
+    description: t("about.meta.description"),
+    canonical: "https://www.infinitehomelending.com/about",
+  });
 
   return (
     <PageContainer>
