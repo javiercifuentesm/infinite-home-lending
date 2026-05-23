@@ -4,6 +4,9 @@
 builder = "nixpacks"
 buildCommand = "npm install --legacy-peer-deps"
 
+[build.env]
+NIXPACKS_NODE_VERSION = "20"
+
 [deploy]
 startCommand = "npm run server:agent-v3"
 restartPolicyType = "ON_FAILURE"
