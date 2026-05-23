@@ -11,6 +11,8 @@ export const es = {
   "nav.startPreApproval": "Iniciar Pre-Aprobación",
   "footer.askSarah": "Pregunta a Sarah",
 
+  "sarah.askSarah": "Habla con Sarah",
+
   "trustBar.nmls": "NMLS #2831765",
   "trustBar.region": "Maryland · Virginia · D.C.",
   "trustBar.equalHousing": "Prestamista de Vivienda Equitativa",
@@ -482,6 +484,10 @@ export const es = {
   "smartTools.eyebrow": "Infinite Home Lending",
   "smartTools.title": "Herramientas Inteligentes",
   "smartTools.subtitle": "Herramientas interactivas diseñadas para brindar claridad en decisiones hipotecarias reales.",
+  "smartTools.builtFor": "Desarrollado para MD · VA · DC",
+  "smartTools.featuredTool": "Herramienta Destacada",
+  "smartTools.allTools": "Todas las Herramientas",
+  "smartTools.mostUsed": "Más Utilizada",
   "smartTools.launchTool": "Abrir herramienta",
 
   // Smart Tools catalog — names

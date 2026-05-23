@@ -394,7 +394,7 @@ const LeadForm = ({ leadData, setLeadData, onSubmit, onDismiss }: LeadFormProps)
 // ─── MAIN COMPONENT ───────────────────────────────────────────────────────────
 
 function MortgageConciergeInner() {
-  const { lang } = useLanguage();
+  const { lang, t } = useLanguage();
 
   const STARTERS = lang === "es"
     ? [
@@ -927,7 +927,7 @@ function MortgageConciergeInner() {
               ))}
               <div style={{ width: "70px", height: "70px", borderRadius: "50%", background: ORB_BG, border: "3px solid rgba(198,161,91,0.95)", animation: "sarahBtnPulse 2.5s ease-in-out infinite", boxShadow: "0 0 0 4px rgba(11,42,74,0.4), 0 8px 32px rgba(0,0,0,0.5)", position: "relative", zIndex: 2 }} />
             </div>
-            <span style={{ color: "#C6A15B", fontSize: "12px", fontWeight: 700, letterSpacing: "0.5px", whiteSpace: "nowrap", textShadow: "0 2px 8px rgba(0,0,0,0.6)", textTransform: "uppercase" }}>Ask Sarah</span>
+            <span style={{ color: "#C6A15B", fontSize: "12px", fontWeight: 700, letterSpacing: "0.5px", whiteSpace: "nowrap", textShadow: "0 2px 8px rgba(0,0,0,0.6)", textTransform: "uppercase" }}>{t("sarah.askSarah")}</span>
           </div>
         </button>
       )}

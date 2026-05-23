@@ -11,6 +11,8 @@ export const en = {
   "nav.startPreApproval": "Start Pre-Approval",
   "footer.askSarah": "Ask Sarah",
 
+  "sarah.askSarah": "Ask Sarah",
+
   "trustBar.nmls": "NMLS #2831765",
   "trustBar.region": "Maryland · Virginia · D.C.",
   "trustBar.equalHousing": "Equal Housing Lender",
@@ -481,6 +483,10 @@ export const en = {
   "smartTools.eyebrow": "Infinite Home Lending",
   "smartTools.title": "Smart Tools",
   "smartTools.subtitle": "Interactive tools designed to bring clarity to real mortgage decisions.",
+  "smartTools.builtFor": "Built for MD · VA · DC",
+  "smartTools.featuredTool": "Featured Tool",
+  "smartTools.allTools": "All Tools",
+  "smartTools.mostUsed": "Most Used",
   "smartTools.launchTool": "Launch tool",
 
   // Smart Tools catalog — names

@@ -1,9 +1,76 @@
 import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
+import {
+  ArrowRight,
+  MapPin,
+} from "lucide-react";
 import { PAGE_CONTENT_RAIL_CLASS } from "../constants/layout";
-import { getSmartToolsForHub } from "../data/smartToolsCatalog";
+import {
+  getSmartToolsForHub,
+  type SmartToolCatalogEntry,
+} from "../data/smartToolsCatalog";
 import { useLanguage } from "../i18n/LanguageContext";
 import { usePageMetadata } from "../hooks/usePageMetadata";
+
+const GRID_CARD_CLASS =
+  "group flex flex-col rounded-[10px] border-t-2 border-[#C9A84C] bg-[#1B2A4A] p-4 transition-colors duration-300 hover:bg-[#243560]";
+
+/** Matches one column in the 3-column grid (accounts for gap-6 / 1.5rem). */
+const GRID_CARD_WIDTH_CLASS =
+  "w-full md:w-[calc((100%-1.5rem)/2)] lg:w-[calc((100%-3rem)/3)]";
+
+function GoldPillCta({
+  to,
+  label,
+  className = "",
+  arrowSize = 12,
+}: {
+  to: string;
+  label: string;
+  className?: string;
+  arrowSize?: number;
+}) {
+  return (
+    <Link
+      to={to}
+      className={`inline-flex w-fit items-center gap-1.5 rounded-[20px] bg-[#C9A84C] font-medium text-[#1B2A4A] transition-opacity hover:opacity-90 ${className}`.trim()}
+    >
+      {label}
+      <ArrowRight size={arrowSize} strokeWidth={2.5} aria-hidden="true" />
+    </Link>
+  );
+}
+
+function ToolGridCard({
+  tool,
+  t,
+  className = "",
+}: {
+  tool: SmartToolCatalogEntry;
+  t: (key: string) => string;
+  className?: string;
+}) {
+  const Icon = tool.icon;
+
+  return (
+    <article className={`${GRID_CARD_CLASS} ${className}`.trim()}>
+      <Icon
+        className="mb-3 h-[18px] w-[18px] shrink-0 text-[#C9A84C]"
+        strokeWidth={1.75}
+        aria-hidden="true"
+      />
+      <h2 className="text-[12px] font-medium text-white">{t(tool.nameKey)}</h2>
+      <p className="mt-1.5 flex-1 text-[10px] leading-[1.6] text-[rgba(255,255,255,0.55)]">
+        {t(tool.descKey)}
+      </p>
+      <GoldPillCta
+        to={tool.path}
+        label={t("smartTools.launchTool")}
+        className="mt-4 px-3 py-1 text-[9px]"
+        arrowSize={10}
+      />
+    </article>
+  );
+}
 
 export default function SmartTools() {
   const { t } = useLanguage();
@@ -12,49 +79,87 @@ export default function SmartTools() {
     description: t("smartTools.meta.description"),
     canonical: "https://www.infinitehomelending.com/smart-tools",
   });
+
   const tools = getSmartToolsForHub();
+  const [featuredTool, ...gridTools] = tools;
+  const mainGridTools = gridTools.slice(0, -2);
+  const lastRowTools = gridTools.slice(-2);
+  const FeaturedIcon = featuredTool.icon;
 
   return (
-    <div className="min-h-screen bg-surface pb-24 font-sans">
-      <div className="border-b border-slate-200/30 bg-gradient-to-b from-white/[0.92] via-surface to-surface pt-24 sm:pt-28 lg:pt-32">
-        <div className={`${PAGE_CONTENT_RAIL_CLASS} pt-12 md:pt-16 lg:pt-20 pb-10 sm:pb-12`}>
-          <header className="text-center md:text-left">
-            <p className="type-eyebrow mb-4 text-gold">{t("smartTools.eyebrow")}</p>
-            <h1 className="type-section-title-lg mb-5 text-[2rem] sm:text-[2.35rem] lg:text-[2.65rem] text-navy">
+    <div className="min-h-screen bg-white pb-24 font-sans">
+      <div className={`${PAGE_CONTENT_RAIL_CLASS} pt-24 sm:pt-28 lg:pt-32`}>
+        {/* Header */}
+        <header>
+          <div className="border-b border-slate-200/80 pb-8 sm:pb-10">
+            <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#C9A84C]">
+              {t("smartTools.eyebrow")}
+            </p>
+            <h1 className="text-[2rem] font-semibold tracking-tight text-[#1B2A4A] sm:text-[2.35rem] lg:text-[2.65rem]">
               {t("smartTools.title")}
             </h1>
-            <p className="type-body-lg max-w-2xl text-slate-600">
+            <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-slate-600 sm:text-base">
               {t("smartTools.subtitle")}
             </p>
-          </header>
-        </div>
-      </div>
+            <p className="mt-4 flex items-center gap-2 text-[13px] text-slate-500">
+              <MapPin className="h-4 w-4 shrink-0 text-[#C9A84C]" strokeWidth={1.75} aria-hidden="true" />
+              <span>{t("smartTools.builtFor")}</span>
+            </p>
+          </div>
+        </header>
 
-      <div className={`${PAGE_CONTENT_RAIL_CLASS} pt-10 sm:pt-12`}>
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 md:gap-8">
-          {tools.map((tool) => {
-            const Icon = tool.icon;
-            return (
-              <article
-                key={tool.path}
-                className="group relative flex flex-col rounded-[4px] border border-slate-200/90 bg-white p-8 shadow-[0_12px_40px_rgba(10,25,47,0.05)] transition-shadow duration-300 hover:shadow-[0_16px_48px_rgba(10,25,47,0.08)]"
-              >
-                <div className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-[4px] border border-gold/20 bg-surface text-gold transition-transform duration-300 group-hover:scale-[1.02]">
-                  <Icon size={22} strokeWidth={1.75} />
-                </div>
-                <h2 className="font-heading text-xl font-semibold text-navy sm:text-[1.35rem]">{t(tool.nameKey)}</h2>
-                <p className="mt-3 flex-1 text-[15px] leading-relaxed text-slate-600">{t(tool.descKey)}</p>
-                <Link
-                  to={tool.path}
-                  className="mt-8 inline-flex items-center gap-2 text-[13px] font-semibold uppercase tracking-[0.12em] text-navy transition-colors hover:text-gold"
-                >
-                  {t("smartTools.launchTool")}
-                  <ArrowRight size={16} strokeWidth={2} className="transition-transform group-hover:translate-x-0.5" />
-                </Link>
-              </article>
-            );
-          })}
-        </div>
+        {/* Featured Tool */}
+        <section className="pt-10 sm:pt-12">
+          <p className="mb-4 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400">
+            {t("smartTools.featuredTool")}
+          </p>
+          <article className="flex flex-col gap-6 rounded-[12px] border-t-2 border-[#C9A84C] bg-[#1B2A4A] p-6 transition-colors duration-300 hover:bg-[#243560] sm:flex-row sm:items-center sm:gap-8">
+            <div className="flex shrink-0 items-center justify-center sm:w-[88px]">
+              <FeaturedIcon
+                className="h-14 w-14 text-[#C9A84C] sm:h-16 sm:w-16"
+                strokeWidth={1.5}
+                aria-hidden="true"
+              />
+            </div>
+            <div className="flex min-w-0 flex-1 flex-col">
+              <span className="mb-3 inline-flex w-fit rounded-full border border-[#C9A84C]/35 bg-[#C9A84C]/10 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#C9A84C]">
+                {t("smartTools.mostUsed")}
+              </span>
+              <h2 className="text-[15px] font-medium text-white">{t(featuredTool.nameKey)}</h2>
+              <p className="mt-2 max-w-2xl text-[11px] leading-[1.6] text-white/60">
+                {t(featuredTool.descKey)}
+              </p>
+              <GoldPillCta
+                to={featuredTool.path}
+                label={t("smartTools.launchTool")}
+                className="mt-5 px-[14px] py-[6px] text-[11px]"
+              />
+            </div>
+          </article>
+        </section>
+
+        {/* All Tools Grid */}
+        <section className="pt-12 sm:pt-14">
+          <p className="mb-5 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400">
+            {t("smartTools.allTools")}
+          </p>
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 md:gap-6">
+            {mainGridTools.map((tool) => (
+              <ToolGridCard key={tool.path} tool={tool} t={t} />
+            ))}
+
+            <div className="col-span-1 flex flex-wrap items-stretch justify-center gap-5 md:col-span-2 md:gap-6 lg:col-span-3">
+              {lastRowTools.map((tool) => (
+                <ToolGridCard
+                  key={tool.path}
+                  tool={tool}
+                  t={t}
+                  className={GRID_CARD_WIDTH_CLASS}
+                />
+              ))}
+            </div>
+          </div>
+        </section>
       </div>
     </div>
   );
