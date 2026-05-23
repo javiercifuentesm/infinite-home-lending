@@ -862,7 +862,8 @@ html {
     align-items: stretch;
     padding-left: env(safe-area-inset-left, 0px);
     padding-right: env(safe-area-inset-right, 0px);
-    padding-bottom: 2rem;
+    margin-bottom: 0;
+    padding-bottom: 0;
     box-sizing: border-box;
     background: transparent;
   }

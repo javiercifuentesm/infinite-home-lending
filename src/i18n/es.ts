@@ -11,6 +11,10 @@ export const es = {
   "nav.startPreApproval": "Iniciar Pre-Aprobación",
   "footer.askSarah": "Pregunta a Sarah",
 
+  "trustBar.nmls": "NMLS #2831765",
+  "trustBar.region": "Maryland · Virginia · D.C.",
+  "trustBar.equalHousing": "Prestamista de Vivienda Equitativa",
+
   "home.meta.title": "Inicio",
   "home.meta.description":
     "Asesoría hipotecaria premium en Maryland, DC y Virginia. Compare opciones de préstamo, use calculadoras inteligentes y reciba orientación clara según sus metas—no solo una tasa.",

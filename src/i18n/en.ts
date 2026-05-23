@@ -11,6 +11,10 @@ export const en = {
   "nav.startPreApproval": "Start Pre-Approval",
   "footer.askSarah": "Ask Sarah",
 
+  "trustBar.nmls": "NMLS #2831765",
+  "trustBar.region": "Maryland · Virginia · D.C.",
+  "trustBar.equalHousing": "Equal Housing Lender",
+
   "home.meta.title": "Home",
   "home.meta.description":
     "Premium mortgage guidance for Maryland, DC, and Virginia. Compare loan options, run smart calculators, and get advice built around your goals—not just a rate.",

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { usePrefersReducedMotion } from "../hooks/usePrefersReducedMotion";
 import { buildHeroRotationOrder, type HeroAsset } from "../lib/heroRotation";
 import { useLanguage } from "../i18n/LanguageContext";
+import { TrustBar } from "./TrustBar";
 
 /**
  * All hero frames (`/images/hero-v16/*.png`) with explicit type for sequencing.
@@ -179,12 +180,13 @@ export function HeroSection() {
   const showThumbs = total > 1;
 
   return (
-    <section
-      className={`hero ${heroHovered ? "hero--paused" : ""}`}
-      aria-labelledby="hero-heading"
-      onMouseEnter={() => setHeroHovered(true)}
-      onMouseLeave={() => setHeroHovered(false)}
-    >
+    <>
+      <section
+        className={`hero mb-0 pb-0 ${heroHovered ? "hero--paused" : ""}`}
+        aria-labelledby="hero-heading"
+        onMouseEnter={() => setHeroHovered(true)}
+        onMouseLeave={() => setHeroHovered(false)}
+      >
       <div className="hero-framed" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
         <div className="hero-image-stack" aria-hidden="true">
           {HERO_ROTATION.map((asset, i) => (
@@ -291,5 +293,7 @@ export function HeroSection() {
         </div>
       </div>
     </section>
+    <TrustBar />
+    </>
   );
 }
