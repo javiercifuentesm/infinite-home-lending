@@ -31,6 +31,7 @@ const CLOSING_HELD_THRESHOLD = PROCESS_STEP_THRESHOLDS[4];
 /** Map raw section scroll into ~[0,1] before raw max would otherwise fall short. */
 const PROCESS_SCROLL_NORMALIZER = 0.88;
 
+/*
 const REVIEW_TAB_SPECS = [
   { slug: "all", labelKey: "home.reviews.tab.all" },
   { slug: "first-time-buyer", labelKey: "home.reviews.tab.firstTime" },
@@ -39,6 +40,7 @@ const REVIEW_TAB_SPECS = [
   { slug: "self-employed", labelKey: "home.reviews.tab.selfEmployed" },
   { slug: "smart-tools", labelKey: "home.reviews.tab.smartTools" },
 ] as const;
+*/
 
 const Home = () => {
   const { t } = useLanguage();
@@ -293,7 +295,12 @@ const Home = () => {
 
           {/* Evidence Board — Option 3 */}
           <div className="mb-14">
-            {/* Section header + tabs */}
+            {/*
+              TESTIMONIALS SECTION — PARKED
+              Re-enable when real client reviews are available.
+              Replace placeholder names/content with actual client testimonials.
+              Search for "TESTIMONIALS SECTION — PARKED" to find this block.
+
             <div className="text-center mb-8">
               <h3 className="font-heading text-navy text-[1.25rem] font-semibold mb-5">
                 {t("home.reviews.title")}
@@ -339,7 +346,6 @@ const Home = () => {
               </div>
             </div>
 
-            {/* Review cards grid */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {[
                 {
@@ -450,6 +456,7 @@ const Home = () => {
                 </div>
               ))}
             </div>
+            */}
 
             {/* Smart Tools callout card */}
             <div className="mt-6 bg-navy rounded-xl p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4">
