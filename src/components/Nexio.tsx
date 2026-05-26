@@ -812,29 +812,27 @@ function NexioInner({ isPartner }: { isPartner: boolean }) {
       transcriptSummary,
     ].join("\n");
 
-    try {
-      await sendLeadEmail({
-        lead_name: partnerData.name,
-        lead_email: partnerData.email,
-        lead_phone: partnerData.phone,
-        best_day: partnerData.bestDay || "Not specified",
-        best_time: partnerData.bestTime || "Not specified",
-        preferred_contact: partnerData.preferredContact,
-        lead_grade: lead.grade,
-        lead_emoji: lead.emoji,
-        lead_color: lead.color,
-        lead_bg: lead.bg,
-        lead_priority: lead.priority,
-        date: new Date().toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" }),
-        time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-        transcript: enrichedTranscript,
-        lead_subject_override: `Deal Desk partner inquiry via Nexio — ${partnerData.name.trim()}`,
-      });
-    } catch (error) {
+    // Fire and forget — send in background, don't block conversation
+    sendLeadEmail({
+      lead_name: partnerData.name,
+      lead_email: partnerData.email,
+      lead_phone: partnerData.phone,
+      best_day: partnerData.bestDay || "Not specified",
+      best_time: partnerData.bestTime || "Not specified",
+      preferred_contact: partnerData.preferredContact,
+      lead_grade: lead.grade,
+      lead_emoji: lead.emoji,
+      lead_color: lead.color,
+      lead_bg: lead.bg,
+      lead_priority: lead.priority,
+      date: new Date().toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" }),
+      time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      transcript: enrichedTranscript,
+      lead_subject_override: `Deal Desk partner inquiry via Nexio — ${partnerData.name.trim()}`,
+    }).catch((error) => {
       console.error("Failed to send partner inquiry email:", error);
       partnerSubmittedRef.current = false;
-      return;
-    }
+    });
 
     setPartnerSubmittedUi(true);
     setShowPartnerForm(false);

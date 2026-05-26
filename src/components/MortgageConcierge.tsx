@@ -764,28 +764,26 @@ function MortgageConciergeInner() {
       .map(m => `${m.role === "user" ? "Visitor" : "Sarah"} (${m.time}): ${m.content}`)
       .join("\n");
 
-    try {
-      await sendLeadEmail({
-        lead_name: leadData.name,
-        lead_email: leadData.email,
-        lead_phone: leadData.phone,
-        best_day: leadData.bestDay || "Not specified",
-        best_time: leadData.bestTime || "Not specified",
-        preferred_contact: leadData.preferredContact,
-        lead_grade: lead.grade,
-        lead_emoji: lead.emoji,
-        lead_color: lead.color,
-        lead_bg: lead.bg,
-        lead_priority: lead.priority,
-        date: new Date().toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" }),
-        time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-        transcript: transcriptSummary,
-      });
-    } catch (error) {
+    // Fire and forget — send in background, don't block conversation
+    sendLeadEmail({
+      lead_name: leadData.name,
+      lead_email: leadData.email,
+      lead_phone: leadData.phone,
+      best_day: leadData.bestDay || "Not specified",
+      best_time: leadData.bestTime || "Not specified",
+      preferred_contact: leadData.preferredContact,
+      lead_grade: lead.grade,
+      lead_emoji: lead.emoji,
+      lead_color: lead.color,
+      lead_bg: lead.bg,
+      lead_priority: lead.priority,
+      date: new Date().toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" }),
+      time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      transcript: transcriptSummary,
+    }).catch((error) => {
       console.error("Failed to send lead email:", error);
       leadSubmittedRef.current = false;
-      return;
-    }
+    });
 
     setLeadSubmitted(true);
     setShowLeadForm(false);
