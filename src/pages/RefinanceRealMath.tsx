@@ -8,15 +8,17 @@ import {
   computeRefinanceRealMath,
   DEFAULT_REFINANCE_INPUTS,
   type RefinanceRealMathInputs,
-  type RefinanceRealMathResult,
+  type RefinanceRealMathStrings,
   type RefinanceVerdictKind,
 } from "../lib/refinanceRealMathModel";
+import { useLanguage } from "../i18n/LanguageContext";
 import { usePrefersReducedMotion } from "../hooks/usePrefersReducedMotion";
 import { useAnimatedNumber } from "../hooks/useAnimatedNumber";
 import {
   findCurrentLoanPayoffMonth,
   RefinanceEquityChartRecharts,
   RefinanceInterestChartRecharts,
+  type RefinanceChartStrings,
 } from "../components/refinance/RefinanceRealMathCharts";
 
 function formatCurrency(n: number): string {
@@ -43,26 +45,6 @@ function splitParagraphs(text: string): string[] {
     .filter(Boolean);
 }
 
-const MIC_HEADLINE = "This isn’t about saving money — it’s about when you pay it.";
-
-function micDropSupportingLine(result: RefinanceRealMathResult, horizonYears: number): string {
-  const m = Math.abs(result.monthlyDelta);
-  const dInterest = result.interestTotalNewHorizon - result.interestTotalCurrentHorizon;
-  if (result.monthlyDelta > 1e-2 && dInterest > 1e-2) {
-    return `You reduce your payment by ${formatCurrency(m)}/month, but add ${formatCurrency(dInterest)} in total cost over the next ${horizonYears} years (modeled).`;
-  }
-  if (result.monthlyDelta > 1e-2 && dInterest < -1e-2) {
-    return `You reduce your payment by ${formatCurrency(m)}/month and pay ${formatCurrency(-dInterest)} less in interest over the next ${horizonYears} years (modeled).`;
-  }
-  if (result.monthlyDelta <= 1e-2 && result.monthlyDelta >= -1e-2) {
-    return `On these numbers, the monthly move is small — closing costs and how long you stay drive the outcome.`;
-  }
-  if (result.monthlyDelta < -1e-2) {
-    return `Your payment rises on these terms — weigh that against rate and timeline before you commit.`;
-  }
-  return `Over the next ${horizonYears} years (modeled), compare interest and timeline — not just the rate.`;
-}
-
 function verdictPanelClasses(kind: RefinanceVerdictKind): string {
   switch (kind) {
     case "likely_worth_it":
@@ -83,8 +65,24 @@ function verdictPanelClasses(kind: RefinanceVerdictKind): string {
 
 const DIRTY_HINT_COLOR = "#888780";
 
+function ChartInteractionHint({ t }: { t: (key: string) => string }) {
+  return (
+    <div className="chart-interaction-bar">
+      <span className="interaction-icon" aria-hidden>
+        ↔
+      </span>
+      <span className="interaction-text">
+        {t("rrm.charts.moveAcross")}{" "}
+        <span className="font-semibold text-navy/85">{t("rrm.charts.chart")}</span> {t("rrm.charts.toSeeHow")}{" "}
+        <span className="font-semibold text-navy/85">{t("rrm.charts.numbers")}</span> {t("rrm.charts.changeOverTime")}
+      </span>
+    </div>
+  );
+}
+
 export default function RefinanceRealMath() {
   usePageMetadata(PAGE_METADATA.refinanceRealMath);
+  const { t, lang } = useLanguage();
   const [draftInputs, setDraftInputs] = useState<RefinanceRealMathInputs>(DEFAULT_REFINANCE_INPUTS);
   const [committedInputs, setCommittedInputs] = useState<RefinanceRealMathInputs>(DEFAULT_REFINANCE_INPUTS);
   const [loading, setLoading] = useState(false);
@@ -99,7 +97,72 @@ export default function RefinanceRealMath() {
     [draftInputs, committedInputs]
   );
 
-  const result = useMemo(() => computeRefinanceRealMath(committedInputs), [committedInputs]);
+  const rrmStrings: RefinanceRealMathStrings = useMemo(
+    () => ({
+      keyInsight: t("rrm.keyInsight"),
+      verdict: {
+        paymentNotLower: {
+          title: t("rrm.verdict.paymentNotLower.title"),
+          body: t("rrm.verdict.paymentNotLower.body"),
+        },
+        modestChange: {
+          title: t("rrm.verdict.modestChange.title"),
+          body: t("rrm.verdict.modestChange.body"),
+        },
+        paymentDownCostUp: {
+          title: t("rrm.verdict.paymentDownCostUp.title"),
+          body: t("rrm.verdict.paymentDownCostUp.body"),
+        },
+        likelyWorthIt: {
+          title: t("rrm.verdict.likelyWorthIt.title"),
+          bodyWithYears: t("rrm.verdict.likelyWorthIt.bodyWithYears"),
+          bodyQuick: t("rrm.verdict.likelyWorthIt.bodyQuick"),
+        },
+        dependsTimeline: {
+          title: t("rrm.verdict.dependsTimeline.title"),
+          body: t("rrm.verdict.dependsTimeline.body"),
+        },
+        closerLook: {
+          title: t("rrm.verdict.closerLook.title"),
+          body: t("rrm.verdict.closerLook.body"),
+          lower: t("rrm.verdict.closerLook.lower"),
+          higher: t("rrm.verdict.closerLook.higher"),
+        },
+      },
+    }),
+    [lang, t]
+  );
+
+  const chartStrings: RefinanceChartStrings = useMemo(
+    () => ({
+      breakEvenLabel: (month: number) => t("rrm.charts.breakEvenLabel").replace("{month}", String(month)),
+      lessInterestLabel: (amount: string) => t("rrm.charts.lessInterestLabel").replace("{amount}", amount),
+      moreInterestLabel: (amount: string) => t("rrm.charts.moreInterestLabel").replace("{amount}", amount),
+      loanPaidOff: t("rrm.charts.loanPaidOff"),
+      principalAccelerating: t("rrm.charts.principalAccelerating"),
+      tooltipYear: (year: number, month: number) =>
+        t("rrm.charts.tooltipYear").replace("{year}", String(year)).replace("{month}", String(month)),
+      totalInterestCurrent: t("rrm.charts.totalInterestCurrent"),
+      totalInterestNew: t("rrm.charts.totalInterestNew"),
+      remainingCurrent: t("rrm.charts.remainingCurrent"),
+      remainingNew: t("rrm.charts.remainingNew"),
+      equityBuiltCurrent: t("rrm.charts.equityBuiltCurrent"),
+      equityBuiltNew: t("rrm.charts.equityBuiltNew"),
+      equityPctCurrent: t("rrm.charts.equityPctCurrent"),
+      equityPctNew: t("rrm.charts.equityPctNew"),
+      equityCurrent: t("rrm.charts.equityCurrent"),
+      equityNew: t("rrm.charts.equityNew"),
+      balanceCurrent: t("rrm.charts.balanceCurrent"),
+      balanceNew: t("rrm.charts.balanceNew"),
+      pctPaidCurrent: t("rrm.charts.pctPaidCurrent"),
+    }),
+    [lang, t]
+  );
+
+  const result = useMemo(
+    () => computeRefinanceRealMath(committedInputs, rrmStrings),
+    [committedInputs, rrmStrings]
+  );
 
   const chartKey = useMemo(
     () =>
@@ -170,30 +233,30 @@ export default function RefinanceRealMath() {
         <header className="mb-10 lg:mb-12 max-w-3xl pt-2 sm:pt-3 lg:pt-4 text-center lg:text-left">
           <div className="mb-4 inline-flex items-center gap-2 rounded-[4px] border border-gold/20 bg-white px-3 py-1.5 text-navy/70">
             <RefreshCw size={14} className="text-gold" strokeWidth={1.75} aria-hidden />
-            <span className="type-label">Smart tool</span>
+            <span className="type-label">{t("rrm.badge")}</span>
           </div>
           <h1 className="type-editorial-section-title text-[2rem] sm:text-4xl lg:text-[2.75rem] mb-5 leading-[1.08]">
-            Refinance Real Math
+            {t("rrm.title")}
           </h1>
           <p className="type-body-lg mx-auto max-w-2xl text-slate-600 lg:mx-0">
-            Model payment, break-even, and interest cost side by side — so you can see what actually changes before you commit.
+            {t("rrm.subtitle")}
           </p>
         </header>
 
         {/* Hook — above inputs */}
         <div className="mx-auto mb-7 max-w-3xl rounded-xl bg-white p-6 shadow-sm">
           <p className="font-heading text-[16px] font-semibold leading-snug text-navy">
-            Most people refinance for a lower payment — and never see the full cost.
+            {t("rrm.hook.heading")}
           </p>
           <p className="mt-3 font-sans text-[12px] leading-relaxed text-slate-500 sm:text-[13px]">
-            This tool shows you what actually changes over time — including the part most calculators leave out.
+            {t("rrm.hook.body")}
           </p>
           <p className="mt-4 font-sans text-[12px] leading-relaxed text-slate-600 sm:text-[13px]">
-            Also see:{" "}
+            {t("rrm.hook.alsoSee")}{" "}
             <Link to="/tools/principal-accelerator" className="font-semibold text-navy underline decoration-gold/40 hover:text-gold">
-              The Principal Accelerator
+              {t("rrm.hook.acceleratorLink")}
             </Link>{" "}
-            — what extra payments do to your current loan.
+            {t("rrm.hook.acceleratorDesc")}
           </p>
         </div>
 
@@ -201,7 +264,7 @@ export default function RefinanceRealMath() {
         <div id="rrm-inputs" className="scroll-mt-28">
           <section
             className="relative mx-auto mb-7 w-full max-w-3xl overflow-hidden rounded-xl bg-white p-6 shadow-sm"
-            aria-label="Loan inputs"
+            aria-label={t("rrm.inputs.title")}
           >
             {loading && (
               <div
@@ -210,16 +273,16 @@ export default function RefinanceRealMath() {
               />
             )}
             <div className="mb-6">
-              <h2 className="font-heading text-lg font-semibold text-navy sm:text-xl">Your scenario</h2>
+              <h2 className="font-heading text-lg font-semibold text-navy sm:text-xl">{t("rrm.inputs.title")}</h2>
               <p className="mt-2 font-sans text-[13px] leading-relaxed text-slate-500 sm:text-[14px]">
-                Adjust the numbers to reflect your current loan and potential refinance
+                {t("rrm.inputs.subtitle")}
               </p>
             </div>
             <div
               className={`grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-x-8 sm:gap-y-6 ${loading ? "pointer-events-none opacity-60" : ""}`}
             >
               <label className="block">
-                <span className="type-label mb-2 block text-navy">Current balance</span>
+                <span className="type-label mb-2 block text-navy">{t("rrm.inputs.currentBalance")}</span>
                 <input
                   type="number"
                   min={1000}
@@ -231,7 +294,7 @@ export default function RefinanceRealMath() {
                 />
               </label>
               <label className="block">
-                <span className="type-label mb-2 block text-navy">Current rate (%)</span>
+                <span className="type-label mb-2 block text-navy">{t("rrm.inputs.currentRate")}</span>
                 <input
                   type="number"
                   min={0.125}
@@ -244,7 +307,7 @@ export default function RefinanceRealMath() {
                 />
               </label>
               <label className="block">
-                <span className="type-label mb-2 block text-navy">Years left on loan</span>
+                <span className="type-label mb-2 block text-navy">{t("rrm.inputs.yearsLeft")}</span>
                 <input
                   type="number"
                   min={1}
@@ -257,7 +320,7 @@ export default function RefinanceRealMath() {
                 />
               </label>
               <label className="block">
-                <span className="type-label mb-2 block text-navy">New rate (%)</span>
+                <span className="type-label mb-2 block text-navy">{t("rrm.inputs.newRate")}</span>
                 <input
                   type="number"
                   min={0.125}
@@ -270,7 +333,7 @@ export default function RefinanceRealMath() {
                 />
               </label>
               <label className="block">
-                <span className="type-label mb-2 block text-navy">New loan term (years)</span>
+                <span className="type-label mb-2 block text-navy">{t("rrm.inputs.newTerm")}</span>
                 <input
                   type="number"
                   min={5}
@@ -283,7 +346,7 @@ export default function RefinanceRealMath() {
                 />
               </label>
               <label className="block">
-                <span className="type-label mb-2 block text-navy">Closing costs ($)</span>
+                <span className="type-label mb-2 block text-navy">{t("rrm.inputs.closingCosts")}</span>
                 <input
                   type="number"
                   min={0}
@@ -295,7 +358,7 @@ export default function RefinanceRealMath() {
                 />
               </label>
               <label className="block sm:col-span-2">
-                <span className="type-label mb-2 block text-navy">Compare interest over (years)</span>
+                <span className="type-label mb-2 block text-navy">{t("rrm.inputs.compareInterest")}</span>
                 <input
                   type="number"
                   min={1}
@@ -309,7 +372,7 @@ export default function RefinanceRealMath() {
               </label>
             </div>
             <p className="mt-6 font-sans text-[12px] leading-relaxed text-slate-500 sm:text-[13px]">
-              You’re not just comparing rates — you’re comparing timelines, costs, and long-term impact.
+              {t("rrm.inputs.ratesHint")}
             </p>
             <div className="mt-8 flex flex-col gap-3 border-t border-slate-100 pt-8 sm:flex-row sm:items-center sm:gap-6">
               <button
@@ -328,28 +391,28 @@ export default function RefinanceRealMath() {
                 )}
                 {loading ? (
                   <>
-                    <span className="relative z-[1]">Calculating...</span>
+                    <span className="relative z-[1]">{t("rrm.inputs.calculating")}</span>
                     <Loader2 className="relative z-[1] h-4 w-4 shrink-0 animate-spin" aria-hidden />
                   </>
                 ) : (
-                  <span className="relative z-[1]">Calculate your scenario</span>
+                  <span className="relative z-[1]">{t("rrm.inputs.calculate")}</span>
                 )}
               </button>
               {isDirty ? (
                 <p className="font-sans text-[12px] leading-snug sm:text-[13px]" style={{ color: DIRTY_HINT_COLOR }}>
-                  Values updated — recalculate to see results
+                  {t("rrm.inputs.dirtyHint")}
                 </p>
               ) : (
                 <p className="font-sans text-[12px] text-slate-500 sm:text-[13px]">
-                  Results reflect your last calculation.
+                  {t("rrm.inputs.cleanHint")}
                 </p>
               )}
             </div>
             <p className="mt-4 font-sans text-[12px] leading-relaxed text-slate-500 sm:text-[13px]">
-              We’ll map your full loan timeline — not just your payment.
+              {t("rrm.inputs.mapHint")}
             </p>
             <p className="type-body-xs mt-6 border-t border-slate-100 pt-6 text-slate-500">
-              Illustrative only — not a quote. Taxes, insurance, MI, and lender fees beyond this estimate aren’t modeled here.
+              {t("rrm.inputs.disclaimer")}
             </p>
           </section>
         </div>
@@ -357,7 +420,7 @@ export default function RefinanceRealMath() {
         {!result && (
           <div className="mx-auto mb-7 max-w-3xl rounded-xl border border-amber-200/90 bg-white p-6 shadow-sm">
             <p className="type-body-sm text-amber-950">
-              Adjust your inputs — we couldn’t run the comparison with those numbers.
+              {t("rrm.inputs.invalidResult")}
             </p>
           </div>
         )}
@@ -400,26 +463,49 @@ export default function RefinanceRealMath() {
                 >
                   <div className="text-center lg:text-left">
                     <h2 className="font-heading text-2xl font-semibold leading-[1.15] tracking-[-0.02em] text-navy sm:text-3xl">
-                      {MIC_HEADLINE}
+                      {t("rrm.mic.headline")}
                     </h2>
                     <p className="mt-4 font-sans text-[15px] leading-relaxed text-slate-700 sm:text-[16px]">
-                      {micDropSupportingLine(result, committedInputs.compareHorizonYears)}
+                      {(() => {
+                        const m = Math.abs(result.monthlyDelta);
+                        const dInterest = result.interestTotalNewHorizon - result.interestTotalCurrentHorizon;
+                        const yrs = committedInputs.compareHorizonYears;
+                        if (result.monthlyDelta > 1e-2 && dInterest > 1e-2) {
+                          return t("rrm.mic.reduceCostUp")
+                            .replace("{monthly}", formatCurrency(m))
+                            .replace("{interest}", formatCurrency(dInterest))
+                            .replace("{years}", String(yrs));
+                        }
+                        if (result.monthlyDelta > 1e-2 && dInterest < -1e-2) {
+                          return t("rrm.mic.reduceBothLower")
+                            .replace("{monthly}", formatCurrency(m))
+                            .replace("{interest}", formatCurrency(-dInterest))
+                            .replace("{years}", String(yrs));
+                        }
+                        if (result.monthlyDelta <= 1e-2 && result.monthlyDelta >= -1e-2) {
+                          return t("rrm.mic.smallMove");
+                        }
+                        if (result.monthlyDelta < -1e-2) {
+                          return t("rrm.mic.paymentRises");
+                        }
+                        return t("rrm.mic.fallback").replace("{years}", String(yrs));
+                      })()}
                     </p>
                     <p className="mt-5 font-sans text-3xl font-semibold tabular-nums tracking-tight text-navy sm:text-4xl">
                       {interestDeltaSigned >= 0 ? "+" : "−"}
                       {formatCurrencyTight(Math.abs(interestDeltaSigned))}
                       <span className="ml-2 block text-sm font-medium tracking-normal text-slate-500 sm:inline sm:text-base">
-                        total interest difference over {committedInputs.compareHorizonYears} yr (modeled)
+                        {t("rrm.mic.intDiff").replace("{years}", String(committedInputs.compareHorizonYears))}
                       </span>
                     </p>
                   </div>
                   <div
                     className={`mt-8 rounded-lg p-6 sm:p-8 ${verdictPanelClasses(result.verdictKind)}`}
                     role="region"
-                    aria-label="Your refinance reality"
+                    aria-label={t("rrm.verdict.eyebrow")}
                   >
                     <p className="text-center font-sans text-xs font-semibold uppercase tracking-[0.2em] text-slate-500 lg:text-left">
-                      Your refinance reality
+                      {t("rrm.verdict.eyebrow")}
                     </p>
                     <h3 className="mt-3 text-center font-heading text-lg font-semibold leading-snug text-navy sm:text-xl lg:text-left">
                       {result.verdictTitle}
@@ -437,42 +523,44 @@ export default function RefinanceRealMath() {
             {/* Metrics (Tier 2) */}
             <div className="mb-8 w-full max-w-3xl mx-auto rounded-xl bg-white p-6 shadow-sm">
               <p className="mb-5 max-w-3xl font-sans text-[13px] leading-relaxed text-slate-600 sm:text-[14px]">
-                Here’s what actually changes when you refinance:
+                {t("rrm.metrics.intro")}
               </p>
               <div className="grid grid-cols-2 gap-4 lg:grid-cols-4 lg:gap-5">
                 <div className="rounded-lg bg-[#F7F7F5] p-4">
-                  <p className="type-body-xs uppercase tracking-[0.14em] text-slate-500">Monthly change</p>
+                  <p className="type-body-xs uppercase tracking-[0.14em] text-slate-500">{t("rrm.metrics.monthlyChange")}</p>
                   <p className="mt-2 font-sans text-2xl font-semibold tabular-nums text-navy">
                     {result.monthlyDelta >= 0 ? "−" : "+"}
                     {formatCurrencyTight(animMonthly)}
                   </p>
-                  <p className="type-body-xs mt-2 text-slate-500">per month</p>
+                  <p className="type-body-xs mt-2 text-slate-500">{t("rrm.metrics.perMonth")}</p>
                 </div>
                 <div className="rounded-lg bg-[#F7F7F5] p-4">
-                  <p className="type-body-xs uppercase tracking-[0.14em] text-slate-500">New vs current</p>
+                  <p className="type-body-xs uppercase tracking-[0.14em] text-slate-500">{t("rrm.metrics.newVsCurrent")}</p>
                   <p className="mt-2 font-sans text-2xl font-semibold tabular-nums text-navy">
                     {formatCurrencyTight(animNewPay)}
                   </p>
                   <p className="type-body-xs mt-2 text-slate-500">vs {formatCurrencyTight(animCurPay)}</p>
                 </div>
                 <div className="rounded-lg bg-[#F7F7F5] p-4">
-                  <p className="type-body-xs uppercase tracking-[0.14em] text-slate-500">Break-even</p>
+                  <p className="type-body-xs uppercase tracking-[0.14em] text-slate-500">{t("rrm.metrics.breakEven")}</p>
                   <p className="mt-2 font-sans text-2xl font-semibold tabular-nums text-navy">
                     {result.breakEvenMonths != null && Number.isFinite(result.breakEvenMonths)
                       ? `${Math.ceil(animBe)} mo`
                       : "—"}
                   </p>
-                  <p className="type-body-xs mt-2 text-slate-500">break-even timeline</p>
+                  <p className="type-body-xs mt-2 text-slate-500">{t("rrm.metrics.breakEvenTimeline")}</p>
                 </div>
                 <div className="rounded-lg bg-[#F7F7F5] p-4">
-                  <p className="type-body-xs uppercase tracking-[0.14em] text-slate-500">Interest ({committedInputs.compareHorizonYears} yr)</p>
+                  <p className="type-body-xs uppercase tracking-[0.14em] text-slate-500">
+                    {t("rrm.metrics.interest").replace("{years}", String(committedInputs.compareHorizonYears))}
+                  </p>
                   <p className="mt-2 font-sans text-2xl font-semibold tabular-nums text-navy">
                     {formatCurrencyTight(animIntDiff)}
                   </p>
                   <p className="type-body-xs mt-2 text-slate-500">
                     {result.interestTotalCurrentHorizon >= result.interestTotalNewHorizon
-                      ? "less interest vs current path"
-                      : "more interest vs current path"}
+                      ? t("rrm.metrics.lessInterest")
+                      : t("rrm.metrics.moreInterest")}
                   </p>
                 </div>
               </div>
@@ -481,23 +569,25 @@ export default function RefinanceRealMath() {
             {/* Comparison cards */}
             <div className="mb-8 w-full max-w-3xl mx-auto rounded-xl bg-white p-6 shadow-sm">
               <div className="mb-6 max-w-3xl">
-                <h2 className="font-heading text-lg font-semibold text-navy sm:text-xl">Side-by-side impact</h2>
+                <h2 className="font-heading text-lg font-semibold text-navy sm:text-xl">{t("rrm.sidebyside.title")}</h2>
                 <p className="mt-2 font-sans text-[13px] leading-relaxed text-slate-500 sm:text-[14px]">
-                  Not just what you pay monthly — but what you pay over time
+                  {t("rrm.sidebyside.subtitle")}
                 </p>
               </div>
               <div className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6">
                 <div className="rounded-lg border border-slate-200/90 bg-[#F7F7F5]/80 p-6">
-                  <h3 className="type-label text-navy/50">Keep current loan</h3>
+                  <h3 className="type-label text-navy/50">{t("rrm.sidebyside.keepCurrent")}</h3>
                   <p className="mt-4 font-sans text-2xl font-semibold tabular-nums text-navy">
                     {formatCurrency(result.currentMonthlyPayment)}
-                    <span className="block text-[11px] font-normal uppercase tracking-[0.12em] text-slate-500">/ month</span>
+                    <span className="block text-[11px] font-normal uppercase tracking-[0.12em] text-slate-500">
+                      {t("rrm.sidebyside.perMonth")}
+                    </span>
                   </p>
                   <p className="mt-6 type-body-sm text-slate-600">
-                    Interest over ~{committedInputs.compareHorizonYears} years (modeled):{" "}
+                    {t("rrm.sidebyside.interestOver").replace("{years}", String(committedInputs.compareHorizonYears))}{" "}
                     <span className="font-semibold text-navy">{formatCurrency(result.interestTotalCurrentHorizon)}</span>
                   </p>
-                  <p className="mt-3 type-body-xs text-slate-500">Payments continue on your existing amortization schedule.</p>
+                  <p className="mt-3 type-body-xs text-slate-500">{t("rrm.sidebyside.existingSchedule")}</p>
                 </div>
                 <div
                   className={`rounded-lg bg-white p-6 transition-transform duration-200 motion-reduce:transition-none motion-reduce:hover:scale-100 ${
@@ -506,17 +596,19 @@ export default function RefinanceRealMath() {
                       : "border border-slate-200/90 ring-1 ring-gold/25"
                   }`}
                 >
-                  <h3 className="type-label text-gold/90">Refinance to new terms</h3>
+                  <h3 className="type-label text-gold/90">{t("rrm.sidebyside.refinanceTo")}</h3>
                   <p className="mt-4 font-sans text-2xl font-semibold tabular-nums text-navy">
                     {formatCurrency(result.newMonthlyPayment)}
-                    <span className="block text-[11px] font-normal uppercase tracking-[0.12em] text-slate-500">/ month</span>
+                    <span className="block text-[11px] font-normal uppercase tracking-[0.12em] text-slate-500">
+                      {t("rrm.sidebyside.perMonth")}
+                    </span>
                   </p>
                   <p className="mt-6 type-body-sm text-slate-600">
-                    Interest over ~{committedInputs.compareHorizonYears} years (modeled):{" "}
+                    {t("rrm.sidebyside.interestOver").replace("{years}", String(committedInputs.compareHorizonYears))}{" "}
                     <span className="font-semibold text-navy">{formatCurrency(result.interestTotalNewHorizon)}</span>
                   </p>
                   <p className="mt-3 type-body-xs text-slate-500">
-                    Closing costs {formatCurrency(committedInputs.closingCosts)} assumed paid in cash at closing (not financed).
+                    {t("rrm.sidebyside.closingCosts").replace("{amount}", formatCurrency(committedInputs.closingCosts))}
                   </p>
                 </div>
               </div>
@@ -525,39 +617,28 @@ export default function RefinanceRealMath() {
             {/* Charts (Tier 3) */}
             <div className="mb-8 w-full max-w-3xl mx-auto rounded-xl border border-slate-200/80 bg-white p-6 shadow-md">
               <div className="mb-6 max-w-3xl">
-                <h2 className="font-heading text-lg font-semibold text-navy sm:text-xl">How this decision plays out over time</h2>
+                <h2 className="font-heading text-lg font-semibold text-navy sm:text-xl">{t("rrm.charts.title")}</h2>
                 <p className="mt-2 font-sans text-[13px] leading-relaxed text-slate-600 sm:text-[14px]">
-                  These charts show how your decision plays out over time — not just today.
+                  {t("rrm.charts.subtitle")}
                 </p>
               </div>
               <div className="flex flex-col gap-6">
                 <div>
-                  <h3 className="font-heading text-base font-semibold text-navy sm:text-lg">Total interest over time</h3>
+                  <h3 className="font-heading text-base font-semibold text-navy sm:text-lg">{t("rrm.charts.interestTitle")}</h3>
                   <p className="mt-1 font-sans text-[13px] leading-relaxed text-slate-500">
-                    Shaded gap = cost difference between paths. Break-even = when monthly savings offset closing costs.
+                    {t("rrm.charts.interestSubtitle")}
                   </p>
-                  <p className="chart-context">
-                    Each point reflects your full loan position at that moment in time.
-                  </p>
-                  <div className="chart-interaction-bar">
-                    <span className="interaction-icon" aria-hidden>
-                      ↔
-                    </span>
-                    <span className="interaction-text">
-                      Move across the{" "}
-                      <span className="font-semibold text-navy/85">chart</span> to see how the{" "}
-                      <span className="font-semibold text-navy/85">numbers</span> change over time.
-                    </span>
-                  </div>
+                  <p className="chart-context">{t("rrm.charts.eachPoint")}</p>
+                  <ChartInteractionHint t={t} />
                   <div className="mt-4 rounded-xl bg-slate-100/90 p-4 shadow-inner">
                     <div className="mb-3 flex flex-wrap items-center gap-6 text-[12px] text-slate-600">
                       <span className="inline-flex items-center gap-2">
                         <span className="h-0.5 w-6 bg-navy" aria-hidden />
-                        Current loan
+                        {t("rrm.charts.currentLoan")}
                       </span>
                       <span className="inline-flex items-center gap-2">
                         <span className="h-0.5 w-6 bg-gold" aria-hidden />
-                        New loan
+                        {t("rrm.charts.newLoan")}
                       </span>
                     </div>
                     <RefinanceInterestChartRecharts
@@ -567,36 +648,26 @@ export default function RefinanceRealMath() {
                       chartKey={chartKey}
                       reducedMotion={reducedMotion}
                       currentPayoffMonth={payoffCurrent}
+                      chartStrings={chartStrings}
                     />
                   </div>
                 </div>
                 <div className="border-t border-slate-200/90 pt-6">
-                  <h3 className="font-heading text-base font-semibold text-navy sm:text-lg">Equity over time</h3>
+                  <h3 className="font-heading text-base font-semibold text-navy sm:text-lg">{t("rrm.charts.equityTitle")}</h3>
                   <p className="mt-1 font-sans text-[13px] leading-relaxed text-slate-500">
-                    How equity builds — early years are interest-heavy; principal accelerates later.
+                    {t("rrm.charts.equitySubtitle")}
                   </p>
-                  <p className="chart-context">
-                    Each point reflects your full loan position at that moment in time.
-                  </p>
-                  <div className="chart-interaction-bar">
-                    <span className="interaction-icon" aria-hidden>
-                      ↔
-                    </span>
-                    <span className="interaction-text">
-                      Move across the{" "}
-                      <span className="font-semibold text-navy/85">chart</span> to see how the{" "}
-                      <span className="font-semibold text-navy/85">numbers</span> change over time.
-                    </span>
-                  </div>
+                  <p className="chart-context">{t("rrm.charts.eachPoint")}</p>
+                  <ChartInteractionHint t={t} />
                   <div className="mt-4 rounded-xl bg-slate-100/90 p-4 shadow-inner">
                     <div className="mb-3 flex flex-wrap items-center gap-6 text-[12px] text-slate-600">
                       <span className="inline-flex items-center gap-2">
                         <span className="h-0.5 w-6 bg-navy" aria-hidden />
-                        Current loan
+                        {t("rrm.charts.currentLoan")}
                       </span>
                       <span className="inline-flex items-center gap-2">
                         <span className="h-0.5 w-6 bg-gold" aria-hidden />
-                        New loan
+                        {t("rrm.charts.newLoan")}
                       </span>
                     </div>
                     <RefinanceEquityChartRecharts
@@ -604,6 +675,7 @@ export default function RefinanceRealMath() {
                       seriesNew={result.seriesNew}
                       chartKey={`eq-${chartKey}`}
                       reducedMotion={reducedMotion}
+                      chartStrings={chartStrings}
                     />
                   </div>
                 </div>
@@ -612,40 +684,46 @@ export default function RefinanceRealMath() {
 
             {/* What this actually means */}
             <div className="mx-auto mb-8 max-w-3xl rounded-xl border border-slate-200/80 bg-white p-6 shadow-sm">
-              <h2 className="font-heading text-lg font-semibold text-navy sm:text-xl">What this actually means</h2>
+              <h2 className="font-heading text-lg font-semibold text-navy sm:text-xl">{t("rrm.means.title")}</h2>
               <p className="mt-3 font-sans text-[15px] leading-relaxed text-slate-700">
-                You’re improving monthly flexibility — but extending your financial timeline.
+                {t("rrm.means.subtitle")}
               </p>
               <ul className="mt-4 list-disc space-y-2 pl-5 font-sans text-[14px] leading-relaxed text-slate-700">
-                <li>You reset your amortization curve (more interest early again)</li>
+                <li>{t("rrm.means.resetAmort")}</li>
                 {yearsAdded > 0 && (
-                  <li>You add {yearsAdded} years of payments vs. your remaining term on paper</li>
+                  <li>{t("rrm.means.addYears").replace("{years}", String(yearsAdded))}</li>
                 )}
                 <li>
-                  You {interestDeltaSigned > 0 ? "increase" : interestDeltaSigned < 0 ? "decrease" : "change"} total
-                  borrowing cost by {formatCurrency(Math.abs(interestDeltaSigned))} over the next{" "}
-                  {committedInputs.compareHorizonYears} years (interest modeled)
+                  {interestDeltaSigned > 0
+                    ? t("rrm.means.increaseCost")
+                        .replace("{amount}", formatCurrency(Math.abs(interestDeltaSigned)))
+                        .replace("{years}", String(committedInputs.compareHorizonYears))
+                    : interestDeltaSigned < 0
+                      ? t("rrm.means.decreaseCost")
+                          .replace("{amount}", formatCurrency(Math.abs(interestDeltaSigned)))
+                          .replace("{years}", String(committedInputs.compareHorizonYears))
+                      : t("rrm.means.changeCost")
+                          .replace("{amount}", formatCurrency(Math.abs(interestDeltaSigned)))
+                          .replace("{years}", String(committedInputs.compareHorizonYears))}
                 </li>
               </ul>
-              <p className="mt-5 font-sans text-[14px] font-medium text-navy">This can make sense if:</p>
+              <p className="mt-5 font-sans text-[14px] font-medium text-navy">{t("rrm.means.makeSenseIf")}</p>
               <ul className="mt-2 list-none space-y-1.5 font-sans text-[14px] leading-relaxed text-slate-600">
-                <li className="before:mr-2 before:text-gold before:content-['→']">You need monthly breathing room</li>
+                <li className="before:mr-2 before:text-gold before:content-['→']">{t("rrm.means.breathingRoom")}</li>
                 <li className="before:mr-2 before:text-gold before:content-['→']">
-                  You plan to sell or refinance within {Math.min(10, committedInputs.compareHorizonYears)}–10 years
+                  {t("rrm.means.planToSell").replace("{min}", String(Math.min(10, committedInputs.compareHorizonYears)))}
                 </li>
               </ul>
-              <p className="mt-5 font-sans text-[14px] font-medium text-navy">Less ideal if:</p>
+              <p className="mt-5 font-sans text-[14px] font-medium text-navy">{t("rrm.means.lessIdealIf")}</p>
               <ul className="mt-2 list-none space-y-1.5 font-sans text-[14px] leading-relaxed text-slate-600">
-                <li className="before:mr-2 before:text-gold before:content-['→']">Your goal is minimizing total cost</li>
-                <li className="before:mr-2 before:text-gold before:content-['→']">
-                  You’re already well into your current loan
-                </li>
+                <li className="before:mr-2 before:text-gold before:content-['→']">{t("rrm.means.minimizingCost")}</li>
+                <li className="before:mr-2 before:text-gold before:content-['→']">{t("rrm.means.wellInto")}</li>
               </ul>
             </div>
 
             {/* Insight */}
             <div className="mx-auto mb-8 max-w-3xl rounded-xl border border-slate-200/70 border-l-4 border-l-[#C6A15B] bg-[#FAF6EF] p-5 shadow-sm sm:p-6">
-              <p className="font-sans text-xs font-semibold uppercase tracking-[0.18em] text-navy/50">Key insight most people miss</p>
+              <p className="font-sans text-xs font-semibold uppercase tracking-[0.18em] text-navy/50">{t("rrm.insight.eyebrow")}</p>
               <div className="mt-3 space-y-3 font-sans text-[15px] italic leading-relaxed text-slate-800">
                 {splitParagraphs(result.keyInsight).map((para, i) => (
                   <p key={i}>{para}</p>
@@ -655,12 +733,12 @@ export default function RefinanceRealMath() {
 
             <div className="mx-auto mb-8 max-w-3xl rounded-xl border border-slate-200/80 bg-white p-5 text-center shadow-sm sm:p-6">
               <p className="font-sans text-[14px] leading-relaxed text-slate-700">
-                Locking your refinance rate?{" "}
+                {t("rrm.rateLock")}{" "}
                 <Link
                   to="/tools/rate-lock-engine"
                   className="font-semibold text-navy underline decoration-gold/40 hover:text-gold"
                 >
-                  Use the Rate Lock Decision Engine →
+                  {t("rrm.rateLockLink")}
                 </Link>
               </p>
             </div>
@@ -671,16 +749,16 @@ export default function RefinanceRealMath() {
               aria-labelledby="rrm-cta-heading"
             >
               <h2 id="rrm-cta-heading" className="type-section-heading-sm mx-auto mb-3 max-w-xl text-center">
-                Want to see how this plays out for your exact situation?
+                {t("rrm.cta.title")}
               </h2>
               <p className="type-body-sm mx-auto max-w-md text-center leading-relaxed text-slate-600">
-                No obligation — just clarity on whether this move actually works for you.
+                {t("rrm.cta.subtitle")}
               </p>
               <Link
                 to="/contact?topic=refinance-real-math"
                 className="btn-primary mx-auto mt-7 inline-flex min-h-[52px] min-w-[280px] items-center justify-center gap-2 px-8 text-[15px] shadow-[0_6px_24px_rgba(10,25,47,0.2)] transition-shadow duration-200 hover:shadow-[0_10px_36px_rgba(10,25,47,0.28)] motion-reduce:transition-none"
               >
-                Review my scenario with an advisor
+                {t("rrm.cta.button")}
                 <ArrowRight size={18} aria-hidden />
               </Link>
             </section>

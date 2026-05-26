@@ -12,7 +12,7 @@ type SectionChapterDividerProps = {
 export function SectionChapterDivider({ label, className = "" }: SectionChapterDividerProps) {
   return (
     <div
-      className={`relative flex items-center gap-4 py-10 lg:py-12 ${className}`}
+      className={`relative flex items-center gap-4 py-5 lg:py-6 ${className}`}
       aria-hidden={!label}
     >
       <div className="h-px flex-1 bg-slate-200/80" />

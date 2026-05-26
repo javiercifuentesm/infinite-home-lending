@@ -1,11 +1,13 @@
 import type { WealthResults } from "../../../hooks/useWealthMath";
 import { fmtK } from "../../../hooks/useWealthMath";
+import { useLanguage } from "../../../i18n/LanguageContext";
 
 const YEARS = [5, 10, 20, 30] as const;
 
 type Props = { results: WealthResults };
 
 export function WTMilestoneStrip({ results }: Props) {
+  const { t } = useLanguage();
   const { milestoneData } = results;
 
   return (
@@ -20,7 +22,7 @@ export function WTMilestoneStrip({ results }: Props) {
             className="rounded-[10px] border-[0.5px] border-slate-200/90 bg-white p-4 shadow-sm"
           >
             <p className="text-[10px] font-semibold uppercase tracking-[0.12em]" style={{ color: "#C6A15B" }}>
-              Year {yr}
+              {t("wt.milestone.year").replace("{yr}", String(yr))}
             </p>
             <p
               className="mt-2 font-[Georgia,serif] text-[17px] font-medium"
@@ -29,7 +31,7 @@ export function WTMilestoneStrip({ results }: Props) {
               {adv >= 0 ? "+" : ""}
               {fmtK(adv)}
             </p>
-            <p className="mt-1 text-[10px] text-slate-500">{pos ? "Owner advantage" : "Renter advantage"}</p>
+            <p className="mt-1 text-[10px] text-slate-500">{pos ? t("wt.milestone.ownerAdv") : t("wt.milestone.renterAdv")}</p>
           </div>
         );
       })}

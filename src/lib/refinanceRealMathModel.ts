@@ -13,6 +13,18 @@ function fmtMoney(n: number): string {
   }).format(n);
 }
 
+export type RefinanceRealMathStrings = {
+  keyInsight: string;
+  verdict: {
+    paymentNotLower: { title: string; body: string };
+    modestChange: { title: string; body: string };
+    paymentDownCostUp: { title: string; body: string };
+    likelyWorthIt: { bodyWithYears: string; bodyQuick: string; title: string };
+    dependsTimeline: { title: string; body: string };
+    closerLook: { title: string; body: string; lower: string; higher: string };
+  };
+};
+
 export type RefinanceRealMathInputs = {
   currentBalance: number;
   currentRatePct: number;
@@ -107,7 +119,10 @@ function buildSchedule(
   return out;
 }
 
-export function computeRefinanceRealMath(raw: RefinanceRealMathInputs): RefinanceRealMathResult | null {
+export function computeRefinanceRealMath(
+  raw: RefinanceRealMathInputs,
+  strings?: RefinanceRealMathStrings
+): RefinanceRealMathResult | null {
   const currentBalance = clamp(raw.currentBalance, 1, 50_000_000);
   const currentRatePct = clamp(raw.currentRatePct, 0.1, 25);
   const remainingYears = clamp(raw.remainingYears, 0.25, 40);
@@ -158,6 +173,7 @@ export function computeRefinanceRealMath(raw: RefinanceRealMathInputs): Refinanc
     newMonthlyPayment,
     newTermYears,
     compareHorizonYears,
+    strings,
   });
 
   const inputs: RefinanceRealMathInputs = {
@@ -211,6 +227,7 @@ function buildVerdict(p: {
   newMonthlyPayment: number;
   newTermYears: number;
   compareHorizonYears: number;
+  strings?: RefinanceRealMathStrings;
 }): {
   verdictKind: RefinanceVerdictKind;
   verdictTitle: string;
@@ -227,8 +244,10 @@ function buildVerdict(p: {
     newMonthlyPayment,
     newTermYears,
     compareHorizonYears,
+    strings,
   } = p;
 
+  const keyInsight = strings?.keyInsight ?? KEY_INSIGHT_AHA;
   const interestDelta = interestTotalCurrentHorizon - interestTotalNewHorizon;
   const horizonYears = horizonMonths / 12;
   const termRounded = Math.round(newTermYears);
@@ -237,20 +256,22 @@ function buildVerdict(p: {
   if (newMonthlyPayment > currentMonthlyPayment + 1e-2) {
     return {
       verdictKind: "payment_not_lower",
-      verdictTitle: "Your payment may not actually drop",
+      verdictTitle: strings?.verdict.paymentNotLower.title ?? "Your payment may not actually drop",
       verdictBody:
-        "A lower rate on paper doesn’t always mean a lower payment when the loan stretches to a longer term. Before you chase the rate, look at the payment line and the interest totals — they’re telling different stories.",
-      keyInsight: KEY_INSIGHT_AHA,
+        strings?.verdict.paymentNotLower.body ??
+        "A lower rate on paper doesn't always mean a lower payment when the loan stretches to a longer term. Before you chase the rate, look at the payment line and the interest totals — they're telling different stories.",
+      keyInsight,
     };
   }
 
   if (monthlyDelta <= 1e-2) {
     return {
       verdictKind: "modest_change",
-      verdictTitle: "The monthly move is small — the decision is still real",
+      verdictTitle: strings?.verdict.modestChange.title ?? "The monthly move is small — the decision is still real",
       verdictBody:
-        "A few dollars either way doesn’t mean you’re wrong to look — it means closing costs and how long you’ll keep the loan are doing most of the talking.",
-      keyInsight: KEY_INSIGHT_AHA,
+        strings?.verdict.modestChange.body ??
+        "A few dollars either way doesn't mean you're wrong to look — it means closing costs and how long you'll keep the loan are doing most of the talking.",
+      keyInsight,
     };
   }
 
@@ -258,55 +279,87 @@ function buildVerdict(p: {
   const recoversInHorizon = be <= horizonMonths;
 
   if (monthlyDelta > 0 && interestDelta < -1e-2) {
-    return {
-      verdictKind: "payment_down_cost_up",
-      verdictTitle: "Your payment goes down — but the cost can go up",
-      verdictBody: `By resetting to a ${termRounded}-year loan, you’re extending how long interest works against you. Over the next ${compareHorizonYears} years, this model shows about ${fmtMoney(
+    const bodyTemplate =
+      strings?.verdict.paymentDownCostUp.body ??
+      `By resetting to a ${termRounded}-year loan, you're extending how long interest works against you. Over the next ${compareHorizonYears} years, this model shows about ${fmtMoney(
         extraInterestIfNewHigher
       )} more in interest than staying on your current path — even with a lower check each month.
 
-That lower payment comes with a tradeoff most people never see clearly. It isn’t automatically wrong — but it’s worth deciding with your eyes open.`,
-      keyInsight: KEY_INSIGHT_AHA,
+That lower payment comes with a tradeoff most people never see clearly. It isn't automatically wrong — but it's worth deciding with your eyes open.`;
+
+    return {
+      verdictKind: "payment_down_cost_up",
+      verdictTitle: strings?.verdict.paymentDownCostUp.title ?? "Your payment goes down — but the cost can go up",
+      verdictBody: bodyTemplate
+        .replace("{term}", String(termRounded))
+        .replace("{years}", String(compareHorizonYears))
+        .replace("{amount}", fmtMoney(extraInterestIfNewHigher)),
+      keyInsight,
     };
   }
 
   if (monthlyDelta > 0 && recoversInHorizon && interestDelta > 1e-2) {
     const beYears = breakEvenMonths != null && Number.isFinite(breakEvenMonths) ? breakEvenMonths / 12 : null;
-    const beLine =
-      beYears != null && beYears > 0.05
-        ? `You save about ${fmtMoney(monthlyDelta)}/month and break even in roughly ${beYears.toFixed(1)} years. After that, the savings are real — if you stay.`
-        : `You save about ${fmtMoney(monthlyDelta)}/month and break even quickly on this model. After that, the savings are real — if you stay.`;
+    const useWithYears = beYears != null && beYears > 0.05;
+    const bodyTemplate = useWithYears
+      ? (strings?.verdict.likelyWorthIt.bodyWithYears ??
+          `You save about ${fmtMoney(monthlyDelta)}/month and break even in roughly ${beYears!.toFixed(1)} years. After that, the savings are real — if you stay.
+
+The key question isn't the rate — it's whether you stay long enough for the math to play out. Life moves; the numbers don't.`)
+      : (strings?.verdict.likelyWorthIt.bodyQuick ??
+          `You save about ${fmtMoney(monthlyDelta)}/month and break even quickly on this model. After that, the savings are real — if you stay.
+
+The key question isn't the rate — it's whether you stay long enough for the math to play out. Life moves; the numbers don't.`);
+
+    const verdictBody = useWithYears
+      ? bodyTemplate.replace("{monthly}", fmtMoney(monthlyDelta)).replace("{years}", beYears!.toFixed(1))
+      : bodyTemplate.replace("{monthly}", fmtMoney(monthlyDelta));
 
     return {
       verdictKind: "likely_worth_it",
-      verdictTitle: "This can work — if the timeline holds",
-      verdictBody: `${beLine}
-
-The key question isn’t the rate — it’s whether you stay long enough for the math to play out. Life moves; the numbers don’t.`,
-      keyInsight: KEY_INSIGHT_AHA,
+      verdictTitle: strings?.verdict.likelyWorthIt.title ?? "This can work — if the timeline holds",
+      verdictBody,
+      keyInsight,
     };
   }
 
   if (monthlyDelta > 0 && !recoversInHorizon) {
+    const bodyTemplate =
+      strings?.verdict.dependsTimeline.body ??
+      `You'd free about ${fmtMoney(
+        monthlyDelta
+      )}/month, but closing costs don't break even in your ${compareHorizonYears}-year comparison window. If you move or refinance again before that, the savings can evaporate.
+
+That doesn't mean "no." It means the decision is about time, not just the rate.`;
+
     return {
       verdictKind: "depends_on_timeline",
-      verdictTitle: "The payment improves — your calendar might not",
-      verdictBody: `You’d free about ${fmtMoney(
-        monthlyDelta
-      )}/month, but closing costs don’t break even in your ${compareHorizonYears}-year comparison window. If you move or refinance again before that, the savings can evaporate.
-
-That doesn’t mean “no.” It means the decision is about time, not just the rate.`,
-      keyInsight: KEY_INSIGHT_AHA,
+      verdictTitle: strings?.verdict.dependsTimeline.title ?? "The payment improves — your calendar might not",
+      verdictBody: bodyTemplate
+        .replace("{monthly}", fmtMoney(monthlyDelta))
+        .replace("{years}", String(compareHorizonYears)),
+      keyInsight,
     };
   }
 
+  const closerBodyTemplate =
+    strings?.verdict.closerLook.body ??
+    `Over ~${horizonYears.toFixed(
+      0
+    )} years, interest paid is ${interestDelta >= 0 ? "lower" : "higher"} on the new loan in this model — a starting point, not a verdict. Taxes, MI, and lender fees beyond this estimate still change the picture.`;
+
   return {
     verdictKind: "depends_on_timeline",
-    verdictTitle: "Worth a closer look with your full picture",
-    verdictBody: `Over ~${horizonYears.toFixed(
-      0
-    )} years, interest paid is ${interestDelta >= 0 ? "lower" : "higher"} on the new loan in this model — a starting point, not a verdict. Taxes, MI, and lender fees beyond this estimate still change the picture.`,
-    keyInsight: KEY_INSIGHT_AHA,
+    verdictTitle: strings?.verdict.closerLook.title ?? "Worth a closer look with your full picture",
+    verdictBody: closerBodyTemplate
+      .replace("{years}", horizonYears.toFixed(0))
+      .replace(
+        "{direction}",
+        interestDelta >= 0
+          ? (strings?.verdict.closerLook.lower ?? "lower")
+          : (strings?.verdict.closerLook.higher ?? "higher")
+      ),
+    keyInsight,
   };
 }
 

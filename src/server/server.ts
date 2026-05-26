@@ -5,6 +5,7 @@ import { createAgentV3Router } from "./agent-v3/agentV3Route";
 import { createAnalyticsRouter } from "./analyticsRoute";
 import { createUploadUrlRouter } from "./uploadUrlRoute";
 import { createMortgageConciergeSendLeadRouter } from "./mortgageConciergeSendLeadRoute";
+import { createAssignLeadRouter } from "./assignLeadRoute";
 import { createSubmitLeadRouter } from "./submitLeadRoute";
 import {
   createIntelligenceLoopRouter,
@@ -44,10 +45,12 @@ app.get("/api/health", (_req, res) => {
   res.status(200).json({ ok: true, service: "ihl-api" });
 });
 app.use(express.json({ limit: "1mb" }));
+app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/agent-v3", createAgentV3Router());
 app.use("/api", createUploadUrlRouter());
 app.use("/api", createMortgageConciergeSendLeadRouter());
+app.use("/api", createAssignLeadRouter());
 app.use("/api", createSubmitLeadRouter());
 app.use("/api", createAnalyticsRouter());
 app.use("/api", createIntelligenceLoopRouter());

@@ -1,5 +1,6 @@
 import { useMemo, useState, type CSSProperties } from "react";
 import { runCalculation, type WealthInputs } from "../../../hooks/useWealthMath";
+import { useLanguage } from "../../../i18n/LanguageContext";
 import { SmartToolIntro } from "../SmartToolIntro";
 import { WTPurchaseInputs } from "./WTPurchaseInputs";
 import { WTAssumptionInputs } from "./WTAssumptionInputs";
@@ -26,6 +27,7 @@ const defaultInputs: WealthInputs = {
 };
 
 export default function WTCalculator() {
+  const { t } = useLanguage();
   const [inputs, setInputs] = useState<WealthInputs>(defaultInputs);
   const results = useMemo(() => runCalculation(inputs), [inputs]);
   const chartKey = useMemo(() => JSON.stringify(inputs), [inputs]);
@@ -39,19 +41,9 @@ export default function WTCalculator() {
         } as CSSProperties
       }
     >
-      <SmartToolIntro title="The Mortgage Wealth Tracker">
-        <p>
-          Every mortgage calculator shows you a monthly payment. This one shows you six parallel wealth streams — equity,
-          appreciation, PMI elimination, rent inflation protection, tax benefit, and opportunity cost — and calculates your net
-          worth advantage from owning vs. renting at years 5, 10, 20, and 30. Federal Reserve Survey of Consumer Finances and NAR
-          analyses have reported large average net worth gaps between homeowners and renters nationally (often cited on the
-          order of roughly $430,000 — varies by survey year and methodology). This tool shows how wealth can build from your
-          specific inputs — not as a guarantee, but as a transparent model.
-        </p>
-        <p className="!text-[11px] !leading-relaxed !text-slate-500">
-          Source context (not a link): homeowner vs. renter wealth comparisons are typically drawn from Federal Reserve Survey of
-          Consumer Finances and National Association of Realtors research summaries; exact figures change over time.
-        </p>
+      <SmartToolIntro title={t("wt.title")}>
+        <p>{t("wt.intro.p1")}</p>
+        <p className="!text-[11px] !leading-relaxed !text-slate-500">{t("wt.intro.source")}</p>
       </SmartToolIntro>
 
       <section className="mt-10 space-y-8">
@@ -59,9 +51,7 @@ export default function WTCalculator() {
           className="rounded-lg border border-amber-200/80 bg-amber-50/90 px-4 py-3 text-[12px] leading-relaxed text-amber-950"
           role="note"
         >
-          <strong>Honest framing:</strong> At high investment return assumptions, renting plus disciplined investing can
-          outperform in this model. Opportunity cost of your down payment is shown in red because most calculators omit it. This
-          is the complete picture so you can decide — not a claim that buying always wins.
+          <strong>{t("wt.honestFraming.label")}</strong> {t("wt.honestFraming.text")}
         </div>
 
         <WTPurchaseInputs inputs={inputs} onChange={(next) => setInputs(next)} />
@@ -76,13 +66,7 @@ export default function WTCalculator() {
         <WTInsight results={results} />
         <WTCTA results={results} />
 
-        <p className="text-center text-[10px] leading-relaxed text-slate-500">
-          All projections are hypothetical and for educational purposes only. Actual wealth outcomes depend on market conditions,
-          personal savings behavior, tax situation, and many other factors. Home appreciation rates, rent increases, and
-          investment returns are not guaranteed. Mortgage interest deductibility depends on individual tax situation — consult a
-          tax advisor. The homeowner vs. renter wealth gap data cited in research is sourced from Federal Reserve Survey of
-          Consumer Finances and NAR analyses. This tool does not constitute financial advice or a loan offer.
-        </p>
+        <p className="text-center text-[10px] leading-relaxed text-slate-500">{t("wt.disclaimer")}</p>
       </section>
     </div>
   );

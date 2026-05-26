@@ -174,19 +174,32 @@ const Footer = () => {
 
         {/* Legal strip */}
         <div className="mt-14 border-t border-slate-200/80 py-8">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-            <div className="space-y-1.5 font-sans text-[11px] leading-[1.75] text-slate-400">
-              <p className="text-slate-500">© {year} Infinite Home Lending. {t("footer.rights")}</p>
-              <p>NMLS #{NMLS_ID} · {t("footer.nmls")}</p>
-              <p>{t("footer.loanDisclaimer")}</p>
+          <div className="flex flex-col items-center gap-3 text-center font-sans text-[11px] text-slate-400">
+            {/* Top row — all key info on one line */}
+            <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
+              <span className="text-slate-500">© {year} Infinite Home Lending.</span>
+              <a
+                href="https://www.nmlsconsumeraccess.org/EntityDetails.aspx/COMPANY/2831765"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gold transition-colors hover:text-gold/80"
+              >
+                NMLS #{NMLS_ID}
+              </a>
+              <span className="text-slate-300">·</span>
+              <span>{t("footer.nmls")}</span>
+              <span className="text-slate-300">·</span>
+              <a href="#" className="transition-colors hover:text-navy">
+                {t("footer.privacy")}
+              </a>
+              <span className="text-slate-300">·</span>
+              <a href="#" className="transition-colors hover:text-navy">
+                {t("footer.terms")}
+              </a>
             </div>
-            <div className="flex flex-col gap-2 sm:items-end sm:text-right">
-              <p className="font-sans text-[11px] text-slate-400">{t("footer.serving")}</p>
-              <div className="flex gap-6">
-                <a href="#" className="font-sans text-[11px] text-slate-400 transition-colors hover:text-navy">{t("footer.privacy")}</a>
-                <a href="#" className="font-sans text-[11px] text-slate-400 transition-colors hover:text-navy">{t("footer.terms")}</a>
-              </div>
-            </div>
+
+            {/* Bottom row — disclaimer */}
+            <p className="text-[10px] text-slate-400/80">{t("footer.loanDisclaimer")}</p>
           </div>
         </div>
       </div>

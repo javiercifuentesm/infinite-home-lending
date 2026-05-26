@@ -10,6 +10,7 @@ import {
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 import type { WealthResults } from "../../../hooks/useWealthMath";
+import { useLanguage } from "../../../i18n/LanguageContext";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Filler, Tooltip);
 
@@ -23,14 +24,17 @@ function formatYAxis(v: number): string {
 type Props = { results: WealthResults; chartKey: string };
 
 export function WTWealthChart({ results, chartKey }: Props) {
+  const { t } = useLanguage();
   const { ownerNWArr, renterNWArr, labels } = results;
+  const ownerLabel = t("wt.chart.ownerLabel");
+  const renterLabel = t("wt.chart.renterLabel");
 
   const data = useMemo(
     () => ({
       labels,
       datasets: [
         {
-          label: "Owner net worth",
+          label: ownerLabel,
           data: ownerNWArr,
           borderColor: "#0B2A4A",
           backgroundColor: "rgba(11,42,74,0.07)",
@@ -40,7 +44,7 @@ export function WTWealthChart({ results, chartKey }: Props) {
           fill: true,
         },
         {
-          label: "Renter net worth",
+          label: renterLabel,
           data: renterNWArr,
           borderColor: "#C6A15B",
           backgroundColor: "rgba(198,161,91,0.06)",
@@ -52,7 +56,7 @@ export function WTWealthChart({ results, chartKey }: Props) {
         },
       ],
     }),
-    [ownerNWArr, renterNWArr, labels],
+    [ownerNWArr, renterNWArr, labels, ownerLabel, renterLabel],
   );
 
   const options = useMemo(
@@ -90,21 +94,19 @@ export function WTWealthChart({ results, chartKey }: Props) {
 
   return (
     <div className="rounded-xl border border-slate-200/90 bg-white p-5 shadow-sm sm:p-6">
-      <h3 className="font-[Georgia,serif] text-[13px] font-medium text-[#0B2A4A]">
-        Net worth over 30 years — owner vs. renter
-      </h3>
+      <h3 className="font-[Georgia,serif] text-[13px] font-medium text-[#0B2A4A]">{t("wt.chart.title")}</h3>
 
       <div className="mt-4 flex flex-wrap items-center justify-center gap-6 text-[11px] text-slate-600">
         <span className="inline-flex items-center gap-2">
           <span className="inline-block h-2.5 w-6 rounded-sm" style={{ background: "#0B2A4A" }} />
-          Owner net worth
+          {ownerLabel}
         </span>
         <span className="inline-flex items-center gap-2">
           <span
             className="inline-block h-0 w-8 border-t-2 border-dashed"
             style={{ borderColor: "#C6A15B" }}
           />
-          Renter net worth
+          {renterLabel}
         </span>
       </div>
 

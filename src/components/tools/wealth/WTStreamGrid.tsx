@@ -1,9 +1,11 @@
 import type { WealthResults } from "../../../hooks/useWealthMath";
 import { fmt, fmtK } from "../../../hooks/useWealthMath";
+import { useLanguage } from "../../../i18n/LanguageContext";
 
 type Props = { results: WealthResults };
 
 export function WTStreamGrid({ results }: Props) {
+  const { t } = useLanguage();
   const {
     totalAppreciation,
     finalPrincipal,
@@ -14,7 +16,6 @@ export function WTStreamGrid({ results }: Props) {
     pmiRate,
     pmiMo,
     pmiRemoveYear,
-    basePmt,
     hp,
     dpDollars,
     appr,
@@ -40,16 +41,14 @@ export function WTStreamGrid({ results }: Props) {
 
   return (
     <div>
-      <h3 className="font-[Georgia,serif] text-[15px] font-medium text-[#0B2A4A]">
-        The six wealth streams — how each one contributes
-      </h3>
+      <h3 className="font-[Georgia,serif] text-[15px] font-medium text-[#0B2A4A]">{t("wt.streams.title")}</h3>
       <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         <div
           className="rounded-lg border p-4"
           style={{ background: "rgba(11,42,74,0.04)", borderColor: "rgba(11,42,74,0.12)" }}
         >
           <p className="text-[18px]">🏗</p>
-          <p className="mt-1 text-[12px] font-medium text-[#0B2A4A]">1. Equity from principal paydown</p>
+          <p className="mt-1 text-[12px] font-medium text-[#0B2A4A]">{t("wt.streams.s1.title")}</p>
           <p className="mt-2 font-[Georgia,serif] text-[20px] font-medium" style={{ color: "#0B2A4A" }}>
             +{fmtK(finalPrincipal)}
           </p>
@@ -61,7 +60,7 @@ export function WTStreamGrid({ results }: Props) {
           style={{ background: "rgba(59,109,17,0.04)", borderColor: "rgba(59,109,17,0.12)" }}
         >
           <p className="text-[18px]">📈</p>
-          <p className="mt-1 text-[12px] font-medium text-[#0B2A4A]">2. Home appreciation</p>
+          <p className="mt-1 text-[12px] font-medium text-[#0B2A4A]">{t("wt.streams.s2.title")}</p>
           <p className="mt-2 font-[Georgia,serif] text-[20px] font-medium" style={{ color: "#27500A" }}>
             +{fmtK(totalAppreciation)}
           </p>
@@ -76,9 +75,9 @@ export function WTStreamGrid({ results }: Props) {
           style={{ background: "rgba(198,161,91,0.07)", borderColor: "rgba(198,161,91,0.2)" }}
         >
           <p className="text-[18px]">✂️</p>
-          <p className="mt-1 text-[12px] font-medium text-[#0B2A4A]">3. PMI elimination savings</p>
+          <p className="mt-1 text-[12px] font-medium text-[#0B2A4A]">{t("wt.streams.s3.title")}</p>
           <p className="mt-2 font-[Georgia,serif] text-[20px] font-medium" style={{ color: "#854F0B" }}>
-            {pmiRate > 0 ? fmtK(totalPMIPaid) : "$0 — no PMI"}
+            {pmiRate > 0 ? fmtK(totalPMIPaid) : t("wt.streams.s3.noPmi")}
           </p>
           <p className="mt-2 text-[11px] leading-[1.5] text-slate-600">{pmiDesc}</p>
         </div>
@@ -88,7 +87,7 @@ export function WTStreamGrid({ results }: Props) {
           style={{ background: "rgba(133,79,11,0.04)", borderColor: "rgba(133,79,11,0.1)" }}
         >
           <p className="text-[18px]">🛡</p>
-          <p className="mt-1 text-[12px] font-medium text-[#0B2A4A]">4. Rent inflation protection</p>
+          <p className="mt-1 text-[12px] font-medium text-[#0B2A4A]">{t("wt.streams.s4.title")}</p>
           <p className="mt-2 font-[Georgia,serif] text-[20px] font-medium" style={{ color: "#633806" }}>
             {fmtK(totalRentInflationExtra)}
           </p>
@@ -102,13 +101,13 @@ export function WTStreamGrid({ results }: Props) {
           style={{ background: "rgba(24,95,165,0.04)", borderColor: "rgba(24,95,165,0.12)" }}
         >
           <p className="text-[18px]">💰</p>
-          <p className="mt-1 text-[12px] font-medium text-[#0B2A4A]">5. Mortgage interest tax benefit</p>
+          <p className="mt-1 text-[12px] font-medium text-[#0B2A4A]">{t("wt.streams.s5.title")}</p>
           <p className="mt-2 font-[Georgia,serif] text-[20px] font-medium" style={{ color: "#0C447C" }}>
             {fmtK(totalTaxBenefit)}
           </p>
           <p className="mt-2 text-[11px] leading-[1.5] text-slate-600">
             Mortgage interest deduction at {taxRate}% marginal rate saves ~{fmt(Math.round(totalTaxBenefit / 30 / 12))}/mo on average in early years.
-            Benefit decreases as interest portion shrinks. (Consult a tax advisor.)
+            Benefit decreases as interest portion shrinks. {t("wt.streams.s5.hint")}
           </p>
         </div>
 
@@ -117,7 +116,7 @@ export function WTStreamGrid({ results }: Props) {
           style={{ background: "rgba(163,45,45,0.04)", borderColor: "rgba(163,45,45,0.12)" }}
         >
           <p className="text-[18px]">⚖️</p>
-          <p className="mt-1 text-[12px] font-medium text-[#0B2A4A]">6. Opportunity cost (honest)</p>
+          <p className="mt-1 text-[12px] font-medium text-[#0B2A4A]">{t("wt.streams.s6.title")}</p>
           <p className="mt-2 font-[Georgia,serif] text-[20px] font-medium" style={{ color: "#A32D2D" }}>
             −{fmtK(totalOppCost)}
           </p>

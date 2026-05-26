@@ -1,9 +1,11 @@
 import type { WealthResults } from "../../../hooks/useWealthMath";
 import { fmt, fmtK } from "../../../hooks/useWealthMath";
+import { useLanguage } from "../../../i18n/LanguageContext";
 
 type Props = { results: WealthResults };
 
 export function WTInsight({ results }: Props) {
+  const { t } = useLanguage();
   const {
     buyingWins,
     invReturn,
@@ -19,13 +21,19 @@ export function WTInsight({ results }: Props) {
   let text: string;
 
   if (!buyingWins && invReturn >= 9) {
-    text = `At a ${invReturn.toFixed(1)}% investment return, the renter who consistently invests the down payment and monthly payment difference does mathematically outperform in this model. That is a real result — and it is honest. But it assumes disciplined monthly investing over 30 years and an above-average return. The homeowner's wealth builds automatically, through mortgage payments that would otherwise be made anyway. The renter's requires consistent behavior and market performance that isn't guaranteed.`;
+    text = t("wt.insight.renterWins").replace("{rate}", invReturn.toFixed(1));
   } else if (advantage > 300000) {
-    text = `At ${appr.toFixed(1)}% appreciation in the MD-DC-VA market, owning builds ${fmtK(advantage)} more wealth than renting over 30 years in this scenario. The Federal Reserve's Survey of Consumer Finances and NAR analyses often cite large homeowner vs. renter net worth gaps nationally. This tool shows you the mechanism: forced equity, compounding appreciation, and fixed housing costs while rents rise. None of this is guaranteed — but the structural advantage of ownership is real and measurable.`;
+    text = t("wt.insight.highAdvantage")
+      .replace("{appr}", appr.toFixed(1))
+      .replace("{advantage}", fmtK(advantage));
   } else if (beYear && beYear <= 5) {
-    text = `The break-even arrives at year ${beYear} — remarkably fast. That is when the combined equity, appreciation, and rent inflation protection overcome the closing costs and early interest-heavy payments. Beyond that point, every year of owning adds to the wealth advantage. The longer you hold, the more powerfully the gap compounds.`;
+    text = t("wt.insight.fastBreakeven").replace("{year}", String(beYear));
   } else {
-    text = `Stream 4 — rent inflation protection — is the most underrated wealth lever in this tool. Your mortgage payment is fixed forever. Today's ${fmt(rent)}/mo rent becomes ${fmt(rentAtYear30)}/mo by year 30 at ${rentInc.toFixed(1)}%/yr. That's ${fmtK(totalRentInflationExtra)} of cumulative extra rent cost that your fixed mortgage payment shields you from. Nobody who talks about renting vs. buying calculates that number — but it is one of the most powerful structural arguments for ownership.`;
+    text = t("wt.insight.rentProtection")
+      .replace("{rent}", fmt(rent))
+      .replace("{rentAtYear30}", fmt(rentAtYear30))
+      .replace("{rentInc}", rentInc.toFixed(1))
+      .replace("{extra}", fmtK(totalRentInflationExtra));
   }
 
   return (

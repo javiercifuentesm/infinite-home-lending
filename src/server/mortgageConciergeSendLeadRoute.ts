@@ -1,10 +1,37 @@
 /**
  * POST /api/send-lead — build flagship lead email and send via Resend (server-side; avoids browser CORS).
  */
+import crypto from "crypto";
 import { appendLead } from "./leadsStore";
 import { Router, type Request, type Response } from "express";
 
-function escapeHtml(s: string): string {
+/*
+ * ─── MORTGAGE ADVISOR (MA) CONFIGURATION ──────────────────────
+ *
+ * MAs are configured via the MORTGAGE_ADVISORS environment variable.
+ * Format: "Full Name:email@domain.com,Full Name 2:email2@domain.com"
+ *
+ * Current MA list:
+ *   Alma Jaramillo:Alma.Jaramillo@infinitehomelending.com
+ *
+ * ┌─────────────────────────────────────────────────────────────┐
+ * │  🅿️  PARKING LOT — Adding a new MA when you hire            │
+ * │                                                             │
+ * │  1. Go to Railway dashboard                                 │
+ * │  2. Open infinite-home-lending service → Variables          │
+ * │  3. Find: MORTGAGE_ADVISORS                                 │
+ * │  4. Current value:                                          │
+ * │     Alma Jaramillo:Alma.Jaramillo@infinitehomelending.com   │
+ * │  5. Add new MA with a comma separator:                      │
+ * │     Alma Jaramillo:Alma.Jaramillo@infinitehomelending.com,  │
+ * │     New Name:newname@infinitehomelending.com                │
+ * │  6. Click Save → Redeploy                                   │
+ * │  7. New MA appears in assignment emails automatically        │
+ * │     — zero code changes needed.                             │
+ * └─────────────────────────────────────────────────────────────┘
+ */
+
+export function escapeHtml(s: string): string {
   return s
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
@@ -371,6 +398,131 @@ function generateComplianceNote(): string {
       </td>
     </tr>
   `;
+}
+
+/* ── MA list parser ── */
+export type MortgageAdvisor = {
+  name: string;
+  email: string;
+};
+
+export function getMortgageAdvisors(): MortgageAdvisor[] {
+  const raw =
+    process.env.MORTGAGE_ADVISORS ?? "Alma Jaramillo:Alma.Jaramillo@infinitehomelending.com";
+  return raw
+    .split(",")
+    .map((entry) => {
+      const [name, email] = entry.trim().split(":");
+      return { name: name?.trim() ?? "", email: email?.trim() ?? "" };
+    })
+    .filter((ma) => ma.name && ma.email);
+}
+
+/* ── Token store (in-memory) ── */
+export type AssignmentToken = {
+  token: string;
+  maName: string;
+  maEmail: string;
+  leadName: string;
+  leadEmail: string;
+  leadPhone: string;
+  leadGrade: string;
+  leadEmoji: string;
+  leadPriority: string;
+  bestDay: string;
+  bestTime: string;
+  preferredContact: string;
+  transactionType: string;
+  transactionEmoji: string;
+  transcript: string;
+  html: string;
+  createdAt: number;
+  used: boolean;
+};
+
+const assignmentTokens = new Map<string, AssignmentToken>();
+
+export function createAssignmentToken(
+  data: Omit<AssignmentToken, "token" | "createdAt" | "used">,
+): string {
+  const token = crypto.randomBytes(32).toString("hex");
+  assignmentTokens.set(token, {
+    ...data,
+    token,
+    createdAt: Date.now(),
+    used: false,
+  });
+  return token;
+}
+
+export function getAssignmentToken(token: string): AssignmentToken | null {
+  const entry = assignmentTokens.get(token);
+  if (!entry) return null;
+  if (Date.now() - entry.createdAt > 48 * 60 * 60 * 1000) {
+    assignmentTokens.delete(token);
+    return null;
+  }
+  return entry;
+}
+
+export function markTokenUsed(token: string): void {
+  const entry = assignmentTokens.get(token);
+  if (entry) entry.used = true;
+}
+
+/* ── Transaction type detector ── */
+export function detectTransactionType(transcript: string): {
+  type: string;
+  emoji: string;
+} {
+  const t = transcript.toLowerCase();
+  if (/heloc|home equity|equity line|line of credit/i.test(t)) return { type: "HELOC", emoji: "🏦" };
+  if (/refinanc/i.test(t)) return { type: "Refinance", emoji: "🔄" };
+  if (/reverse mortgage|reverse/i.test(t)) return { type: "Reverse Mortgage", emoji: "🛡️" };
+  if (/purchase|buy|buying|first home|first time/i.test(t)) return { type: "Purchase", emoji: "🏠" };
+  return { type: "General Inquiry", emoji: "📋" };
+}
+
+/* ── MA assignment section HTML (appended to Javier's email) ── */
+export function generateAssignmentSection(
+  tokens: { ma: MortgageAdvisor; token: string }[],
+  baseUrl: string,
+): string {
+  const buttons = tokens
+    .map(
+      ({ ma, token }) => `
+        <tr>
+          <td style="padding:6px 0;">
+            <a href="${baseUrl}/api/assign-lead/review?token=${token}"
+              style="display:block;background-color:#C6A15B;color:#0B2A4A;
+              text-decoration:none;font-size:14px;font-weight:bold;
+              padding:14px 24px;border-radius:8px;text-align:center;">
+              🎯 Assign to ${escapeHtml(ma.name)} →
+            </a>
+          </td>
+        </tr>`,
+    )
+    .join("");
+
+  return `
+    <tr>
+      <td style="background-color:#F0F4FF;border-top:3px solid #C6A15B;
+        padding:28px 40px;">
+        <p style="margin:0 0 6px 0;color:#0B2A4A;font-size:11px;
+          font-weight:bold;letter-spacing:2px;text-transform:uppercase;">
+          📋 Assign This Lead
+        </p>
+        <p style="margin:0 0 18px 0;color:#475569;font-size:13px;">
+          Review the lead above and assign to your Mortgage Advisor:
+        </p>
+        <table width="100%" cellpadding="0" cellspacing="0">
+          ${buttons}
+        </table>
+        <p style="margin:16px 0 0 0;color:#94a3b8;font-size:11px;">
+          ⏱ Assignment links expire after 48 hours.
+        </p>
+      </td>
+    </tr>`;
 }
 
 function generateTimeline(transcript: string): string {
@@ -867,6 +1019,32 @@ export function createMortgageConciergeSendLeadRouter(): Router {
       String(time ?? ""),
     );
 
+    const { type: transactionType, emoji: transactionEmoji } = detectTransactionType(tRaw);
+
+    const advisors = getMortgageAdvisors();
+    const baseUrl = process.env.API_BASE_URL ?? "https://infinite-home-lending-production.up.railway.app";
+
+    const advisorTokens = advisors.map((ma) => ({
+      ma,
+      token: createAssignmentToken({
+        maName: ma.name,
+        maEmail: ma.email,
+        leadName: lead_name,
+        leadEmail: lead_email,
+        leadPhone: String(lead_phone ?? ""),
+        leadGrade: String(lead_grade ?? ""),
+        leadEmoji: String(lead_emoji ?? ""),
+        leadPriority: String(lead_priority ?? ""),
+        bestDay: String(best_day ?? ""),
+        bestTime: String(best_time ?? ""),
+        preferredContact: String(preferred_contact ?? ""),
+        transactionType,
+        transactionEmoji,
+        transcript: tRaw,
+        html: "",
+      }),
+    }));
+
     const html = `<!DOCTYPE html>
 <html>
 <head>
@@ -960,6 +1138,7 @@ export function createMortgageConciergeSendLeadRouter(): Router {
             </td>
           </tr>
           ${playbookHtml}
+          ${generateAssignmentSection(advisorTokens, baseUrl)}
           <tr>
             <td style="padding:24px 40px;">
               <table width="100%" cellpadding="0" cellspacing="0">
@@ -982,6 +1161,11 @@ export function createMortgageConciergeSendLeadRouter(): Router {
 </body>
 </html>`;
 
+    advisorTokens.forEach(({ token }) => {
+      const entry = assignmentTokens.get(token);
+      if (entry) entry.html = html;
+    });
+
     const subjectOverride = String(lead_subject_override ?? "").trim();
     const subject = subjectOverride
       ? subjectOverride
@@ -990,7 +1174,7 @@ export function createMortgageConciergeSendLeadRouter(): Router {
     const resendBody = {
       // Ensure Resend + domain allow listing for this sender address.
       from: "IHL Mortgage Concierge <sarah@update.infinitehomelending.com>",
-      to: "Info@infinitehomelending.com",
+      to: process.env.LEAD_ADVISOR_EMAIL ?? "javier.cifuentes@infinitehomelending.com",
       subject,
       html,
     };

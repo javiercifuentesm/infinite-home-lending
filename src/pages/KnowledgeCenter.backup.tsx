@@ -25,6 +25,9 @@ import {
 } from "../data/knowledgeCenterRoutes";
 import { useLanguage } from "../i18n/LanguageContext";
 import { usePageMetadata } from "../hooks/usePageMetadata";
+import { KNOWLEDGE_CONNECTED_TOOLS_V2 } from "../config/knowledgeCenterLayout";
+import { KnowledgeConnectedTools } from "../components/knowledge/KnowledgeConnectedTools";
+import { KnowledgeConnectedToolsLegacy } from "../components/knowledge/KnowledgeConnectedToolsLegacy";
 
 const ENTRY_IMAGE_BY_ROUTE: Record<KnowledgeRouteId, { src: string; objectClass: string }> = {
   "start-here": { src: "/knowledge/knowledge-start-here.png", objectClass: "object-[center_38%]" },
@@ -57,7 +60,7 @@ const stagger = {
 };
 
 const cardHover =
-  "transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(10,25,47,0.10)] hover:border-gold/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/40 focus-visible:ring-offset-2";
+  "transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_28px_64px_-20px_rgba(10,25,47,0.15)] hover:border-gold/35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/40 focus-visible:ring-offset-2";
 
 /** Curated FAQ count before “View more” (spec: 4–6). */
 const FAQ_INITIAL = 6;
@@ -284,129 +287,12 @@ export default function KnowledgeCenter() {
             ))}
           </motion.div>
 
-          {/* ── Smart Tools Showcase — Option C ── */}
-          {/* TO REVERT: delete this block and restore KnowledgeCenter.backup.tsx */}
-          <motion.div
-            variants={fadeUp}
-            initial="initial"
-            animate="animate"
-            className="w-full max-w-3xl mx-auto mb-10"
-          >
-            {/* Featured — True Cost of Waiting */}
-            <Link
-              to="/tools/true-cost-of-waiting"
-              className="group flex items-center gap-5 bg-navy rounded-2xl px-6 py-5 mb-3 hover:bg-navy/95 transition-colors duration-200"
-            >
-              <div className="flex-1 min-w-0">
-                <span className="inline-flex items-center gap-1.5 bg-gold/20 border border-gold/40 rounded-full px-2.5 py-0.5 text-[9px] font-semibold uppercase tracking-[0.1em] text-gold mb-3">
-                  <Sparkles className="h-2.5 w-2.5" aria-hidden />
-                  {t("knowledge.tools.featuredBadge")}
-                </span>
-                <p className="font-heading text-[16px] font-semibold text-white leading-snug mb-1.5">
-                  {t("knowledge.tools.waitingLink")}
-                </p>
-                <p className="font-sans text-[11px] text-white/50 leading-relaxed mb-4">
-                  {t("knowledge.tools.waitingDescShort")}
-                </p>
-                <span className="inline-flex items-center gap-1.5 bg-gold rounded-lg px-4 py-2 text-[11px] font-semibold text-navy group-hover:bg-gold/90 transition-colors duration-200">
-                  {t("knowledge.tools.featuredCta")}
-                  <ArrowRight className="h-3 w-3" aria-hidden />
-                </span>
-              </div>
-              <div className="flex-shrink-0 bg-white/[0.06] border border-white/10 rounded-xl px-5 py-4 text-center min-w-[105px]">
-                <p className="font-heading text-[26px] font-semibold text-gold leading-none mb-1.5">
-                  {t("knowledge.tools.featuredStat")}
-                </p>
-                <p className="font-sans text-[10px] text-white/40 leading-snug">
-                  {t("knowledge.tools.featuredStatLabel")}
-                </p>
-              </div>
-            </Link>
-
-            {/* 2×2 tool grid */}
-            <div className="grid grid-cols-2 gap-2.5 mb-2.5">
-              {[
-                {
-                  to: "/tools/buy-vs-rent",
-                  cat: t("knowledge.tools.catBuying"),
-                  catClass: "bg-[#FBF3E0] text-[#8A6200]",
-                  name: t("knowledge.tools.buyRentLink"),
-                  desc: t("knowledge.tools.buyRentDescShort"),
-                },
-                {
-                  to: "/tools/conventional-vs-fha",
-                  cat: t("knowledge.tools.catBuying"),
-                  catClass: "bg-[#FBF3E0] text-[#8A6200]",
-                  name: t("knowledge.tools.fhaLink"),
-                  desc: t("knowledge.tools.fhaDescShort"),
-                },
-                {
-                  to: "/tools/principal-accelerator",
-                  cat: t("knowledge.tools.catRefi"),
-                  catClass: "bg-[#E8EBF2] text-[#2A3A5A]",
-                  name: t("knowledge.tools.acceleratorLink"),
-                  desc: t("knowledge.tools.acceleratorDescShort"),
-                },
-                {
-                  to: "/tools/heloc-planner",
-                  cat: t("knowledge.tools.catRefi"),
-                  catClass: "bg-[#E8EBF2] text-[#2A3A5A]",
-                  name: t("knowledge.tools.helocLink"),
-                  desc: t("knowledge.tools.helocDescShort"),
-                },
-              ].map((tool) => (
-                <Link
-                  key={tool.to}
-                  to={tool.to}
-                  className="group flex flex-col bg-white border border-slate-200/80 rounded-xl px-4 py-3.5 hover:border-gold/50 hover:shadow-[0_4px_20px_rgba(10,25,47,0.08)] transition-all duration-200"
-                >
-                  <span className={`inline-block text-[9px] font-semibold uppercase tracking-[0.07em] px-2 py-0.5 rounded-lg mb-2.5 w-fit ${tool.catClass}`}>
-                    {tool.cat}
-                  </span>
-                  <p className="font-heading text-[12px] font-semibold text-navy mb-1.5 leading-snug">
-                    {tool.name}
-                  </p>
-                  <p className="font-sans text-[10px] text-slate-500 leading-relaxed">
-                    {tool.desc}
-                  </p>
-                </Link>
-              ))}
-            </div>
-
-            {/* Reverse Mortgage — full width */}
-            <Link
-              to="/tools/reverse-mortgage-planner"
-              className="group flex items-center gap-4 bg-white border border-slate-200/80 rounded-xl px-4 py-3.5 mb-2.5 hover:border-gold/50 hover:shadow-[0_4px_20px_rgba(10,25,47,0.08)] transition-all duration-200"
-            >
-              <span className="inline-block text-[9px] font-semibold uppercase tracking-[0.07em] px-2 py-0.5 rounded-lg bg-[#EDF0F5] text-[#3A4A6A] flex-shrink-0 whitespace-nowrap">
-                {t("knowledge.tools.catSenior")}
-              </span>
-              <p className="font-heading text-[13px] font-semibold text-navy flex-1 leading-snug">
-                {t("knowledge.tools.reverseLink")}
-              </p>
-              <p className="font-sans text-[10px] text-slate-500 leading-relaxed hidden sm:block max-w-[220px]">
-                {t("knowledge.tools.reverseDescShort")}
-              </p>
-              <ArrowRight className="h-4 w-4 text-gold flex-shrink-0 group-hover:translate-x-0.5 transition-transform duration-200" aria-hidden />
-            </Link>
-
-            {/* MD · VA · DC trust strip */}
-            <div className="flex items-center justify-between bg-[#EEF1F6] rounded-xl px-4 py-2.5">
-              <p className="font-sans text-[11px] text-slate-500">
-                {t("knowledge.tools.regionDesc")}
-              </p>
-              <div className="flex gap-1.5 flex-shrink-0 ml-3">
-                {["MD", "VA", "DC"].map((s) => (
-                  <span
-                    key={s}
-                    className="font-sans text-[10px] font-semibold text-navy bg-white border border-slate-200/80 rounded-lg px-2.5 py-1"
-                  >
-                    {s}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </motion.div>
+          {/* Connected tools — toggle in src/config/knowledgeCenterLayout.ts */}
+          {KNOWLEDGE_CONNECTED_TOOLS_V2 ? (
+            <KnowledgeConnectedTools t={t} />
+          ) : (
+            <KnowledgeConnectedToolsLegacy t={t} />
+          )}
 
           {/* 6 entry cards */}
           <motion.ul
@@ -424,7 +310,7 @@ export default function KnowledgeCenter() {
                   <button
                     type="button"
                     onClick={() => selectRoute(rid)}
-                    className={`group w-full flex flex-col overflow-hidden rounded-2xl border-t-[2.5px] border-t-gold border border-slate-200/60 bg-white text-left shadow-[0_4px_16px_rgba(10,25,47,0.06)] ${cardHover}`}
+                    className={`group w-full flex flex-col overflow-hidden rounded-2xl border border-slate-200/90 bg-white text-left shadow-[0_12px_48px_rgba(10,25,47,0.07)] ${cardHover}`}
                   >
                     <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
                       <img
@@ -843,7 +729,7 @@ export default function KnowledgeCenter() {
             {MISUNDERSTANDINGS.map((f) => (
               <article
                 key={f.id}
-                className="rounded-2xl border border-slate-200/60 border-l-[2.5px] border-l-gold bg-white p-6 lg:p-7 shadow-[0_2px_10px_rgba(10,25,47,0.05)]"
+                className="rounded-2xl border border-slate-200/80 bg-white p-6 lg:p-7 shadow-[0_8px_36px_rgba(10,25,47,0.06)]"
               >
                 <h3 className="font-heading text-lg font-semibold text-navy mb-3 leading-snug">{f.title}</h3>
                 <p className="font-sans text-[14px] text-slate-600 leading-relaxed">{f.summary}</p>

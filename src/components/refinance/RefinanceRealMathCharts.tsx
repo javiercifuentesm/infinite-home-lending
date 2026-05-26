@@ -17,6 +17,28 @@ const GOLD = "#C5A059";
 const NAVY = "#0A192F";
 const REF_LINE = "#C89B5A";
 
+export type RefinanceChartStrings = {
+  breakEvenLabel: (month: number) => string;
+  lessInterestLabel: (amount: string) => string;
+  moreInterestLabel: (amount: string) => string;
+  loanPaidOff: string;
+  principalAccelerating: string;
+  tooltipYear: (year: number, month: number) => string;
+  totalInterestCurrent: string;
+  totalInterestNew: string;
+  remainingCurrent: string;
+  remainingNew: string;
+  equityBuiltCurrent: string;
+  equityBuiltNew: string;
+  equityPctCurrent: string;
+  equityPctNew: string;
+  equityCurrent: string;
+  equityNew: string;
+  balanceCurrent: string;
+  balanceNew: string;
+  pctPaidCurrent: string;
+};
+
 export type InterestChartRow = {
   month: number;
   year: number;
@@ -75,88 +97,98 @@ function yTicks50k(maxVal: number): number[] {
 
 const YEAR_TICK_MONTHS = [12, 60, 120, 180, 240, 300, 360];
 
-function interestTooltip({
-  active,
-  payload,
-}: {
-  active?: boolean;
-  payload?: Array<{ payload: InterestChartRow }>;
-}) {
-  if (!active || !payload?.length) return null;
-  const p = payload[0].payload;
-  const own = (eq: number, bal: number) => {
-    const t = eq + bal;
-    return t > 0 ? Math.round((eq / t) * 1000) / 10 : 0;
+function makeInterestTooltip(chartStrings: RefinanceChartStrings) {
+  return function InterestTooltip({
+    active,
+    payload,
+  }: {
+    active?: boolean;
+    payload?: Array<{ payload: InterestChartRow }>;
+  }) {
+    if (!active || !payload?.length) return null;
+    const p = payload[0].payload;
+    const own = (eq: number, bal: number) => {
+      const t = eq + bal;
+      return t > 0 ? Math.round((eq / t) * 1000) / 10 : 0;
+    };
+    const yearLabel = Math.max(1, Math.ceil(p.month / 12));
+    return (
+      <div className="tooltip-box">
+        <p className="font-semibold text-navy">{chartStrings.tooltipYear(yearLabel, p.month)}</p>
+        <p className="mt-1.5 text-slate-600">
+          {chartStrings.totalInterestCurrent}{" "}
+          <span className="font-medium text-navy">{fmtMoney(p.currentInterest)}</span>
+        </p>
+        <p className="text-slate-600">
+          {chartStrings.totalInterestNew}{" "}
+          <span className="font-medium text-navy">{fmtMoney(p.newInterest)}</span>
+        </p>
+        <p className="mt-1.5 text-slate-600">
+          {chartStrings.remainingCurrent}{" "}
+          <span className="font-medium">{fmtMoney(p.balanceCurrent)}</span>
+        </p>
+        <p className="text-slate-600">
+          {chartStrings.remainingNew}{" "}
+          <span className="font-medium">{fmtMoney(p.balanceNew)}</span>
+        </p>
+        <p className="mt-1.5 text-slate-600">
+          {chartStrings.equityBuiltCurrent}{" "}
+          <span className="font-medium">{fmtMoney(p.equityCurrent)}</span>
+        </p>
+        <p className="text-slate-600">
+          {chartStrings.equityBuiltNew}{" "}
+          <span className="font-medium">{fmtMoney(p.equityNew)}</span>
+        </p>
+        <p className="mt-2 text-[11px] text-slate-500">
+          {chartStrings.equityPctCurrent} {own(p.equityCurrent, p.balanceCurrent)}% · {chartStrings.equityPctNew}{" "}
+          {own(p.equityNew, p.balanceNew)}%
+        </p>
+      </div>
+    );
   };
-  const yearLabel = Math.max(1, Math.ceil(p.month / 12));
-  return (
-    <div className="tooltip-box">
-      <p className="font-semibold text-navy">
-        Year {yearLabel} · Month {p.month}
-      </p>
-      <p className="mt-1.5 text-slate-600">
-        Total interest — current: <span className="font-medium text-navy">{fmtMoney(p.currentInterest)}</span>
-      </p>
-      <p className="text-slate-600">
-        Total interest — new: <span className="font-medium text-navy">{fmtMoney(p.newInterest)}</span>
-      </p>
-      <p className="mt-1.5 text-slate-600">
-        Remaining balance — current: <span className="font-medium">{fmtMoney(p.balanceCurrent)}</span>
-      </p>
-      <p className="text-slate-600">
-        Remaining balance — new: <span className="font-medium">{fmtMoney(p.balanceNew)}</span>
-      </p>
-      <p className="mt-1.5 text-slate-600">
-        Equity built — current: <span className="font-medium">{fmtMoney(p.equityCurrent)}</span>
-      </p>
-      <p className="text-slate-600">
-        Equity built — new: <span className="font-medium">{fmtMoney(p.equityNew)}</span>
-      </p>
-      <p className="mt-2 text-[11px] text-slate-500">
-        Est. equity % (loan) — current {own(p.equityCurrent, p.balanceCurrent)}% · new{" "}
-        {own(p.equityNew, p.balanceNew)}%
-      </p>
-    </div>
-  );
 }
 
-function equityTooltip({
-  active,
-  payload,
-}: {
-  active?: boolean;
-  payload?: Array<{ payload: InterestChartRow }>;
-}) {
-  if (!active || !payload?.length) return null;
-  const p = payload[0].payload;
-  const own = (eq: number, bal: number) => {
-    const t = eq + bal;
-    return t > 0 ? Math.round((eq / t) * 1000) / 10 : 0;
+function makeEquityTooltip(chartStrings: RefinanceChartStrings) {
+  return function EquityTooltip({
+    active,
+    payload,
+  }: {
+    active?: boolean;
+    payload?: Array<{ payload: InterestChartRow }>;
+  }) {
+    if (!active || !payload?.length) return null;
+    const p = payload[0].payload;
+    const own = (eq: number, bal: number) => {
+      const t = eq + bal;
+      return t > 0 ? Math.round((eq / t) * 1000) / 10 : 0;
+    };
+    const yearLabel = Math.max(1, Math.ceil(p.month / 12));
+    return (
+      <div className="tooltip-box">
+        <p className="font-semibold text-navy">{chartStrings.tooltipYear(yearLabel, p.month)}</p>
+        <p className="mt-1.5 text-slate-600">
+          {chartStrings.equityCurrent}{" "}
+          <span className="font-medium text-navy">{fmtMoney(p.equityCurrent)}</span>
+        </p>
+        <p className="text-slate-600">
+          {chartStrings.equityNew}{" "}
+          <span className="font-medium text-navy">{fmtMoney(p.equityNew)}</span>
+        </p>
+        <p className="mt-1.5 text-slate-600">
+          {chartStrings.balanceCurrent}{" "}
+          <span className="font-medium">{fmtMoney(p.balanceCurrent)}</span>
+        </p>
+        <p className="text-slate-600">
+          {chartStrings.balanceNew}{" "}
+          <span className="font-medium">{fmtMoney(p.balanceNew)}</span>
+        </p>
+        <p className="mt-1 text-[11px] text-slate-500">
+          {chartStrings.pctPaidCurrent} {own(p.equityCurrent, p.balanceCurrent)}% · {chartStrings.equityPctNew}{" "}
+          {own(p.equityNew, p.balanceNew)}%
+        </p>
+      </div>
+    );
   };
-  const yearLabel = Math.max(1, Math.ceil(p.month / 12));
-  return (
-    <div className="tooltip-box">
-      <p className="font-semibold text-navy">
-        Year {yearLabel} · Month {p.month}
-      </p>
-      <p className="mt-1.5 text-slate-600">
-        Equity — current: <span className="font-medium text-navy">{fmtMoney(p.equityCurrent)}</span>
-      </p>
-      <p className="text-slate-600">
-        Equity — new: <span className="font-medium text-navy">{fmtMoney(p.equityNew)}</span>
-      </p>
-      <p className="mt-1.5 text-slate-600">
-        Balance — current: <span className="font-medium">{fmtMoney(p.balanceCurrent)}</span>
-      </p>
-      <p className="text-slate-600">
-        Balance — new: <span className="font-medium">{fmtMoney(p.balanceNew)}</span>
-      </p>
-      <p className="mt-1 text-[11px] text-slate-500">
-        % of loan paid to equity — current {own(p.equityCurrent, p.balanceCurrent)}% · new{" "}
-        {own(p.equityNew, p.balanceNew)}%
-      </p>
-    </div>
-  );
 }
 
 type InterestChartProps = {
@@ -166,6 +198,7 @@ type InterestChartProps = {
   chartKey: string;
   reducedMotion: boolean;
   currentPayoffMonth: number | null;
+  chartStrings: RefinanceChartStrings;
 };
 
 export function RefinanceInterestChartRecharts({
@@ -175,9 +208,11 @@ export function RefinanceInterestChartRecharts({
   chartKey,
   reducedMotion,
   currentPayoffMonth,
+  chartStrings,
 }: InterestChartProps) {
   const data = useMemo(() => buildRows(seriesCurrent, seriesNew), [seriesCurrent, seriesNew]);
   const [showPulse, setShowPulse] = useState(true);
+  const InterestTooltip = useMemo(() => makeInterestTooltip(chartStrings), [chartStrings]);
 
   useEffect(() => {
     setShowPulse(true);
@@ -212,17 +247,11 @@ export function RefinanceInterestChartRecharts({
 
   const endCalloutText =
     refiMore >= 0
-      ? `+${fmtMoney(refiMore)} more interest (new vs current)`
-      : `${fmtMoney(Math.abs(refiMore))} less interest (new vs current)`;
+      ? chartStrings.moreInterestLabel(fmtMoney(refiMore))
+      : chartStrings.lessInterestLabel(fmtMoney(Math.abs(refiMore)));
 
-  /** Slightly left of the last month keeps the callout inside the plot and avoids right-edge clipping. */
   const safeRefiEndX = data.length > 0.25 ? data.length - 0.25 : data.length;
 
-  /**
-   * Recharts places the label relative to the anchor dot. When cumulative interest ends high on the
-   * chart, a small offset leaves text on the line; scale offset by how high the endpoint sits so the
-   * callout drops into the band above the x-axis without overlapping the gold series.
-   */
   const refiLabelVerticalOffset = useMemo(() => {
     if (!last || domainMax <= 0) return 72;
     const t = Math.min(1, Math.max(0, last.newInterest / domainMax));
@@ -260,7 +289,7 @@ export function RefinanceInterestChartRecharts({
             stroke="#cbd5e1"
             width={48}
           />
-          <Tooltip content={interestTooltip} cursor={{ stroke: REF_LINE, strokeWidth: 1 }} isAnimationActive={false} />
+          <Tooltip content={InterestTooltip} cursor={{ stroke: REF_LINE, strokeWidth: 1 }} isAnimationActive={false} />
           <Area
             type="monotone"
             dataKey="low"
@@ -310,7 +339,7 @@ export function RefinanceInterestChartRecharts({
               strokeDasharray="4 4"
               strokeWidth={1.5}
               label={{
-                value: `Break-even · Month ${be}`,
+                value: chartStrings.breakEvenLabel(be),
                 position: "top",
                 offset: 12,
                 fill: REF_LINE,
@@ -352,7 +381,7 @@ export function RefinanceInterestChartRecharts({
                 isFront
                 ifOverflow="extendDomain"
                 label={{
-                  value: "Loan paid off (current path)",
+                  value: chartStrings.loanPaidOff,
                   position: "bottom",
                   offset: 20,
                   dx: 4,
@@ -392,6 +421,7 @@ type EquityChartProps = {
   seriesNew: AmortMonth[];
   chartKey: string;
   reducedMotion: boolean;
+  chartStrings: RefinanceChartStrings;
 };
 
 const DOT_MONTHS = new Set([60, 120, 240]);
@@ -401,9 +431,11 @@ export function RefinanceEquityChartRecharts({
   seriesNew,
   chartKey,
   reducedMotion,
+  chartStrings,
 }: EquityChartProps) {
   const data = useMemo(() => buildRows(seriesCurrent, seriesNew), [seriesCurrent, seriesNew]);
   const [showPulse, setShowPulse] = useState(true);
+  const EquityTooltip = useMemo(() => makeEquityTooltip(chartStrings), [chartStrings]);
 
   useEffect(() => {
     setShowPulse(true);
@@ -443,7 +475,7 @@ export function RefinanceEquityChartRecharts({
   return (
     <div className="relative h-[340px] w-full">
       <p className="absolute left-1/2 top-2 z-10 -translate-x-1/2 text-center text-[10px] font-medium text-slate-500">
-        This is where principal starts accelerating
+        {chartStrings.principalAccelerating}
       </p>
       <ResponsiveContainer width="100%" height="100%">
         <ComposedChart
@@ -479,7 +511,7 @@ export function RefinanceEquityChartRecharts({
             stroke="#cbd5e1"
             width={48}
           />
-          <Tooltip content={equityTooltip} cursor={{ stroke: REF_LINE, strokeWidth: 1 }} isAnimationActive={false} />
+          <Tooltip content={EquityTooltip} cursor={{ stroke: REF_LINE, strokeWidth: 1 }} isAnimationActive={false} />
           <Line
             name="Current loan"
             type="monotone"
