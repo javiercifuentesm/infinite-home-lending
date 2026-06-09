@@ -17,7 +17,7 @@ import { PlaybookToolGuides } from "../../components/deal-desk/playbook/Playbook
 import Nexio from "../../components/Nexio";
 import { printPlaybookQuickReference } from "../../utils/generatePlaybookPDF";
 
-const PHONE_DISPLAY = "(301) 555-0123";
+const PHONE_DISPLAY = "(301) 507-7609";
 const NMLS_ID = "2831765";
 
 export default function DealDeskPlaybook() {

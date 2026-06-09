@@ -1,0 +1,180 @@
+.careers-card-light {
+  transition:
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.4s ease;
+}
+
+.careers-card-light:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 48px rgba(11, 42, 74, 0.09);
+  border-color: rgba(198, 161, 91, 0.32) !important;
+}
+
+.careers-card-dark {
+  transition:
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.4s ease,
+    background 0.4s ease;
+}
+
+.careers-card-dark:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 52px rgba(0, 0, 0, 0.22);
+  border-color: rgba(198, 161, 91, 0.28) !important;
+  background: rgba(255, 255, 255, 0.055) !important;
+}
+
+.careers-gold-accent {
+  transition: border-color 0.4s ease, color 0.4s ease;
+}
+
+.careers-gold-accent:hover {
+  border-color: rgba(198, 161, 91, 0.55) !important;
+}
+
+.careers-hero-cta {
+  transition:
+    background 0.35s ease,
+    box-shadow 0.35s ease,
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.careers-hero-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(11, 42, 74, 0.18);
+}
+
+/* Platform product frames — editorial, no device chrome */
+.careers-platform-shot {
+  margin: 0;
+}
+
+.careers-platform-shot__frame {
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: 2px;
+  border: 0.5px solid rgba(11, 42, 74, 0.1);
+  box-shadow: 0 8px 28px rgba(11, 42, 74, 0.07);
+  background: #ffffff;
+  transition:
+    box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.45s ease;
+}
+
+.careers-platform-shot__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+}
+
+.careers-card-light:hover .careers-platform-shot__frame {
+  box-shadow: 0 14px 40px rgba(11, 42, 74, 0.11);
+  border-color: rgba(198, 161, 91, 0.28);
+}
+
+/* Connected platform narrative: Technology → Capabilities → Client Impact */
+.careers-platform-narrative {
+  position: relative;
+}
+
+.careers-platform-narrative > section:first-of-type {
+  padding-bottom: 4.5rem;
+}
+
+.careers-platform-narrative > section:nth-of-type(2) {
+  padding-top: 4.5rem;
+  padding-bottom: 4.5rem;
+}
+
+.careers-platform-narrative > section:nth-of-type(3) {
+  padding-top: 4.5rem;
+}
+
+@media (min-width: 768px) {
+  .careers-platform-narrative > section:first-of-type {
+    padding-bottom: 5.5rem;
+  }
+
+  .careers-platform-narrative > section:nth-of-type(2) {
+    padding-top: 5.5rem;
+    padding-bottom: 5.5rem;
+  }
+
+  .careers-platform-narrative > section:nth-of-type(3) {
+    padding-top: 5.5rem;
+  }
+}
+
+.careers-narrative-connector {
+  height: 1px;
+  margin-top: 3.5rem;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(198, 161, 91, 0.35) 20%,
+    rgba(198, 161, 91, 0.55) 50%,
+    rgba(198, 161, 91, 0.35) 80%,
+    transparent 100%
+  );
+}
+
+.careers-narrative-connector--to-dark {
+  opacity: 0.7;
+}
+
+.careers-narrative-connector--to-light {
+  opacity: 0.55;
+}
+
+.careers-platform-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.careers-platform-card .careers-platform-shot {
+  margin-top: auto;
+  padding-top: 1.25rem;
+}
+
+/* Career Paths → Start A Conversation (consecutive navy sections) */
+.careers-paths-to-form > section:first-of-type {
+  padding-bottom: 4.5rem;
+}
+
+.careers-paths-to-form > section:last-of-type {
+  padding-top: 0;
+  border-top: 0.5px solid rgba(255, 255, 255, 0.06);
+}
+
+@media (min-width: 768px) {
+  .careers-paths-to-form > section:first-of-type {
+    padding-bottom: 5.5rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .careers-card-light:hover,
+  .careers-card-dark:hover,
+  .careers-hero-cta:hover {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .careers-card-light,
+  .careers-card-dark,
+  .careers-hero-cta,
+  .careers-platform-shot__frame {
+    transition: none;
+  }
+
+  .careers-card-light:hover,
+  .careers-card-dark:hover,
+  .careers-hero-cta:hover {
+    transform: none;
+  }
+}

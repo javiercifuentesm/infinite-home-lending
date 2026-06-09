@@ -330,7 +330,7 @@ function RescuePlanView({ plan }: { plan: RescuePlan }) {
           <Phone className="h-4 w-4 text-[#C6A15B] shrink-0" />
           <div>
             <div className="font-sans text-[12px] font-bold text-white">Call IHL Now</div>
-            <div className="font-sans text-[11px] text-[#C6A15B]">(301) 555-0123 · Available 7 days a week</div>
+            <div className="font-sans text-[11px] text-[#C6A15B]">(301) 507-7609 · Available 7 days a week</div>
           </div>
         </div>
       </div>

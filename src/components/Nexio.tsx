@@ -916,7 +916,7 @@ function NexioInner({ isPartner }: { isPartner: boolean }) {
     });
     doc.setFillColor(11, 42, 74); doc.rect(0, 282, pageWidth, 15, "F");
     doc.setTextColor(198, 161, 91); doc.setFontSize(8);
-    doc.text("Infinite Home Lending · Maryland · DC · Virginia · infinitehomelending.com", margin, 290);
+    doc.text("Infinite Home Lending · Washington, DC · infinitehomelending.com", margin, 290);
     doc.save(`IHL-Nexio-${Date.now()}.pdf`);
   }, [messages]);
 

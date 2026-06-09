@@ -11,7 +11,7 @@ const COLS = [
   },
   {
     emoji: "📍",
-    title: "Built for MD·DC·VA",
+    title: "Built for Washington, DC",
     body: "Market data, tax rates, and loan limits calibrated for the region you actually work in. Not national averages.",
   },
   {

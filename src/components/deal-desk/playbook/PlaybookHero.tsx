@@ -40,7 +40,7 @@ export function PlaybookHero({ onDownloadPdf, pdfLoading }: Props) {
           <span className="text-slate-300" aria-hidden>
             |
           </span>
-          <span>Built for MD-DC-VA</span>
+          <span>Built for Washington, DC</span>
           <span className="text-slate-300" aria-hidden>
             |
           </span>

@@ -59,7 +59,7 @@ export function DealDeskHero() {
           className="mx-auto mb-4 max-w-2xl font-sans text-[17px] leading-[1.75]"
           style={{ color: "rgba(247,247,245,0.7)" }}
         >
-          Not a resource center. A command center. Built for MD·DC·VA agents who win listings, structure complex deals, and close with confidence.
+          Not a resource center. A command center. Built for Washington, DC agents who win listings, structure complex deals, and close with confidence.
         </p>
 
         <p

@@ -75,7 +75,7 @@ const ALL_PROGRAMS: ProgramOverview[] = [
     name: "USDA Loan",
     emoji: "🌾",
     tagline: "A zero-down option that works in far more areas than most agents realize.",
-    bestFor: "Buyers purchasing in eligible rural and suburban areas — including many communities in Maryland and Virginia that people assume don't qualify.",
+    bestFor: "Buyers purchasing in eligible rural and suburban areas. Ask your IHL advisor about qualifying locations.",
     whatMakesItDifferent: "Backed by the U.S. Department of Agriculture. Designed to encourage homeownership outside of major urban centers. Many agents overlook this program entirely because they assume only farmland qualifies — that's often not accurate.",
     questionsToAskIHL: [
       "Does the area my buyer is targeting qualify for USDA?",
@@ -119,17 +119,17 @@ const ALL_PROGRAMS: ProgramOverview[] = [
   {
     name: "Down Payment Assistance Programs",
     emoji: "🤝",
-    tagline: "Maryland, DC, and Virginia all have active programs that most buyers don't know exist.",
+    tagline: "Washington, DC has active programs that most buyers don't know exist.",
     bestFor: "First-time buyers, moderate-income buyers, and buyers in specific professions or geographic areas — eligibility varies by program.",
     whatMakesItDifferent: "DPA programs are offered by state and local housing agencies to reduce the barrier of the down payment and closing costs. MD, DC, and VA each have multiple active programs. IHL stays current on all active programs and can quickly determine eligibility.",
     questionsToAskIHL: [
-      "What DPA programs are currently active in Maryland / DC / Virginia?",
+      "What DPA programs are currently active in Washington, DC?",
       "Does my buyer's situation make them a candidate for any programs?",
       "How does DPA affect the offer — do sellers see it differently?",
       "Can DPA be combined with other loan types?",
       "What's the timeline impact of using a DPA program?",
     ],
-    whatToTellYourClient: "\"Maryland, DC, and Virginia all have programs that help buyers with down payment and closing costs — and most people have no idea they exist or that they might qualify. I want IHL to check your eligibility before we assume you need to come up with the full amount yourself.\"",
+    whatToTellYourClient: "\"Washington, DC has programs that help buyers with down payment and closing costs — and most people have no idea they exist or that they might qualify. I want IHL to check your eligibility before we assume you need to come up with the full amount yourself.\"",
     highlighted: false,
   },
   {
@@ -343,7 +343,7 @@ export function LoanMatchmakerCalculator() {
                 <div className="rounded-xl border border-[#C6A15B]/30 bg-[#0B2A4A] p-5 text-white">
                   <div className="font-sans text-[10px] font-bold uppercase tracking-widest text-[#C6A15B] mb-2">📞 Ready to Find the Right Fit?</div>
                   <p className="font-sans text-[13px] leading-relaxed text-white/85 mb-3">This library helps you understand the landscape. IHL determines the actual best program based on your buyer's complete financial picture — income, assets, credit history, goals, and the specific property.</p>
-                  <p className="font-sans text-[12px] font-semibold text-[#C6A15B]">(301) 555-0123 · Info@infinitehomelending.com</p>
+                  <p className="font-sans text-[12px] font-semibold text-[#C6A15B]">(301) 507-7609 · Info@infinitehomelending.com</p>
                 </div>
                 <p className="font-sans text-[10px] leading-relaxed text-slate-500">This tool is for educational purposes only. Program descriptions are general overviews and do not constitute lending advice, qualification determinations, or commitment to lend. All program eligibility is determined by IHL based on the buyer's complete application. Programs and guidelines are subject to change.</p>
               </>

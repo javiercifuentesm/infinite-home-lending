@@ -1,11 +1,12 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Facebook, Instagram, Linkedin, Mail, MapPin, Phone } from "lucide-react";
 import { IHLLogo } from "./IHLLogo";
 import { useLanguage } from "../i18n/LanguageContext";
+import { en } from "../i18n/en";
 
 const OFFICE_LINES = ["7272 Wisconsin Avenue, 9th Floor", "Bethesda, MD 20814"] as const;
-const PHONE_DISPLAY = "(301) 555-0123";
-const PHONE_TEL = "+13015550123";
+const PHONE_DISPLAY = "(301) 507-7609";
+const PHONE_TEL = "+13015077609";
 const EMAIL = "Info@infinitehomelending.com";
 const NMLS_ID = "2831765";
 
@@ -17,7 +18,13 @@ const SOCIAL = [
 
 const Footer = () => {
   const year = new Date().getFullYear();
-  const { t } = useLanguage();
+  const { pathname } = useLocation();
+  const { t: tGlobal } = useLanguage();
+  const t = (key: string) => {
+    const dict = pathname === "/careers" ? en : null;
+    if (dict) return (dict as Record<string, string>)[key] ?? key;
+    return tGlobal(key);
+  };
 
   return (
     <footer className="site-footer relative isolate overflow-x-clip border-t border-slate-200/60 bg-[#F7F7F5] text-navy">

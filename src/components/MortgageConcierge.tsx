@@ -4,7 +4,9 @@ import { jsPDF } from "jspdf";
 import { sendLeadEmail } from "../api/sendLead";
 import { getApiBaseUrl } from "../lib/apiBase";
 import { useLanguage } from "../i18n/LanguageContext";
-
+import { SarahKeyframes } from "./sarah/SarahKeyframes";
+import { SarahOrb } from "./sarah/SarahOrb";
+import { SarahStreamingCursor } from "./sarah/SarahStreamingCursor";
 const PDF_ASSISTANT_LABEL = "Sarah — IHL Mortgage Concierge";
 const IS_MOBILE = () => window.innerWidth < 768;
 
@@ -31,8 +33,6 @@ type ContentBlock =
   | { type: "text"; text: string }
   | { type: "image"; source: { type: "base64"; media_type: string; data: string } }
   | { type: "document"; source: { type: "base64"; media_type: string; data: string } };
-
-const ORB_BG = "radial-gradient(circle at 30% 28%, rgba(255,240,190,0.95) 0%, rgba(198,161,91,0.9) 15%, rgba(15,55,100,0.95) 38%, rgba(5,25,55,0.98) 65%, rgba(2,8,22,1) 100%)";
 
 /** Web Speech API — not modeled in TS's default DOM lib */
 type SpeechRecognitionEvent = {
@@ -156,23 +156,23 @@ const MessageBubble = ({ msg, index, scrollRef }: { msg: Message; index: number;
   if (msg.content.includes("FORM_SUBMITTED")) return null;
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: msg.role === "user" ? "flex-end" : "flex-start", animation: "sarahMsgIn 0.35s ease forwards" }}>
+    <div style={{ display: "flex", flexDirection: "column", alignItems: msg.role === "user" ? "flex-end" : "flex-start" }}>
       {msg.role === "assistant" && (!msg.streaming || msg.content.trim() !== "") && (
         <div style={{ display: "flex", alignItems: "flex-start", gap: "10px", maxWidth: "88%" }}>
           <div style={{ flexShrink: 0, marginTop: "2px" }}>
-            <div style={{ width: "28px", height: "28px", borderRadius: "50%", background: ORB_BG, border: "1.5px solid rgba(198,161,91,0.5)", boxShadow: msg.streaming ? "0 0 12px rgba(198,161,91,0.4)" : "0 0 8px rgba(198,161,91,0.2)", animation: msg.streaming ? "sarahOrbBreathe 1.6s ease-in-out infinite" : "none" }} />
+            <SarahOrb size="sm" streaming={!!msg.streaming} static={!msg.streaming} />
           </div>
-          <div style={{ flex: 1 }}>
+          <div style={{ flex: 1, animation: "sarahMsgIn 0.35s ease forwards" }}>
             <div style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(198,161,91,0.12)", borderRadius: "4px 16px 16px 16px", padding: "13px 16px", color: "rgba(247,247,245,0.92)", fontSize: "14px", lineHeight: "1.7", borderLeft: "3px solid rgba(198,161,91,0.4)", whiteSpace: "pre-wrap" }}>
               {msg.streaming ? displayed : renderMarkdown(displayed)}
-              {msg.streaming && <span style={{ display: "inline-block", width: "2px", height: "14px", backgroundColor: "#C6A15B", marginLeft: "3px", verticalAlign: "middle", animation: "sarahCursor 0.7s ease infinite", borderRadius: "1px" }} />}
+              {msg.streaming && <SarahStreamingCursor />}
             </div>
             <p style={{ color: "rgba(247,247,245,0.25)", fontSize: "10px", marginTop: "4px", paddingLeft: "4px" }}>Sarah · {msg.time}</p>
           </div>
         </div>
       )}
       {msg.role === "user" && (
-        <div style={{ maxWidth: "75%" }}>
+        <div style={{ maxWidth: "75%", animation: "sarahMsgIn 0.35s ease forwards" }}>
           {msg.docName && (
             <div style={{ backgroundColor: "rgba(198,161,91,0.15)", border: "1px solid rgba(198,161,91,0.3)", borderRadius: "10px 10px 0 0", padding: "8px 12px", display: "flex", alignItems: "center", gap: "6px" }}>
               <span style={{ fontSize: "16px" }}>📎</span>
@@ -200,10 +200,7 @@ type SarahHeaderProps = {
 const SarahHeader = ({ onEnd, onSave, messageCount = 0 }: SarahHeaderProps) => (
   <div style={{ padding: "14px 18px", borderBottom: "1px solid rgba(198,161,91,0.12)", background: "linear-gradient(135deg, rgba(198,161,91,0.08) 0%, transparent 100%)", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
     <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-      <div style={{ position: "relative", flexShrink: 0 }}>
-        <div style={{ width: "38px", height: "38px", borderRadius: "50%", background: ORB_BG, border: "2px solid rgba(198,161,91,0.6)" }} />
-        <div style={{ position: "absolute", bottom: "1px", right: "1px", width: "10px", height: "10px", borderRadius: "50%", backgroundColor: "#22c55e", border: "2px solid #0B2A4A" }} />
-      </div>
+      <SarahOrb size="md" showOnlineDot static />
       <div>
         <div style={{ display: "flex", alignItems: "center", gap: "7px" }}>
           <p style={{ color: "#C6A15B", fontSize: "15px", fontWeight: 700 }}>Sarah</p>
@@ -393,7 +390,7 @@ const LeadForm = ({ leadData, setLeadData, onSubmit, onDismiss }: LeadFormProps)
 
 // ─── MAIN COMPONENT ───────────────────────────────────────────────────────────
 
-function MortgageConciergeInner() {
+function MortgageConciergeInner({ assetCapture = false }: { assetCapture?: boolean }) {
   const { lang, t } = useLanguage();
 
   const STARTERS = lang === "es"
@@ -428,7 +425,7 @@ function MortgageConciergeInner() {
         "Hi! I'm Sarah with Infinite Home Lending, serving Maryland, DC, and Virginia. I help homebuyers and homeowners find the right solution — whether that's a purchase loan, a refinance, a HELOC, or a reverse mortgage. What would you like to explore today?",
       ];
 
-  const [screen, setScreen] = useState<Screen>("idle");
+  const [screen, setScreen] = useState<Screen>(assetCapture ? "widget" : "idle");
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState("");
   const [isThinking, setIsThinking] = useState(false);
@@ -462,6 +459,19 @@ function MortgageConciergeInner() {
     }).SpeechRecognition || (window as unknown as { webkitSpeechRecognition?: new () => SpeechRecognition }).webkitSpeechRecognition;
     if (SR) setMicSupported(true);
   }, []);
+
+  useEffect(() => {
+    if (!assetCapture || messages.length > 0) return;
+    const greeting = GREETINGS[0];
+    greetingRef.current = greeting;
+    setMessages([
+      {
+        role: "assistant",
+        content: greeting,
+        time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      },
+    ]);
+  }, [assetCapture, messages.length, GREETINGS]);
 
   useEffect(() => {
     if (scrollContainerRef.current) { scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight; }
@@ -899,20 +909,7 @@ function MortgageConciergeInner() {
 
   return (
     <>
-      <style>{`
-        @keyframes sarahBtnFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
-        @keyframes sarahBtnPulse{0%,100%{box-shadow:0 0 24px rgba(198,161,91,0.3)}50%{box-shadow:0 0 52px rgba(198,161,91,0.75)}}
-        @keyframes sarahBtnRing{0%{transform:scale(0.85);opacity:0.6}100%{transform:scale(1.65);opacity:0}}
-        @keyframes sarahMsgIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-        @keyframes sarahCursor{0%,100%{opacity:1}50%{opacity:0}}
-        @keyframes sarahMicPulse{0%,100%{box-shadow:0 0 0 0 rgba(198,161,91,0.5)}50%{box-shadow:0 0 0 12px rgba(198,161,91,0)}}
-        @keyframes sarahOrbBreathe{0%,100%{transform:scale(1);box-shadow:0 0 20px rgba(198,161,91,0.2)}50%{transform:scale(1.22);box-shadow:0 0 40px rgba(198,161,91,0.6)}}
-        @keyframes sarahGlow{0%,100%{opacity:0.4}50%{opacity:1}}
-        @keyframes sarahStarterIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-        @keyframes sarahWidgetExpand{from{transform:scale(0.95);opacity:0.8}to{transform:scale(1);opacity:1}}
-        @keyframes sarahFullscreenIn{from{opacity:0;transform:scale(0.98)}to{opacity:1;transform:scale(1)}}
-        @keyframes sarahGoodbyeIn{from{opacity:0;transform:translateY(30px) scale(0.95)}to{opacity:1;transform:translateY(0) scale(1)}}
-      `}</style>
+      <SarahKeyframes />
 
       {/* SCREEN 1 — Idle orb */}
       {screen === "idle" && (
@@ -923,7 +920,7 @@ function MortgageConciergeInner() {
               {[0, 0.9, 1.8].map((delay, i) => (
                 <div key={i} style={{ position: "absolute", width: "70px", height: "70px", borderRadius: "50%", border: "2px solid rgba(198,161,91,0.5)", animation: `sarahBtnRing 2.8s ease-out ${delay}s infinite`, pointerEvents: "none" }} />
               ))}
-              <div style={{ width: "70px", height: "70px", borderRadius: "50%", background: ORB_BG, border: "3px solid rgba(198,161,91,0.95)", animation: "sarahBtnPulse 2.5s ease-in-out infinite", boxShadow: "0 0 0 4px rgba(11,42,74,0.4), 0 8px 32px rgba(0,0,0,0.5)", position: "relative", zIndex: 2 }} />
+              <SarahOrb size="lg" fab className="relative z-[2]" />
             </div>
             <span style={{ color: "#C6A15B", fontSize: "12px", fontWeight: 700, letterSpacing: "0.5px", whiteSpace: "nowrap", textShadow: "0 2px 8px rgba(0,0,0,0.6)", textTransform: "uppercase" }}>{t("sarah.askSarah")}</span>
           </div>
@@ -932,17 +929,34 @@ function MortgageConciergeInner() {
 
       {/* SCREEN 2 — Widget */}
       {screen === "widget" && (
-        <div className="fixed z-50 flex flex-col rounded-2xl overflow-hidden"
-          style={{
-            bottom: IS_MOBILE() ? "16px" : "24px",
-            right: IS_MOBILE() ? "16px" : "24px",
-            width: "420px",
-            maxWidth: "calc(100vw - 48px)",
-            maxHeight: "min(700px, calc(100dvh - 100px))",
-            background: "linear-gradient(160deg, #0a2540 0%, #0B2A4A 40%, #0a1f35 100%)",
-            boxShadow: "0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(198,161,91,0.15)",
-            animation: "sarahWidgetExpand 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards",
-          }}>
+        <div
+          className={
+            assetCapture
+              ? "flex flex-col rounded-2xl overflow-hidden"
+              : "fixed z-50 flex flex-col rounded-2xl overflow-hidden"
+          }
+          data-ihl-capture={assetCapture ? "sarah-widget" : undefined}
+          style={
+            assetCapture
+              ? {
+                  position: "relative",
+                  width: "420px",
+                  height: "400px",
+                  background: "linear-gradient(160deg, #0a2540 0%, #0B2A4A 40%, #0a1f35 100%)",
+                  boxShadow: "0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(198,161,91,0.15)",
+                }
+              : {
+                  bottom: IS_MOBILE() ? "16px" : "24px",
+                  right: IS_MOBILE() ? "16px" : "24px",
+                  width: "420px",
+                  maxWidth: "calc(100vw - 48px)",
+                  maxHeight: "min(700px, calc(100dvh - 100px))",
+                  background: "linear-gradient(160deg, #0a2540 0%, #0B2A4A 40%, #0a1f35 100%)",
+                  boxShadow: "0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(198,161,91,0.15)",
+                  animation: "sarahWidgetExpand 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards",
+                }
+          }
+        >
           <SarahHeader onEnd={handleEndConversation} messageCount={messages.length} />
           <div style={{ padding: "18px 18px 12px", display: "flex", flexDirection: "column", gap: "14px" }}>
             {messages.slice(0, 1).map((msg, i) => (
@@ -1041,8 +1055,8 @@ function MortgageConciergeInner() {
               ))}
 
               {isThinking && (
-                <div style={{ display: "flex", alignItems: "flex-start", gap: "10px", animation: "sarahMsgIn 0.3s ease forwards" }}>
-                  <div style={{ width: "28px", height: "28px", borderRadius: "50%", flexShrink: 0, marginTop: "2px", background: ORB_BG, border: "1.5px solid rgba(198,161,91,0.6)", animation: "sarahOrbBreathe 1.6s ease-in-out infinite" }} />
+                <div style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
+                  <SarahOrb size="sm" streaming />
                 </div>
               )}
 
@@ -1082,7 +1096,7 @@ function MortgageConciergeInner() {
         <div className="fixed z-50 flex flex-col rounded-2xl overflow-hidden"
           style={{ bottom: "12px", left: "12px", right: "12px", width: "auto", maxWidth: "520px", margin: "0 auto", background: "linear-gradient(160deg, #0a2540 0%, #0B2A4A 40%, #0a1f35 100%)", boxShadow: "0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(198,161,91,0.15)", animation: "sarahGoodbyeIn 0.5s cubic-bezier(0.34, 1.4, 0.64, 1) forwards" }}>
           <div style={{ padding: "16px 18px", borderBottom: "1px solid rgba(198,161,91,0.12)", background: "linear-gradient(135deg, rgba(198,161,91,0.08) 0%, transparent 100%)", display: "flex", alignItems: "center", gap: "10px" }}>
-            <div style={{ width: "38px", height: "38px", borderRadius: "50%", background: ORB_BG, border: "2px solid rgba(198,161,91,0.6)" }} />
+            <SarahOrb size="md" static />
             <div>
               <p style={{ color: "#C6A15B", fontSize: "15px", fontWeight: 700 }}>Sarah</p>
               <p style={{ color: "rgba(247,247,245,0.4)", fontSize: "11px" }}>IHL Mortgage Concierge</p>
@@ -1090,7 +1104,7 @@ function MortgageConciergeInner() {
           </div>
           <div style={{ padding: "20px 18px 24px", display: "flex", flexDirection: "column", gap: "12px" }}>
             <div style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
-              <div style={{ width: "28px", height: "28px", borderRadius: "50%", flexShrink: 0, marginTop: "2px", background: ORB_BG, border: "1.5px solid rgba(198,161,91,0.5)" }} />
+              <SarahOrb size="sm" static />
               <div style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(198,161,91,0.12)", borderRadius: "4px 16px 16px 16px", padding: "14px 16px", color: "rgba(247,247,245,0.92)", fontSize: "14px", lineHeight: "1.7", borderLeft: "3px solid rgba(198,161,91,0.4)", flex: 1 }}>
                 {goodbyeMessage}
               </div>
@@ -1105,8 +1119,10 @@ function MortgageConciergeInner() {
   );
 }
 
-export default function MortgageConcierge() {
+type MortgageConciergeProps = { assetCapture?: boolean };
+
+export default function MortgageConcierge({ assetCapture = false }: MortgageConciergeProps) {
   const location = useLocation();
-  if (location.pathname.startsWith("/deal-desk")) return null;
-  return <MortgageConciergeInner />;
+  if (!assetCapture && location.pathname.startsWith("/deal-desk")) return null;
+  return <MortgageConciergeInner assetCapture={assetCapture} />;
 }

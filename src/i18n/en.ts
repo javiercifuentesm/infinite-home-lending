@@ -14,7 +14,7 @@ export const en = {
   "sarah.askSarah": "Ask Sarah",
 
   "trustBar.nmls": "NMLS #2831765",
-  "trustBar.region": "Maryland · Virginia · D.C.",
+  "trustBar.region": "Washington, D.C.",
   "trustBar.equalHousing": "Equal Housing Lender",
 
   "home.meta.title": "Home",
@@ -33,13 +33,13 @@ export const en = {
     "Contact Infinite Home Lending for purchase, refinance, or equity questions in MD, DC, and VA. Share your goals and get clear next steps from licensed advisors.",
   "smartTools.meta.title": "Smart Tools",
   "smartTools.meta.description":
-    "Free interactive mortgage calculators for MD, DC, and VA buyers and homeowners. Model payments, equity, waiting costs, and credit impact before you apply.",
+    "Free interactive mortgage calculators for Washington, DC buyers and homeowners. Model payments, equity, waiting costs, and credit impact before you apply.",
   "knowledge.meta.title": "Knowledge Center",
   "knowledge.meta.description":
     "Mortgage guides for Maryland, DC, and Virginia—buying, refinancing, loan types, and numbers explained without jargon. Find clear answers before you decide.",
 
   // Footer
-  "footer.tagline": "Premium mortgage guidance built around your life — not just your rate. Serving Maryland, Virginia, and Washington, D.C.",
+  "footer.tagline": "Premium mortgage guidance built around your life — not just your rate. Serving Washington, D.C.",
   "footer.slogan": "Tailored Lending. Infinite Possibilities.",
   "footer.company": "Company",
   "footer.resources": "Resources",
@@ -57,9 +57,9 @@ export const en = {
   "footer.calculators": "Calculators",
   "footer.startPreApproval": "Start Pre-Approval",
   "footer.rights": "All rights reserved.",
-  "footer.nmls": "Licensed in Maryland, Virginia, and Washington DC.",
+  "footer.nmls": "Licensed in Washington, DC.",
   "footer.loanDisclaimer": "All loans subject to credit approval. Rates and terms subject to change without notice.",
-  "footer.serving": "Serving Maryland, Virginia & Washington, D.C.",
+  "footer.serving": "Serving Washington, D.C.",
   "footer.privacy": "Privacy Policy",
   "footer.terms": "Terms of Service",
 
@@ -483,7 +483,7 @@ export const en = {
   "smartTools.eyebrow": "Infinite Home Lending",
   "smartTools.title": "Smart Tools",
   "smartTools.subtitle": "Interactive tools designed to bring clarity to real mortgage decisions.",
-  "smartTools.builtFor": "Built for MD · VA · DC",
+  "smartTools.builtFor": "Built for DC",
   "smartTools.featuredTool": "Featured Tool",
   "smartTools.allTools": "All Tools",
   "smartTools.mostUsed": "Most Used",

@@ -6,6 +6,7 @@ import { IHLLogo } from "./IHLLogo";
 import { getAllSmartToolPaths, getSmartToolsForHub } from "../data/smartToolsCatalog";
 import { useLanguage } from "../i18n/LanguageContext";
 import { LanguageToggle } from "../i18n/LanguageToggle";
+import { getCareersNavLink } from "../config/careersNav";
 
 const SMART_TOOLS_HUB = "/smart-tools";
 const SMART_TOOLS_ROUTES = [SMART_TOOLS_HUB, ...getAllSmartToolPaths()] as const;
@@ -54,6 +55,7 @@ const Navbar = () => {
   const pathname = location.pathname;
   const smartActive = isSmartToolsSectionActive(pathname);
   const dealDeskActive = isDealDeskActive(pathname);
+  const careersNavLink = getCareersNavLink();
 
   const baseLink = (active: boolean) =>
     `text-[11px] font-semibold uppercase tracking-[0.14em] font-sans transition-all duration-300 whitespace-nowrap ${
@@ -190,6 +192,12 @@ const Navbar = () => {
               </div>
             </div>
 
+            {careersNavLink && (
+              <Link to={careersNavLink.path} className={baseLink(pathname === careersNavLink.path)}>
+                {careersNavLink.label}
+              </Link>
+            )}
+
             <Link to="/contact" className={baseLink(pathname === "/contact")}>
               {t("nav.contact")}
             </Link>
@@ -287,6 +295,16 @@ const Navbar = () => {
               </div>
             )}
           </div>
+
+          {careersNavLink && (
+            <Link
+              to={careersNavLink.path}
+              onClick={() => setIsOpen(false)}
+              className="text-lg font-medium text-slate-900 py-3 border-b border-slate-100/80"
+            >
+              {careersNavLink.label}
+            </Link>
+          )}
 
           <Link
             to="/contact"

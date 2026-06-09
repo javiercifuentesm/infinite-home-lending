@@ -2,9 +2,8 @@ import type { ChangeEvent, Dispatch, SetStateAction } from "react";
 import { useLayoutEffect, useRef } from "react";
 import { AnimatePresence, motion, type HTMLMotionProps } from "motion/react";
 import {
-  getCitiesForMarylandCounty,
-  MARYLAND_COUNTY_KEYS,
-  PURCHASE_STATE_OPTIONS,
+  getCitiesForDCArea,
+  DC_AREA_KEYS,
 } from "../../data/purchaseLocations";
 import { useLanguage } from "../../i18n/LanguageContext";
 
@@ -13,8 +12,8 @@ export type PurchaseFlowStep = "inactive" | "intro" | "property" | "price" | "do
 export type PurchaseDataState = {
   hasProperty: boolean | null;
   address: string;
-  /** Structured location when “still exploring” — phase 1: Maryland only. */
-  locationState: "" | "MD";
+  /** Structured location when “still exploring” — DC only (licensed market). */
+  locationState: "" | "DC";
   locationCounty: string;
   locationCity: string;
   purchasePriceStr: string;
@@ -242,49 +241,29 @@ export function PurchasePathStep({ purchaseFlowStep, purchaseData, setPurchaseDa
                 {t("contact.purchase.property.where.body")}
               </p>
               <div className="grid grid-cols-1 gap-3">
-                {PURCHASE_STATE_OPTIONS.map((opt) =>
-                  opt.available ? (
-                    <button
-                      key={opt.id}
-                      type="button"
-                      onClick={() =>
-                        setPurchaseData((d) => ({
-                          ...d,
-                          locationState: "MD",
-                          locationCounty: "",
-                          locationCity: "",
-                        }))
-                      }
-                      className={`card-option contact-card-transition py-4 text-center font-sans text-[15px] font-semibold text-[#0B2A4A] ${
-                        purchaseData.locationState === "MD" ? "card-option--selected" : ""
-                      }`}
-                    >
-                      {opt.label}
-                    </button>
-                  ) : (
-                    <div key={opt.id} className="flex flex-col gap-1">
-                      <button
-                        type="button"
-                        disabled
-                        aria-disabled="true"
-                        aria-label={`${opt.label} — ${t("contact.purchase.property.comingSoon")}`}
-                        className="card-option cursor-not-allowed py-4 text-center font-sans text-[15px] font-semibold text-[#0B2A4A] opacity-[0.55]"
-                      >
-                        {opt.label}
-                        <span className="mt-1 block text-center font-sans text-[11px] font-semibold uppercase tracking-[0.1em] text-slate-500">
-                          {t("contact.purchase.property.comingSoon")}
-                        </span>
-                      </button>
-                    </div>
-                  ),
-                )}
+                <button
+                  type="button"
+                  onClick={() =>
+                    setPurchaseData((d) => ({
+                      ...d,
+                      locationState: "DC",
+                      locationCounty: "",
+                      locationCity: "",
+                    }))
+                  }
+                  className={`card-option contact-card-transition py-4 text-center font-sans text-[15px] font-semibold text-[#0B2A4A] ${
+                    purchaseData.locationState === "DC" ? "card-option--selected" : ""
+                  }`}
+                >
+                  District of Columbia
+                </button>
               </div>
-              <p className="text-center font-sans text-[11px] leading-relaxed text-slate-500">
+              <p className="text-center font-sans text-[12px] leading-relaxed text-slate-500">
                 {t("contact.purchase.property.expanding")}
               </p>
 
               <AnimatePresence mode="wait">
-                {purchaseData.locationState === "MD" ? (
+                {purchaseData.locationState === "DC" ? (
                   <motion.div
                     id="purchase-anchor-county"
                     key="county-layer"
@@ -298,7 +277,7 @@ export function PurchasePathStep({ purchaseFlowStep, purchaseData, setPurchaseDa
                       {t("contact.purchase.property.county.question")}
                     </h4>
                     <label htmlFor="sc-purchase-county" className="sr-only">
-                      County (optional)
+                      DC area (optional)
                     </label>
                     <select
                       id="sc-purchase-county"
@@ -312,12 +291,12 @@ export function PurchasePathStep({ purchaseFlowStep, purchaseData, setPurchaseDa
                         }))
                       }
                       className="time-picker w-full"
-                      aria-label="County (optional)"
+                      aria-label="DC area (optional)"
                     >
                       <option value="">{t("contact.purchase.property.county.placeholder")}</option>
-                      {MARYLAND_COUNTY_KEYS.map((county) => (
-                        <option key={county} value={county}>
-                          {county}
+                      {DC_AREA_KEYS.map((area) => (
+                        <option key={area} value={area}>
+                          {area}
                         </option>
                       ))}
                     </select>
@@ -326,7 +305,7 @@ export function PurchasePathStep({ purchaseFlowStep, purchaseData, setPurchaseDa
               </AnimatePresence>
 
               <AnimatePresence mode="wait">
-                {purchaseData.locationState === "MD" && purchaseData.locationCounty ? (
+                {purchaseData.locationState === "DC" && purchaseData.locationCounty ? (
                   <motion.div
                     id="purchase-anchor-city"
                     key="city-layer"
@@ -340,7 +319,7 @@ export function PurchasePathStep({ purchaseFlowStep, purchaseData, setPurchaseDa
                       {t("contact.purchase.property.city.question")}
                     </h4>
                     <label htmlFor="sc-purchase-city-select" className="sr-only">
-                      City or area (optional)
+                      Neighborhood (optional)
                     </label>
                     <select
                       id="sc-purchase-city-select"
@@ -348,10 +327,10 @@ export function PurchasePathStep({ purchaseFlowStep, purchaseData, setPurchaseDa
                       value={purchaseData.locationCity}
                       onChange={(e) => setPurchaseData((d) => ({ ...d, locationCity: e.target.value }))}
                       className="time-picker w-full"
-                      aria-label="City or area (optional)"
+                      aria-label="Neighborhood (optional)"
                     >
                       <option value="">{t("contact.purchase.property.city.placeholder")}</option>
-                      {getCitiesForMarylandCounty(purchaseData.locationCounty).map((city) => (
+                      {getCitiesForDCArea(purchaseData.locationCounty).map((city) => (
                         <option key={city} value={city}>
                           {city}
                         </option>

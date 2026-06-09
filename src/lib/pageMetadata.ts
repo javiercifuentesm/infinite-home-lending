@@ -96,7 +96,7 @@ export const PAGE_METADATA = {
   refinanceRealMath: {
     title: "Refinance Real Math",
     description:
-      "See when refinancing truly pays off—monthly payment vs total interest over your hold period—not just a rate quote. Built for MD, DC, and Virginia homeowners.",
+      "See when refinancing truly pays off—monthly payment vs total interest over your hold period—not just a rate quote. Built for Washington, DC homeowners.",
     canonical: `${SITE}/refinance-real-math`,
   },
   analytics: {
