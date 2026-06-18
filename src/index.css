@@ -374,8 +374,114 @@ html {
     min-width: 0;
   }
 
-  .nav-cta {
-    margin-left: 24px;
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    margin-left: 22px;
+    gap: 14px;
+  }
+
+  .nav-lang-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    background: #fff;
+    border: 1px solid rgb(0 0 0 / 0.12);
+    border-radius: 9999px;
+    padding: 3px 6px 3px 3px;
+    font-family: ui-sans-serif, system-ui, sans-serif;
+  }
+
+  .nav-lang-pill__btn {
+    padding: 4px 8px;
+    border-radius: 9999px;
+    border: none;
+    cursor: pointer;
+    background: transparent;
+    color: #0b2a4a;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    line-height: 1;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .nav-lang-pill__btn:hover {
+    background: rgb(11 42 74 / 0.06);
+  }
+
+  .nav-lang-pill__btn--active {
+    background: rgb(11 42 74 / 0.08);
+    color: #0b2a4a;
+  }
+
+  .nav-lang-pill__chevron {
+    flex-shrink: 0;
+    margin-left: 2px;
+    margin-right: 2px;
+    color: rgb(11 42 74 / 0.45);
+    pointer-events: none;
+  }
+
+  .nav-btn-realtors {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 20px;
+    border-radius: 9999px;
+    border: 1.5px solid #c6a15b;
+    background: #fff;
+    color: #0b2a4a;
+    font-family: ui-sans-serif, system-ui, sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  }
+
+  .nav-btn-realtors:hover {
+    background: rgb(198 161 91 / 0.12);
+    border-color: #c6a15b;
+    color: #0b2a4a;
+  }
+
+  .nav-btn-realtors:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px rgb(198 161 91 / 0.45);
+  }
+
+  .nav-btn-preapproval {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 24px;
+    border-radius: 9999px;
+    border: none;
+    background: #c6a15b;
+    color: #0b2a4a;
+    font-family: ui-sans-serif, system-ui, sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .nav-btn-preapproval:hover {
+    background: #b8924f;
+    color: #0b2a4a;
+  }
+
+  .nav-btn-preapproval:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px rgb(11 42 74 / 0.25);
+  }
+
+  .nav-btn-preapproval__arrow {
     flex-shrink: 0;
   }
 

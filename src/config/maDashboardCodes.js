@@ -4,7 +4,7 @@
 // Railway env var takes precedence if set
 
 export const MA_EMPLOYEE_IDS = [
-  "IHL000001", // Javier Cifuentes — Founder
+  "IHL000001", // Javier Cifuentes — Founder & Managing Director
   "IHL000002", // Alma Jaramillo — VP Senior Mortgage Advisor
 ];
 

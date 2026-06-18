@@ -1,6 +1,7 @@
-import type { Dispatch, SetStateAction } from "react";
+import type { ChangeEvent, Dispatch, SetStateAction } from "react";
 import { motion, type HTMLMotionProps } from "motion/react";
 import { CurrencyInput } from "./PurchasePathFlow";
+import { formatRate } from "./RefinancePathFlow";
 import { useLanguage } from "../../i18n/LanguageContext";
 
 export type ReverseFlowStep =
@@ -8,8 +9,10 @@ export type ReverseFlowStep =
   | "residence"
   | "age"
   | "goal"
+  | "address"
   | "value"
   | "balance"
+  | "rate"
   | "obligations"
   | "timeline"
   | "complete";
@@ -18,9 +21,11 @@ export type ReverseDataState = {
   residence: string;
   ageRange: string;
   goal: string;
+  address: string;
   propertyValueStr: string;
   propertyValueUnsure: boolean;
   mortgageBalanceStr: string;
+  currentRate: string;
   obligations: string;
   timeline: string;
 };
@@ -29,9 +34,11 @@ export const initialReverseData = (): ReverseDataState => ({
   residence: "",
   ageRange: "",
   goal: "",
+  address: "",
   propertyValueStr: "",
   propertyValueUnsure: false,
   mortgageBalanceStr: "",
+  currentRate: "",
   obligations: "",
   timeline: "",
 });
@@ -48,8 +55,10 @@ const SCROLL_ID: Record<Exclude<ReverseFlowStep, "inactive" | "complete">, strin
   residence: "reverse-step-residence",
   age: "reverse-step-age",
   goal: "reverse-step-goal",
+  address: "reverse-step-address",
   value: "reverse-step-value",
   balance: "reverse-step-balance",
+  rate: "reverse-step-rate",
   obligations: "reverse-step-obligations",
   timeline: "reverse-step-timeline",
 };
@@ -62,8 +71,10 @@ const REVERSE_ORDER: Exclude<ReverseFlowStep, "inactive" | "complete">[] = [
   "residence",
   "age",
   "goal",
+  "address",
   "value",
   "balance",
+  "rate",
   "obligations",
   "timeline",
 ];
@@ -106,6 +117,7 @@ export function ReversePathStep({
   ];
 
   const AGE_OPTIONS = [
+    { id: "55_61", label: "55–61" },
     { id: "62_69", label: t("contact.reverse.age.62_69") },
     { id: "70_79", label: t("contact.reverse.age.70_79") },
     { id: "80_plus", label: t("contact.reverse.age.80plus") },
@@ -138,6 +150,15 @@ export function ReversePathStep({
       {t("contact.reverse.softMicro")}
     </p>
   );
+
+  const microLine = (
+    <p className="mx-auto max-w-[32rem] px-2 text-center font-sans text-[12px] leading-relaxed text-[#6B7280] sm:text-[13px]">
+      {t("contact.refi.microLine")}
+    </p>
+  );
+
+  const inputClass =
+    "purchase-input-field w-full rounded-xl border border-[#E5E7EB] bg-white px-4 py-3.5 font-sans text-navy outline-none transition-colors focus:border-[#C6A15B] focus:shadow-[0_0_0_2px_rgba(198,161,91,0.15)]";
 
   if (reverseFlowStep === "residence") {
     return (
@@ -237,6 +258,38 @@ export function ReversePathStep({
     );
   }
 
+  if (reverseFlowStep === "address") {
+    return (
+      <motion.div id={SCROLL_ID.address} key="reverse-address" className="form-step space-y-5" {...stepMotion}>
+        <h2 className="text-balance text-center font-heading text-lg font-semibold text-[#0B2A4A] sm:text-xl">
+          {t("contact.refi.address.question")}
+        </h2>
+        {microLine}
+        <div className="option-group mx-auto w-full max-w-[520px] space-y-2 text-left">
+          <label htmlFor="sc-reverse-address" className="font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">
+            {t("contact.refi.address.label")} <span className="font-normal text-slate-400">{t("contact.refi.address.optional")}</span>
+          </label>
+          <input
+            id="sc-reverse-address"
+            name="reverseAddress"
+            type="text"
+            autoComplete="street-address"
+            value={reverseData.address}
+            onChange={(e) => {
+              setReverseData((d) => ({ ...d, address: e.target.value }));
+              onStepInteraction?.();
+            }}
+            placeholder={t("contact.refi.address.placeholder")}
+            className={`${inputClass} text-center`}
+          />
+        </div>
+        <button type="button" className={skipBtnClass} onClick={onSkip}>
+          {t("contact.refi.skip")}
+        </button>
+      </motion.div>
+    );
+  }
+
   if (reverseFlowStep === "value") {
     return (
       <motion.div id={SCROLL_ID.value} key="reverse-value" className="form-step space-y-6" {...stepMotion}>
@@ -313,6 +366,40 @@ export function ReversePathStep({
     );
   }
 
+  if (reverseFlowStep === "rate") {
+    return (
+      <motion.div id={SCROLL_ID.rate} key="reverse-rate" className="form-step space-y-4" {...stepMotion}>
+        <h2 className="text-balance text-center font-heading text-lg font-semibold text-[#0B2A4A] sm:text-xl">
+          {t("contact.refi.rate.question")}
+        </h2>
+        {microLine}
+        <div className="option-group mx-auto w-full max-w-[320px]">
+          <label htmlFor="sc-reverse-rate" className="sr-only">
+            Current interest rate (optional)
+          </label>
+          <input
+            id="sc-reverse-rate"
+            name="reverseRateInput"
+            type="text"
+            inputMode="decimal"
+            autoComplete="off"
+            value={reverseData.currentRate}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              setReverseData((d) => ({ ...d, currentRate: formatRate(e.target.value) }));
+              onStepInteraction?.();
+            }}
+            placeholder="6.25%"
+            aria-label="Current interest rate (optional)"
+            className="purchase-input-field w-full rounded-xl border border-[#E5E7EB] bg-white px-4 py-3.5 text-center font-sans text-navy outline-none transition-colors focus:border-[#C6A15B] focus:shadow-[0_0_0_2px_rgba(198,161,91,0.15)] tabular-nums"
+          />
+        </div>
+        <button type="button" className={skipBtnClass} onClick={onSkip}>
+          {t("contact.refi.skip")}
+        </button>
+      </motion.div>
+    );
+  }
+
   if (reverseFlowStep === "obligations") {
     return (
       <motion.div id={SCROLL_ID.obligations} key="reverse-obligations" className="form-step space-y-6" {...stepMotion}>
@@ -381,14 +468,21 @@ function parseCurrencyDigits(raw: string): number | null {
   return Number.isFinite(n) ? n : null;
 }
 
+function parseRate(raw: string): number | null {
+  const n = parseFloat(raw.replace(/%/g, "").trim());
+  return Number.isFinite(n) ? n : null;
+}
+
 export function buildReverseContextPayload(data: ReverseDataState): string {
   const payload = {
     residence: data.residence.trim() || null,
     ageRange: data.ageRange.trim() || null,
     goal: data.goal.trim() || null,
+    address: data.address.trim() || null,
     propertyValue: data.propertyValueUnsure ? null : parseCurrencyDigits(data.propertyValueStr),
     propertyValueUnsure: data.propertyValueUnsure,
     mortgageBalance: parseCurrencyDigits(data.mortgageBalanceStr),
+    currentRate: parseRate(data.currentRate),
     obligations: data.obligations.trim() || null,
     timeline: data.timeline.trim() || null,
   };

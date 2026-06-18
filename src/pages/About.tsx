@@ -37,7 +37,7 @@ function LeadershipPortrait(props: {
   alt: string;
   placeholderInitials: string;
   placeholderFilename: string;
-  /** Premium leadership portrait: 4:5, gold-accent frame (Founder + Co-Founder). */
+  /** Premium leadership portrait: 4:5, gold-accent frame (Founder & Managing Director + Co-Founder). */
   variant?: "default" | "premium";
 }) {
   const [showPlaceholder, setShowPlaceholder] = useState(false);
@@ -341,7 +341,7 @@ export default function About() {
                 <LeadershipPortrait
                   variant="premium"
                   src={FOUNDER_PUBLIC_SRC}
-                  alt="Javier Cifuentes, Founder of Infinite Home Lending"
+                  alt="Javier Cifuentes, Founder & Managing Director of Infinite Home Lending"
                   placeholderInitials="JC"
                   placeholderFilename="javier-cifuentes-founder.jpg"
                 />

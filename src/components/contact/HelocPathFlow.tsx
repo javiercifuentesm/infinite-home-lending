@@ -6,6 +6,7 @@ import { useLanguage } from "../../i18n/LanguageContext";
 export type HelocFlowStep =
   | "inactive"
   | "purpose"
+  | "address"
   | "value"
   | "balance"
   | "amount"
@@ -15,6 +16,7 @@ export type HelocFlowStep =
 
 export type HelocDataState = {
   helocPurpose: string;
+  address: string;
   propertyValueStr: string;
   mortgageBalanceStr: string;
   desiredAccess: string;
@@ -24,6 +26,7 @@ export type HelocDataState = {
 
 export const initialHelocData = (): HelocDataState => ({
   helocPurpose: "",
+  address: "",
   propertyValueStr: "",
   mortgageBalanceStr: "",
   desiredAccess: "",
@@ -38,6 +41,7 @@ type StepMotion = Pick<HTMLMotionProps<"div">, "initial" | "animate" | "exit" | 
 
 const SCROLL_ID: Record<Exclude<HelocFlowStep, "inactive" | "complete">, string> = {
   purpose: "heloc-step-purpose",
+  address: "heloc-step-address",
   value: "heloc-step-value",
   balance: "heloc-step-balance",
   amount: "heloc-step-amount",
@@ -51,6 +55,7 @@ export function getHelocStepScrollId(step: Exclude<HelocFlowStep, "inactive" | "
 
 const HELOC_ORDER: Exclude<HelocFlowStep, "inactive" | "complete">[] = [
   "purpose",
+  "address",
   "value",
   "balance",
   "amount",
@@ -122,11 +127,20 @@ export function HelocPathStep({
     { id: "quick", label: t("contact.heloc.timeline.quick") },
   ];
 
-  const microLine = (
+  const helocMicroLine = (
     <p className="mx-auto max-w-[32rem] px-2 text-center font-sans text-[12px] leading-relaxed text-[#6B7280] sm:text-[13px]">
       {t("contact.heloc.microLine")}
     </p>
   );
+
+  const microLine = (
+    <p className="mx-auto max-w-[32rem] px-2 text-center font-sans text-[12px] leading-relaxed text-[#6B7280] sm:text-[13px]">
+      {t("contact.refi.microLine")}
+    </p>
+  );
+
+  const inputClass =
+    "purchase-input-field w-full rounded-xl border border-[#E5E7EB] bg-white px-4 py-3.5 font-sans text-navy outline-none transition-colors focus:border-[#C6A15B] focus:shadow-[0_0_0_2px_rgba(198,161,91,0.15)]";
 
   const helocGlobalDisclaimer = (
     <p className="mx-auto max-w-[36rem] px-2 text-center font-sans text-[12px] leading-relaxed text-[#6B7280] sm:text-[13px]">
@@ -149,7 +163,7 @@ export function HelocPathStep({
         <h2 className="text-balance text-center font-heading text-lg font-semibold text-[#0B2A4A] sm:text-xl">
           {t("contact.heloc.purpose.question")}
         </h2>
-        {microLine}
+        {helocMicroLine}
         <div className="option-group grid grid-cols-1 gap-3">
           {PURPOSE_OPTIONS.map((opt) => (
             <button
@@ -174,6 +188,38 @@ export function HelocPathStep({
     );
   }
 
+  if (helocFlowStep === "address") {
+    return (
+      <motion.div id={SCROLL_ID.address} key="heloc-address" className="form-step space-y-5" {...stepMotion}>
+        <h2 className="text-balance text-center font-heading text-lg font-semibold text-[#0B2A4A] sm:text-xl">
+          {t("contact.refi.address.question")}
+        </h2>
+        {microLine}
+        <div className="option-group mx-auto w-full max-w-[520px] space-y-2 text-left">
+          <label htmlFor="sc-heloc-address" className="font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">
+            {t("contact.refi.address.label")} <span className="font-normal text-slate-400">{t("contact.refi.address.optional")}</span>
+          </label>
+          <input
+            id="sc-heloc-address"
+            name="helocAddress"
+            type="text"
+            autoComplete="street-address"
+            value={helocData.address}
+            onChange={(e) => {
+              setHelocData((d) => ({ ...d, address: e.target.value }));
+              onStepInteraction?.();
+            }}
+            placeholder={t("contact.refi.address.placeholder")}
+            className={`${inputClass} text-center`}
+          />
+        </div>
+        <button type="button" className={skipBtnClass} onClick={onSkip}>
+          {t("contact.refi.skip")}
+        </button>
+      </motion.div>
+    );
+  }
+
   if (helocFlowStep === "value") {
     return (
       <motion.div
@@ -189,7 +235,7 @@ export function HelocPathStep({
         <p className="mx-auto max-w-[30rem] text-center font-sans text-[12px] leading-relaxed text-slate-500 sm:text-[13px]">
           {t("contact.heloc.value.body")}
         </p>
-        {microLine}
+        {helocMicroLine}
         <div className="option-group mx-auto w-full max-w-[320px]">
           <label htmlFor="sc-heloc-value" className="sr-only">
             Estimated property value (optional)
@@ -228,7 +274,7 @@ export function HelocPathStep({
         <p className="mx-auto max-w-[30rem] text-center font-sans text-[12px] leading-relaxed text-slate-500 sm:text-[13px]">
           {t("contact.heloc.balance.body")}
         </p>
-        {microLine}
+        {helocMicroLine}
         <div className="option-group mx-auto w-full max-w-[320px]">
           <label htmlFor="sc-heloc-balance" className="sr-only">
             Current mortgage balance (optional)
@@ -264,7 +310,7 @@ export function HelocPathStep({
         <h2 className="text-balance text-center font-heading text-lg font-semibold text-[#0B2A4A] sm:text-xl">
           {t("contact.heloc.amount.question")}
         </h2>
-        {microLine}
+        {helocMicroLine}
         <div className="option-group grid grid-cols-1 gap-3">
           {ACCESS_OPTIONS.map((opt) => (
             <button
@@ -304,7 +350,7 @@ export function HelocPathStep({
         <p className="mx-auto max-w-[30rem] text-center font-sans text-[12px] leading-relaxed text-slate-500 sm:text-[13px]">
           {t("contact.heloc.credit.body")}
         </p>
-        {microLine}
+        {helocMicroLine}
         <div className="option-group grid grid-cols-1 gap-3">
           {CREDIT_OPTIONS.map((opt) => (
             <button
@@ -341,7 +387,7 @@ export function HelocPathStep({
         <h2 className="text-balance text-center font-heading text-lg font-semibold text-[#0B2A4A] sm:text-xl">
           {t("contact.heloc.timeline.question")}
         </h2>
-        {microLine}
+        {helocMicroLine}
         <div className="option-group grid grid-cols-1 gap-3">
           {TIMELINE_OPTIONS.map((opt) => (
             <button
@@ -379,6 +425,7 @@ function parseCurrencyDigits(raw: string): number | null {
 export function buildHelocContextPayload(data: HelocDataState): string {
   const payload = {
     helocPurpose: data.helocPurpose.trim() || null,
+    address: data.address.trim() || null,
     propertyValue: parseCurrencyDigits(data.propertyValueStr),
     mortgageBalance: parseCurrencyDigits(data.mortgageBalanceStr),
     desiredAccess: data.desiredAccess.trim() || null,

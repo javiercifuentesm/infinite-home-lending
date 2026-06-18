@@ -118,7 +118,7 @@ export const en = {
   "home.approach.point3": "A structured, transparent process from start to finish",
   "home.approach.quote":
     "Lending is a service, not a product. Our goal is to bring clarity and structure to one of life's most important financial decisions.",
-  "home.approach.attribution": "Founder",
+  "home.approach.attribution": "Founder & Managing Director",
   "home.approach.attributionSub": "Infinite Home Lending",
 
   "home.pillars.title": "Our Core Pillars",
@@ -1878,7 +1878,7 @@ export const en = {
   "about.eyebrow": "Our Story",
   "about.title": "The people behind Infinite Home Lending",
   "about.subtitle": "Two decades of experience. One clear commitment: guide every client with strategy, clarity, and care.",
-  "about.founder": "Founder",
+  "about.founder": "Founder & Managing Director",
   "about.coFounder": "Co-Founder",
   "about.startPreApproval": "Start Pre-Approval",
 

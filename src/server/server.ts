@@ -178,6 +178,7 @@ async function buildAlfredHealthPayload(): Promise<AlfredHealthPayload | AlfredH
 
 console.log("ENV CHECK:", {
   RESEND_API_KEY: process.env.RESEND_API_KEY ? "✅ PRESENT" : "❌ MISSING",
+  HUBSPOT_API_KEY: process.env.HUBSPOT_API_KEY ? "✅ PRESENT" : "❌ MISSING",
   LEAD_ADVISOR_EMAIL: process.env.LEAD_ADVISOR_EMAIL,
 });
 

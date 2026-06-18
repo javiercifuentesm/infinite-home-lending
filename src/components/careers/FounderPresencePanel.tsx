@@ -6,9 +6,9 @@ const COFOUNDER_SRC = "/about/alma-jaramillo-portrait.jpg";
 const FOUNDERS = [
   {
     name: "Javier Cifuentes",
-    role: "Co-Founder",
+    role: "Founder & Managing Director",
     src: FOUNDER_SRC,
-    alt: "Javier Cifuentes, Co-Founder of Infinite Home Lending",
+    alt: "Javier Cifuentes, Founder & Managing Director of Infinite Home Lending",
     objectPosition: "center 22%",
   },
   {

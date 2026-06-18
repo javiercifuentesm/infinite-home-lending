@@ -417,6 +417,12 @@ export function StrategicContactExperience() {
     if (!n) return "";
     return n.split(/\s+/)[0] ?? "";
   });
+  const [lastName, setLastName] = useState(() => {
+    const n = searchParams.get("name")?.trim();
+    if (!n) return "";
+    const parts = n.split(/\s+/).filter(Boolean);
+    return parts.length > 1 ? parts.slice(1).join(" ") : "";
+  });
   const [email, setEmail] = useState(() => searchParams.get("email") ?? "");
   const [phone, setPhone] = useState("");
   const [contextNote] = useState(() => {
@@ -545,7 +551,7 @@ export function StrategicContactExperience() {
     let targetId: string | null = null;
     if (step === 0 && reasonId === "buy" && purchaseFlowStep !== "inactive" && purchaseFlowStep !== "complete") {
       /* Full white card for credit (matches screenshot); inner steps use purchase-flow-* */
-      targetId = purchaseFlowStep === "credit" ? "contact-form" : `purchase-flow-${purchaseFlowStep}`;
+      targetId = purchaseFlowStep === "credit" || purchaseFlowStep === "timeline" ? "contact-form" : `purchase-flow-${purchaseFlowStep}`;
     } else if (step === 0 && reasonId === "refi" && refinanceFlowStep !== "inactive" && refinanceFlowStep !== "complete") {
       targetId = getRefinanceStepScrollId(refinanceFlowStep);
     } else if (step >= 1 && step <= 3 + uploadInset) {
@@ -706,6 +712,7 @@ export function StrategicContactExperience() {
       purchasePrice: parseCurrencyDigitsToNumber(purchaseData.purchasePriceStr),
       downPayment: parseDownPaymentPayload(purchaseData),
       creditRange: purchaseData.creditRange.trim() || null,
+      purchaseTimeline: purchaseData.purchaseTimeline.trim() || null,
     };
     return JSON.stringify(payload);
   }, [reasonId, purchaseFlowStep, purchaseData]);
@@ -728,7 +735,7 @@ export function StrategicContactExperience() {
   const advanceHelocAfterTileAnswer = useCallback(() => {
     const s = helocFlowStepRef.current;
     let next: HelocFlowStep | null = null;
-    if (s === "purpose") next = "value";
+    if (s === "purpose") next = "address";
     else if (s === "amount") next = "credit";
     else if (s === "credit") next = "timeline";
     if (!next) return;
@@ -747,7 +754,7 @@ export function StrategicContactExperience() {
     let next: ReverseFlowStep | null = null;
     if (s === "residence") next = "age";
     else if (s === "age") next = "goal";
-    else if (s === "goal") next = "value";
+    else if (s === "goal") next = "address";
     else if (s === "value") next = "balance";
     else if (s === "obligations") next = "timeline";
     if (!next) return;
@@ -854,6 +861,11 @@ export function StrategicContactExperience() {
         return;
       }
       if (reverseFlowStep === "goal") {
+        setReverseFlowStep("address");
+        scheduleReverseScrollToStepId("reverse-step-address");
+        return;
+      }
+      if (reverseFlowStep === "address") {
         setReverseFlowStep("value");
         scheduleReverseScrollToStepId("reverse-step-value");
         return;
@@ -864,6 +876,11 @@ export function StrategicContactExperience() {
         return;
       }
       if (reverseFlowStep === "balance") {
+        setReverseFlowStep("rate");
+        scheduleReverseScrollToStepId("reverse-step-rate");
+        return;
+      }
+      if (reverseFlowStep === "rate") {
         setReverseFlowStep("obligations");
         scheduleReverseScrollToStepId("reverse-step-obligations");
         return;
@@ -887,6 +904,11 @@ export function StrategicContactExperience() {
         return;
       }
       if (helocFlowStep === "purpose") {
+        setHelocFlowStep("address");
+        scheduleHelocScrollToStepId("heloc-step-address");
+        return;
+      }
+      if (helocFlowStep === "address") {
         setHelocFlowStep("value");
         scheduleHelocScrollToStepId("heloc-step-value");
         return;
@@ -983,6 +1005,10 @@ export function StrategicContactExperience() {
         return;
       }
       if (purchaseFlowStep === "credit") {
+        setPurchaseFlowStep("timeline");
+        return;
+      }
+      if (purchaseFlowStep === "timeline") {
         setPurchaseFlowStep("complete");
         setStep(1);
         return;
@@ -1009,6 +1035,8 @@ export function StrategicContactExperience() {
       setPurchaseData((d) => ({ ...d, downPaymentStr: "", downPaymentType: "dollar" }));
     } else if (flow === "credit") {
       setPurchaseData((d) => ({ ...d, creditRange: "" }));
+    } else if (flow === "timeline") {
+      setPurchaseData((d) => ({ ...d, purchaseTimeline: "" }));
     }
     if (flow === "intro") {
       setPurchaseFlowStep("property");
@@ -1027,6 +1055,10 @@ export function StrategicContactExperience() {
       return;
     }
     if (flow === "credit") {
+      setPurchaseFlowStep("timeline");
+      return;
+    }
+    if (flow === "timeline") {
       setPurchaseFlowStep("complete");
       setStep(1);
     }
@@ -1078,6 +1110,7 @@ export function StrategicContactExperience() {
 
     const next = getNextHelocSubstep(flow);
     if (flow === "purpose") setHelocData((d) => ({ ...d, helocPurpose: "" }));
+    if (flow === "address") setHelocData((d) => ({ ...d, address: "" }));
     if (flow === "value") setHelocData((d) => ({ ...d, propertyValueStr: "" }));
     if (flow === "balance") setHelocData((d) => ({ ...d, mortgageBalanceStr: "" }));
     if (flow === "amount") setHelocData((d) => ({ ...d, desiredAccess: "" }));
@@ -1102,8 +1135,10 @@ export function StrategicContactExperience() {
     if (flow === "residence") setReverseData((d) => ({ ...d, residence: "" }));
     if (flow === "age") setReverseData((d) => ({ ...d, ageRange: "" }));
     if (flow === "goal") setReverseData((d) => ({ ...d, goal: "" }));
+    if (flow === "address") setReverseData((d) => ({ ...d, address: "" }));
     if (flow === "value") setReverseData((d) => ({ ...d, propertyValueStr: "", propertyValueUnsure: false }));
     if (flow === "balance") setReverseData((d) => ({ ...d, mortgageBalanceStr: "" }));
+    if (flow === "rate") setReverseData((d) => ({ ...d, currentRate: "" }));
     if (flow === "obligations") setReverseData((d) => ({ ...d, obligations: "" }));
     if (flow === "timeline") setReverseData((d) => ({ ...d, timeline: "" }));
 
@@ -1131,16 +1166,24 @@ export function StrategicContactExperience() {
         setReverseFlowStep("age");
         return;
       }
-      if (reverseFlowStep === "value") {
+      if (reverseFlowStep === "address") {
         setReverseFlowStep("goal");
+        return;
+      }
+      if (reverseFlowStep === "value") {
+        setReverseFlowStep("address");
         return;
       }
       if (reverseFlowStep === "balance") {
         setReverseFlowStep("value");
         return;
       }
-      if (reverseFlowStep === "obligations") {
+      if (reverseFlowStep === "rate") {
         setReverseFlowStep("balance");
+        return;
+      }
+      if (reverseFlowStep === "obligations") {
+        setReverseFlowStep("rate");
         return;
       }
       if (reverseFlowStep === "timeline") {
@@ -1153,8 +1196,12 @@ export function StrategicContactExperience() {
         setHelocFlowStep("inactive");
         return;
       }
-      if (helocFlowStep === "value") {
+      if (helocFlowStep === "address") {
         setHelocFlowStep("purpose");
+        return;
+      }
+      if (helocFlowStep === "value") {
+        setHelocFlowStep("address");
         return;
       }
       if (helocFlowStep === "balance") {
@@ -1233,11 +1280,15 @@ export function StrategicContactExperience() {
         setPurchaseFlowStep("down");
         return;
       }
+      if (purchaseFlowStep === "timeline") {
+        setPurchaseFlowStep("credit");
+        return;
+      }
     }
     if (step === 1 && reasonId === "buy" && purchaseFlowStep === "complete") {
       setMortgageStatementFileKey(null);
       setStep(0);
-      setPurchaseFlowStep("credit");
+      setPurchaseFlowStep("timeline");
       return;
     }
     if (step === 1 && reasonId === "refi" && refinanceFlowStep === "complete") {
@@ -1317,7 +1368,8 @@ export function StrategicContactExperience() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: firstName.trim(),
+          firstName: firstName.trim(),
+          lastName: lastName.trim(),
           email: email.trim(),
           phone: phone.trim() || undefined,
           path: mapReasonIdToLeadPath(reasonId),

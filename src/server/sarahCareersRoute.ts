@@ -333,6 +333,7 @@ FOUNDER INTELLIGENCE
 Sarah should understand who founded Infinite Home Lending and why.
 
 Javier Cifuentes:
+- Founder & Managing Director of Infinite Home Lending
 - Mortgage industry professional with more than two decades of experience
 - Leadership experience at Wells Fargo and Bank of America
 - Worked inside large retail mortgage organizations

@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "motion/react";
-import { ChevronDown, Menu, X } from "lucide-react";
+import { ChevronDown, Menu, Users, X } from "lucide-react";
 import { useState, useEffect } from "react";
 import { IHLLogo } from "./IHLLogo";
 import { getAllSmartToolPaths, getSmartToolsForHub } from "../data/smartToolsCatalog";
@@ -76,39 +76,6 @@ const Navbar = () => {
         scrolled ? "shadow-sm shadow-navy/5" : ""
       }`}
     >
-      <style>{`
-        @keyframes realtorBadgePulse {
-          0%, 100% {
-            transform: scale(1);
-            box-shadow: 0 2px 8px rgba(198,161,91,0.3);
-          }
-          50% {
-            transform: scale(1.04);
-            box-shadow: 0 4px 20px rgba(198,161,91,0.65);
-          }
-        }
-        .ihl-realtor-nav-glow {
-          display: inline-block;
-          color: #C6A15B !important;
-          font-size: 12px;
-          font-weight: 700;
-          letter-spacing: 0.8px;
-          text-transform: uppercase;
-          padding: 6px 16px;
-          border-radius: 9999px;
-          background: #0B2A4A;
-          outline: 2px solid #C6A15B;
-          outline-offset: 2px;
-          animation: none;
-          border-bottom: none !important;
-          text-shadow: none !important;
-          transition: background 0.2s, color 0.2s;
-        }
-        .ihl-realtor-nav-glow:hover {
-          background: #0a2240;
-          outline-color: #d4b06a;
-        }
-      `}</style>
       <div className="container navbar-inner">
         <div className="flex shrink-0 items-center">
           <Link
@@ -138,7 +105,7 @@ const Navbar = () => {
 
             {/* Smart Tools — hub link + dropdown */}
             <div
-              className="relative pb-2"
+              className="relative inline-flex items-center"
               onMouseEnter={() => setSmartToolsOpen(true)}
               onMouseLeave={() => setSmartToolsOpen(false)}
               onFocusCapture={() => setSmartToolsOpen(true)}
@@ -157,7 +124,7 @@ const Navbar = () => {
               >
                 {t("nav.smartTools")}
                 <ChevronDown
-                  className={`h-3.5 w-3.5 shrink-0 transition-transform duration-200 ${smartToolsOpen ? "rotate-180" : ""}`}
+                  className={`h-3.5 w-3.5 shrink-0 self-center transition-transform duration-200 ${smartToolsOpen ? "rotate-180" : ""}`}
                   strokeWidth={2}
                   aria-hidden
                 />
@@ -201,25 +168,18 @@ const Navbar = () => {
             <Link to="/contact" className={baseLink(pathname === "/contact")}>
               {t("nav.contact")}
             </Link>
-
-            <LanguageToggle />
-
-            <Link
-              to="/deal-desk"
-              className="inline-flex shrink-0 items-center font-sans outline-none focus-visible:ring-2 focus-visible:ring-gold/45 focus-visible:ring-offset-2 rounded-md"
-              aria-current={dealDeskActive ? "page" : undefined}
-            >
-              <span className="ihl-realtor-nav-glow">{t("nav.forRealtors")}</span>
-            </Link>
           </div>
         </div>
 
-        <div className="nav-cta hidden md:flex">
+        <div className="nav-actions hidden md:flex">
+          <LanguageToggle variant="header" />
           <Link
-            to="/contact"
-            className="btn-primary !px-10 !py-4 shadow-xl shadow-navy/10 whitespace-nowrap"
+            to="/deal-desk"
+            className="nav-btn-realtors"
+            aria-current={dealDeskActive ? "page" : undefined}
           >
-            {t("nav.startPreApproval")}
+            <Users className="h-4 w-4 shrink-0" strokeWidth={2} aria-hidden />
+            {t("nav.forRealtors")}
           </Link>
         </div>
 
@@ -314,24 +274,18 @@ const Navbar = () => {
             {t("nav.contact")}
           </Link>
 
-          <div className="flex items-center justify-center py-4 border-b border-slate-100/80">
-            <LanguageToggle />
+          <div className="flex flex-col gap-3 py-4 border-b border-slate-100/80">
+            <LanguageToggle variant="header" />
           </div>
 
           <Link
             to="/deal-desk"
             onClick={() => setIsOpen(false)}
-            className="flex items-center py-3 border-b border-slate-100/80 font-sans outline-none focus-visible:ring-2 focus-visible:ring-gold/45 focus-visible:ring-offset-2 rounded-md"
+            className="nav-btn-realtors w-full justify-center mt-2"
+            aria-current={dealDeskActive ? "page" : undefined}
           >
-            <span className="ihl-realtor-nav-glow">{t("nav.forRealtors")}</span>
-          </Link>
-
-          <Link
-            to="/contact"
-            onClick={() => setIsOpen(false)}
-            className="mt-2 bg-slate-900 text-white px-5 py-3.5 rounded-sm text-center font-medium min-h-[48px] flex items-center justify-center"
-          >
-            {t("nav.startPreApproval")}
+            <Users className="h-4 w-4 shrink-0" strokeWidth={2} aria-hidden />
+            {t("nav.forRealtors")}
           </Link>
           </div>
         </motion.div>

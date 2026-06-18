@@ -7,7 +7,7 @@ import {
 } from "../../data/purchaseLocations";
 import { useLanguage } from "../../i18n/LanguageContext";
 
-export type PurchaseFlowStep = "inactive" | "intro" | "property" | "price" | "down" | "credit" | "complete";
+export type PurchaseFlowStep = "inactive" | "intro" | "property" | "price" | "down" | "credit" | "timeline" | "complete";
 
 export type PurchaseDataState = {
   hasProperty: boolean | null;
@@ -20,6 +20,7 @@ export type PurchaseDataState = {
   downPaymentType: "dollar" | "percent";
   downPaymentStr: string;
   creditRange: string;
+  purchaseTimeline: string;
 };
 
 export const initialPurchaseData = (): PurchaseDataState => ({
@@ -32,6 +33,7 @@ export const initialPurchaseData = (): PurchaseDataState => ({
   downPaymentType: "dollar",
   downPaymentStr: "",
   creditRange: "",
+  purchaseTimeline: "",
 });
 
 /** Spec: digits only → $ + toLocaleString */
@@ -466,6 +468,45 @@ export function PurchasePathStep({ purchaseFlowStep, purchaseData, setPurchaseDa
               onClick={() => setPurchaseData((d) => ({ ...d, creditRange: opt.id }))}
               className={`card-option contact-card-transition py-4 text-center font-sans text-[15px] font-semibold text-[#0B2A4A] ${
                 purchaseData.creditRange === opt.id ? "card-option--selected" : ""
+              }`}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+        <button type="button" className={skipBtnClass} onClick={onSkip}>
+          {t("contact.purchase.skip")}
+        </button>
+      </motion.div>
+    );
+  }
+
+  if (purchaseFlowStep === "timeline") {
+    const TIMELINE_OPTIONS = [
+      { id: "30_days", label: "In the next 30 days" },
+      { id: "1_3_months", label: "1–3 months" },
+      { id: "3_6_months", label: "3–6 months" },
+      { id: "6_12_months", label: "6–12 months" },
+      { id: "exploring", label: "Just exploring for now" },
+    ] as const;
+
+    return (
+      <motion.div id="purchase-flow-timeline" key="purchase-timeline" className="form-step space-y-4" {...stepMotion}>
+        <h2 className="text-balance text-center font-heading text-lg font-semibold text-[#0B2A4A] sm:text-xl">
+          What&apos;s your target purchase timeline?
+        </h2>
+        <p className="mx-auto max-w-[30rem] text-center font-sans text-[12px] leading-relaxed text-slate-500 sm:text-[13px]">
+          A rough sense is plenty — this helps us prioritize your next steps.
+        </p>
+        {microLine}
+        <div className="option-group grid grid-cols-1 gap-3">
+          {TIMELINE_OPTIONS.map((opt) => (
+            <button
+              key={opt.id}
+              type="button"
+              onClick={() => setPurchaseData((d) => ({ ...d, purchaseTimeline: opt.id }))}
+              className={`card-option contact-card-transition py-4 text-center font-sans text-[15px] font-semibold text-[#0B2A4A] ${
+                purchaseData.purchaseTimeline === opt.id ? "card-option--selected" : ""
               }`}
             >
               {opt.label}

@@ -13,6 +13,8 @@ const NAV_LINKS = [
   { label: "Contact", path: "/contact" },
 ] as const;
 
+const careersNavLink = getCareersNavLink();
+
 export function CareersNav() {
   return (
     <nav

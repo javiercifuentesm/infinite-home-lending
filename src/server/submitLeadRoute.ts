@@ -7,6 +7,9 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { tryGetS3Client } from "./lib/s3Upload";
 import { Router, type Request, type Response } from "express";
 import { Resend } from "resend";
+import { createOrUpdateHubSpotContact } from "./hubspotClient";
+import { extractContactFormHubSpotFields } from "./hubspotFormFields";
+import { sendBrevoWelcomeEmail } from "./brevoEmailRoute";
 
 const GET_URL_EXPIRES_SEC = 86400;
 const MAX_ANSWER_ENTRIES = 48;
@@ -26,6 +29,61 @@ export async function getSignedDownloadUrl(fileKey: string): Promise<string | nu
 }
 
 const ALLOWED_PATHS = new Set(["purchase", "refinance", "heloc", "reverse", "plan", "explore"]);
+
+function isDealDeskPartnerLead(keyInsights: Record<string, unknown>): boolean {
+  const entryContext = keyInsights["Entry context"];
+  return typeof entryContext === "string" && /deal desk partner/i.test(entryContext);
+}
+
+function syncContactFormToHubSpot(params: {
+  name: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  path: string;
+  keyInsights: Record<string, unknown>;
+}): void {
+  const { name, firstName, lastName, email, phone, path, keyInsights } = params;
+  const isPartnerCta = isDealDeskPartnerLead(keyInsights);
+  const formFields = extractContactFormHubSpotFields(path, keyInsights, { firstName, lastName });
+
+  void createOrUpdateHubSpotContact({
+    name,
+    firstName: formFields.firstName,
+    lastName: formFields.lastName,
+    email,
+    phone,
+    leadSource: isPartnerCta ? "Partner CTA" : "Contact Form",
+    loanPurpose: isPartnerCta ? "Partner / Referral" : formFields.loanPurpose,
+    purchaseTimeline: formFields.purchaseTimeline,
+    leadStatus: formFields.leadStatus,
+    aiSourced: false,
+    notes: formFields.notes,
+    extraProperties: {
+      ...formFields.extraProperties,
+      ...(isPartnerCta ? { ihl_pipeline: "referral" } : {}),
+    },
+  })
+    .then(() => {
+      console.log("[brevo] attempting welcome email send");
+      void sendBrevoWelcomeEmail({
+        firstName: formFields.firstName,
+        lastName: formFields.lastName,
+        email,
+        loanPurpose: isPartnerCta ? "Partner / Referral" : formFields.loanPurpose,
+      })
+        .then(() => {
+          console.log("[brevo] email sent");
+        })
+        .catch((err) => {
+          console.error("[brevo] error:", err);
+        });
+    })
+    .catch((err) => {
+      console.error("[hubspot] submit-lead sync failed:", err);
+    });
+}
 
 function escapeHtml(s: string): string {
   return s
@@ -1353,8 +1411,12 @@ export function createSubmitLeadRouter(): Router {
 
       const body = req.body as Record<string, unknown>;
 
-      const name =
-        (typeof body.name === "string" ? body.name.trim() : "") || "Unknown";
+      const firstName =
+        (typeof body.firstName === "string" ? body.firstName.trim() : "") ||
+        (typeof body.name === "string" ? body.name.trim() : "") ||
+        "Unknown";
+      const lastName = typeof body.lastName === "string" ? body.lastName.trim() : "";
+      const name = [firstName, lastName].filter(Boolean).join(" ") || firstName;
       const emailRaw = typeof body.email === "string" ? body.email.trim() : "";
       const email = emailRaw || "";
       const phone = typeof body.phone === "string" ? body.phone.trim() : "";
@@ -1465,6 +1527,8 @@ export function createSubmitLeadRouter(): Router {
       }
 
       console.log("STEP 4: After Resend — Email sent successfully");
+
+      syncContactFormToHubSpot({ name, firstName, lastName, email, phone, path, keyInsights });
 
       return res.status(200).json({
         ok: true,

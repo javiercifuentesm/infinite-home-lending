@@ -1,7 +1,36 @@
+import { ChevronDown } from "lucide-react";
 import { useLanguage } from "./LanguageContext";
 
-export function LanguageToggle() {
+type LanguageToggleProps = {
+  variant?: "default" | "header";
+};
+
+export function LanguageToggle({ variant = "default" }: LanguageToggleProps) {
   const { lang, setLang, t } = useLanguage();
+
+  if (variant === "header") {
+    return (
+      <div className="nav-lang-pill" aria-label="Language">
+        <button
+          type="button"
+          onClick={() => setLang("en")}
+          className={`nav-lang-pill__btn ${lang === "en" ? "nav-lang-pill__btn--active" : ""}`}
+          aria-pressed={lang === "en"}
+        >
+          {t("lang.toggle.en")}
+        </button>
+        <button
+          type="button"
+          onClick={() => setLang("es")}
+          className={`nav-lang-pill__btn ${lang === "es" ? "nav-lang-pill__btn--active" : ""}`}
+          aria-pressed={lang === "es"}
+        >
+          {t("lang.toggle.es")}
+        </button>
+        <ChevronDown className="nav-lang-pill__chevron h-3 w-3" strokeWidth={2.25} aria-hidden />
+      </div>
+    );
+  }
 
   return (
     <div

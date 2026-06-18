@@ -3,6 +3,9 @@
  */
 import crypto from "crypto";
 import { appendLead } from "./leadsStore";
+import { createOrUpdateHubSpotContact } from "./hubspotClient";
+import { buildSarahLeadHubSpotNotes, rateFromStructured } from "./hubspotFormFields";
+import { sendBrevoWelcomeEmail } from "./brevoEmailRoute";
 import { Router, type Request, type Response } from "express";
 
 /*
@@ -95,6 +98,826 @@ function getVisitorOnlyTranscript(transcript: string): string {
     .split("\n")
     .filter((l) => l.toLowerCase().trim().startsWith("visitor"))
     .join("\n");
+}
+
+type TranscriptTurn = { speaker: "sarah" | "visitor"; message: string };
+
+function parseTranscriptTurns(transcript: string): TranscriptTurn[] {
+  const turns: TranscriptTurn[] = [];
+  for (const line of transcript.split("\n")) {
+    const trimmed = line.trim();
+    if (!trimmed) continue;
+    const sarah = trimmed.match(/^(?:luna|sarah)\s*\([^)]*\):\s*(.*)$/i);
+    if (sarah) {
+      turns.push({ speaker: "sarah", message: sarah[1].trim() });
+      continue;
+    }
+    const visitor = trimmed.match(/^visitor\s*\([^)]*\):\s*(.*)$/i);
+    if (visitor) {
+      turns.push({ speaker: "visitor", message: visitor[1].trim() });
+    }
+  }
+  return turns;
+}
+
+/** After Sarah asks a matching question, return the next visitor reply (if any). */
+function nextVisitorReplyAfterSarahQuestion(
+  turns: TranscriptTurn[],
+  questionPatterns: RegExp[],
+): string {
+  for (let i = 0; i < turns.length; i++) {
+    const turn = turns[i];
+    if (turn.speaker !== "sarah") continue;
+    if (!questionPatterns.some((p) => p.test(turn.message))) continue;
+    for (let j = i + 1; j < turns.length; j++) {
+      if (turns[j].speaker === "visitor") return turns[j].message;
+      if (turns[j].speaker === "sarah") break;
+    }
+  }
+  return "";
+}
+
+/** Index of Sarah turn matching question patterns, or -1. */
+function findSarahQuestionIndex(turns: TranscriptTurn[], questionPatterns: RegExp[]): number {
+  for (let i = 0; i < turns.length; i++) {
+    if (turns[i].speaker !== "sarah") continue;
+    if (questionPatterns.some((p) => p.test(turns[i].message))) return i;
+  }
+  return -1;
+}
+
+function isAffirmativeReply(raw: string): boolean {
+  const t = raw.trim().toLowerCase().replace(/[!.?,]/g, "");
+  return /^(yes|yeah|yep|yup|correct|that(?:'s| is) right|that(?:'s| is) correct|sure|ok(?:ay)?|yes please|please|absolutely|exactly|right|affirmative)$/.test(
+    t,
+  );
+}
+
+function parseMoneyFromText(raw: string): string {
+  const trimmed = raw.trim();
+  if (!trimmed) return "";
+  const dollar = trimmed.match(/\$\s*([\d,]+(?:\.\d+)?)/);
+  if (dollar?.[1]) return dollar[1].replace(/,/g, "");
+  const plain = trimmed.match(/^([\d,]+(?:\.\d+)?)\s*(?:k|thousand)?$/i);
+  if (plain?.[1]) {
+    const digits = plain[1].replace(/,/g, "");
+    if (/k|thousand/i.test(trimmed)) {
+      const num = Number(digits);
+      if (Number.isFinite(num)) return String(Math.round(num * 1000));
+    }
+    return digits;
+  }
+  const embedded = trimmed.match(/\b([\d,]{4,}(?:\.\d+)?)\b/);
+  return embedded?.[1]?.replace(/,/g, "") ?? "";
+}
+
+/** Parse money from a visitor reply (alias for shared money parser). */
+function parseMoneyFromVisitorReply(raw: string): string {
+  return parseMoneyFromText(raw);
+}
+
+/**
+ * After Sarah's market-value question, parse the visitor reply — or, if the reply is
+ * affirmative/non-numeric (e.g. "Yes" to a clarifying question), extract from Sarah's
+ * follow-up message that restates the amount.
+ */
+function isSarahValueClarification(message: string): boolean {
+  return /clarif|confirm|just to (?:make sure|clarify)|is that|you mean|so (?:that'?s|it'?s)/i.test(
+    message,
+  );
+}
+
+function extractEstimatedValueFromSarahTurns(
+  turns: TranscriptTurn[],
+  valueQuestionPatterns: RegExp[],
+  stopPattern: RegExp,
+): string {
+  const sarahIdx = findSarahQuestionIndex(turns, valueQuestionPatterns);
+  if (sarahIdx < 0) return "";
+
+  for (let j = sarahIdx + 1; j < turns.length; j++) {
+    const turn = turns[j];
+    if (turn.speaker === "sarah" && stopPattern.test(turn.message)) break;
+
+    if (turn.speaker === "visitor") {
+      const money = parseMoneyFromText(turn.message);
+      if (money) return money;
+      continue;
+    }
+
+    if (turn.speaker === "sarah" && isSarahValueClarification(turn.message)) {
+      const money = parseMoneyFromText(turn.message);
+      if (!money) continue;
+      for (let k = j + 1; k < turns.length; k++) {
+        if (turns[k].speaker === "visitor") {
+          if (isAffirmativeReply(turns[k].message) || !parseMoneyFromText(turns[k].message)) {
+            return money;
+          }
+          break;
+        }
+        if (turns[k].speaker === "sarah") break;
+      }
+    }
+  }
+
+  return "";
+}
+
+function parseRefinanceGoalFromReply(raw: string): string {
+  const trimmed = raw.trim();
+  if (!trimmed) return "";
+  const t = trimmed.toLowerCase();
+  if (/lower(?:ing)?\s*(?:my\s*)?rate|reduce\s*(?:my\s*)?rate|better\s*rate|rate\s*reduction/.test(t)) {
+    return "reduce_rate";
+  }
+  if (/lower(?:ing)?\s*(?:my\s*)?payment|reduce\s*(?:my\s*)?payment|smaller\s*payment|monthly\s*payment/.test(t)) {
+    return "lower_payment";
+  }
+  if (/equity|cash\s*out|access\s*(?:my\s*)?equity|pull\s*(?:out\s*)?equity|tap\s*equity/.test(t)) {
+    return "cash_out";
+  }
+  if (/debt|consolidat/.test(t)) {
+    return "consolidate_debt";
+  }
+  if (/unsure|not\s*sure|don'?t\s*know|exploring|figure\s*out/.test(t)) {
+    return "unsure";
+  }
+  return trimmed;
+}
+
+function parseRateFromVisitorReply(raw: string): string {
+  const trimmed = raw.trim();
+  if (!trimmed) return "";
+  const m = trimmed.match(/(\d+(?:\.\d+)?)\s*(?:%|percent)?/i);
+  return m?.[1] ? `${m[1]}%` : "";
+}
+
+const REFINANCE_GOAL_QUESTION_PATTERNS = [
+  /main goal/i,
+  /lowering your rate.*reducing your payment|reducing your payment.*accessing equity/i,
+  /lower(?:ing)? your rate|accessing equity/i,
+];
+
+const REFINANCE_BALANCE_QUESTION_PATTERNS = [
+  /principal balance/i,
+  /current (?:loan )?balance/i,
+  /mortgage balance/i,
+  /loan balance/i,
+  /how much (?:do you )?(?:still )?(?:owe|own)/i,
+  /remaining (?:on (?:your|the) (?:mortgage|loan))/i,
+];
+
+const REFINANCE_VALUE_QUESTION_PATTERNS = [
+  /market value/i,
+  /estimate.*(?:home|house|property).*value/i,
+  /(?:home|house|property).*(?:worth|valued)/i,
+  /what would you estimate/i,
+];
+
+const REFINANCE_RATE_QUESTION_PATTERNS = [
+  /interest rate/i,
+  /current rate/i,
+  /(?:do you )?know your (?:current )?rate/i,
+  /what rate/i,
+];
+
+const REFINANCE_ADDRESS_QUESTION_PATTERNS = [
+  /address.*(?:property|refinanc)/i,
+  /property.*address/i,
+  /what(?:'s| is) the address/i,
+];
+
+function extractEstimatedValueFromTurns(turns: TranscriptTurn[]): string {
+  return extractEstimatedValueFromSarahTurns(
+    turns,
+    REFINANCE_VALUE_QUESTION_PATTERNS,
+    /principal balance|interest rate|address of the property|credit situation|when did you purchase/i,
+  );
+}
+
+const VOLUNTEERED_BALANCE_KEYWORDS =
+  /\b(balance|principal|payoff|owe|owing|mortgage balance|loan balance|remaining|left on (?:the )?mortgage)\b/i;
+
+const VOLUNTEERED_VALUE_KEYWORDS =
+  /\b(worth|market value|home value|property value|estimated value|valued at|home is worth|house is worth)\b/i;
+
+const STREET_SUFFIX =
+  /(?:street|st|avenue|ave|road|rd|drive|dr|lane|ln|blvd|boulevard|court|ct|way|place|pl|circle|cir|parkway|pkwy)\.?\b/i;
+
+/** Street + optional directional suffix + optional city, state, ZIP. */
+const FULL_ADDRESS_PATTERN = new RegExp(
+  String.raw`\d+\s+[A-Za-z0-9\s.,#'-]+${STREET_SUFFIX.source}\s*(?:[NSEW]{1,2}\b\.?\s*)?(?:,\s*[A-Za-z0-9][A-Za-z0-9\s.'-]*(?:,?\s*[A-Z]{2}\s+)?\d{5}(?:-\d{4})?)?`,
+  "i",
+);
+
+function visitorMessagesFromTurns(turns: TranscriptTurn[]): string[] {
+  return turns.filter((t) => t.speaker === "visitor").map((t) => t.message);
+}
+
+/** Visitor lines before Sarah's first matching question — empty if she never asked. */
+function visitorMessagesBeforeSarahQuestion(
+  turns: TranscriptTurn[],
+  questionPatterns: RegExp[],
+): string[] {
+  const sarahIdx = findSarahQuestionIndex(turns, questionPatterns);
+  if (sarahIdx < 0) return visitorMessagesFromTurns(turns);
+  return turns.slice(0, sarahIdx).filter((t) => t.speaker === "visitor").map((t) => t.message);
+}
+
+function textClauses(text: string): string[] {
+  const placeholders: string[] = [];
+  const protectedText = text.replace(/\$\d{1,3}(?:,\d{3})+(?:\.\d+)?/g, (match) => {
+    placeholders.push(match);
+    return `\x00${placeholders.length - 1}\x00`;
+  });
+
+  return protectedText
+    .split(/[,;]|\band\b|(?<=\.)\s+(?=[A-Z])/i)
+    .map((s) => s.replace(/\x00(\d+)\x00/g, (_, i) => placeholders[Number(i)] ?? "").trim())
+    .filter(Boolean);
+}
+
+function extractMoneyNearKeywords(text: string, keywordPattern: RegExp): string {
+  for (const clause of textClauses(text)) {
+    if (!keywordPattern.test(clause)) continue;
+    const money = parseMoneyFromText(clause);
+    if (money) return money;
+  }
+  if (keywordPattern.test(text)) {
+    const money = parseMoneyFromText(text);
+    if (money) return money;
+  }
+  return "";
+}
+
+function extractRateFromVolunteeredText(text: string): string {
+  for (const clause of textClauses(text)) {
+    if (!/\b(rate|interest|apr)\b/i.test(clause) && !/\d+(?:\.\d+)?\s*%/.test(clause)) continue;
+    const rate = parseRateFromVisitorReply(clause);
+    if (rate) return rate;
+  }
+  if (/\b(rate|interest|apr)\b/i.test(text) || /\d+(?:\.\d+)?\s*%/.test(text)) {
+    return parseRateFromVisitorReply(text);
+  }
+  return "";
+}
+
+function extractAddressFromVolunteeredText(text: string): string {
+  const streetTail = String.raw`\s*(?:[NSEW]{1,2}\b\.?\s*)?(?:,\s*[A-Za-z0-9][A-Za-z0-9\s.'-]*(?:,?\s*[A-Z]{2}\s+)?\d{5}(?:-\d{4})?)?`;
+
+  const atAddressPattern = new RegExp(
+    String.raw`\bat\s+(\d+\s+[A-Za-z0-9\s.,#'-]+${STREET_SUFFIX.source}${streetTail})`,
+    "i",
+  );
+  const atMatch = text.match(atAddressPattern);
+  if (atMatch?.[1]) return atMatch[1].replace(/\s+/g, " ").trim();
+
+  const streetNumberPattern = new RegExp(
+    String.raw`\d{3,}\s+[A-Za-z0-9\s.,#'-]+${STREET_SUFFIX.source}${streetTail}`,
+    "i",
+  );
+  const streetMatch = text.match(streetNumberPattern);
+  if (streetMatch?.[0]) return streetMatch[0].replace(/\s+/g, " ").trim();
+
+  const match = text.match(FULL_ADDRESS_PATTERN);
+  return match?.[0]?.replace(/\s+/g, " ").trim() ?? "";
+}
+
+function extractGoalFromVolunteeredText(text: string): string {
+  if (!/refinanc|goal|lower|reduce|equity|payment|cash\s*out|consolidat/i.test(text)) return "";
+  return parseRefinanceGoalFromReply(text);
+}
+
+/** Scan visitor messages for a field volunteered before Sarah asked (or anywhere if still missing). */
+function volunteeredVisitorMessagesForField(
+  turns: TranscriptTurn[],
+  questionPatterns: RegExp[],
+): string[] {
+  const beforeQuestion = visitorMessagesBeforeSarahQuestion(turns, questionPatterns);
+  if (beforeQuestion.length > 0) return beforeQuestion;
+  return visitorMessagesFromTurns(turns);
+}
+
+function extractVolunteeredRefinanceGoal(turns: TranscriptTurn[]): string {
+  const msgs = volunteeredVisitorMessagesForField(turns, REFINANCE_GOAL_QUESTION_PATTERNS);
+  for (const msg of msgs) {
+    const goal = extractGoalFromVolunteeredText(msg);
+    if (goal) {
+      return goal;
+    }
+  }
+  return "";
+}
+
+function extractVolunteeredBalance(turns: TranscriptTurn[]): string {
+  const msgs = volunteeredVisitorMessagesForField(turns, REFINANCE_BALANCE_QUESTION_PATTERNS);
+  for (const msg of msgs) {
+    const balance = extractMoneyNearKeywords(msg, VOLUNTEERED_BALANCE_KEYWORDS);
+    if (balance) {
+      return balance;
+    }
+  }
+  return "";
+}
+
+function extractVolunteeredEstimatedValue(turns: TranscriptTurn[]): string {
+  const msgs = volunteeredVisitorMessagesForField(turns, REFINANCE_VALUE_QUESTION_PATTERNS);
+  for (const msg of msgs) {
+    const value = extractMoneyNearKeywords(msg, VOLUNTEERED_VALUE_KEYWORDS);
+    if (value) {
+      return value;
+    }
+  }
+  return "";
+}
+
+function extractVolunteeredRate(turns: TranscriptTurn[]): string {
+  const msgs = volunteeredVisitorMessagesForField(turns, REFINANCE_RATE_QUESTION_PATTERNS);
+  for (const msg of msgs) {
+    const rate = extractRateFromVolunteeredText(msg);
+    if (rate) {
+      return rate;
+    }
+  }
+  return "";
+}
+
+function extractVolunteeredAddress(turns: TranscriptTurn[]): string {
+  const primaryMsgs = volunteeredVisitorMessagesForField(turns, REFINANCE_ADDRESS_QUESTION_PATTERNS);
+  for (const msg of primaryMsgs) {
+    const address = extractAddressFromVolunteeredText(msg);
+    if (address) {
+      return address;
+    }
+  }
+  for (const msg of visitorMessagesFromTurns(turns)) {
+    const address = extractAddressFromVolunteeredText(msg);
+    if (address) {
+      return address;
+    }
+  }
+  return "";
+}
+
+/** Extract refinance property/loan fields from Sarah transcript for HubSpot. */
+function extractSarahRefinanceHubSpotFields(transcript: string): Record<string, string> {
+  const fields: Record<string, string> = {};
+  const turns = parseTranscriptTurns(transcript);
+
+  const goalReply = nextVisitorReplyAfterSarahQuestion(turns, REFINANCE_GOAL_QUESTION_PATTERNS);
+  const goal = parseRefinanceGoalFromReply(goalReply);
+  if (goal) fields.ihl_refinance_goal = goal;
+
+  const balanceReply = nextVisitorReplyAfterSarahQuestion(turns, REFINANCE_BALANCE_QUESTION_PATTERNS);
+  const balance = parseMoneyFromVisitorReply(balanceReply);
+  if (balance) fields.ihl_current_balance = balance;
+
+  const value = extractEstimatedValueFromTurns(turns);
+  if (value) fields.ihl_estimated_value = value;
+
+  const rateReply = nextVisitorReplyAfterSarahQuestion(turns, REFINANCE_RATE_QUESTION_PATTERNS);
+  const rate = parseRateFromVisitorReply(rateReply);
+  if (rate) fields.ihl_current_rate = rate;
+
+  const addressReply = nextVisitorReplyAfterSarahQuestion(turns, REFINANCE_ADDRESS_QUESTION_PATTERNS);
+  const addressFromReply = extractAddressFromVolunteeredText(addressReply) || addressReply.trim();
+  if (addressFromReply) {
+    fields.ihl_property_address = addressFromReply;
+  } else {
+    for (const turn of turns) {
+      if (turn.speaker !== "visitor") continue;
+      const volunteeredAddress = extractAddressFromVolunteeredText(turn.message);
+      if (volunteeredAddress) {
+        fields.ihl_property_address = volunteeredAddress;
+        break;
+      }
+    }
+  }
+
+  if (!fields.ihl_refinance_goal) {
+    const volunteeredGoal = extractVolunteeredRefinanceGoal(turns);
+    if (volunteeredGoal) fields.ihl_refinance_goal = volunteeredGoal;
+  }
+  if (!fields.ihl_current_balance) {
+    const volunteeredBalance = extractVolunteeredBalance(turns);
+    if (volunteeredBalance) fields.ihl_current_balance = volunteeredBalance;
+  }
+  if (!fields.ihl_estimated_value) {
+    const volunteeredValue = extractVolunteeredEstimatedValue(turns);
+    if (volunteeredValue) fields.ihl_estimated_value = volunteeredValue;
+  }
+  if (!fields.ihl_current_rate) {
+    const volunteeredRate = extractVolunteeredRate(turns);
+    if (volunteeredRate) fields.ihl_current_rate = volunteeredRate;
+  }
+  if (!fields.ihl_property_address) {
+    const volunteeredAddress = extractVolunteeredAddress(turns);
+    if (volunteeredAddress) fields.ihl_property_address = volunteeredAddress;
+  }
+
+  return fields;
+}
+
+const HELOC_PURPOSE_QUESTION_PATTERNS = [
+  /use the funds for/i,
+  /looking to use the funds/i,
+  /what are you looking to use/i,
+  /purpose.*(?:heloc|equity|funds)/i,
+];
+
+const HELOC_ACCESS_QUESTION_PATTERNS = [
+  /how much.*access/i,
+  /looking to access/i,
+  /ballpark figure/i,
+  /amount.*access/i,
+  /access amount/i,
+  /how much.*(?:draw|borrow|take out)/i,
+];
+
+const HELOC_VALUE_QUESTION_PATTERNS = [
+  /market value/i,
+  /estimate.*(?:home|house|property).*value/i,
+  /(?:home|house|property).*(?:worth|valued)/i,
+  /what would you estimate/i,
+  /how much.*(?:home|house|property).*(?:worth|valued)/i,
+  /property value/i,
+];
+
+const HELOC_BALANCE_QUESTION_PATTERNS = [
+  /principal balance/i,
+  /current (?:loan )?balance/i,
+  /mortgage balance/i,
+  /loan balance/i,
+  /how much (?:do you )?(?:still )?(?:owe|own)/i,
+  /remaining (?:on (?:your|the) (?:mortgage|loan))/i,
+  /current mortgage/i,
+];
+
+const HELOC_ADDRESS_QUESTION_PATTERNS = [
+  /address.*(?:property|home|heloc)/i,
+  /property.*address/i,
+  /what(?:'s| is) the address/i,
+  /where.*(?:property|home).*(?:located|is)/i,
+];
+
+const HELOC_VALUE_STOP_PATTERN =
+  /use the funds|how much.*access|credit situation|ballpark figure|mortgage balance|interest rate/i;
+
+const VOLUNTEERED_ACCESS_KEYWORDS =
+  /\b(access|draw|line amount|looking to access|want to access|need about|borrow|take out|ballpark|heloc amount|amount i need|looking to get|looking for|need|want)\b/i;
+
+function parseHelocPurposeFromReply(raw: string): string {
+  const trimmed = raw.trim();
+  if (!trimmed) return "";
+  const t = trimmed.toLowerCase();
+  if (/home\s+improvements?|home\s*improv|renovat|remodel|repair|upgrade/i.test(t)) return "home_improvements";
+  if (/debt\s*consolid|pay\s*off\s*debt|credit\s*card/i.test(t)) return "debt_consolidation";
+  if (/major\s*expense|medical|wedding|education|tuition/i.test(t)) return "major_expense";
+  if (/flexible|emergency|general|rainy\s*day|backup|something\s*else/i.test(t)) return "flexible_funds";
+  if (/unsure|not\s*sure|don'?t\s*know|exploring/i.test(t)) return "unsure";
+  return trimmed;
+}
+
+function parseDesiredAccessFromReply(raw: string): string {
+  const trimmed = raw.trim();
+  if (!trimmed) return "";
+  const t = trimmed.toLowerCase();
+  if (/unsure|not\s*sure|don'?t\s*know/.test(t)) return "unsure";
+  if (/under\s*25|less than\s*25|<\s*25|under\s*\$?\s*25/i.test(t)) return "under_25k";
+  if (/25.*75|25\s*[-–to]+\s*75|\$?25\s*k.*\$?75\s*k/i.test(t)) return "range_25_75";
+  if (/75.*150|75\s*[-–to]+\s*150|\$?75\s*k.*\$?150\s*k/i.test(t)) return "range_75_150";
+  if (/over\s*150|more than\s*150|>\s*150|\$?150\s*k\+/i.test(t)) return "over_150k";
+  const money = parseMoneyFromText(trimmed);
+  if (money) {
+    const n = Number(money);
+    if (Number.isFinite(n)) {
+      if (n < 25000) return "under_25k";
+      if (n <= 75000) return "range_25_75";
+      if (n <= 150000) return "range_75_150";
+      return "over_150k";
+    }
+    return money;
+  }
+  return trimmed;
+}
+
+function extractHelocPurposeFromVolunteeredText(text: string): string {
+  if (
+    !/heloc|home equity|equity line|use the funds|funds for|home improvements?|improv|consolid|access|line of credit/i.test(
+      text,
+    )
+  ) {
+    return "";
+  }
+  return parseHelocPurposeFromReply(text);
+}
+
+function extractDesiredAccessFromVolunteeredText(text: string): string {
+  const fromKeywords = extractMoneyNearKeywords(text, VOLUNTEERED_ACCESS_KEYWORDS);
+  if (fromKeywords) return parseDesiredAccessFromReply(fromKeywords);
+  if (VOLUNTEERED_ACCESS_KEYWORDS.test(text)) return parseDesiredAccessFromReply(text);
+
+  if (!/heloc|home equity|equity line|line of credit|access|draw/i.test(text)) {
+    return "";
+  }
+  for (const clause of textClauses(text)) {
+    if (VOLUNTEERED_BALANCE_KEYWORDS.test(clause) || VOLUNTEERED_VALUE_KEYWORDS.test(clause)) {
+      continue;
+    }
+    if (!/\$|\d{4,}/.test(clause)) continue;
+    const money = parseMoneyFromText(clause);
+    if (money) return parseDesiredAccessFromReply(money);
+  }
+  return "";
+}
+
+function extractVolunteeredHelocPurpose(turns: TranscriptTurn[]): string {
+  const msgs = volunteeredVisitorMessagesForField(turns, HELOC_PURPOSE_QUESTION_PATTERNS);
+  for (const msg of msgs) {
+    const parsed = extractHelocPurposeFromVolunteeredText(msg);
+    if (parsed) {
+      return parsed;
+    }
+  }
+  return "";
+}
+
+function extractVolunteeredDesiredAccess(turns: TranscriptTurn[]): string {
+  const msgs = volunteeredVisitorMessagesForField(turns, HELOC_ACCESS_QUESTION_PATTERNS);
+  for (const msg of msgs) {
+    const parsed = extractDesiredAccessFromVolunteeredText(msg);
+    if (parsed) {
+      return parsed;
+    }
+  }
+  return "";
+}
+
+/** Extract HELOC property/loan fields from Sarah transcript for HubSpot. */
+function extractSarahHelocHubSpotFields(transcript: string): Record<string, string> {
+  const fields: Record<string, string> = {};
+  const turns = parseTranscriptTurns(transcript);
+
+  const purposeReply = nextVisitorReplyAfterSarahQuestion(turns, HELOC_PURPOSE_QUESTION_PATTERNS);
+  const purpose = parseHelocPurposeFromReply(purposeReply);
+  if (purpose) fields.ihl_heloc_purpose = purpose;
+
+  const addressReply = nextVisitorReplyAfterSarahQuestion(turns, HELOC_ADDRESS_QUESTION_PATTERNS);
+  const addressFromReply = extractAddressFromVolunteeredText(addressReply) || addressReply.trim();
+  if (addressFromReply) {
+    fields.ihl_property_address = addressFromReply;
+  } else {
+    for (const turn of turns) {
+      if (turn.speaker !== "visitor") continue;
+      const volunteeredAddress = extractAddressFromVolunteeredText(turn.message);
+      if (volunteeredAddress) {
+        fields.ihl_property_address = volunteeredAddress;
+        break;
+      }
+    }
+  }
+
+  const value = extractEstimatedValueFromSarahTurns(
+    turns,
+    HELOC_VALUE_QUESTION_PATTERNS,
+    HELOC_VALUE_STOP_PATTERN,
+  );
+  if (value) fields.ihl_estimated_value = value;
+
+  const balanceReply = nextVisitorReplyAfterSarahQuestion(turns, HELOC_BALANCE_QUESTION_PATTERNS);
+  const balance = parseMoneyFromVisitorReply(balanceReply);
+  if (balance) fields.ihl_current_balance = balance;
+
+  const accessReply = nextVisitorReplyAfterSarahQuestion(turns, HELOC_ACCESS_QUESTION_PATTERNS);
+  const access = parseDesiredAccessFromReply(accessReply);
+  if (access) fields.ihl_desired_access = access;
+
+  if (!fields.ihl_heloc_purpose) {
+    const volunteeredPurpose = extractVolunteeredHelocPurpose(turns);
+    if (volunteeredPurpose) fields.ihl_heloc_purpose = volunteeredPurpose;
+  }
+  if (!fields.ihl_property_address) {
+    for (const msg of volunteeredVisitorMessagesForField(turns, HELOC_ADDRESS_QUESTION_PATTERNS)) {
+      const volunteeredAddress = extractAddressFromVolunteeredText(msg);
+      if (volunteeredAddress) {
+        fields.ihl_property_address = volunteeredAddress;
+        break;
+      }
+    }
+    if (!fields.ihl_property_address) {
+      for (const msg of visitorMessagesFromTurns(turns)) {
+        const volunteeredAddress = extractAddressFromVolunteeredText(msg);
+        if (volunteeredAddress) {
+          fields.ihl_property_address = volunteeredAddress;
+          break;
+        }
+      }
+    }
+  }
+  if (!fields.ihl_estimated_value) {
+    for (const msg of volunteeredVisitorMessagesForField(turns, HELOC_VALUE_QUESTION_PATTERNS)) {
+      const volunteeredValue = extractMoneyNearKeywords(msg, VOLUNTEERED_VALUE_KEYWORDS);
+      if (volunteeredValue) {
+        fields.ihl_estimated_value = volunteeredValue;
+        break;
+      }
+    }
+  }
+  if (!fields.ihl_current_balance) {
+    for (const msg of volunteeredVisitorMessagesForField(turns, HELOC_BALANCE_QUESTION_PATTERNS)) {
+      const volunteeredBalance = extractMoneyNearKeywords(msg, VOLUNTEERED_BALANCE_KEYWORDS);
+      if (volunteeredBalance) {
+        fields.ihl_current_balance = volunteeredBalance;
+        break;
+      }
+    }
+  }
+  if (!fields.ihl_desired_access) {
+    const volunteeredAccess = extractVolunteeredDesiredAccess(turns);
+    if (volunteeredAccess) fields.ihl_desired_access = volunteeredAccess;
+  }
+
+  return fields;
+}
+
+const REVERSE_GOAL_QUESTION_PATTERNS = [
+  /main goal/i,
+  /supplemental income|eliminating your mortgage payment/i,
+  /supplement.*income|eliminat(?:e|ing).*(?:mortgage )?payment/i,
+];
+
+const REVERSE_VALUE_QUESTION_PATTERNS = [
+  /market value/i,
+  /estimate.*(?:home|house|property).*value/i,
+  /(?:home|house|property).*(?:worth|valued)/i,
+  /what would you estimate/i,
+  /how much.*(?:home|house|property).*(?:worth|valued)/i,
+  /rough sense of how much your home is worth/i,
+  /when you purchased/i,
+];
+
+const REVERSE_BALANCE_QUESTION_PATTERNS = [
+  /principal balance/i,
+  /current (?:loan )?balance/i,
+  /mortgage balance/i,
+  /loan balance/i,
+  /how much (?:do you )?(?:still )?(?:owe|own)/i,
+  /remaining (?:on (?:your|the) (?:mortgage|loan))/i,
+  /current mortgage/i,
+];
+
+const REVERSE_RATE_QUESTION_PATTERNS = [
+  /interest rate/i,
+  /current rate/i,
+  /(?:do you )?know your (?:current )?rate/i,
+  /what rate/i,
+];
+
+const REVERSE_ADDRESS_QUESTION_PATTERNS = [
+  /address.*(?:property|home|reverse)/i,
+  /property.*address/i,
+  /what(?:'s| is) the address/i,
+  /where.*(?:property|home).*(?:located|is)/i,
+];
+
+const REVERSE_VALUE_STOP_PATTERN =
+  /primary residence|main goal|HUD-approved counselor|mortgage balance|interest rate|address of the property/i;
+
+function formatSarahRateForHubSpot(raw: string): string {
+  const trimmed = raw.trim();
+  if (!trimmed) return "";
+  return rateFromStructured(trimmed) ?? rateFromStructured(parseRateFromVisitorReply(trimmed)) ?? "";
+}
+
+function parseReverseGoalFromReply(raw: string): string {
+  const trimmed = raw.trim();
+  if (!trimmed) return "";
+  const t = trimmed.toLowerCase();
+  if (/supplement(?:al)?\s*income|monthly\s*income|extra\s*income|income stream/i.test(t)) {
+    return "supplement_income";
+  }
+  if (/eliminat(?:e|ing)\s*(?:my\s*)?(?:mortgage\s*)?payment|no\s*mortgage\s*payment|pay\s*off\s*mortgage|reduce\s*stress/i.test(t)) {
+    return "reduce_stress";
+  }
+  if (/stay\s*(?:in|at)\s*(?:my\s*)?home|age\s*in\s*place|remain\s*(?:in\s*)?home/i.test(t)) {
+    return "stay_home";
+  }
+  if (/upcoming\s*expense|major\s*expense|medical|bills/i.test(t)) {
+    return "upcoming_expenses";
+  }
+  if (/explor|something\s*else|unsure|not\s*sure|don'?t\s*know/i.test(t)) {
+    return "exploring";
+  }
+  return trimmed;
+}
+
+function extractReverseGoalFromVolunteeredText(text: string): string {
+  if (
+    !/reverse mortgage|reverse|supplemental income|supplement.*income|eliminat.*payment|stay.*home|main goal|age in place/i.test(
+      text,
+    )
+  ) {
+    return "";
+  }
+  return parseReverseGoalFromReply(text);
+}
+
+function extractVolunteeredReverseGoal(turns: TranscriptTurn[]): string {
+  for (const msg of volunteeredVisitorMessagesForField(turns, REVERSE_GOAL_QUESTION_PATTERNS)) {
+    const goal = extractReverseGoalFromVolunteeredText(msg);
+    if (goal) return goal;
+  }
+  return "";
+}
+
+function extractVolunteeredReverseAddress(turns: TranscriptTurn[]): string {
+  for (const msg of volunteeredVisitorMessagesForField(turns, REVERSE_ADDRESS_QUESTION_PATTERNS)) {
+    const address = extractAddressFromVolunteeredText(msg);
+    if (address) return address;
+  }
+  for (const msg of visitorMessagesFromTurns(turns)) {
+    const address = extractAddressFromVolunteeredText(msg);
+    if (address) return address;
+  }
+  return "";
+}
+
+/** Extract reverse mortgage property/loan fields from Sarah transcript for HubSpot. */
+function extractSarahReverseHubSpotFields(transcript: string): Record<string, string> {
+  const fields: Record<string, string> = {};
+  const turns = parseTranscriptTurns(transcript);
+
+  const goalReply = nextVisitorReplyAfterSarahQuestion(turns, REVERSE_GOAL_QUESTION_PATTERNS);
+  const goal = parseReverseGoalFromReply(goalReply);
+  if (goal) fields.ihl_reverse_goal = goal;
+
+  const addressReply = nextVisitorReplyAfterSarahQuestion(turns, REVERSE_ADDRESS_QUESTION_PATTERNS);
+  const addressFromReply = extractAddressFromVolunteeredText(addressReply);
+  if (addressFromReply) {
+    fields.ihl_property_address = addressFromReply;
+  } else {
+    for (const turn of turns) {
+      if (turn.speaker !== "visitor") continue;
+      const volunteeredAddress = extractAddressFromVolunteeredText(turn.message);
+      if (volunteeredAddress) {
+        fields.ihl_property_address = volunteeredAddress;
+        break;
+      }
+    }
+  }
+
+  const value = extractEstimatedValueFromSarahTurns(
+    turns,
+    REVERSE_VALUE_QUESTION_PATTERNS,
+    REVERSE_VALUE_STOP_PATTERN,
+  );
+  if (value) fields.ihl_estimated_value = value;
+
+  const balanceReply = nextVisitorReplyAfterSarahQuestion(turns, REVERSE_BALANCE_QUESTION_PATTERNS);
+  const balance = parseMoneyFromVisitorReply(balanceReply);
+  if (balance) fields.ihl_current_balance = balance;
+
+  const rateReply = nextVisitorReplyAfterSarahQuestion(turns, REVERSE_RATE_QUESTION_PATTERNS);
+  const rate = formatSarahRateForHubSpot(rateReply);
+  if (rate) fields.ihl_current_rate = rate;
+
+  if (!fields.ihl_reverse_goal) {
+    const volunteeredGoal = extractVolunteeredReverseGoal(turns);
+    if (volunteeredGoal) fields.ihl_reverse_goal = volunteeredGoal;
+  }
+  if (!fields.ihl_property_address) {
+    const volunteeredAddress = extractVolunteeredReverseAddress(turns);
+    if (volunteeredAddress) fields.ihl_property_address = volunteeredAddress;
+  }
+  if (!fields.ihl_estimated_value) {
+    for (const msg of volunteeredVisitorMessagesForField(turns, REVERSE_VALUE_QUESTION_PATTERNS)) {
+      const volunteeredValue = extractMoneyNearKeywords(msg, VOLUNTEERED_VALUE_KEYWORDS);
+      if (volunteeredValue) {
+        fields.ihl_estimated_value = volunteeredValue;
+        break;
+      }
+    }
+  }
+  if (!fields.ihl_current_balance) {
+    for (const msg of volunteeredVisitorMessagesForField(turns, REVERSE_BALANCE_QUESTION_PATTERNS)) {
+      const volunteeredBalance = extractMoneyNearKeywords(msg, VOLUNTEERED_BALANCE_KEYWORDS);
+      if (volunteeredBalance) {
+        fields.ihl_current_balance = volunteeredBalance;
+        break;
+      }
+    }
+  }
+  if (!fields.ihl_current_rate) {
+    for (const msg of volunteeredVisitorMessagesForField(turns, REVERSE_RATE_QUESTION_PATTERNS)) {
+      const volunteeredRate = formatSarahRateForHubSpot(extractRateFromVolunteeredText(msg));
+      if (volunteeredRate) {
+        fields.ihl_current_rate = volunteeredRate;
+        break;
+      }
+    }
+  }
+
+  return fields;
 }
 
 function generateSpeedAlert(
@@ -998,6 +1821,77 @@ export function createMortgageConciergeSendLeadRouter(): Router {
     } = b;
 
     const tRaw = String(transcript ?? "");
+    const visitorTranscript = getVisitorOnlyTranscript(tRaw);
+    const { type: transactionType, emoji: transactionEmoji } = detectTransactionType(visitorTranscript);
+    const purchaseTimeline = tRaw.match(/(\d+)\s*(month|year)/i)?.[0] ?? "";
+    const ihlBudget = tRaw.match(/\$[\d,]+|\d{3},\d{3}/i)?.[0] ?? "";
+    const refinanceHubSpotFields =
+      transactionType === "Refinance" ? extractSarahRefinanceHubSpotFields(tRaw) : {};
+    const helocHubSpotFields =
+      transactionType === "HELOC" ? extractSarahHelocHubSpotFields(tRaw) : {};
+    const reverseHubSpotFields =
+      transactionType === "Reverse Mortgage" ? extractSarahReverseHubSpotFields(tRaw) : {};
+
+    // TEMP DEBUG — Sarah → HubSpot lead sync (remove after investigation)
+    console.log("[hubspot][sarah] (1) detected loan type:", transactionType);
+    console.log("[hubspot][sarah] (2) ihl_loan_purpose value (loanPurpose):", transactionType);
+    console.log("[hubspot][sarah] (2b) path field: not sent on Sarah sync — contact form uses path; Sarah only sends loanPurpose → ihl_loan_purpose");
+    const hubSpotPayload = {
+      name: lead_name,
+      email: lead_email,
+      phone: String(lead_phone ?? ""),
+      leadSource: "Sarah AI",
+      loanPurpose: transactionType,
+      aiSourced: true,
+      purchaseTimeline,
+      extraProperties: {
+        ihl_lead_grade: String(lead_grade ?? ""),
+        ihl_budget: ihlBudget,
+        ...refinanceHubSpotFields,
+        ...helocHubSpotFields,
+        ...reverseHubSpotFields,
+      },
+    };
+    console.log("[hubspot][sarah] HubSpot sync payload:", hubSpotPayload);
+
+    void createOrUpdateHubSpotContact({
+      name: hubSpotPayload.name,
+      email: hubSpotPayload.email,
+      phone: hubSpotPayload.phone,
+      leadSource: hubSpotPayload.leadSource,
+      loanPurpose: hubSpotPayload.loanPurpose,
+      aiSourced: hubSpotPayload.aiSourced,
+      purchaseTimeline: hubSpotPayload.purchaseTimeline,
+      notes: [
+        ...buildSarahLeadHubSpotNotes({
+          preferredContact: String(preferred_contact ?? ""),
+          bestDay: String(best_day ?? ""),
+          bestTime: String(best_time ?? ""),
+        }),
+        `Sarah AI Conversation Transcript:\n${tRaw}`,
+      ],
+      extraProperties: hubSpotPayload.extraProperties,
+    })
+      .then(() => {
+        console.log("[hubspot][sarah] HubSpot contact sync succeeded for:", lead_email);
+        const nameParts = String(lead_name ?? "").trim().split(/\s+/);
+        const firstName = nameParts[0] ?? "";
+        const lastName = nameParts.slice(1).join(" ");
+        void sendBrevoWelcomeEmail({
+          firstName,
+          lastName,
+          email: String(lead_email ?? ""),
+          loanPurpose: transactionType,
+        }).catch(() => {});
+      })
+      .catch((err) => {
+        console.error("[hubspot][sarah] (3) HubSpot API sync failed:", err);
+        if (err instanceof Error) {
+          console.error("[hubspot][sarah] HubSpot error message:", err.message);
+          console.error("[hubspot][sarah] HubSpot error stack:", err.stack);
+        }
+      });
+
     const c = sanitizeHexColor(lead_color, "#6B7280");
     const bg = sanitizeHexColor(lead_bg, "#F9FAFB");
 
@@ -1018,8 +1912,6 @@ export function createMortgageConciergeSendLeadRouter(): Router {
       String(date ?? ""),
       String(time ?? ""),
     );
-
-    const { type: transactionType, emoji: transactionEmoji } = detectTransactionType(tRaw);
 
     const advisors = getMortgageAdvisors();
     const baseUrl = process.env.API_BASE_URL ?? "https://infinite-home-lending-production.up.railway.app";
