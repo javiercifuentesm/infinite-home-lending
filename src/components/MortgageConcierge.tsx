@@ -8,7 +8,34 @@ import { SarahKeyframes } from "./sarah/SarahKeyframes";
 import { SarahOrb } from "./sarah/SarahOrb";
 import { SarahStreamingCursor } from "./sarah/SarahStreamingCursor";
 const PDF_ASSISTANT_LABEL = "Sarah — IHL Mortgage Concierge";
+/** Narrower than the widget footer so EN wraps after the first sentence, not mid-second. */
+const SARAH_DISCLAIMER_WRAP: React.CSSProperties = {
+  maxWidth: "21.75rem",
+  marginLeft: "auto",
+  marginRight: "auto",
+};
 const IS_MOBILE = () => window.innerWidth < 768;
+
+/** Keeps expanded Sarah panels below the fixed site header. */
+function getSarahPanelInsets() {
+  const edge = IS_MOBILE() ? 16 : 24;
+  const headerGap = 16;
+  const extraClearance = 8;
+  const headerOffset = `var(--site-header-height, 100px)`;
+  const verticalReserve = headerGap + edge + extraClearance;
+  return {
+    edge,
+    headerGap,
+    top: `calc(${headerOffset} + ${headerGap}px)`,
+    bottom: `${edge}px`,
+    right: `${edge}px`,
+    maxHeight: `min(700px, calc(100dvh - ${headerOffset} - ${verticalReserve}px))`,
+    fullscreenMaxHeight: `calc(100dvh - ${headerOffset} - ${verticalReserve}px)`,
+    overlayPaddingTop: `calc(${headerOffset} + ${headerGap}px)`,
+    overlayPaddingBottom: `${edge}px`,
+    overlayPaddingX: `${edge}px`,
+  };
+}
 
 type Screen = "idle" | "widget" | "fullscreen" | "goodbye";
 
@@ -244,7 +271,10 @@ type InputBarProps = {
 const InputBar = ({
   inputText, setInputText, isThinking, isLockdown, isMicActive, micSupported,
   pendingDoc, setPendingDoc, inputRef, fileInputRef, onSend, onMic, onFileUpload, compact = false
-}: InputBarProps) => (
+}: InputBarProps) => {
+  const { t } = useLanguage();
+
+  return (
   <div style={{ padding: compact ? "10px 14px 12px" : "12px 16px 16px", flexShrink: 0, background: "rgba(0,0,0,0.15)" }}>
     {pendingDoc && (
       <div style={{ backgroundColor: "rgba(198,161,91,0.1)", border: "1px solid rgba(198,161,91,0.3)", borderRadius: "8px", padding: "6px 10px", marginBottom: "8px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
@@ -314,13 +344,14 @@ const InputBar = ({
             </svg>
           </button>
         </div>
-        <p style={{ color: "rgba(247,247,245,0.2)", fontSize: "10px", textAlign: "center", marginTop: "8px", lineHeight: 1.4 }}>
-          Sarah is our IHL Mortgage Concierge — not a licensed advisor. Information is educational only.
+        <p style={{ color: "rgba(247,247,245,0.2)", fontSize: "10px", textAlign: "center", marginTop: "8px", lineHeight: 1.4, ...SARAH_DISCLAIMER_WRAP }}>
+          {t("sarah.disclaimer")}
         </p>
       </>
     )}
   </div>
-);
+  );
+};
 
 type LeadFormProps = {
   leadData: LeadData;
@@ -750,6 +781,12 @@ function MortgageConciergeInner({ assetCapture = false }: { assetCapture?: boole
     setScreen("widget");
   }, [lang]);
 
+  useEffect(() => {
+    const onOpenSarah = () => handleOpenWidget();
+    window.addEventListener("ihl:open-sarah", onOpenSarah);
+    return () => window.removeEventListener("ihl:open-sarah", onOpenSarah);
+  }, [handleOpenWidget]);
+
   const handleEnterFullscreen = useCallback(() => {
     setScreen("fullscreen");
   }, []);
@@ -907,14 +944,20 @@ function MortgageConciergeInner({ assetCapture = false }: { assetCapture?: boole
 
   // ─── RENDER ───────────────────────────────────────────────────────────────
 
+  const sarahInsets = getSarahPanelInsets();
+
   return (
     <>
       <SarahKeyframes />
 
-      {/* SCREEN 1 — Idle orb */}
+      {/* SCREEN 1 — Idle orb (hidden on /solutions mobile — pill nav must stay unobstructed) */}
       {screen === "idle" && (
-        <button type="button" onClick={handleOpenWidget} className="fixed bottom-4 right-4 z-50"
-          style={{ background: "none", border: "none", padding: 0, cursor: "pointer" }}>
+        <button
+          type="button"
+          onClick={handleOpenWidget}
+          data-sarah-fab="idle"
+          className="fixed bottom-4 right-4 z-50"
+          style={{ background: "none", border: "none", padding: 0, cursor: "pointer", bottom: "max(1rem, env(safe-area-inset-bottom, 0px))" }}>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px", animation: "sarahBtnFloat 3.5s ease-in-out infinite" }}>
             <div style={{ position: "relative", width: "70px", height: "70px", display: "flex", alignItems: "center", justifyContent: "center" }}>
               {[0, 0.9, 1.8].map((delay, i) => (
@@ -946,11 +989,13 @@ function MortgageConciergeInner({ assetCapture = false }: { assetCapture?: boole
                   boxShadow: "0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(198,161,91,0.15)",
                 }
               : {
-                  bottom: IS_MOBILE() ? "16px" : "24px",
-                  right: IS_MOBILE() ? "16px" : "24px",
+                  top: sarahInsets.top,
+                  bottom: sarahInsets.bottom,
+                  right: sarahInsets.right,
                   width: "420px",
                   maxWidth: "calc(100vw - 48px)",
-                  maxHeight: "min(700px, calc(100dvh - 100px))",
+                  maxHeight: sarahInsets.maxHeight,
+                  minHeight: 0,
                   background: "linear-gradient(160deg, #0a2540 0%, #0B2A4A 40%, #0a1f35 100%)",
                   boxShadow: "0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(198,161,91,0.15)",
                   animation: "sarahWidgetExpand 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards",
@@ -958,7 +1003,17 @@ function MortgageConciergeInner({ assetCapture = false }: { assetCapture?: boole
           }
         >
           <SarahHeader onEnd={handleEndConversation} messageCount={messages.length} />
-          <div style={{ padding: "18px 18px 12px", display: "flex", flexDirection: "column", gap: "14px" }}>
+          <div
+            style={{
+              padding: "18px 18px 12px",
+              display: "flex",
+              flexDirection: "column",
+              gap: "14px",
+              flex: 1,
+              minHeight: 0,
+              overflowY: "auto",
+            }}
+          >
             {messages.slice(0, 1).map((msg, i) => (
               <React.Fragment key={i}>
                 <MessageBubble msg={msg} index={i} />
@@ -980,7 +1035,13 @@ function MortgageConciergeInner({ assetCapture = false }: { assetCapture?: boole
             )}
           </div>
           {/* Tap-to-chat area */}
-          <div style={{ padding: "10px 16px 16px", flexShrink: 0, background: "rgba(0,0,0,0.15)" }}>
+          <div
+            style={{
+              padding: "10px 16px calc(16px + env(safe-area-inset-bottom, 0px))",
+              flexShrink: 0,
+              background: "rgba(0,0,0,0.15)",
+            }}
+          >
             <div onClick={handleEnterFullscreen} style={{ display: "flex", gap: "8px", alignItems: "center", cursor: "pointer" }}>
               <button type="button" style={{ width: "40px", height: "40px", borderRadius: "50%", border: "none", backgroundColor: "rgba(198,161,91,0.1)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, cursor: "pointer" }}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C6A15B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -1004,8 +1065,8 @@ function MortgageConciergeInner({ assetCapture = false }: { assetCapture?: boole
                 </svg>
               </div>
             </div>
-            <p style={{ color: "rgba(247,247,245,0.2)", fontSize: "10px", textAlign: "center", marginTop: "8px" }}>
-              Sarah is our IHL Mortgage Concierge — not a licensed advisor. Information is educational only.
+            <p style={{ color: "rgba(247,247,245,0.2)", fontSize: "10px", textAlign: "center", marginTop: "8px", ...SARAH_DISCLAIMER_WRAP }}>
+              {t("sarah.disclaimer")}
             </p>
           </div>
         </div>
@@ -1019,12 +1080,15 @@ function MortgageConciergeInner({ assetCapture = false }: { assetCapture?: boole
             inset: 0,
             zIndex: 9999,
             display: "flex",
-            alignItems: "center",
+            alignItems: "stretch",
             justifyContent: "center",
             background: "rgba(0,0,0,0.6)",
             backdropFilter: "blur(12px)",
             WebkitBackdropFilter: "blur(12px)",
-            padding: "20px",
+            paddingTop: sarahInsets.overlayPaddingTop,
+            paddingBottom: sarahInsets.overlayPaddingBottom,
+            paddingLeft: sarahInsets.overlayPaddingX,
+            paddingRight: sarahInsets.overlayPaddingX,
           }}
           onClick={(e) => { if (e.target === e.currentTarget) handleEndConversation(); }}
         >
@@ -1036,13 +1100,12 @@ function MortgageConciergeInner({ assetCapture = false }: { assetCapture?: boole
               width: "100%",
               height: "100%",
               maxWidth: "900px",
-              maxHeight: "100dvh",
+              maxHeight: sarahInsets.fullscreenMaxHeight,
               background: "linear-gradient(160deg, #0a2540 0%, #0B2A4A 50%, #071a2e 100%)",
-              // On desktop (md+), add rounded corners and limit height
               borderRadius: "0",
               overflow: "hidden",
             }}
-            className="md:max-h-[90vh] md:rounded-2xl md:mx-8"
+            className="md:rounded-2xl md:mx-8"
           >
             <SarahHeader onEnd={handleEndConversation} onSave={downloadPDF} messageCount={messages.length} />
 
@@ -1123,6 +1186,25 @@ type MortgageConciergeProps = { assetCapture?: boolean };
 
 export default function MortgageConcierge({ assetCapture = false }: MortgageConciergeProps) {
   const location = useLocation();
+  const [isMobile, setIsMobile] = useState(
+    () => typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches,
+  );
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const sync = () => setIsMobile(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
+  const hideOnSolutionsMobile =
+    !assetCapture &&
+    isMobile &&
+    (location.pathname === "/solutions" || location.pathname === "/solutions/");
+
   if (!assetCapture && location.pathname.startsWith("/deal-desk")) return null;
+  if (hideOnSolutionsMobile) return null;
+
   return <MortgageConciergeInner assetCapture={assetCapture} />;
 }

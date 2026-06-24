@@ -1,0 +1,552 @@
+/**
+ * Loan program detail — premium section layout below the program header.
+ * Mirrors About page rhythm; content comes from existing loan product data.
+ */
+.loan-program-detail {
+  --lpd-scroll-offset: calc(var(--site-header-height, 100px) + 1.25rem);
+  --lpd-card-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --lpd-card-duration: 300ms;
+}
+
+.loan-program-detail .lpd-section {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
+@media (min-width: 1024px) {
+  .loan-program-detail .lpd-section {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+}
+
+.loan-program-detail .lpd-section--cta {
+  padding-top: 5.5rem;
+  padding-bottom: 6.5rem;
+}
+
+@media (min-width: 1024px) {
+  .loan-program-detail .lpd-section--cta {
+    padding-top: 6.5rem;
+    padding-bottom: 7.5rem;
+  }
+}
+
+.loan-program-detail .lpd-section--compact-top {
+  padding-top: 2.5rem;
+}
+
+@media (min-width: 1024px) {
+  .loan-program-detail .lpd-section--compact-top {
+    padding-top: 3rem;
+  }
+}
+
+/* Fit badges */
+.loan-program-detail .lpd-fit-badge {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  min-height: 100%;
+  border-radius: 4px;
+  border: 1px solid rgb(226 232 240 / 0.9);
+  background: rgb(255 255 255 / 0.72);
+  backdrop-filter: blur(8px);
+  padding: 1rem 1.125rem;
+  box-shadow: 0 8px 28px rgb(10 25 47 / 0.04);
+  transition:
+    border-color var(--lpd-card-duration) var(--lpd-card-ease),
+    box-shadow var(--lpd-card-duration) var(--lpd-card-ease),
+    transform var(--lpd-card-duration) var(--lpd-card-ease);
+}
+
+.loan-program-detail .lpd-fit-icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 4px;
+  border: 1px solid rgb(197 160 89 / 0.25);
+  background: rgb(197 160 89 / 0.08);
+  color: rgb(197 160 89);
+}
+
+.loan-program-detail .lpd-fit-text {
+  font-size: 0.875rem;
+  line-height: 1.55;
+  font-weight: 500;
+  color: rgb(51 65 85);
+}
+
+@media (min-width: 1024px) {
+  .loan-program-detail .lpd-fit-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.25rem;
+  }
+
+  .loan-program-detail .lpd-fit-grid > li {
+    flex: 0 1 calc(33.333% - 0.875rem);
+    max-width: calc(33.333% - 0.875rem);
+    min-width: 15rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .loan-program-detail .lpd-fit-grid > li {
+    flex: 0 1 calc(25% - 0.95rem);
+    max-width: calc(25% - 0.95rem);
+  }
+}
+
+/* Benefit cards */
+.loan-program-detail .lpd-benefit-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 9.5rem;
+  border-radius: 4px;
+  border: 1px solid rgb(226 232 240 / 0.9);
+  background: rgb(255 255 255 / 0.78);
+  backdrop-filter: blur(10px);
+  padding: 1.5rem 1.625rem;
+  box-shadow: 0 10px 32px rgb(10 25 47 / 0.05);
+  transition:
+    border-color var(--lpd-card-duration) var(--lpd-card-ease),
+    box-shadow var(--lpd-card-duration) var(--lpd-card-ease),
+    transform var(--lpd-card-duration) var(--lpd-card-ease);
+}
+
+.loan-program-detail .lpd-benefit-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 4px;
+  border: 1px solid rgb(197 160 89 / 0.22);
+  background: rgb(197 160 89 / 0.07);
+  color: rgb(197 160 89);
+  margin-bottom: 1rem;
+}
+
+.loan-program-detail .lpd-benefit-title {
+  font-family: var(--font-heading, inherit);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.35;
+  color: rgb(10 25 47);
+  margin-bottom: 0.5rem;
+}
+
+.loan-program-detail .lpd-benefit-desc {
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: rgb(71 85 105);
+  margin-top: auto;
+}
+
+@media (min-width: 1024px) {
+  .loan-program-detail .lpd-benefit-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.75rem;
+  }
+
+  .loan-program-detail .lpd-benefit-grid > li {
+    flex: 0 1 calc(33.333% - 1.2rem);
+    max-width: calc(33.333% - 1.2rem);
+    min-width: 16rem;
+  }
+}
+
+/* Guided process — flagship journey */
+.loan-program-detail .lpd-section--process {
+  padding-top: 5.5rem;
+  padding-bottom: 5.5rem;
+}
+
+@media (min-width: 1024px) {
+  .loan-program-detail .lpd-section--process {
+    padding-top: 7rem;
+    padding-bottom: 7rem;
+  }
+}
+
+.loan-program-detail .lpd-process-flow {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+  max-width: 76rem;
+  margin-inline: auto;
+  list-style: none;
+  padding: 0;
+}
+
+@media (min-width: 640px) {
+  .loan-program-detail .lpd-process-flow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .loan-program-detail .lpd-process-flow {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: center;
+    gap: 0;
+  }
+}
+
+.loan-program-detail .lpd-process-group {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  height: 100%;
+}
+
+@media (min-width: 1024px) {
+  .loan-program-detail .lpd-process-group {
+    flex: 1;
+    flex-direction: row;
+    align-items: stretch;
+    max-width: none;
+  }
+}
+
+.loan-program-detail .lpd-process-step {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  width: 100%;
+  min-height: 17.5rem;
+  height: 100%;
+  border-radius: 4px;
+  border: 1px solid rgb(255 255 255 / 0.12);
+  background: rgb(255 255 255 / 0.06);
+  padding: 1.75rem 1.625rem 2rem;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 36px rgb(0 0 0 / 0.12);
+  transition:
+    border-color var(--lpd-card-duration) var(--lpd-card-ease),
+    background-color var(--lpd-card-duration) var(--lpd-card-ease),
+    box-shadow var(--lpd-card-duration) var(--lpd-card-ease),
+    transform var(--lpd-card-duration) var(--lpd-card-ease);
+}
+
+@media (min-width: 1024px) {
+  .loan-program-detail .lpd-process-step {
+    min-height: 19rem;
+    padding: 2rem 1.5rem 2.125rem;
+  }
+}
+
+.loan-program-detail .lpd-process-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 50%;
+  border: 1px solid rgb(197 160 89 / 0.32);
+  background: rgb(197 160 89 / 0.08);
+  color: rgb(197 160 89);
+  margin-bottom: 1.25rem;
+  box-shadow: 0 0 0 6px rgb(197 160 89 / 0.05);
+  transition:
+    border-color var(--lpd-card-duration) var(--lpd-card-ease),
+    background-color var(--lpd-card-duration) var(--lpd-card-ease),
+    box-shadow var(--lpd-card-duration) var(--lpd-card-ease),
+    color var(--lpd-card-duration) var(--lpd-card-ease);
+}
+
+.loan-program-detail .lpd-process-num {
+  display: block;
+  font-family: var(--font-heading, inherit);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgb(197 160 89 / 0.88);
+  margin-bottom: 0.75rem;
+  transition: color var(--lpd-card-duration) var(--lpd-card-ease);
+}
+
+.loan-program-detail .lpd-process-title {
+  font-family: var(--font-heading, inherit);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.35;
+  color: rgb(255 255 255 / 0.94);
+  margin-bottom: 1rem;
+}
+
+.loan-program-detail .lpd-process-divider {
+  width: 2.25rem;
+  height: 1px;
+  background: rgb(197 160 89 / 0.45);
+  margin-bottom: 1rem;
+  transition:
+    width var(--lpd-card-duration) var(--lpd-card-ease),
+    background-color var(--lpd-card-duration) var(--lpd-card-ease);
+}
+
+.loan-program-detail .lpd-process-desc {
+  font-size: 0.8125rem;
+  line-height: 1.68;
+  font-weight: 300;
+  color: rgb(255 255 255 / 0.62);
+  margin-top: auto;
+}
+
+.loan-program-detail .lpd-process-connector {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .loan-program-detail .lpd-process-connector {
+    display: flex;
+    align-items: center;
+    align-self: center;
+    flex-shrink: 0;
+    gap: 0;
+    padding: 0 0.25rem;
+  }
+
+  .loan-program-detail .lpd-process-connector-line {
+    display: block;
+    width: 1.75rem;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      rgb(197 160 89 / 0.15) 0%,
+      rgb(197 160 89 / 0.55) 100%
+    );
+  }
+
+  .loan-program-detail .lpd-process-connector-node {
+    display: block;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: rgb(197 160 89 / 0.7);
+    box-shadow: 0 0 0 3px rgb(197 160 89 / 0.12);
+    flex-shrink: 0;
+  }
+}
+
+/* Stat highlights band */
+.loan-program-detail .lpd-stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  height: 100%;
+  border-radius: 4px;
+  border: 1px solid rgb(255 255 255 / 0.12);
+  background: rgb(255 255 255 / 0.05);
+  padding: 1.375rem 1.5rem;
+  backdrop-filter: blur(4px);
+}
+
+.loan-program-detail .lpd-stat-label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgb(197 160 89 / 0.9);
+}
+
+.loan-program-detail .lpd-stat-value {
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  font-weight: 500;
+  color: rgb(255 255 255 / 0.92);
+}
+
+@media (min-width: 1024px) {
+  .loan-program-detail .lpd-stat-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.25rem;
+  }
+
+  .loan-program-detail .lpd-stat-grid > * {
+    flex: 0 1 calc(25% - 0.95rem);
+    max-width: calc(25% - 0.95rem);
+    min-width: 11rem;
+  }
+}
+
+/* FAQ accordion */
+.loan-program-detail .lpd-faq-item {
+  border-radius: 4px;
+  border: 1px solid rgb(226 232 240 / 0.9);
+  background: rgb(255 255 255 / 0.85);
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgb(10 25 47 / 0.03);
+}
+
+.loan-program-detail .lpd-faq-trigger {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.125rem 1.375rem;
+  text-align: left;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.loan-program-detail .lpd-faq-trigger:hover {
+  background: rgb(248 250 252 / 0.8);
+}
+
+.loan-program-detail .lpd-faq-trigger:focus-visible {
+  outline: none;
+  box-shadow: inset 0 0 0 2px rgb(197 160 89 / 0.45);
+}
+
+.loan-program-detail .lpd-faq-title {
+  font-family: var(--font-heading, inherit);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: rgb(10 25 47);
+  line-height: 1.35;
+}
+
+.loan-program-detail .lpd-faq-chevron {
+  flex-shrink: 0;
+  color: rgb(148 163 184);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.loan-program-detail .lpd-faq-chevron--open {
+  transform: rotate(180deg);
+}
+
+.loan-program-detail .lpd-faq-panel {
+  display: grid;
+  transition: grid-template-rows 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.loan-program-detail .lpd-faq-panel-inner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.loan-program-detail .lpd-faq-body {
+  padding: 0 1.375rem 1.375rem;
+  font-size: 0.9375rem;
+  line-height: 1.68;
+  color: rgb(71 85 105);
+}
+
+.loan-program-detail .lpd-faq-body ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+}
+
+.loan-program-detail .lpd-faq-body li + li {
+  margin-top: 0.5rem;
+}
+
+.loan-program-detail .lpd-faq-body p + p {
+  margin-top: 1rem;
+}
+
+/* Sarah advisory band */
+.loan-program-detail .lpd-sarah-card {
+  border-radius: 4px;
+  border: 1px solid rgb(226 232 240 / 0.9);
+  background: linear-gradient(145deg, rgb(255 255 255 / 0.95), rgb(248 250 252 / 0.88));
+  box-shadow: 0 12px 40px rgb(10 25 47 / 0.07);
+  padding: 1.75rem;
+}
+
+.loan-program-detail .lpd-sarah-orb-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+/* Hover — pointer devices only */
+@media (hover: hover) and (pointer: fine) {
+  .loan-program-detail .lpd-fit-badge:hover,
+  .loan-program-detail .lpd-benefit-card:hover {
+    border-color: rgb(197 160 89 / 0.35);
+    box-shadow: 0 14px 40px rgb(10 25 47 / 0.08);
+    transform: translateY(-2px);
+  }
+
+  .loan-program-detail .lpd-process-step:hover {
+    border-color: rgb(197 160 89 / 0.28);
+    background: rgb(255 255 255 / 0.09);
+    box-shadow:
+      0 16px 40px rgb(0 0 0 / 0.18),
+      0 0 0 1px rgb(197 160 89 / 0.1);
+    transform: translateY(-4px);
+  }
+
+  .loan-program-detail .lpd-process-step:hover .lpd-process-icon-wrap {
+    border-color: rgb(197 160 89 / 0.45);
+    background: rgb(197 160 89 / 0.12);
+    box-shadow:
+      0 0 0 6px rgb(197 160 89 / 0.08),
+      0 0 20px rgb(197 160 89 / 0.1);
+    color: rgb(212 176 106);
+  }
+
+  .loan-program-detail .lpd-process-step:hover .lpd-process-num {
+    color: rgb(197 160 89);
+  }
+
+  .loan-program-detail .lpd-process-step:hover .lpd-process-divider {
+    width: 2.75rem;
+    background: rgb(197 160 89 / 0.72);
+  }
+
+  .loan-program-detail .lpd-process-group:hover .lpd-process-connector-line {
+    background: linear-gradient(
+      90deg,
+      rgb(197 160 89 / 0.25) 0%,
+      rgb(197 160 89 / 0.72) 100%
+    );
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loan-program-detail .lpd-fit-badge,
+  .loan-program-detail .lpd-benefit-card,
+  .loan-program-detail .lpd-process-step {
+    transition: none;
+  }
+
+  .loan-program-detail .lpd-process-icon-wrap,
+  .loan-program-detail .lpd-process-divider,
+  .loan-program-detail .lpd-process-num {
+    transition: none;
+  }
+
+  .loan-program-detail .lpd-fit-badge:hover,
+  .loan-program-detail .lpd-benefit-card:hover,
+  .loan-program-detail .lpd-process-step:hover {
+    transform: none;
+  }
+}

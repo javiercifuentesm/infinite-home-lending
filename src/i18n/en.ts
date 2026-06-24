@@ -12,6 +12,8 @@ export const en = {
   "footer.askSarah": "Ask Sarah",
 
   "sarah.askSarah": "Ask Sarah",
+  "sarah.disclaimer":
+    "Sarah is our IHL Mortgage Concierge — not a licensed advisor. Information is educational only.",
 
   "trustBar.nmls": "NMLS #2831765",
   "trustBar.region": "Washington, D.C.",
@@ -22,7 +24,7 @@ export const en = {
     "Premium mortgage guidance for Maryland, DC, and Virginia. Compare loan options, run smart calculators, and get advice built around your goals—not just a rate.",
   "about.meta.title": "About Us",
   "about.meta.description":
-    "Meet Infinite Home Lending—MD, DC, and VA advisors focused on clarity, strategy, and direct guidance from first conversation through closing and beyond.",
+    "Learn who Infinite Home Lending is, why we exist, and how our advisory-first approach helps borrowers navigate home financing with clarity and confidence.",
   "solutions.meta.title": "Loan Solutions",
   "solutions.meta.description":
     "Compare Conventional, FHA, VA, USDA, refinance, HELOC, and specialty loans for Maryland, DC, and Virginia. Understand tradeoffs before you pick a structure.",
@@ -61,7 +63,13 @@ export const en = {
   "footer.loanDisclaimer": "All loans subject to credit approval. Rates and terms subject to change without notice.",
   "footer.serving": "Serving Washington, D.C.",
   "footer.privacy": "Privacy Policy",
-  "footer.terms": "Terms of Service",
+  "footer.terms": "Terms of Use",
+  "footer.compliance": "Compliance",
+  "footer.compliancePrivacy": "Privacy Policy",
+  "footer.complianceTerms": "Terms of Use",
+  "footer.complianceSms": "SMS Terms & Conditions",
+  "footer.complianceLicensing": "Licensing Information",
+  "footer.complianceEqualHousing": "Equal Housing Opportunity",
 
   // Home — Hero
   "home.hero.line1": "Anyone can quote a rate.",
@@ -1813,12 +1821,22 @@ export const en = {
   "howItWorks.compare.closing": "This is where the structure of your loan starts to matter.",
   "howItWorks.compare.pullQuote":
     "The difference isn't more options—it's avoiding the wrong decision from the start.",
-  "howItWorks.why.title": "Why this structure matters",
-  "howItWorks.why.body1": "A mortgage is not just a transaction—it's a long-term financial decision.",
+  "howItWorks.why.title": "Why This Structure Matters",
+  "howItWorks.why.body1":
+    "A mortgage is more than a transaction—it's a long-term financial decision that can influence your stability, flexibility, and future opportunities.",
   "howItWorks.why.body2": "The way it's structured impacts your monthly cash flow, your flexibility, and your future opportunities.",
   "howItWorks.why.body3": "The way your loan is structured can impact you by tens of thousands of dollars over time.",
   "howItWorks.why.body4": "This process exists to make sure those decisions are made with clarity—not pressure.",
   "howItWorks.why.body5": "Most people only understand this after they've gone through it. Our goal is to make sure you understand it before.",
+  "howItWorks.why.card1.title": "Monthly Cash Flow",
+  "howItWorks.why.card1.body":
+    "The way your loan is structured can affect your monthly payment, your financial flexibility, and how you plan for the next stage of your journey.",
+  "howItWorks.why.card2.title": "Long-Term Impact",
+  "howItWorks.why.card2.body":
+    "Every mortgage decision can influence your future opportunities, overall financial position, and the total cost of financing over time.",
+  "howItWorks.why.card3.title": "Clarity Before Pressure",
+  "howItWorks.why.card3.body":
+    "Our process is designed to help you understand your options, make informed decisions, and move forward with confidence.",
   "howItWorks.finalCta.eyebrow": "You've seen How We Work. Now take the first step.",
   "howItWorks.finalCta.title": "Ready to move forward with a defined strategy?",
   "howItWorks.finalCta.body": "You don't need to have everything figured out. You just need a clear starting point.",
@@ -1831,6 +1849,227 @@ export const en = {
 
   // Solutions page
   "solutions.eyebrow": "Loan Solutions",
+  "solutions.hero.navLabel": "Financing programs",
+  "solutions.hero.navScrollPrev": "Scroll programs left",
+  "solutions.hero.navScrollNext": "Scroll programs right",
+  "solutions.hero.featuresLabel": "Program features",
+  "solutions.hero.bestForLabel": "Best for",
+  "solutions.hero.disclosure":
+    "All financing options are subject to credit approval, property eligibility, and applicable loan program guidelines. Financing availability, rates, terms, and qualification requirements may vary.",
+  "solutions.hero.slides.conventional.badgeLabel": "Conventional",
+  "solutions.hero.slides.conventional.eyebrow": "Conventional Financing",
+  "solutions.hero.slides.conventional.headline":
+    "Own Your Home With Flexible Terms and Broad Lender Choice.",
+  "solutions.hero.slides.conventional.subheadline":
+    "Competitive rates and flexible terms for buyers with stable income and good credit—without government program overlays.",
+  "solutions.hero.slides.conventional.feature.0.title": "3% Down Options",
+  "solutions.hero.slides.conventional.feature.0.desc":
+    "Put as little as 3% down with paths to eliminate mortgage insurance.",
+  "solutions.hero.slides.conventional.feature.1.title": "Flexible Rate Terms",
+  "solutions.hero.slides.conventional.feature.1.desc":
+    "Fixed and adjustable options without FHA, VA, or USDA program overlays.",
+  "solutions.hero.slides.conventional.feature.2.title": "Nationwide Lender Choice",
+  "solutions.hero.slides.conventional.feature.2.desc":
+    "Widely available across lenders with a streamlined path for documented income.",
+  "solutions.hero.slides.conventional.bestFor.0": "Stable income",
+  "solutions.hero.slides.conventional.bestFor.1": "Good credit",
+  "solutions.hero.slides.conventional.bestFor.2": "Primary home buyers",
+  "solutions.hero.slides.conventional.bestFor.3": "Flexible terms",
+  "solutions.hero.slides.conventional.cta": "Explore Conventional Financing →",
+  "solutions.hero.slides.conventional.imageAlt":
+    "Elegant brick colonial home representing conventional purchase financing",
+  "solutions.hero.slides.dscr.badgeLabel": "DSCR Investor",
+  "solutions.hero.slides.dscr.eyebrow": "Investor Financing",
+  "solutions.hero.slides.dscr.headline":
+    "Grow Your Real Estate Portfolio Without Tax Returns",
+  "solutions.hero.slides.dscr.subheadline":
+    "Qualify using the property's rental income instead of traditional tax returns, W-2s, or personal income documentation.",
+  "solutions.hero.slides.dscr.feature.0.title": "Qualify Using Rental Income",
+  "solutions.hero.slides.dscr.feature.0.desc":
+    "Focus on the property's cash flow rather than personal tax returns or W-2 income.",
+  "solutions.hero.slides.dscr.feature.1.title": "Multiple Financed Properties",
+  "solutions.hero.slides.dscr.feature.1.desc":
+    "Designed for investors who own or plan to own multiple rental properties.",
+  "solutions.hero.slides.dscr.feature.2.title": "Purchase, Refinance, or Cash-Out",
+  "solutions.hero.slides.dscr.feature.2.desc":
+    "Access financing solutions designed for investors seeking flexibility and growth.",
+  "solutions.hero.slides.dscr.bestFor.0": "Real Estate Investors",
+  "solutions.hero.slides.dscr.bestFor.1": "Self-Employed Borrowers",
+  "solutions.hero.slides.dscr.bestFor.2": "Multiple Properties",
+  "solutions.hero.slides.dscr.bestFor.3": "Short-Term Rentals",
+  "solutions.hero.slides.dscr.cta": "Explore DSCR Financing →",
+  "solutions.hero.slides.dscr.imageAlt":
+    "Investment property model on cash representing DSCR investor financing",
+  "solutions.hero.slides.fha100down.badgeLabel": "FHA $100 Down",
+  "solutions.hero.slides.fha100down.eyebrow": "First-Time Buyer Program",
+  "solutions.hero.slides.fha100down.headline": "Buy a Home With Just $100 Down.",
+  "solutions.hero.slides.fha100down.subheadline":
+    "For eligible HUD homes, this program helps qualified buyers become homeowners with far less upfront cash.",
+  "solutions.hero.slides.fha100down.feature.0.title": "$100 Down Payment",
+  "solutions.hero.slides.fha100down.feature.0.desc":
+    "Buy an eligible HUD home with as little as $100 down instead of the standard FHA minimum.",
+  "solutions.hero.slides.fha100down.feature.1.title": "Become a Homeowner Sooner",
+  "solutions.hero.slides.fha100down.feature.1.desc":
+    "Lower upfront cash requirements can help qualified buyers buy sooner.",
+  "solutions.hero.slides.fha100down.feature.2.title": "Finance Repairs & Improvements",
+  "solutions.hero.slides.fha100down.feature.2.desc":
+    "May pair with eligible FHA renovation programs for purchase and improvements.",
+  "solutions.hero.slides.fha100down.bestFor.0": "First-Time Buyers",
+  "solutions.hero.slides.fha100down.bestFor.1": "Limited Savings",
+  "solutions.hero.slides.fha100down.bestFor.2": "Owner-Occupants",
+  "solutions.hero.slides.fha100down.bestFor.3": "HUD Homes",
+  "solutions.hero.slides.fha100down.cta": "Explore FHA $100 Down →",
+  "solutions.hero.slides.fha100down.imageAlt":
+    "Smiling couple in front of a home representing FHA $100 down homeownership opportunity",
+  "solutions.hero.slides.dpaAdvantage.badgeLabel": "DPA Advantage",
+  "solutions.hero.slides.dpaAdvantage.eyebrow": "Forgivable Grant Program",
+  "solutions.hero.slides.dpaAdvantage.headline": "Receive Up To 3.5% Toward Your Down Payment.",
+  "solutions.hero.slides.dpaAdvantage.subheadline":
+    "Designed to help qualified buyers reduce upfront cash requirements through a fully forgivable grant that does not require repayment.",
+  "solutions.hero.slides.dpaAdvantage.feature.0.title": "Up To 3.5% Grant Assistance",
+  "solutions.hero.slides.dpaAdvantage.feature.0.desc":
+    "Help cover your down payment with a grant equal to 2% or 3.5% of the purchase price.",
+  "solutions.hero.slides.dpaAdvantage.feature.1.title": "No Repayment Required",
+  "solutions.hero.slides.dpaAdvantage.feature.1.desc":
+    "The grant is fully forgivable on the day of closing with no repayment or recapture period.",
+  "solutions.hero.slides.dpaAdvantage.feature.2.title": "Combine With FHA Financing",
+  "solutions.hero.slides.dpaAdvantage.feature.2.desc":
+    "May be used with eligible FHA purchase and renovation programs for additional flexibility.",
+  "solutions.hero.slides.dpaAdvantage.bestFor.0": "First-Time Buyers",
+  "solutions.hero.slides.dpaAdvantage.bestFor.1": "Limited Savings",
+  "solutions.hero.slides.dpaAdvantage.bestFor.2": "FHA Borrowers",
+  "solutions.hero.slides.dpaAdvantage.bestFor.3": "Down Payment Assistance",
+  "solutions.hero.slides.dpaAdvantage.cta": "Explore DPA Advantage →",
+  "solutions.hero.slides.dpaAdvantage.imageAlt":
+    "Happy couple moving into a new home representing down payment assistance grant programs",
+  "solutions.hero.slides.fhaRepairEscrow.badgeLabel": "FHA Repair Escrow",
+  "solutions.hero.slides.fhaRepairEscrow.eyebrow": "Minor Repair Financing Program",
+  "solutions.hero.slides.fhaRepairEscrow.headline":
+    "Buy a Home That Needs Minor Repairs Without Paying for Them Upfront.",
+  "solutions.hero.slides.fhaRepairEscrow.subheadline":
+    "Finance up to $10,000 in eligible repairs through an FHA repair escrow while completing your home purchase.",
+  "solutions.hero.slides.fhaRepairEscrow.feature.0.title": "Up To $10,000 Repair Escrow",
+  "solutions.hero.slides.fhaRepairEscrow.feature.0.desc":
+    "Set aside eligible repair funds in escrow at closing instead of paying for minor updates out of pocket.",
+  "solutions.hero.slides.fhaRepairEscrow.feature.1.title": "Buy Now, Repair After Closing",
+  "solutions.hero.slides.fhaRepairEscrow.feature.1.desc":
+    "Complete your purchase on a structurally sound home and address cosmetic or minor maintenance items afterward.",
+  "solutions.hero.slides.fhaRepairEscrow.feature.2.title": "Expand Your Home Search",
+  "solutions.hero.slides.fhaRepairEscrow.feature.2.desc":
+    "Consider move-in capable homes with dated fixtures or light cosmetic needs that other buyers may pass on.",
+  "solutions.hero.slides.fhaRepairEscrow.bestFor.0": "Minor Repairs Needed",
+  "solutions.hero.slides.fhaRepairEscrow.bestFor.1": "First-Time Buyers",
+  "solutions.hero.slides.fhaRepairEscrow.bestFor.2": "FHA-Eligible Homes",
+  "solutions.hero.slides.fhaRepairEscrow.bestFor.3": "Limited Upfront Cash",
+  "solutions.hero.slides.fhaRepairEscrow.cta": "Explore FHA Repair Escrow →",
+  "solutions.hero.slides.fhaRepairEscrow.imageAlt":
+    "Young couple touring a move-in capable home with minor cosmetic repair needs alongside a real estate agent",
+  "solutions.hero.slides.fha203k.badgeLabel": "FHA 203(k)",
+  "solutions.hero.slides.fha203k.eyebrow": "Renovation Financing",
+  "solutions.hero.slides.fha203k.headline": "Buy Where You Want To Live And Finance The Renovations.",
+  "solutions.hero.slides.fha203k.subheadline":
+    "Finance both the purchase and eligible renovations with a single mortgage—allowing you to transform a property without paying for repairs out of pocket.",
+  "solutions.hero.slides.fha203k.feature.0.title": "Purchase + Renovation In One Loan",
+  "solutions.hero.slides.fha203k.feature.0.desc":
+    "Finance the home purchase and eligible improvements together instead of obtaining separate financing.",
+  "solutions.hero.slides.fha203k.feature.1.title": "Expand Your Home Options",
+  "solutions.hero.slides.fha203k.feature.1.desc":
+    "Consider homes that need updates, repairs, or modernization that other buyers may overlook.",
+  "solutions.hero.slides.fha203k.feature.2.title": "Build Equity Through Improvements",
+  "solutions.hero.slides.fha203k.feature.2.desc":
+    "Renovations may increase the property's value while creating a home tailored to your needs.",
+  "solutions.hero.slides.fha203k.bestFor.0": "Fixer-Uppers",
+  "solutions.hero.slides.fha203k.bestFor.1": "Outdated Homes",
+  "solutions.hero.slides.fha203k.bestFor.2": "First-Time Buyers",
+  "solutions.hero.slides.fha203k.bestFor.3": "Renovation Projects",
+  "solutions.hero.slides.fha203k.cta": "Explore FHA 203(k) →",
+  "solutions.hero.slides.fha203k.imageAlt":
+    "Home under renovation with visible framing representing FHA 203(k) renovation financing",
+  "solutions.hero.slides.vaRenovation.badgeLabel": "VA Renovation",
+  "solutions.hero.slides.vaRenovation.eyebrow": "VA Renovation Loan Program",
+  "solutions.hero.slides.vaRenovation.headline":
+    "Buy, Renovate, and Finance It All with Your VA Benefits.",
+  "solutions.hero.slides.vaRenovation.subheadline":
+    "Eligible veterans and active-duty service members may finance a home purchase and renovation costs together through a single VA loan.",
+  "solutions.hero.slides.vaRenovation.feature.0.title": "100% Financing Available",
+  "solutions.hero.slides.vaRenovation.feature.0.desc":
+    "Qualified borrowers may finance both the home purchase and renovation costs with little or no down payment.",
+  "solutions.hero.slides.vaRenovation.feature.1.title": "Purchase and Renovate Together",
+  "solutions.hero.slides.vaRenovation.feature.1.desc":
+    "Combine the acquisition of a home and approved improvement costs into one mortgage transaction.",
+  "solutions.hero.slides.vaRenovation.feature.2.title": "Expand Your Home Options",
+  "solutions.hero.slides.vaRenovation.feature.2.desc":
+    "Consider homes needing repairs or updates that may not qualify for traditional VA financing today.",
+  "solutions.hero.slides.vaRenovation.bestFor.0": "Veterans",
+  "solutions.hero.slides.vaRenovation.bestFor.1": "Active-Duty Military",
+  "solutions.hero.slides.vaRenovation.bestFor.2": "Homes Needing Repairs",
+  "solutions.hero.slides.vaRenovation.bestFor.3": "VA-Eligible Borrowers",
+  "solutions.hero.slides.vaRenovation.cta": "Explore VA Renovation →",
+  "solutions.hero.slides.vaRenovation.imageAlt":
+    "Veteran with family in a bright home with subtle renovation details representing VA renovation loan benefits",
+  "solutions.hero.slides.heloc.badgeLabel": "HELOC",
+  "solutions.hero.slides.heloc.eyebrow": "Home Equity Financing",
+  "solutions.hero.slides.heloc.headline": "Put Your Home's Equity To Work For Your Next Chapter.",
+  "solutions.hero.slides.heloc.subheadline":
+    "Access funds for renovations, education expenses, debt consolidation, or other major financial goals—without replacing your current mortgage.",
+  "solutions.hero.slides.heloc.feature.0.title": "Access Available Equity",
+  "solutions.hero.slides.heloc.feature.0.desc":
+    "Convert a portion of your home's value into available funds that can be used for a variety of personal or financial goals.",
+  "solutions.hero.slides.heloc.feature.1.title": "Keep Your Current Mortgage",
+  "solutions.hero.slides.heloc.feature.1.desc":
+    "A HELOC allows you to access equity without replacing your existing mortgage or restarting your loan term.",
+  "solutions.hero.slides.heloc.feature.2.title": "Fund Projects And Major Expenses",
+  "solutions.hero.slides.heloc.feature.2.desc":
+    "Use funds for improvements, education, debt consolidation, reserves, or other eligible needs.",
+  "solutions.hero.slides.heloc.bestFor.0": "Homeowners With Equity",
+  "solutions.hero.slides.heloc.bestFor.1": "Home Improvements",
+  "solutions.hero.slides.heloc.bestFor.2": "Debt Consolidation",
+  "solutions.hero.slides.heloc.bestFor.3": "Financial Flexibility",
+  "solutions.hero.slides.heloc.cta": "Explore HELOC Options →",
+  "solutions.hero.slides.heloc.imageAlt":
+    "Graduate celebrating with family representing home equity used for life milestones and future opportunities",
+  "solutions.hero.slides.reverse.badgeLabel": "Reverse Mortgage",
+  "solutions.hero.slides.reverse.eyebrow": "Home Equity for Retirement",
+  "solutions.hero.slides.reverse.headline": "Turn Home Equity Into Greater Financial Flexibility.",
+  "solutions.hero.slides.reverse.subheadline":
+    "For eligible homeowners 55+, access equity for retirement income, a safety net, or flexibility while staying in your home.",
+  "solutions.hero.slides.reverse.feature.0.title": "Access Equity Your Way",
+  "solutions.hero.slides.reverse.feature.0.desc":
+    "Choose between a lump sum, line of credit, or other available options based on your financial goals.",
+  "solutions.hero.slides.reverse.feature.1.title": "No Required Monthly Mortgage Payments",
+  "solutions.hero.slides.reverse.feature.1.desc":
+    "Qualified borrowers may access equity without required monthly mortgage payments while meeting program obligations.",
+  "solutions.hero.slides.reverse.feature.2.title": "Greater Retirement Flexibility",
+  "solutions.hero.slides.reverse.feature.2.desc":
+    "Use available funds for healthcare expenses, home improvements, financial planning, travel, or other retirement priorities.",
+  "solutions.hero.slides.reverse.bestFor.0": "Age 55+",
+  "solutions.hero.slides.reverse.bestFor.1": "Retirement Planning",
+  "solutions.hero.slides.reverse.bestFor.2": "Home Equity Access",
+  "solutions.hero.slides.reverse.bestFor.3": "Financial Flexibility",
+  "solutions.hero.slides.reverse.cta": "Explore Reverse Mortgage Options →",
+  "solutions.hero.slides.reverse.imageAlt":
+    "Couple enjoying retirement outdoors representing home equity flexibility and financial planning",
+  "solutions.hero.slides.jumbo.badgeLabel": "Jumbo Financing",
+  "solutions.hero.slides.jumbo.eyebrow": "Jumbo Financing",
+  "solutions.hero.slides.jumbo.headline": "Finance Your Next Home With More Buying Power.",
+  "solutions.hero.slides.jumbo.subheadline":
+    "Designed for qualified buyers purchasing higher-priced homes who need financing beyond conventional loan limits, with flexible options for primary residences and second homes.",
+  "solutions.hero.slides.jumbo.feature.0.title": "Higher Loan Limits",
+  "solutions.hero.slides.jumbo.feature.0.desc":
+    "Finance homes that exceed conventional loan limits with solutions designed for larger purchase amounts.",
+  "solutions.hero.slides.jumbo.feature.1.title": "Flexible Financing Options",
+  "solutions.hero.slides.jumbo.feature.1.desc":
+    "Choose from fixed-rate and adjustable-rate programs based on your financial goals and long-term plans.",
+  "solutions.hero.slides.jumbo.feature.2.title": "Designed For Strong Borrowers",
+  "solutions.hero.slides.jumbo.feature.2.desc":
+    "Competitive options for qualified buyers with strong credit profiles seeking greater purchasing power.",
+  "solutions.hero.slides.jumbo.bestFor.0": "Move-Up Buyers",
+  "solutions.hero.slides.jumbo.bestFor.1": "Luxury Homes",
+  "solutions.hero.slides.jumbo.bestFor.2": "Higher Loan Amounts",
+  "solutions.hero.slides.jumbo.bestFor.3": "Strong Credit Profiles",
+  "solutions.hero.slides.jumbo.cta": "Explore Jumbo Financing →",
+  "solutions.hero.slides.jumbo.imageAlt":
+    "Luxury home at dusk representing jumbo financing for higher-priced properties",
   "solutions.title": "Find the Right Loan",
   "solutions.subtitle": "Every loan structure has tradeoffs. We help you understand them before you commit.",
   "solutions.learnMore": "Learn more",
@@ -1874,89 +2113,357 @@ export const en = {
   "solutions.modal.selfEmployedLink": "Self-Employed Mortgage Qualifier →",
   "solutions.modal.selfEmployedPost": "to model Schedule C, bank statement, and planning paths the way underwriters do.",
 
+  "solutions.detail.fitTitle": "Could This Program Be a Fit?",
+  "solutions.detail.benefitsTitle": "Key Benefits",
+  "solutions.detail.howItWorksTitle": "How It Works",
+  "solutions.detail.howItWorksSubtitle":
+    "A clear, step-by-step process designed to help you move forward with confidence.",
+  "solutions.detail.processSupport.eligibility":
+    "Establish the requirements that apply before moving into the application process.",
+  "solutions.detail.processSupport.preApproval":
+    "Gain clarity on what you may qualify for before you begin shopping in earnest.",
+  "solutions.detail.processSupport.property":
+    "Identify a property that aligns with program guidelines and your goals.",
+  "solutions.detail.processSupport.underwriting":
+    "The lender reviews your file, the property, and program requirements together.",
+  "solutions.detail.processSupport.closing":
+    "Finalize your loan and transition into the repayment structure you selected.",
+  "solutions.detail.processSupport.equity":
+    "Understand how much you can access and when funds become available.",
+  "solutions.detail.processSupport.compare":
+    "Review options side by side so you can evaluate timing and tradeoffs.",
+  "solutions.detail.processSupport.apply":
+    "Submit the documentation needed for the lender to evaluate your file.",
+  "solutions.detail.processSupport.generic":
+    "Each step builds on the last to keep your path clear and structured.",
+  "solutions.detail.highlightsTitle": "Program Highlights",
+  "solutions.detail.faqTitle": "Program Details",
+  "solutions.detail.backToSolutions": "Back to Loan Solutions",
+
+  "solutions.body.chooseTitle": "How We Help You Choose",
+  "solutions.body.compareTitle": "Compare Your Options",
+  "solutions.body.maCta.primary": "Connect With a Mortgage Advisor",
+  "solutions.body.toolsLabel": "Interactive Planning Tools",
+
+  "solutions.body.intro.headline": "You Don't Need to Know Which Loan Program Fits Best.",
+  "solutions.body.intro.body":
+    "Our role is to help you evaluate your options, compare strategies, and identify a financing solution aligned with your goals.",
+
+  "solutions.body.process1.title": "Understand Your Goals",
+  "solutions.body.process1.body":
+    "Whether you're buying, refinancing, investing, or accessing equity, we start by understanding your priorities.",
+  "solutions.body.process2.title": "Explore Financing Options",
+  "solutions.body.process2.body":
+    "We compare loan programs and financing strategies based on your unique scenario.",
+  "solutions.body.process3.title": "Move Forward With Confidence",
+  "solutions.body.process3.body":
+    "We help you understand your options so you can make informed decisions with clarity.",
+
+  "solutions.flagship.framework.eyebrow": "Our Advisory Approach",
+  "solutions.flagship.framework.headline": "Every Borrower Has A Different Story",
+  "solutions.flagship.framework.body":
+    "We do not begin with loan programs. We begin with your goals, timeline, financial picture, and long-term strategy.",
+  "solutions.flagship.framework.goals.title": "Goals",
+  "solutions.flagship.framework.goals.body": "What are you trying to accomplish?",
+  "solutions.flagship.framework.options.title": "Options",
+  "solutions.flagship.framework.options.body": "Evaluate potential financing paths.",
+  "solutions.flagship.framework.strategy.title": "Strategy",
+  "solutions.flagship.framework.strategy.body":
+    "Compare tradeoffs and identify the strongest approach.",
+  "solutions.flagship.framework.confidence.title": "Confidence",
+  "solutions.flagship.framework.confidence.body":
+    "Move forward with clarity and understanding.",
+
+  "solutions.body.exploreTitle": "Explore Loan Solutions",
+
+  "solutions.body.ma.headline": "Not Sure Which Loan Program Is Right For You?",
+  "solutions.body.ma.lead": "You don't need to figure it out alone.",
+  "solutions.body.ma.body":
+    "Our Mortgage Advisors can help you compare options, understand tradeoffs, and explore financing strategies aligned with your goals.",
+
+  "solutions.flagship.pathwaysTitle": "How Borrowers Typically Begin",
+  "solutions.flagship.pathway.buy.title": "Buying a Home",
+  "solutions.flagship.pathway.buy.body":
+    "Not every homebuyer starts from the same place. Explore financing paths designed for first-time buyers, move-up buyers, veterans, and rural properties.",
+  "solutions.flagship.pathway.buy.programs": "Conventional · FHA · VA · USDA",
+  "solutions.flagship.pathway.buy.cta": "Explore Home Purchase Options →",
+  "solutions.flagship.pathway.equity.title": "Accessing Equity",
+  "solutions.flagship.pathway.equity.body":
+    "Use your existing home equity strategically for renovations, debt consolidation, cash needs, or retirement planning.",
+  "solutions.flagship.pathway.equity.programs": "HELOC · Cash-Out Refinance · Reverse Mortgage",
+  "solutions.flagship.pathway.equity.cta": "Explore Equity Solutions →",
+  "solutions.flagship.pathway.altQual.title": "Alternative Qualification",
+  "solutions.flagship.pathway.altQual.body":
+    "When traditional income documentation doesn't tell the full story, alternative financing strategies may provide additional flexibility.",
+  "solutions.flagship.pathway.altQual.programs": "Non-QM · DSCR · Bank Statement Programs",
+  "solutions.flagship.pathway.altQual.cta": "Explore Alternative Solutions →",
+
+  "solutions.flagship.scenario.title": "Which Description Sounds Most Like You?",
+  "solutions.flagship.scenario.subtitle":
+    "Select the scenario that best reflects your goals and we'll point you toward financing options commonly explored by borrowers in a similar situation.",
+  "solutions.flagship.scenario.suggested": "Suggested programs",
+  "solutions.flagship.scenario.firstTime.title": "First-Time Buyer",
+  "solutions.flagship.scenario.firstTime.programs": "FHA, Conventional, DPA",
+  "solutions.flagship.scenario.firstTime.toolCta": "Estimate Buying Power →",
+  "solutions.flagship.scenario.moveUp.title": "Moving To A New Home",
+  "solutions.flagship.scenario.moveUp.programs": "Conventional, Jumbo",
+  "solutions.flagship.scenario.moveUp.toolCta": "Explore Purchase Options →",
+  "solutions.flagship.scenario.accessEquity.title": "Accessing Equity",
+  "solutions.flagship.scenario.accessEquity.programs": "HELOC, Cash-Out, Reverse",
+  "solutions.flagship.scenario.accessEquity.toolCta": "Explore HELOC / Equity Options →",
+  "solutions.flagship.scenario.investor.title": "Real Estate Investor",
+  "solutions.flagship.scenario.investor.programs": "DSCR, Conventional Investment",
+  "solutions.flagship.scenario.investor.toolCta": "Explore DSCR / Investment Options →",
+  "solutions.flagship.scenario.selfEmployed.title": "Self-Employed",
+  "solutions.flagship.scenario.selfEmployed.programs": "Non-QM, Bank Statement",
+  "solutions.flagship.scenario.selfEmployed.toolCta": "Use Income Qualifier →",
+  "solutions.flagship.scenario.veteran.title": "Veteran",
+  "solutions.flagship.scenario.veteran.programs": "VA, VA Renovation",
+  "solutions.flagship.scenario.veteran.toolCta": "Explore VA Options →",
+
+  "solutions.flagship.tools.title": "Explore Your Options With Interactive Planning Tools",
+  "solutions.flagship.tools.subtitle":
+    "Use our smart tools to start understanding your options before speaking with a Mortgage Advisor.",
+  "solutions.flagship.toolsHub.headline": "Explore Our Smart Tools",
+  "solutions.flagship.toolsHub.body":
+    "Use our smart tools to start understanding your options before speaking with a Mortgage Advisor.",
+  "solutions.flagship.toolsHub.cta": "Explore Smart Tools →",
+  "solutions.flagship.tools.affordability.title": "Home Affordability Planner",
+  "solutions.flagship.tools.affordability.body":
+    "Map buying power across timelines and see how income, credit, and savings shape your range.",
+  "solutions.flagship.tools.affordability.cta": "Start Planning →",
+  "solutions.flagship.tools.selfEmployed.title": "Self-Employed Income Qualifier",
+  "solutions.flagship.tools.selfEmployed.body":
+    "Model tax return, bank statement, and planning paths to understand qualification flexibility.",
+  "solutions.flagship.tools.selfEmployed.cta": "Run Qualifier →",
+  "solutions.flagship.tools.heloc.title": "HELOC & Equity Explorer",
+  "solutions.flagship.tools.heloc.body":
+    "Compare draw and repayment scenarios, rate assumptions, and equity use cases side by side.",
+  "solutions.flagship.tools.heloc.cta": "Explore Equity →",
+  "solutions.flagship.tools.compare.title": "Loan Program Comparison Tool",
+  "solutions.flagship.tools.compare.body":
+    "See how conventional and FHA paths compare across costs, MI, and long-term tradeoffs.",
+  "solutions.flagship.tools.compare.cta": "Compare Programs →",
+
+  "solutions.flagship.strategy.headline": "Financing Is More Than Choosing A Loan Program",
+  "solutions.flagship.strategy.body":
+    "The right financing strategy begins with understanding your goals, evaluating available options, and selecting a solution aligned with your long-term plans.",
+  "solutions.flagship.session.headline": "Every Borrower Has A Different Story.",
+  "solutions.flagship.session.body":
+    "We believe financing decisions deserve thoughtful guidance, not one-size-fits-all recommendations.",
+  "solutions.flagship.strategy.goals": "Goals",
+  "solutions.flagship.strategy.options": "Options",
+  "solutions.flagship.strategy.strategy": "Strategy",
+  "solutions.flagship.strategy.decision": "Decision",
+
+  "solutions.flagship.trust.title": "Why Borrowers Choose Infinite Home Lending",
+  "solutions.flagship.trust.brokerage.title": "Independent Brokerage",
+  "solutions.flagship.trust.brokerage.body": "Access to multiple wholesale lending partners.",
+  "solutions.flagship.trust.experience.title": "40+ Years Combined Experience",
+  "solutions.flagship.trust.experience.body": "Guidance backed by decades of mortgage expertise.",
+  "solutions.flagship.trust.strategies.title": "Multiple Financing Strategies",
+  "solutions.flagship.trust.strategies.body":
+    "A wide range of conventional, government, and specialty financing solutions.",
+  "solutions.flagship.trust.wholesale.title": "Multiple Wholesale Lending Partners",
+  "solutions.flagship.trust.wholesale.body": "Access to a broad network of wholesale lending partners.",
+  "solutions.flagship.trust.bilingual.title": "Bilingual Guidance",
+  "solutions.flagship.trust.bilingual.body": "Serving clients comfortably in English and Spanish.",
+  "solutions.flagship.trust.education.title": "Education Before Recommendation",
+  "solutions.flagship.trust.education.body": "We believe informed decisions create stronger outcomes.",
+
+  "solutions.displayCategory.purchase": "Purchase",
+  "solutions.displayCategory.equity": "Equity",
+  "solutions.displayCategory.specialty": "Specialty",
+
   // About page
-  "about.eyebrow": "Our Story",
-  "about.title": "The people behind Infinite Home Lending",
-  "about.subtitle": "Two decades of experience. One clear commitment: guide every client with strategy, clarity, and care.",
-  "about.founder": "Founder & Managing Director",
-  "about.coFounder": "Co-Founder",
-  "about.startPreApproval": "Start Pre-Approval",
+  "about.eyebrow": "About Infinite Home Lending",
+  "about.hero.title": "Every Mortgage Journey Deserves a Thoughtful Strategy.",
+  "about.hero.body":
+    "At Infinite Home Lending, we believe every mortgage decision deserves thoughtful guidance. Whether you're purchasing a home, refinancing, investing in real estate, or exploring specialized financing options, our role is to help you navigate your options with clarity, confidence, and a strategy tailored to your goals.",
+  "about.hero.ctaPrimary": "Start My Pre-Approval",
+  "about.hero.ctaSecondary": "Schedule a Consultation",
+  "about.hero.imageAlt": "Mortgage advisor consulting with clients in a bright, professional office",
 
-  "about.hero.title": "A more thoughtful way to approach home financing",
-  "about.hero.body": "Most mortgage decisions are made around numbers alone. We believe they should be built around your life.",
+  "about.credibility.heading": "Why borrowers trust Infinite Home Lending",
+  "about.credibility.1.stat": "40+ Years",
+  "about.credibility.1.label": "Combined Mortgage Experience",
+  "about.credibility.2.stat": "Bilingual Service",
+  "about.credibility.2.label": "Supporting Clients in English & Spanish",
+  "about.credibility.3.stat": "Independent Brokerage",
+  "about.credibility.3.label": "Access to Tailored Lending Solutions",
+  "about.credibility.4.stat": "Client-Focused Guidance",
+  "about.credibility.4.label": "Education-Driven Mortgage Advice",
 
-  "about.narrative.title": "A more intentional path forward",
-  "about.narrative.body1": "Most home financing today feels transactional — built for speed, not fit.",
-  "about.narrative.body2": "For something as important as a home, that falls short. We believe the work should be built around your goals, timeline, and where you're headed — not just the next approval.",
-  "about.narrative.pullQuote": "A home loan should fit the life you're building — not just the numbers on a page.",
+  "about.why.title": "Why Infinite Home Lending Exists",
+  "about.why.lead": "After decades in the mortgage industry, we saw that many borrowers needed more than a loan—they needed guidance.",
+  "about.why.p1":
+    "Too often, mortgage decisions are treated as transactions rather than important financial milestones. Borrowers are presented with options, but not always the education, clarity, or personalized attention needed to make confident decisions.",
+  "about.why.p2":
+    "Infinite Home Lending was founded on a simple belief: every borrower deserves thoughtful guidance, transparent communication, and access to solutions tailored to their unique goals.",
+  "about.why.mission":
+    "Our mission is to help individuals and families navigate the mortgage process with confidence by providing personalized support, professional expertise, and a commitment to putting their interests first.",
 
-  "about.approach.title": "We don't just find loans. We structure decisions.",
-  "about.approach.body1": "We start by understanding your full financial picture — not just what you qualify for, but what actually makes sense.",
-  "about.approach.body2": "From there, we structure financing options that align with your priorities — so you see not only what you can do, but what you should do.",
-  "about.approach.body3": "The right structure doesn't just get you approved — it sets you up for what comes next.",
+  "about.philosophy.title": "Our Philosophy",
+  "about.philosophy.principle1.title": "Guidance Before Transactions",
+  "about.philosophy.principle1.body": "We take time to understand your goals before recommending any product or path forward.",
+  "about.philosophy.principle2.title": "Education Empowers Better Decisions",
+  "about.philosophy.principle2.body": "Clear explanations of options, tradeoffs, and implications help you evaluate choices with confidence.",
+  "about.philosophy.principle3.title": "Tailored Solutions",
+  "about.philosophy.principle3.body": "Financing should reflect your situation—not a one-size-fits-all script or lender menu.",
+  "about.philosophy.principle4.title": "Relationships Matter",
+  "about.philosophy.principle4.body": "We build long-term partnerships grounded in trust, communication, and mutual respect.",
+  "about.philosophy.principle5.title": "Clarity Creates Confidence",
+  "about.philosophy.principle5.body": "Transparency at every step helps you move forward with certainty—not guesswork.",
 
-  "about.loanStructure.title": "Not all loans are created equal",
-  "about.loanStructure.body1": "Two borrowers can qualify for the same loan — and still make very different decisions. The difference is structure: term, payment flexibility, and how the pieces fit your plans.",
-  "about.loanStructure.body2": "That's where we spend our time — before you commit.",
+  "about.founders.title": "Built on Experience. Driven by Purpose.",
+  "about.founders.intro1":
+    "Infinite Home Lending was founded by Javier Cifuentes and Alma Jaramillo, two experienced mortgage professionals who share a commitment to helping clients make informed financial decisions through guidance, education, and personalized service.",
+  "about.founders.intro2":
+    "Their vision was to create a mortgage brokerage built on relationships, trust, and long-term success—one where clients feel supported, informed, and empowered throughout the home financing journey.",
+  "about.founders.javier.name": "Javier Cifuentes",
+  "about.founders.javier.role": "Founder",
+  "about.founders.javier.statement":
+    "Helping individuals and families navigate important mortgage decisions with clarity, strategy, and confidence.",
+  "about.founders.javier.imageAlt": "Javier Cifuentes, Founder of Infinite Home Lending",
+  "about.founders.javier.highlight1": "24+ years of mortgage lending experience",
+  "about.founders.javier.highlight2": "Mortgage sales leadership and team development",
+  "about.founders.javier.highlight3": "Strategic financing and advisory expertise",
+  "about.founders.javier.highlight4": "Client education and decision-making guidance",
+  "about.founders.javier.highlight5": "Long-term relationship-focused approach",
+  "about.founders.alma.name": "Alma Jaramillo",
+  "about.founders.alma.role": "Co-Founder",
+  "about.founders.alma.statement":
+    "Building trusted relationships through personalized guidance, clear communication, and a commitment to client success.",
+  "about.founders.alma.imageAlt": "Alma Jaramillo, Co-Founder of Infinite Home Lending",
+  "about.founders.alma.highlight1": "20+ years of mortgage and banking experience",
+  "about.founders.alma.highlight2": "Personalized financing guidance",
+  "about.founders.alma.highlight3": "Complex borrower and income analysis",
+  "about.founders.alma.highlight4": "Bilingual support in English and Spanish",
+  "about.founders.alma.highlight5": "Commitment to communication and client care",
 
-  "about.costOfWrong.title": "The cost of getting it wrong",
-  "about.costOfWrong.body1": "The full weight of a mortgage rarely hits on closing day. It shows up later — in flexibility, opportunity, and whether your financing still fits as life changes.",
-  "about.costOfWrong.body2": "We'd rather surface that tradeoff before you sign than help you unwind it years down the road.",
-  "about.costOfWrong.calloutLabel": "Reality most people miss",
-  "about.costOfWrong.calloutTitle": "The impact of a mortgage decision",
-  "about.costOfWrong.calloutSub": "is often felt later — not upfront.",
+  "about.founders.modal.close": "Close",
+  "about.founders.javier.linkLetter": "A Message From Javier →",
+  "about.founders.javier.linkBio": "Bio →",
+  "about.founders.javier.linkLinkedIn": "Connect on LinkedIn ↗",
+  "about.founders.javier.linkLinkedInAria": "Connect with Javier Cifuentes on LinkedIn",
+  "about.founders.javier.crosslinkBioPrompt": "Want to learn more about Javier's background?",
+  "about.founders.javier.crosslinkLetterPrompt":
+    "Learn why Javier founded Infinite Home Lending.",
+  "about.founders.alma.linkLetter": "A Message From Alma →",
+  "about.founders.alma.linkBio": "Bio →",
+  "about.founders.alma.linkLinkedIn": "Connect on LinkedIn ↗",
+  "about.founders.alma.linkLinkedInAria": "Connect with Alma Jaramillo on LinkedIn",
+  "about.founders.alma.crosslinkBioPrompt": "Want to learn more about Alma's background?",
+  "about.founders.alma.crosslinkLetterPrompt":
+    "Learn why Alma co-founded Infinite Home Lending.",
 
-  "about.founderMessage.opening": "When we started Infinite Home Lending, it came from a simple observation.",
-  "about.founderMessage.p1": "After more than two decades in the mortgage industry—leading teams, navigating different market cycles, and working through thousands of real client scenarios—we saw a consistent pattern. Too many people were making one of the most important financial decisions of their lives without clarity, without enough options, and without a real strategy behind it. It wasn't that people weren't asking the right questions; it's that the process itself wasn't built to support them. Too often, the incentives in the broader mortgage ecosystem still reward speed and volume over fit, which can leave borrowers moving forward without the full picture they deserve.",
-  "about.founderMessage.p2": "Most mortgage experiences are designed to close loans, not to guide decisions. And that difference matters more than most people realize when the stakes are this high: a mortgage is not a one-time product. It is a lever that affects how you build equity, how you absorb financial shocks, and how much flexibility you retain when life changes.",
-  "about.founderMessage.pullQuote": "Because you're not just choosing a loan. You're choosing how your life moves forward—how flexible your future is, how confident you feel in your decisions, and how prepared you are when life inevitably changes.",
-  "about.founderMessage.p3": "Over the years, we've seen how the structure of a loan can either support someone's long-term plans—or quietly limit them. And in many cases, that impact isn't fully understood until much later, when it is harder to adjust.",
-  "about.founderMessage.p4": "That's why we built Infinite Home Lending differently. We focus on structure before product, understanding before commitment, and guidance that actually reflects your goals—not just what fits into a system. As an independent brokerage, we are positioned to align with the borrower, not with a single lender's menu, so we can be direct about tradeoffs and about what holds up over time.",
-  "about.founderMessage.p5": "Our role is simple: to help you understand your options, think through your decisions, and move forward with confidence.",
-  "about.founderMessage.p6": "That's the standard we hold ourselves to, and that's the experience we aim to deliver to every client we work with.",
+  "about.founders.javier.letter.title": "A Message From Javier",
+  "about.founders.javier.letter.lead":
+    "When we started Infinite Home Lending, it came from a simple observation.",
+  "about.founders.javier.letter.p1":
+    "After more than two decades in the mortgage industry—leading teams, navigating different market cycles, and working through thousands of real client scenarios—we saw a consistent pattern. Too many people were making one of the most important financial decisions of their lives without clarity, without enough options, and without a real strategy behind it. It wasn't that people weren't asking the right questions; it's that the process itself wasn't built to support them. Too often, the incentives in the broader mortgage ecosystem still reward speed and volume over fit, which can leave borrowers moving forward without the full picture they deserve.",
+  "about.founders.javier.letter.p2":
+    "Most mortgage experiences are designed to close loans, not to guide decisions. And that difference matters more than most people realize when the stakes are this high: a mortgage is not a one-time product. It is a lever that affects how you build equity, how you absorb financial shocks, and how much flexibility you retain when life changes.",
+  "about.founders.javier.letter.pullquote":
+    "Because you're not just choosing a loan. You're choosing how your life moves forward—how flexible your future is, how confident you feel in your decisions, and how prepared you are when life inevitably changes.",
+  "about.founders.javier.letter.p3":
+    "Over the years, we've seen how the structure of a loan can either support someone's long-term plans—or quietly limit them. And in many cases, that impact isn't fully understood until much later, when it is harder to adjust.",
+  "about.founders.javier.letter.p4":
+    "That's why we built Infinite Home Lending differently. We focus on structure before product, understanding before commitment, and guidance that actually reflects your goals—not just what fits into a system. As an independent brokerage, we are positioned to align with the borrower, not with a single lender's menu, so we can be direct about tradeoffs and about what holds up over time.",
+  "about.founders.javier.letter.p5":
+    "Our role is simple: to help you understand your options, think through your decisions, and move forward with confidence.",
+  "about.founders.javier.letter.p6":
+    "That's the standard we hold ourselves to, and that's the experience we aim to deliver to every client we work with.",
 
-  "about.coFounderMessage.opening": "In every loan I've worked on, there's a point where the numbers stop being just numbers and the decision becomes real.",
-  "about.coFounderMessage.p1": "It's a family preparing for a new chapter, a client trying to make the right choice with incomplete information, or someone whose financial situation doesn't fit neatly into a standard process and requires a deeper level of understanding.",
-  "about.coFounderMessage.p2": "That's where our role truly begins.",
-  "about.coFounderMessage.p3": "Over the past 20+ years, I've worked with a wide range of borrowers, including self-employed clients, layered credit profiles, and scenarios that require patience, precision, and thoughtful structuring rather than a rushed outcome.",
-  "about.coFounderMessage.p4": "What I've seen consistently is that when people feel heard and fully understand their options, they make better decisions—not necessarily faster, but with greater clarity and confidence.",
-  "about.coFounderMessage.p5": "The difference is in how the process is approached.",
-  "about.coFounderMessage.p6": "It's reflected in the conversations that happen early, the details that are carefully evaluated, and the ability to structure a loan in a way that aligns with how someone actually lives—not just what guidelines allow on paper.",
-  "about.coFounderMessage.p7": "That's the standard I bring to every client interaction.",
-  "about.coFounderMessage.p8": "At Infinite Home Lending, we don't approach this process as a checklist. We approach it as a responsibility—to guide, to simplify, and to ensure that every decision is made with full context, both for today and for what comes next.",
-  "about.coFounderMessage.p9": "When that level of clarity is present, clients feel more confident, and the outcome becomes something they can truly stand behind.",
+  "about.founders.javier.bio.title": "About Javier",
+  "about.founders.javier.bio.p1":
+    "Javier Cifuentes has spent more than 23 years inside some of the largest mortgage organizations in the country — and that experience is exactly what led him to build something different.",
+  "about.founders.javier.bio.p2":
+    "His career began in 2002 as a loan officer in Silver Spring, Maryland, originating loans one borrower at a time. From there, the path moved through branch management, sales leadership, and ultimately into the executive ranks of national institutions: Prosperity Mortgage, Wells Fargo Home Mortgage, George Mason Mortgage, and finally Bank of America, where he spent nearly eight years as Vice President and Lending Market Leader for the entire Maryland market.",
+  "about.founders.javier.bio.p3":
+    "Along the way, Javier built and led mortgage production teams, shaped compliance standards, developed referral networks, and coached originators through some of the most volatile rate environments the industry has seen. In 2023, that body of work was recognized with Bank of America's Pinnacle Diamond Award — given to the top 1% of leaders nationally.",
+  "about.founders.javier.bio.p4":
+    "But the longer Javier led inside large institutions, the clearer one thing became: the systems built to serve volume weren't always built to serve people. Borrowers were getting approved fast and closing on time — and still ending up with loans that didn't actually fit their lives.",
+  "about.founders.javier.bio.p5":
+    "That observation is what led him to found Infinite Home Lending — a firm built from the ground up to put strategy and structure ahead of speed, and to give every client the kind of advisory experience he spent two decades helping large institutions try, and often struggle, to deliver at scale.",
+  "about.founders.javier.bio.p6":
+    "Javier holds a Bachelor of Science in Civil Engineering from LaSalle University in Bogotá, Colombia — a background in structural thinking that, in many ways, foreshadowed the way he now approaches mortgage strategy: build the right foundation first, and everything else holds.",
+  "about.founders.javier.bio.p7":
+    "At home, Javier's life is full — his wife and daughter are everything to him, and four dogs make sure no dinner goes unsupervised. That full house is exactly why cooking means so much to him: there's nothing he enjoys more than bringing family and friends together around a table he's prepared himself. Traveling is the other half of it — discovering new places, new cultures, and the history behind them, often with the people he loves most right beside him. Between trips and dinners, he's always staying active and looking for the next place worth exploring.",
 
-  "about.clarity.heading": "Clarity changes everything.",
-  "about.clarity.body": "When you understand your options, everything else becomes easier—the decisions, the timing, the confidence to move forward.",
-  "about.clarity.wantsTitle": "What people really want from a mortgage experience",
-  "about.clarity.wantsBody": "Most people aren't looking for more noise.",
-  "about.clarity.wantsBody2": "They're looking for clarity, confidence, and someone who actually understands their situation.",
-  "about.clarity.pullQuote": "That's the bar we believe every borrower deserves.",
+  "about.founders.alma.letter.title": "A Message From Alma",
+  "about.founders.alma.letter.lead":
+    "In every loan I've worked on, there's a point where the numbers stop being just numbers and the decision becomes real.",
+  "about.founders.alma.letter.p1":
+    "It's a family preparing for a new chapter, a client trying to make the right choice with incomplete information, or someone whose financial situation doesn't fit neatly into a standard process and requires a deeper level of understanding.",
+  "about.founders.alma.letter.p2": "That's where our role truly begins.",
+  "about.founders.alma.letter.p3":
+    "Over the past 20+ years, I've worked with a wide range of borrowers, including self-employed clients, layered credit profiles, and scenarios that require patience, precision, and thoughtful structuring rather than a rushed outcome.",
+  "about.founders.alma.letter.p4":
+    "What I've seen consistently is that when people feel heard and fully understand their options, they make better decisions—not necessarily faster, but with greater clarity and confidence.",
+  "about.founders.alma.letter.p5": "The difference is in how the process is approached.",
+  "about.founders.alma.letter.p6":
+    "It's reflected in the conversations that happen early, the details that are carefully evaluated, and the ability to structure a loan in a way that aligns with how someone actually lives—not just what guidelines allow on paper.",
+      "about.founders.alma.letter.p7": "That's the standard I bring to every client interaction.",
+      "about.founders.alma.letter.p8":
+        "At Infinite Home Lending, we don't approach this process as a checklist. We approach it as a responsibility—to guide, to simplify, and to ensure that every decision is made with full context, both for today and for what comes next.",
+      "about.founders.alma.letter.p9":
+        "When that level of clarity is present, clients feel more confident, and the outcome becomes something they can truly stand behind.",
 
-  "about.wants.straightAnswers.title": "Straight answers",
-  "about.wants.straightAnswers.body": "Plain language and honest context—not a wall of jargon when the stakes are high.",
-  "about.wants.roomToExplore.title": "Room to explore",
-  "about.wants.roomToExplore.body": "Real options to compare so you can move forward with confidence, not guesswork.",
-  "about.wants.guidanceThatFits.title": "Guidance that fits",
-  "about.wants.guidanceThatFits.body": "Advice shaped to your situation—not a one-size script that ignores the nuances.",
-  "about.wants.planYouCanTrust.title": "A plan you can trust",
-  "about.wants.planYouCanTrust.body": "A structure that still makes sense years from now—whether it's your first home or your next chapter.",
+  "about.founders.alma.bio.title": "About Alma",
+  "about.founders.alma.bio.p1":
+    "Alma Jaramillo has spent more than 20 years building something that doesn't show up easily on a résumé: trust.",
+  "about.founders.alma.bio.p2":
+    "Her career started in 2005 as a Relationship Banker at BB&T, where for a decade she did the quiet, unglamorous work of getting to know her clients' full financial pictures — not just their loan applications. That foundation shaped everything that followed. By 2015, she had moved into mortgage origination as a Loan Officer and Assistant Vice President at BB&T, and in 2018, she joined Bank of America as a Credit Solutions Advisor, where she's spent years originating residential mortgages and specializing in some of the most complex borrower scenarios in the business — self-employed income, layered credit, and investment property financing that doesn't fit neatly into a standard underwriting box.",
+  "about.founders.alma.bio.p3":
+    "What sets Alma apart isn't just technical skill, though she has plenty of it. It's patience. Borrowers who've been told \"no\" elsewhere, or who've been rushed through a process that didn't take the time to understand their full situation, consistently find their way to her — and consistently come away with a structure that actually works for how they live, not just what guidelines allow on paper.",
+  "about.founders.alma.bio.p4":
+    "Fluent in English and Spanish, Alma has spent her career serving borrowers across Maryland, Washington, D.C., and Virginia with the kind of bilingual, bicultural understanding that can't be taught in a compliance training — only earned through two decades of showing up for people.",
+  "about.founders.alma.bio.p5":
+    "As Co-Founder of Infinite Home Lending, Alma brings that same standard to every client interaction: structure before speed, understanding before commitment, and a level of care that turns a transaction into a relationship.",
 
-  "about.independent.title": "More options. Deeper understanding.",
-  "about.independent.body1": "Most lenders can only offer what they have.",
-  "about.independent.body2": "We're built differently.",
-  "about.independent.body3": "As an independent brokerage, we work across a broad network of lending partners — so we can structure financing around your situation instead of forcing it into a narrow menu.",
+  "about.quote.text":
+    "We believe every borrower deserves thoughtful guidance, transparent communication, and solutions tailored to their unique goals.",
+  "about.quote.attribution": "Javier Cifuentes & Alma Jaramillo",
 
-  "about.coreValues.strategic.title": "Strategic Thinking",
-  "about.coreValues.strategic.body": "We approach every mortgage as a financial decision — aligning structure with your long-term direction.",
-  "about.coreValues.communication.title": "Clear Communication",
-  "about.coreValues.communication.body": "We keep you informed at every step, so you always know where things stand and what comes next.",
-  "about.coreValues.execution.title": "Disciplined Execution",
-  "about.coreValues.execution.body": "We manage every loan with precision, structure, and attention to detail from start to finish.",
+  "about.process.title": "How We Work",
+  "about.process.subtitle": "A clear advisory process—from first conversation through closing and beyond.",
+  "about.process.step1.title": "Listen",
+  "about.process.step1.desc": "Understand goals, priorities, and circumstances.",
+  "about.process.step2.title": "Evaluate",
+  "about.process.step2.desc": "Review available options and identify appropriate solutions.",
+  "about.process.step3.title": "Educate",
+  "about.process.step3.desc": "Explain benefits, tradeoffs, and considerations.",
+  "about.process.step4.title": "Guide",
+  "about.process.step4.desc": "Help clients make informed decisions.",
+  "about.process.step5.title": "Support",
+  "about.process.step5.desc": "Remain available before, during, and after closing.",
 
-  "about.finalCta.title": "Ready for a mortgage experience built around your life?",
-  "about.finalCta.body": "No pressure. Just a clear, structured path forward.",
-  "about.finalCta.talkStrategy": "Prefer to talk strategy first?",
+  "about.audience.title": "Who We Serve",
+  "about.audience.firstTime.title": "First-Time Homebuyers",
+  "about.audience.firstTime.body": "Clear guidance on affordability, timing, and the path to your first home.",
+  "about.audience.moveUp.title": "Move-Up Buyers",
+  "about.audience.moveUp.body": "Thoughtful support navigating equity, timing, and financing for your next chapter.",
+  "about.audience.veterans.title": "Veterans",
+  "about.audience.veterans.body": "Guidance aligned to service history, benefits, and long-term housing goals.",
+  "about.audience.selfEmployed.title": "Self-Employed Borrowers",
+  "about.audience.selfEmployed.body": "Solutions for non-traditional income profiles and complex financial situations.",
+  "about.audience.investors.title": "Real Estate Investors",
+  "about.audience.investors.body": "Strategic financing aligned to portfolio objectives, cash flow, and growth plans.",
+  "about.audience.retirees.title": "Retirees & Pre-Retirees",
+  "about.audience.retirees.body": "Specialized options including reverse mortgage guidance for later-life planning.",
+  "about.audience.bilingualTitle": "Hablamos Español",
+  "about.audience.bilingualBody": "Personalized mortgage guidance in English and Spanish.",
+
+  "about.finalCta.title": "Clarity. Guidance. Confidence.",
+  "about.finalCta.body":
+    "Whether you're purchasing a home, refinancing, investing, or exploring specialized financing options, we're here to help you move forward with a strategy designed around your goals.",
+  "about.finalCta.cta": "Schedule a Consultation",
+
+  "about.compliance.heading": "Licensing and compliance",
+  "about.compliance.javier": "Javier Cifuentes",
+  "about.compliance.alma": "Alma Jaramillo",
+  "about.compliance.nmlsLink": "NMLS Consumer Access",
 
   // Knowledge Center
   "knowledge.eyebrow": "Knowledge Center",
@@ -2223,6 +2730,165 @@ export const en = {
   "rrm.verdict.closerLook.lower": "lower",
   "rrm.verdict.closerLook.higher": "higher",
   "rrm.keyInsight": "Here's what most people miss:\n\nRefinancing doesn't just change your rate — it resets how your loan works over time.\n\nEarly years are interest-heavy. When you restart the clock, you go back to paying more interest again.\n\nThat's why a lower payment doesn't always mean a better outcome.",
+
+  // Compliance Center
+  "compliance.eyebrow": "Compliance",
+  "compliance.placeholder.body":
+    "This page is being prepared. Full content will be published here soon. For immediate questions, contact Info@infinitehomelending.com or (301) 507-7609.",
+
+  "compliance.privacy.meta.title": "Privacy Policy",
+  "compliance.privacy.meta.description":
+    "How Infinite Home Lending collects, uses, and protects information submitted through our website, forms, email, SMS, and Sarah AI chat.",
+  "compliance.privacy.title": "Privacy Policy",
+  "compliance.privacy.lastUpdated": "Last updated: June 2026",
+  "compliance.privacy.intro.title": "Overview",
+  "compliance.privacy.intro.p1":
+    "Infinite Home Lending (“IHL,” “we,” “us,” or “our”) respects your privacy. This Privacy Policy explains how we collect, use, and protect information when you visit our website, submit forms, communicate with us, or interact with our services—including Sarah, our AI mortgage concierge.",
+  "compliance.privacy.collect.title": "Information We Collect",
+  "compliance.privacy.collect.p1":
+    "We may collect information that you voluntarily provide and information generated through your use of our website and services.",
+  "compliance.privacy.collect.p2": "This may include:",
+  "compliance.privacy.collect.item1":
+    "Contact and inquiry information submitted through website forms (such as name, email, phone number, and details about your mortgage goals).",
+  "compliance.privacy.collect.item2":
+    "Information you provide when contacting Infinite Home Lending by phone, email, or other direct channels.",
+  "compliance.privacy.collect.item3":
+    "Messages and context from interactions with Sarah, our AI chat assistant, including questions you ask and responses provided during your session.",
+  "compliance.privacy.collect.item4":
+    "Email communications you send to or receive from IHL related to mortgage inquiries, appointments, or service updates.",
+  "compliance.privacy.collect.item5":
+    "SMS-related information when you opt in to receive text messages from IHL, including your mobile number and message preferences.",
+  "compliance.privacy.use.title": "How We Use Information",
+  "compliance.privacy.use.p1": "We use the information we collect to:",
+  "compliance.privacy.use.item1":
+    "Respond to inquiries and provide mortgage guidance, appointment scheduling, and customer support.",
+  "compliance.privacy.use.item2":
+    "Deliver application-related updates, service communications, and information you request.",
+  "compliance.privacy.use.item3":
+    "Improve our website, tools, and client experience—including AI-assisted guidance through Sarah.",
+  "compliance.privacy.use.item4":
+    "Maintain records required for compliance, quality assurance, and business operations.",
+  "compliance.privacy.sms.title": "SMS Communications & Privacy",
+  "compliance.privacy.sms.p1":
+    "If you opt in to receive SMS messages from Infinite Home Lending, we may send mortgage-related updates, appointment reminders, and service communications to the mobile number you provide.",
+  "compliance.privacy.sms.p2":
+    "Mobile information will not be shared with third parties or affiliates for marketing or promotional purposes.",
+  "compliance.privacy.sms.p3":
+    "Message frequency varies. Message and data rates may apply. You may reply STOP to unsubscribe or HELP for assistance. See our SMS Terms & Conditions for full program details.",
+
+  "compliance.sms.meta.title": "SMS Terms & Conditions",
+  "compliance.sms.meta.description":
+    "Terms for Infinite Home Lending SMS messaging—including message types, frequency, opt-out instructions, and contact information.",
+  "compliance.sms.title": "SMS Terms & Conditions",
+  "compliance.sms.lastUpdated": "Last updated: June 2026",
+  "compliance.sms.program.title": "SMS Program Description",
+  "compliance.sms.program.p1":
+    "By opting in to receive text messages from Infinite Home Lending, you agree to receive SMS communications related to your mortgage inquiry, application, or ongoing service relationship with IHL.",
+  "compliance.sms.messages.title": "Types of Messages You May Receive",
+  "compliance.sms.messages.p1": "Messages may include:",
+  "compliance.sms.messages.item1": "Mortgage inquiries and follow-up communications",
+  "compliance.sms.messages.item2": "Appointment reminders",
+  "compliance.sms.messages.item3": "Application or service-related updates",
+  "compliance.sms.messages.item4": "Customer support communications",
+  "compliance.sms.frequency.title": "Message Frequency",
+  "compliance.sms.frequency.p1": "Message frequency varies depending on your inquiry, application status, and communication preferences.",
+  "compliance.sms.rates.title": "Message & Data Rates",
+  "compliance.sms.rates.p1": "Message and data rates may apply. Contact your wireless carrier for details about your plan.",
+  "compliance.sms.stop.title": "Opt-Out Instructions",
+  "compliance.sms.stop.p1": "Reply STOP to unsubscribe from Infinite Home Lending SMS messages at any time.",
+  "compliance.sms.help.title": "Help",
+  "compliance.sms.help.p1": "Reply HELP for assistance with SMS messages from Infinite Home Lending.",
+  "compliance.sms.privacy.title": "Privacy Policy",
+  "compliance.sms.privacy.p1": "For information about how we collect and use personal information, please review our",
+  "compliance.sms.privacy.link": "Privacy Policy",
+
+  "compliance.footer.title": "Questions?",
+  "compliance.footer.body":
+    "If you have questions regarding our privacy practices, licensing information, SMS communications, or compliance policies, please contact us.",
+
+  "compliance.terms.title": "Terms of Use",
+  "compliance.terms.meta.title": "Terms of Use",
+  "compliance.terms.meta.description":
+    "Terms governing use of the Infinite Home Lending website and digital services.",
+  "compliance.terms.lastUpdated": "Last updated: June 2026",
+  "compliance.terms.acceptance.title": "Acceptance of Terms",
+  "compliance.terms.acceptance.p1":
+    "By accessing or using the Infinite Home Lending website, tools, and digital services, you agree to these Terms of Use. If you do not agree, please do not use our website or services.",
+  "compliance.terms.educational.title": "Educational Content Disclaimer",
+  "compliance.terms.educational.p1":
+    "Information provided on this website—including articles, calculators, tools, and general guidance—is for educational and informational purposes only. It is not legal, tax, or financial advice, and should not be relied upon as a substitute for consultation with qualified professionals.",
+  "compliance.terms.noCommitment.title": "No Mortgage Commitment",
+  "compliance.terms.noCommitment.p1":
+    "Use of this website, submission of forms, or communication with Infinite Home Lending does not constitute a mortgage application, loan approval, rate lock, or commitment to lend. All loan products are subject to credit approval, underwriting, and applicable program guidelines.",
+  "compliance.terms.sarah.title": "AI Assistant (Sarah) Disclaimer",
+  "compliance.terms.sarah.p1":
+    "Sarah is Infinite Home Lending's AI mortgage concierge. Sarah is not a licensed mortgage advisor or loan officer. Responses provided through Sarah are for general educational purposes only and do not constitute lending advice, pre-approval, or a commitment to provide financing.",
+  "compliance.terms.ip.title": "Intellectual Property",
+  "compliance.terms.ip.p1":
+    "All content on this website—including text, graphics, logos, tools, and software—is the property of Infinite Home Lending or its licensors and is protected by applicable intellectual property laws. You may not reproduce, distribute, or create derivative works without prior written consent.",
+  "compliance.terms.thirdParty.title": "Third-Party Links",
+  "compliance.terms.thirdParty.p1":
+    "This website may contain links to third-party websites or resources. Infinite Home Lending is not responsible for the content, policies, or practices of third-party sites. Accessing external links is at your own discretion and risk.",
+  "compliance.terms.liability.title": "Limitation of Liability",
+  "compliance.terms.liability.p1":
+    "To the fullest extent permitted by law, Infinite Home Lending shall not be liable for any direct, indirect, incidental, or consequential damages arising from your use of this website, tools, or digital services, including reliance on information provided through the site or AI assistant.",
+  "compliance.terms.contact.title": "Contact Information",
+  "compliance.terms.contact.p1":
+    "For questions about these Terms of Use, contact Infinite Home Lending using the information below.",
+
+  "compliance.licensing.title": "Licensing Information",
+  "compliance.licensing.meta.title": "Licensing Information",
+  "compliance.licensing.meta.description":
+    "NMLS, state licensing, and mortgage loan originator disclosure information for Infinite Home Lending.",
+  "compliance.licensing.lastUpdated": "Last updated: June 2026",
+  "compliance.licensing.company.title": "Company Information",
+  "compliance.licensing.company.p1":
+    "Infinite Home Lending is a mortgage brokerage committed to transparent licensing disclosures and regulatory compliance.",
+  "compliance.licensing.company.nmlsLabel": "Company NMLS ID:",
+  "compliance.licensing.states.title": "State Licensing",
+  "compliance.licensing.states.item1": "Washington, D.C. Mortgage Broker License (active)",
+  "compliance.licensing.states.item2": "Maryland License Pending Approval",
+  "compliance.licensing.states.item3": "Virginia License Pending Approval",
+  "compliance.licensing.mlo.title": "Mortgage Loan Originators",
+  "compliance.licensing.mlo.p1":
+    "The following licensed mortgage professionals are associated with Infinite Home Lending:",
+  "compliance.licensing.mlo.javier.name": "Javier Cifuentes",
+  "compliance.licensing.mlo.javier.role": "Founder & Managing Director",
+  "compliance.licensing.mlo.alma.name": "Alma Jaramillo",
+  "compliance.licensing.mlo.alma.role": "Co-Founder",
+  "compliance.licensing.consumerAccess.title": "NMLS Consumer Access",
+  "compliance.licensing.consumerAccess.p1":
+    "Licensing information for Infinite Home Lending and its mortgage loan originators may be verified through NMLS Consumer Access, the official public database for the Nationwide Multistate Licensing System.",
+  "compliance.licensing.consumerAccess.link": "Visit NMLS Consumer Access",
+  "compliance.licensing.equalHousing.title": "Equal Housing Opportunity",
+  "compliance.licensing.equalHousing.p1":
+    "Infinite Home Lending is an Equal Housing Opportunity company. We do not discriminate on the basis of race, color, religion, national origin, sex, familial status, disability, or any other characteristic protected under applicable fair housing laws.",
+
+  "compliance.equalHousing.title": "Equal Housing Opportunity",
+  "compliance.equalHousing.meta.title": "Equal Housing Opportunity",
+  "compliance.equalHousing.meta.description":
+    "Equal Housing Opportunity statement, protected classes, and fair lending commitment for Infinite Home Lending.",
+  "compliance.equalHousing.lastUpdated": "Last updated: June 2026",
+  "compliance.equalHousing.statement.title": "Fair Housing Statement",
+  "compliance.equalHousing.statement.p1":
+    "Infinite Home Lending supports the principles of fair housing and equal opportunity in all aspects of residential lending. We are committed to providing mortgage guidance and services without discrimination.",
+  "compliance.equalHousing.classes.title": "Protected Classes",
+  "compliance.equalHousing.classes.p1":
+    "Under the Fair Housing Act, it is illegal to discriminate in housing-related transactions based on:",
+  "compliance.equalHousing.classes.item1": "Race",
+  "compliance.equalHousing.classes.item2": "Color",
+  "compliance.equalHousing.classes.item3": "Religion",
+  "compliance.equalHousing.classes.item4": "National origin",
+  "compliance.equalHousing.classes.item5": "Sex (including gender identity and sexual orientation)",
+  "compliance.equalHousing.classes.item6": "Familial status",
+  "compliance.equalHousing.classes.item7": "Disability",
+  "compliance.equalHousing.commitment.title": "Our Commitment",
+  "compliance.equalHousing.commitment.p1":
+    "Infinite Home Lending is dedicated to treating every client, partner, and community member with respect, fairness, and transparency. We train our team to uphold fair lending standards and to ensure that mortgage guidance is provided equitably to all qualified borrowers.",
+  "compliance.equalHousing.hud.title": "HUD Resources",
+  "compliance.equalHousing.hud.p1":
+    "If you believe you have experienced housing discrimination, you may file a complaint with the U.S. Department of Housing and Urban Development (HUD). Additional fair housing resources are available through HUD's Office of Fair Housing and Equal Opportunity.",
+  "compliance.equalHousing.hud.link": "HUD Fair Housing & Equal Opportunity",
 
   // Language toggle
   "lang.toggle.en": "EN",

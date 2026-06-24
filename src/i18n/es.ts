@@ -12,6 +12,8 @@ export const es = {
   "footer.askSarah": "Pregunta a Sarah",
 
   "sarah.askSarah": "Habla con Sarah",
+  "sarah.disclaimer":
+    "Sarah es nuestra Concierge Hipotecaria de IHL. No es una asesora hipotecaria con licencia. La información proporcionada es únicamente con fines educativos.",
 
   "trustBar.nmls": "NMLS #2831765",
   "trustBar.region": "Washington, D.C.",
@@ -22,7 +24,7 @@ export const es = {
     "Asesoría hipotecaria premium en Washington, DC. Compare opciones de préstamo, use calculadoras inteligentes y reciba orientación clara según sus metas—no solo una tasa.",
   "about.meta.title": "Nosotros",
   "about.meta.description":
-    "Conozca Infinite Home Lending—asesores hipotecarios en MD, DC y VA enfocados en claridad, estrategia y acompañamiento directo desde la primera conversación hasta el cierre.",
+    "Conozca quién es Infinite Home Lending, por qué existe y cómo nuestro enfoque de asesoría ayuda a los prestatarios a navegar el financiamiento de vivienda con claridad y confianza.",
   "solutions.meta.title": "Soluciones de Préstamo",
   "solutions.meta.description":
     "Compare préstamos convencionales, FHA, VA, USDA, refinanciamiento, HELOC y opciones especializadas en Washington, DC antes de elegir una estructura.",
@@ -61,7 +63,13 @@ export const es = {
   "footer.loanDisclaimer": "Todos los préstamos están sujetos a aprobación de crédito. Las tasas y condiciones pueden cambiar sin previo aviso.",
   "footer.serving": "Atendemos Washington, D.C.",
   "footer.privacy": "Política de privacidad",
-  "footer.terms": "Términos de servicio",
+  "footer.terms": "Términos de uso",
+  "footer.compliance": "Cumplimiento",
+  "footer.compliancePrivacy": "Política de privacidad",
+  "footer.complianceTerms": "Términos de uso",
+  "footer.complianceSms": "Términos y condiciones de SMS",
+  "footer.complianceLicensing": "Información de licencias",
+  "footer.complianceEqualHousing": "Igualdad de oportunidades de vivienda",
 
   // Home — Hero
   "home.hero.line1": "Cualquiera puede cotizar una tasa de interés.",
@@ -1753,6 +1761,7 @@ export const es = {
   "tool.seq.cta.disclaimer": "Esta herramienta ofrece estimaciones educativas con metodología estándar de calificación por cuenta propia. El ingreso calificable real lo determina un suscriptor tras revisar declaraciones y documentación completas. Las tasas de préstamos por extractos suelen ser 0.5–2% mayores que las convencionales. Los resultados no constituyen oferta de préstamo ni asesoría financiera/fiscal. Consulte a un profesional fiscal sobre deducciones. Contacte a Infinite Home Lending para un análisis personalizado.",
 
   // How We Work page
+  "howItWorks.eyebrow": "Cómo Trabajamos",
   "howItWorks.title": "Cómo Trabajamos",
   "howItWorks.subtitle": "Un proceso estructurado y transparente, diseñado alrededor de sus metas — no solo de su préstamo.",
   "howItWorks.step1.title": "Consulta Estratégica",
@@ -1814,11 +1823,21 @@ export const es = {
   "howItWorks.compare.pullQuote":
     "La diferencia no son más opciones — es evitar la decisión equivocada desde el inicio.",
   "howItWorks.why.title": "Por qué esta estructura importa",
-  "howItWorks.why.body1": "Un préstamo hipotecario no es solo una transacción — es una decisión financiera a largo plazo.",
+  "howItWorks.why.body1":
+    "Un préstamo hipotecario no es solo una transacción — es una decisión financiera a largo plazo que puede afectar su estabilidad, su tranquilidad y las oportunidades que vienen después.",
   "howItWorks.why.body2": "La forma en que está estructurado impacta su flujo de caja mensual, su flexibilidad y sus oportunidades futuras.",
   "howItWorks.why.body3": "La estructura de su préstamo puede impactarle en decenas de miles de dólares a lo largo del tiempo.",
   "howItWorks.why.body4": "Este proceso existe para asegurarse de que esas decisiones se tomen con claridad — no con presión.",
   "howItWorks.why.body5": "La mayoría de las personas solo lo entiende después de haberlo vivido. Nuestro objetivo es que usted lo entienda antes.",
+  "howItWorks.why.card1.title": "Flujo de caja mensual",
+  "howItWorks.why.card1.body":
+    "La forma en que estructura su préstamo puede influir en su pago mensual, su flexibilidad financiera y la manera en que planifica sus próximos pasos.",
+  "howItWorks.why.card2.title": "Impacto a largo plazo",
+  "howItWorks.why.card2.body":
+    "Cada decisión hipotecaria puede afectar su presupuesto, sus oportunidades futuras y el costo total de financiamiento a lo largo del tiempo.",
+  "howItWorks.why.card3.title": "Claridad antes que presión",
+  "howItWorks.why.card3.body":
+    "Nuestro proceso está diseñado para ayudarle a entender sus opciones con claridad, tomar decisiones informadas y avanzar con confianza.",
   "howItWorks.finalCta.eyebrow": "Ya conoce cómo trabajamos. Ahora dé el primer paso.",
   "howItWorks.finalCta.title": "¿Listo para avanzar con una estrategia definida?",
   "howItWorks.finalCta.body": "No necesita tenerlo todo resuelto. Solo necesita un punto de partida claro.",
@@ -1831,6 +1850,229 @@ export const es = {
 
   // Solutions page
   "solutions.eyebrow": "Soluciones de Préstamo",
+  "solutions.hero.navLabel": "Programas de financiamiento",
+  "solutions.hero.navScrollPrev": "Desplazar programas a la izquierda",
+  "solutions.hero.navScrollNext": "Desplazar programas a la derecha",
+  "solutions.hero.featuresLabel": "Características del programa",
+  "solutions.hero.bestForLabel": "Ideal para",
+  "solutions.hero.disclosure":
+    "Todas las opciones de financiamiento están sujetas a aprobación de crédito, elegibilidad de la propiedad y los lineamientos del programa de préstamo aplicable. La disponibilidad de financiamiento, las tasas, los términos y los requisitos de calificación pueden variar.",
+  "solutions.hero.slides.conventional.badgeLabel": "Convencional",
+  "solutions.hero.slides.conventional.eyebrow": "Financiamiento Convencional",
+  "solutions.hero.slides.conventional.headline":
+    "Compre su vivienda con términos flexibles y amplia oferta de prestamistas.",
+  "solutions.hero.slides.conventional.subheadline":
+    "Tasas competitivas y términos flexibles para compradores con ingresos estables y buen crédito, sin restricciones adicionales de programas gubernamentales.",
+  "solutions.hero.slides.conventional.feature.0.title": "Cuota inicial desde 3%",
+  "solutions.hero.slides.conventional.feature.0.desc":
+    "Cuota inicial mínima desde el 3% con caminos para eliminar el seguro hipotecario.",
+  "solutions.hero.slides.conventional.feature.1.title": "Términos de tasa flexibles",
+  "solutions.hero.slides.conventional.feature.1.desc":
+    "Opciones fijas y ajustables sin reglas adicionales de FHA, VA o USDA.",
+  "solutions.hero.slides.conventional.feature.2.title": "Amplia oferta de prestamistas",
+  "solutions.hero.slides.conventional.feature.2.desc":
+    "Amplia disponibilidad de prestamistas con un proceso ágil para ingresos documentados.",
+  "solutions.hero.slides.conventional.bestFor.0": "Ingresos estables",
+  "solutions.hero.slides.conventional.bestFor.1": "Buen crédito",
+  "solutions.hero.slides.conventional.bestFor.2": "Compradores de vivienda principal",
+  "solutions.hero.slides.conventional.bestFor.3": "Términos flexibles",
+  "solutions.hero.slides.conventional.cta": "Explorar Financiamiento Convencional →",
+  "solutions.hero.slides.conventional.imageAlt":
+    "Elegante vivienda colonial de ladrillo que representa financiamiento convencional de compra",
+  "solutions.hero.slides.dscr.badgeLabel": "DSCR Inversionista",
+  "solutions.hero.slides.dscr.eyebrow": "Financiamiento para Inversionistas",
+  "solutions.hero.slides.dscr.headline":
+    "Haga crecer su portafolio inmobiliario sin declaraciones de impuestos.",
+  "solutions.hero.slides.dscr.subheadline":
+    "Califique usando los ingresos por alquiler de la propiedad en lugar de declaraciones de impuestos tradicionales, W-2 o documentación de ingresos personales.",
+  "solutions.hero.slides.dscr.feature.0.title": "Califique con ingresos por alquiler",
+  "solutions.hero.slides.dscr.feature.0.desc":
+    "Enfoque en el flujo de efectivo de la propiedad, no en declaraciones de impuestos personales ni ingresos W-2.",
+  "solutions.hero.slides.dscr.feature.1.title": "Múltiples propiedades financiadas",
+  "solutions.hero.slides.dscr.feature.1.desc":
+    "Diseñado para inversionistas que poseen o planean adquirir varias propiedades de alquiler.",
+  "solutions.hero.slides.dscr.feature.2.title": "Compra, refinanciamiento o retiro de efectivo",
+  "solutions.hero.slides.dscr.feature.2.desc":
+    "Acceda a soluciones flexibles para expandir o fortalecer su portafolio.",
+  "solutions.hero.slides.dscr.bestFor.0": "Inversionistas inmobiliarios",
+  "solutions.hero.slides.dscr.bestFor.1": "Prestatarios independientes",
+  "solutions.hero.slides.dscr.bestFor.2": "Múltiples propiedades",
+  "solutions.hero.slides.dscr.bestFor.3": "Alquileres a corto plazo",
+  "solutions.hero.slides.dscr.cta": "Explorar Financiamiento DSCR →",
+  "solutions.hero.slides.dscr.imageAlt":
+    "Modelo de propiedad de inversión sobre efectivo que representa financiamiento DSCR",
+  "solutions.hero.slides.fha100down.badgeLabel": "FHA $100 Down",
+  "solutions.hero.slides.fha100down.eyebrow": "Programa para Compradores Primerizos",
+  "solutions.hero.slides.fha100down.headline": "Compre una vivienda con solo $100 de cuota inicial.",
+  "solutions.hero.slides.fha100down.subheadline":
+    "Para viviendas elegibles de HUD, este programa ayuda a compradores calificados a ser propietarios con mucho menos efectivo inicial.",
+  "solutions.hero.slides.fha100down.feature.0.title": "Cuota inicial de $100",
+  "solutions.hero.slides.fha100down.feature.0.desc":
+    "Compre una vivienda elegible de HUD con tan solo $100 de cuota inicial en lugar del mínimo estándar de FHA.",
+  "solutions.hero.slides.fha100down.feature.1.title": "Sea propietario más pronto",
+  "solutions.hero.slides.fha100down.feature.1.desc":
+    "Menos efectivo inicial puede ayudar a compradores calificados a comprar antes.",
+  "solutions.hero.slides.fha100down.feature.2.title": "Financie reparaciones y mejoras",
+  "solutions.hero.slides.fha100down.feature.2.desc":
+    "Puede combinarse con programas elegibles de renovación FHA para compra y mejoras.",
+  "solutions.hero.slides.fha100down.bestFor.0": "Compradores primerizos",
+  "solutions.hero.slides.fha100down.bestFor.1": "Ahorros limitados",
+  "solutions.hero.slides.fha100down.bestFor.2": "Ocupantes propietarios",
+  "solutions.hero.slides.fha100down.bestFor.3": "Viviendas HUD",
+  "solutions.hero.slides.fha100down.cta": "Explorar FHA $100 Down →",
+  "solutions.hero.slides.fha100down.imageAlt":
+    "Pareja sonriente frente a una vivienda que representa la oportunidad FHA $100 down",
+  "solutions.hero.slides.dpaAdvantage.badgeLabel": "DPA Advantage",
+  "solutions.hero.slides.dpaAdvantage.eyebrow": "Programa de Subvención Perdonable",
+  "solutions.hero.slides.dpaAdvantage.headline": "Reciba hasta 3.5% para su cuota inicial.",
+  "solutions.hero.slides.dpaAdvantage.subheadline":
+    "Diseñado para ayudar a compradores calificados a reducir el efectivo inicial requerido mediante una subvención totalmente perdonable que no requiere reembolso.",
+  "solutions.hero.slides.dpaAdvantage.feature.0.title": "Hasta 3.5% de asistencia por subvención",
+  "solutions.hero.slides.dpaAdvantage.feature.0.desc":
+    "Ayude a cubrir su cuota inicial con una subvención igual al 2% o 3.5% del precio de compra.",
+  "solutions.hero.slides.dpaAdvantage.feature.1.title": "Sin reembolso requerido",
+  "solutions.hero.slides.dpaAdvantage.feature.1.desc":
+    "La subvención es totalmente perdonable el día del cierre, sin reembolso ni período de recuperación.",
+  "solutions.hero.slides.dpaAdvantage.feature.2.title": "Combine con financiamiento FHA",
+  "solutions.hero.slides.dpaAdvantage.feature.2.desc":
+    "Puede usarse con programas elegibles de compra y renovación FHA para mayor flexibilidad.",
+  "solutions.hero.slides.dpaAdvantage.bestFor.0": "Compradores primerizos",
+  "solutions.hero.slides.dpaAdvantage.bestFor.1": "Ahorros limitados",
+  "solutions.hero.slides.dpaAdvantage.bestFor.2": "Prestatarios FHA",
+  "solutions.hero.slides.dpaAdvantage.bestFor.3": "Asistencia para cuota inicial",
+  "solutions.hero.slides.dpaAdvantage.cta": "Explorar DPA Advantage →",
+  "solutions.hero.slides.dpaAdvantage.imageAlt":
+    "Pareja feliz mudándose a una nueva vivienda que representa programas de asistencia para cuota inicial",
+  "solutions.hero.slides.fhaRepairEscrow.badgeLabel": "FHA Reparaciones",
+  "solutions.hero.slides.fhaRepairEscrow.eyebrow": "Programa FHA para Reparaciones Menores",
+  "solutions.hero.slides.fhaRepairEscrow.headline":
+    "Compre una vivienda que necesita reparaciones menores sin pagarlas por adelantado.",
+  "solutions.hero.slides.fhaRepairEscrow.subheadline":
+    "Financie hasta $10,000 en reparaciones elegibles mientras completa la compra de su vivienda.",
+  "solutions.hero.slides.fhaRepairEscrow.feature.0.title": "Hasta $10,000 en depósito de reparaciones",
+  "solutions.hero.slides.fhaRepairEscrow.feature.0.desc":
+    "Reserve fondos para reparaciones elegibles al cierre en lugar de pagarlas de su bolsillo.",
+  "solutions.hero.slides.fhaRepairEscrow.feature.1.title": "Compre ahora, repare después del cierre",
+  "solutions.hero.slides.fhaRepairEscrow.feature.1.desc":
+    "Complete la compra y realice reparaciones menores elegibles después del cierre.",
+  "solutions.hero.slides.fhaRepairEscrow.feature.2.title": "Amplíe su búsqueda de vivienda",
+  "solutions.hero.slides.fhaRepairEscrow.feature.2.desc":
+    "Considere viviendas con pequeñas necesidades de reparación que otros compradores podrían descartar.",
+  "solutions.hero.slides.fhaRepairEscrow.bestFor.0": "Reparaciones menores",
+  "solutions.hero.slides.fhaRepairEscrow.bestFor.1": "Compradores primerizos",
+  "solutions.hero.slides.fhaRepairEscrow.bestFor.2": "Viviendas elegibles FHA",
+  "solutions.hero.slides.fhaRepairEscrow.bestFor.3": "Efectivo inicial limitado",
+  "solutions.hero.slides.fhaRepairEscrow.cta": "Explorar FHA Reparaciones →",
+  "solutions.hero.slides.fhaRepairEscrow.imageAlt":
+    "Pareja joven recorriendo una vivienda habitable con necesidades cosméticas menores junto a un agente inmobiliario",
+  "solutions.hero.slides.fha203k.badgeLabel": "FHA 203(k)",
+  "solutions.hero.slides.fha203k.eyebrow": "Financiamiento de Renovación",
+  "solutions.hero.slides.fha203k.headline": "Compre donde quiera vivir y financie las renovaciones.",
+  "solutions.hero.slides.fha203k.subheadline":
+    "Financie tanto la compra como las renovaciones elegibles con una sola hipoteca, lo que le permite transformar una propiedad sin pagar reparaciones de su bolsillo.",
+  "solutions.hero.slides.fha203k.feature.0.title": "Compra + renovación en un solo préstamo",
+  "solutions.hero.slides.fha203k.feature.0.desc":
+    "Financie la compra de la vivienda y las mejoras elegibles juntas en lugar de obtener financiamiento por separado.",
+  "solutions.hero.slides.fha203k.feature.1.title": "Amplíe sus opciones de vivienda",
+  "solutions.hero.slides.fha203k.feature.1.desc":
+    "Considere viviendas que necesitan actualizaciones, reparaciones o modernización que otros compradores pueden pasar por alto.",
+  "solutions.hero.slides.fha203k.feature.2.title": "Genere patrimonio con mejoras",
+  "solutions.hero.slides.fha203k.feature.2.desc":
+    "Las renovaciones pueden aumentar el valor de la propiedad mientras crea un hogar adaptado a sus necesidades.",
+  "solutions.hero.slides.fha203k.bestFor.0": "Fixer-uppers",
+  "solutions.hero.slides.fha203k.bestFor.1": "Viviendas anticuadas",
+  "solutions.hero.slides.fha203k.bestFor.2": "Compradores primerizos",
+  "solutions.hero.slides.fha203k.bestFor.3": "Proyectos de renovación",
+  "solutions.hero.slides.fha203k.cta": "Explorar FHA 203(k) →",
+  "solutions.hero.slides.fha203k.imageAlt":
+    "Vivienda en renovación con estructura visible que representa financiamiento de renovación FHA 203(k)",
+  "solutions.hero.slides.vaRenovation.badgeLabel": "Renovación VA",
+  "solutions.hero.slides.vaRenovation.eyebrow": "Programa VA de Renovación",
+  "solutions.hero.slides.vaRenovation.headline":
+    "Compre, renueve y financie todo utilizando sus beneficios VA.",
+  "solutions.hero.slides.vaRenovation.subheadline":
+    "Veteranos elegibles y miembros activos del servicio militar pueden combinar la compra y las renovaciones en un solo préstamo VA.",
+  "solutions.hero.slides.vaRenovation.feature.0.title": "Financiamiento hasta el 100%",
+  "solutions.hero.slides.vaRenovation.feature.0.desc":
+    "Los prestatarios elegibles pueden financiar la compra y las renovaciones con poco o ningún pago inicial.",
+  "solutions.hero.slides.vaRenovation.feature.1.title": "Compre y renueve al mismo tiempo",
+  "solutions.hero.slides.vaRenovation.feature.1.desc":
+    "Combine la adquisición de la vivienda y las mejoras aprobadas dentro de una sola hipoteca.",
+  "solutions.hero.slides.vaRenovation.feature.2.title": "Amplíe sus opciones de vivienda",
+  "solutions.hero.slides.vaRenovation.feature.2.desc":
+    "Considere propiedades que necesitan reparaciones o mejoras y que podrían no calificar para financiamiento VA tradicional actualmente.",
+  "solutions.hero.slides.vaRenovation.bestFor.0": "Veteranos",
+  "solutions.hero.slides.vaRenovation.bestFor.1": "Militares activos",
+  "solutions.hero.slides.vaRenovation.bestFor.2": "Viviendas con reparaciones",
+  "solutions.hero.slides.vaRenovation.bestFor.3": "Prestatarios elegibles VA",
+  "solutions.hero.slides.vaRenovation.cta": "Explorar Renovación VA →",
+  "solutions.hero.slides.vaRenovation.imageAlt":
+    "Veterano con su familia en una vivienda luminosa con detalles sutiles de renovación que representa los beneficios del préstamo VA de renovación",
+  "solutions.hero.slides.heloc.badgeLabel": "HELOC",
+  "solutions.hero.slides.heloc.eyebrow": "Financiamiento con Patrimonio",
+  "solutions.hero.slides.heloc.headline":
+    "Ponga el patrimonio de su vivienda a trabajar para su próximo capítulo.",
+  "solutions.hero.slides.heloc.subheadline":
+    "Acceda a fondos para renovaciones, educación, deudas u otras metas—sin reemplazar su hipoteca actual.",
+  "solutions.hero.slides.heloc.feature.0.title": "Acceda al patrimonio disponible",
+  "solutions.hero.slides.heloc.feature.0.desc":
+    "Convierta parte del valor de su vivienda en fondos para metas personales o financieras.",
+  "solutions.hero.slides.heloc.feature.1.title": "Mantenga su hipoteca actual",
+  "solutions.hero.slides.heloc.feature.1.desc":
+    "Acceda al patrimonio sin reemplazar su hipoteca ni reiniciar el plazo del préstamo.",
+  "solutions.hero.slides.heloc.feature.2.title": "Financie proyectos y gastos clave",
+  "solutions.hero.slides.heloc.feature.2.desc":
+    "Use fondos para mejoras, educación, deudas, reservas u otras necesidades elegibles.",
+  "solutions.hero.slides.heloc.bestFor.0": "Propietarios con patrimonio",
+  "solutions.hero.slides.heloc.bestFor.1": "Mejoras del hogar",
+  "solutions.hero.slides.heloc.bestFor.2": "Consolidación de deudas",
+  "solutions.hero.slides.heloc.bestFor.3": "Flexibilidad financiera",
+  "solutions.hero.slides.heloc.cta": "Explorar opciones HELOC →",
+  "solutions.hero.slides.heloc.imageAlt":
+    "Graduada celebrando con su familia que representa el uso del patrimonio para hitos de vida y oportunidades futuras",
+  "solutions.hero.slides.reverse.badgeLabel": "Hipoteca Inversa",
+  "solutions.hero.slides.reverse.eyebrow": "Patrimonio para la Jubilación",
+  "solutions.hero.slides.reverse.headline":
+    "Convierta el patrimonio de su vivienda en mayor flexibilidad financiera.",
+  "solutions.hero.slides.reverse.subheadline":
+    "Para propietarios elegibles de 55+, acceda al patrimonio para ingresos, respaldo o flexibilidad mientras permanece en su hogar.",
+  "solutions.hero.slides.reverse.feature.0.title": "Acceda al patrimonio a su manera",
+  "solutions.hero.slides.reverse.feature.0.desc":
+    "Elija suma global, línea de crédito u otras opciones según sus metas financieras.",
+  "solutions.hero.slides.reverse.feature.1.title": "Sin pagos mensuales de hipoteca",
+  "solutions.hero.slides.reverse.feature.1.desc":
+    "Prestatarios calificados pueden acceder al patrimonio sin pagos mensuales mientras cumplen el programa.",
+  "solutions.hero.slides.reverse.feature.2.title": "Mayor flexibilidad en jubilación",
+  "solutions.hero.slides.reverse.feature.2.desc":
+    "Use fondos para salud, mejoras del hogar, planificación, viajes u otras prioridades.",
+  "solutions.hero.slides.reverse.bestFor.0": "55 años o más",
+  "solutions.hero.slides.reverse.bestFor.1": "Planificación de jubilación",
+  "solutions.hero.slides.reverse.bestFor.2": "Acceso al patrimonio",
+  "solutions.hero.slides.reverse.bestFor.3": "Flexibilidad financiera",
+  "solutions.hero.slides.reverse.cta": "Explorar opciones de hipoteca inversa →",
+  "solutions.hero.slides.reverse.imageAlt":
+    "Pareja disfrutando la jubilación al aire libre que representa flexibilidad del patrimonio y planificación financiera",
+  "solutions.hero.slides.jumbo.badgeLabel": "Financiamiento Jumbo",
+  "solutions.hero.slides.jumbo.eyebrow": "Financiamiento Jumbo",
+  "solutions.hero.slides.jumbo.headline": "Financie su próxima vivienda con mayor poder de compra.",
+  "solutions.hero.slides.jumbo.subheadline":
+    "Diseñado para compradores calificados que adquieren viviendas de mayor precio y necesitan financiamiento más allá de los límites de préstamos convencionales, con opciones flexibles para residencias principales y segundas viviendas.",
+  "solutions.hero.slides.jumbo.feature.0.title": "Límites de préstamo más altos",
+  "solutions.hero.slides.jumbo.feature.0.desc":
+    "Financie viviendas que exceden los límites de préstamos convencionales con soluciones diseñadas para montos de compra mayores.",
+  "solutions.hero.slides.jumbo.feature.1.title": "Opciones de financiamiento flexibles",
+  "solutions.hero.slides.jumbo.feature.1.desc":
+    "Elija entre programas de tasa fija y tasa ajustable según sus metas financieras y planes a largo plazo.",
+  "solutions.hero.slides.jumbo.feature.2.title": "Diseñado para prestatarios sólidos",
+  "solutions.hero.slides.jumbo.feature.2.desc":
+    "Opciones competitivas para compradores calificados con perfiles crediticios sólidos que buscan mayor poder de compra.",
+  "solutions.hero.slides.jumbo.bestFor.0": "Compradores que suben de nivel",
+  "solutions.hero.slides.jumbo.bestFor.1": "Viviendas de lujo",
+  "solutions.hero.slides.jumbo.bestFor.2": "Montos de préstamo más altos",
+  "solutions.hero.slides.jumbo.bestFor.3": "Perfiles crediticios sólidos",
+  "solutions.hero.slides.jumbo.cta": "Explorar financiamiento jumbo →",
+  "solutions.hero.slides.jumbo.imageAlt":
+    "Vivienda de lujo al atardecer que representa financiamiento jumbo para propiedades de mayor precio",
   "solutions.title": "Encuentre el Préstamo Adecuado",
   "solutions.subtitle": "Cada estructura de préstamo tiene ventajas y desventajas. Le ayudamos a entenderlas antes de comprometerse.",
   "solutions.learnMore": "Ver más",
@@ -1874,89 +2116,357 @@ export const es = {
   "solutions.modal.selfEmployedLink": "Calificador Hipotecario para Independientes →",
   "solutions.modal.selfEmployedPost": "para modelar el Anexo C, extractos bancarios y caminos de planificación como lo hacen los suscriptores.",
 
+  "solutions.detail.fitTitle": "¿Este programa podría ser adecuado?",
+  "solutions.detail.benefitsTitle": "Beneficios clave",
+  "solutions.detail.howItWorksTitle": "Cómo funciona",
+  "solutions.detail.howItWorksSubtitle":
+    "Un proceso claro, paso a paso, diseñado para ayudarle a avanzar con confianza.",
+  "solutions.detail.processSupport.eligibility":
+    "Establezca los requisitos que aplican antes de iniciar la solicitud.",
+  "solutions.detail.processSupport.preApproval":
+    "Obtenga claridad sobre lo que puede calificar antes de buscar en serio.",
+  "solutions.detail.processSupport.property":
+    "Identifique una propiedad que se alinee con las pautas del programa y sus metas.",
+  "solutions.detail.processSupport.underwriting":
+    "El prestamista revisa su expediente, la propiedad y los requisitos del programa.",
+  "solutions.detail.processSupport.closing":
+    "Finalice su préstamo y pase a la estructura de pago que seleccionó.",
+  "solutions.detail.processSupport.equity":
+    "Entienda cuánto puede acceder y cuándo estarán disponibles los fondos.",
+  "solutions.detail.processSupport.compare":
+    "Revise las opciones lado a lado para evaluar tiempos y compensaciones.",
+  "solutions.detail.processSupport.apply":
+    "Presente la documentación necesaria para que el prestamista evalúe su expediente.",
+  "solutions.detail.processSupport.generic":
+    "Cada paso se apoya en el anterior para mantener su camino claro y estructurado.",
+  "solutions.detail.highlightsTitle": "Aspectos destacados del programa",
+  "solutions.detail.faqTitle": "Detalles del programa",
+  "solutions.detail.backToSolutions": "Volver a Soluciones de préstamo",
+
+  "solutions.body.chooseTitle": "Cómo le ayudamos a elegir",
+  "solutions.body.compareTitle": "Compare sus opciones",
+  "solutions.body.maCta.primary": "Conéctese con un asesor hipotecario",
+  "solutions.body.toolsLabel": "Herramientas interactivas de planificación",
+
+  "solutions.body.intro.headline": "No necesita saber qué programa de préstamo es el mejor para usted.",
+  "solutions.body.intro.body":
+    "Nuestro papel es ayudarle a evaluar sus opciones, comparar estrategias e identificar una solución de financiamiento alineada con sus metas.",
+
+  "solutions.body.process1.title": "Comprenda sus metas",
+  "solutions.body.process1.body":
+    "Ya sea que esté comprando, refinanciando, invirtiendo o accediendo a patrimonio, comenzamos por entender sus prioridades.",
+  "solutions.body.process2.title": "Explore opciones de financiamiento",
+  "solutions.body.process2.body":
+    "Comparamos programas de préstamo y estrategias de financiamiento según su escenario único.",
+  "solutions.body.process3.title": "Avance con confianza",
+  "solutions.body.process3.body":
+    "Le ayudamos a entender sus opciones para que pueda tomar decisiones informadas con claridad.",
+
+  "solutions.flagship.framework.eyebrow": "Nuestro enfoque de asesoría",
+  "solutions.flagship.framework.headline": "Cada prestatario tiene una historia diferente",
+  "solutions.flagship.framework.body":
+    "No comenzamos con programas de préstamo. Comenzamos con sus metas, plazos, situación financiera y estrategia a largo plazo.",
+  "solutions.flagship.framework.goals.title": "Metas",
+  "solutions.flagship.framework.goals.body": "¿Qué está tratando de lograr?",
+  "solutions.flagship.framework.options.title": "Opciones",
+  "solutions.flagship.framework.options.body": "Evalúe posibles caminos de financiamiento.",
+  "solutions.flagship.framework.strategy.title": "Estrategia",
+  "solutions.flagship.framework.strategy.body":
+    "Compare compensaciones e identifique el enfoque más sólido.",
+  "solutions.flagship.framework.confidence.title": "Confianza",
+  "solutions.flagship.framework.confidence.body":
+    "Avance con claridad y comprensión.",
+
+  "solutions.body.exploreTitle": "Explore soluciones de préstamo",
+
+  "solutions.body.ma.headline": "¿No está seguro de qué programa de préstamo es el adecuado?",
+  "solutions.body.ma.lead": "No tiene que resolverlo solo.",
+  "solutions.body.ma.body":
+    "Nuestros asesores hipotecarios pueden ayudarle a comparar opciones, entender compensaciones y explorar estrategias de financiamiento alineadas con sus metas.",
+
+  "solutions.flagship.pathwaysTitle": "Cómo suelen comenzar los prestatarios",
+  "solutions.flagship.pathway.buy.title": "Comprar una vivienda",
+  "solutions.flagship.pathway.buy.body":
+    "No todos los compradores de vivienda comienzan desde el mismo lugar. Explore caminos de financiamiento diseñados para compradores primerizos, quienes buscan mudarse, veteranos y propiedades rurales.",
+  "solutions.flagship.pathway.buy.programs": "Convencional · FHA · VA · USDA",
+  "solutions.flagship.pathway.buy.cta": "Explore opciones de compra →",
+  "solutions.flagship.pathway.equity.title": "Acceder al patrimonio",
+  "solutions.flagship.pathway.equity.body":
+    "Use el patrimonio de su vivienda de forma estratégica para renovaciones, consolidación de deudas, necesidades de efectivo o planificación de jubilación.",
+  "solutions.flagship.pathway.equity.programs": "HELOC · Refinanciamiento con retiro · Hipoteca inversa",
+  "solutions.flagship.pathway.equity.cta": "Explore soluciones de patrimonio →",
+  "solutions.flagship.pathway.altQual.title": "Calificación alternativa",
+  "solutions.flagship.pathway.altQual.body":
+    "Cuando la documentación de ingresos tradicional no cuenta toda la historia, las estrategias de financiamiento alternativas pueden ofrecer flexibilidad adicional.",
+  "solutions.flagship.pathway.altQual.programs": "Non-QM · DSCR · Programas con extractos bancarios",
+  "solutions.flagship.pathway.altQual.cta": "Explore soluciones alternativas →",
+
+  "solutions.flagship.scenario.title": "¿Cuál descripción se parece más a usted?",
+  "solutions.flagship.scenario.subtitle":
+    "Seleccione el escenario que mejor refleje sus metas y le orientaremos hacia opciones de financiamiento comúnmente exploradas por prestatarios en situaciones similares.",
+  "solutions.flagship.scenario.suggested": "Programas sugeridos",
+  "solutions.flagship.scenario.firstTime.title": "Comprador primerizo",
+  "solutions.flagship.scenario.firstTime.programs": "FHA, Convencional, DPA",
+  "solutions.flagship.scenario.firstTime.toolCta": "Estimar poder de compra →",
+  "solutions.flagship.scenario.moveUp.title": "Mudarse a un nuevo hogar",
+  "solutions.flagship.scenario.moveUp.programs": "Convencional, Jumbo",
+  "solutions.flagship.scenario.moveUp.toolCta": "Explore opciones de compra →",
+  "solutions.flagship.scenario.accessEquity.title": "Acceder al patrimonio",
+  "solutions.flagship.scenario.accessEquity.programs": "HELOC, Retiro de efectivo, Inversa",
+  "solutions.flagship.scenario.accessEquity.toolCta": "Explore HELOC / patrimonio →",
+  "solutions.flagship.scenario.investor.title": "Inversor inmobiliario",
+  "solutions.flagship.scenario.investor.programs": "DSCR, Convencional de inversión",
+  "solutions.flagship.scenario.investor.toolCta": "Explore DSCR / inversión →",
+  "solutions.flagship.scenario.selfEmployed.title": "Trabajador independiente",
+  "solutions.flagship.scenario.selfEmployed.programs": "Non-QM, Extractos bancarios",
+  "solutions.flagship.scenario.selfEmployed.toolCta": "Use calificador de ingresos →",
+  "solutions.flagship.scenario.veteran.title": "Veterano",
+  "solutions.flagship.scenario.veteran.programs": "VA, Renovación VA",
+  "solutions.flagship.scenario.veteran.toolCta": "Explore opciones VA →",
+
+  "solutions.flagship.tools.title": "Explore sus opciones con herramientas interactivas de planificación",
+  "solutions.flagship.tools.subtitle":
+    "Use nuestras herramientas inteligentes para empezar a entender sus opciones antes de hablar con un asesor hipotecario.",
+  "solutions.flagship.toolsHub.headline": "Explore nuestras herramientas inteligentes",
+  "solutions.flagship.toolsHub.body":
+    "Use nuestras herramientas inteligentes para empezar a entender sus opciones antes de hablar con un asesor hipotecario.",
+  "solutions.flagship.toolsHub.cta": "Explore herramientas inteligentes →",
+  "solutions.flagship.tools.affordability.title": "Planificador de asequibilidad",
+  "solutions.flagship.tools.affordability.body":
+    "Mapee su poder de compra en distintos plazos y vea cómo ingresos, crédito y ahorros definen su rango.",
+  "solutions.flagship.tools.affordability.cta": "Comenzar planificación →",
+  "solutions.flagship.tools.selfEmployed.title": "Calificador de ingresos independientes",
+  "solutions.flagship.tools.selfEmployed.body":
+    "Modele declaraciones, extractos bancarios y rutas de planificación para entender la flexibilidad de calificación.",
+  "solutions.flagship.tools.selfEmployed.cta": "Ejecutar calificador →",
+  "solutions.flagship.tools.heloc.title": "Explorador HELOC y patrimonio",
+  "solutions.flagship.tools.heloc.body":
+    "Compare escenarios de retiro y pago, supuestos de tasa y usos del patrimonio lado a lado.",
+  "solutions.flagship.tools.heloc.cta": "Explore patrimonio →",
+  "solutions.flagship.tools.compare.title": "Comparador de programas de préstamo",
+  "solutions.flagship.tools.compare.body":
+    "Vea cómo se comparan las rutas convencional y FHA en costos, MI y compensaciones a largo plazo.",
+  "solutions.flagship.tools.compare.cta": "Comparar programas →",
+
+  "solutions.flagship.strategy.headline": "El financiamiento es más que elegir un programa de préstamo",
+  "solutions.flagship.strategy.body":
+    "La estrategia de financiamiento adecuada comienza por entender sus metas, evaluar las opciones disponibles y seleccionar una solución alineada con sus planes a largo plazo.",
+  "solutions.flagship.session.headline": "Cada prestatario tiene una historia diferente.",
+  "solutions.flagship.session.body":
+    "Creemos que las decisiones de financiamiento merecen orientación reflexiva, no recomendaciones genéricas.",
+  "solutions.flagship.strategy.goals": "Metas",
+  "solutions.flagship.strategy.options": "Opciones",
+  "solutions.flagship.strategy.strategy": "Estrategia",
+  "solutions.flagship.strategy.decision": "Decisión",
+
+  "solutions.flagship.trust.title": "Por qué los prestatarios eligen Infinite Home Lending",
+  "solutions.flagship.trust.brokerage.title": "Corretaje independiente",
+  "solutions.flagship.trust.brokerage.body": "Acceso a múltiples socios prestamistas mayoristas.",
+  "solutions.flagship.trust.experience.title": "Más de 40 años de experiencia combinada",
+  "solutions.flagship.trust.experience.body": "Orientación respaldada por décadas de experiencia hipotecaria.",
+  "solutions.flagship.trust.strategies.title": "Múltiples estrategias de financiamiento",
+  "solutions.flagship.trust.strategies.body":
+    "Una amplia gama de soluciones convencionales, gubernamentales y especializadas.",
+  "solutions.flagship.trust.wholesale.title": "Múltiples socios prestamistas mayoristas",
+  "solutions.flagship.trust.wholesale.body": "Acceso a una amplia red de socios prestamistas mayoristas.",
+  "solutions.flagship.trust.bilingual.title": "Orientación bilingüe",
+  "solutions.flagship.trust.bilingual.body": "Atendemos cómodamente en inglés y español.",
+  "solutions.flagship.trust.education.title": "Educación antes de recomendar",
+  "solutions.flagship.trust.education.body": "Creemos que las decisiones informadas generan mejores resultados.",
+
+  "solutions.displayCategory.purchase": "Compra",
+  "solutions.displayCategory.equity": "Patrimonio",
+  "solutions.displayCategory.specialty": "Especialidad",
+
   // About page
-  "about.eyebrow": "Nuestra Historia",
-  "about.title": "Las personas detrás de Infinite Home Lending",
-  "about.subtitle": "Dos décadas de experiencia. Un compromiso claro: guiar a cada cliente con estrategia, claridad y dedicación.",
-  "about.founder": "Fundador y Director General",
-  "about.coFounder": "Co-Fundadora",
-  "about.startPreApproval": "Iniciar Pre-Aprobación",
+  "about.eyebrow": "Acerca de Infinite Home Lending",
+  "about.hero.title": "Cada camino hipotecario merece una estrategia reflexiva.",
+  "about.hero.body":
+    "En Infinite Home Lending, creemos que cada decisión hipotecaria merece una orientación reflexiva. Ya sea que esté comprando una vivienda, refinanciando, invirtiendo en bienes raíces o explorando opciones de financiamiento especializadas, nuestro rol es ayudarle a navegar sus opciones con claridad, confianza y una estrategia adaptada a sus metas.",
+  "about.hero.ctaPrimary": "Iniciar Mi Pre-Aprobación",
+  "about.hero.ctaSecondary": "Agendar una Consulta",
+  "about.hero.imageAlt": "Asesor hipotecario en consulta con clientes en una oficina profesional y luminosa",
 
-  "about.hero.title": "Una forma más reflexiva de abordar el financiamiento de vivienda",
-  "about.hero.body": "La mayoría de las decisiones hipotecarias se toman solo en torno a números. Creemos que deben construirse alrededor de su vida.",
+  "about.credibility.heading": "Por qué los prestatarios confían en Infinite Home Lending",
+  "about.credibility.1.stat": "40+ Años",
+  "about.credibility.1.label": "Experiencia Hipotecaria Combinada",
+  "about.credibility.2.stat": "Servicio Bilingüe",
+  "about.credibility.2.label": "Atención en Inglés y Español",
+  "about.credibility.3.stat": "Correduría Independiente",
+  "about.credibility.3.label": "Acceso a Soluciones de Préstamo Personalizadas",
+  "about.credibility.4.stat": "Orientación Centrada en el Cliente",
+  "about.credibility.4.label": "Asesoría Hipotecaria Basada en Educación",
 
-  "about.narrative.title": "Un camino más intencional hacia adelante",
-  "about.narrative.body1": "La mayoría del financiamiento hipotecario hoy se siente transaccional — diseñado para la velocidad, no para el ajuste.",
-  "about.narrative.body2": "Para algo tan importante como un hogar, eso no es suficiente. Creemos que el trabajo debe construirse alrededor de sus metas, su cronograma y hacia dónde se dirige — no solo la próxima aprobación.",
-  "about.narrative.pullQuote": "Un préstamo hipotecario debe adaptarse a la vida que está construyendo — no solo a los números en una página.",
+  "about.why.title": "Por Qué Existe Infinite Home Lending",
+  "about.why.lead": "Después de décadas en la industria hipotecaria, vimos que muchos prestatarios necesitaban más que un préstamo: necesitaban orientación.",
+  "about.why.p1":
+    "Con demasiada frecuencia, las decisiones hipotecarias se tratan como transacciones en lugar de hitos financieros importantes. A los prestatarios se les presentan opciones, pero no siempre la educación, claridad o atención personalizada necesarias para tomar decisiones con confianza.",
+  "about.why.p2":
+    "Infinite Home Lending se fundó con una creencia simple: cada prestatario merece orientación reflexiva, comunicación transparente y acceso a soluciones adaptadas a sus metas únicas.",
+  "about.why.mission":
+    "Nuestra misión es ayudar a individuos y familias a navegar el proceso hipotecario con confianza, brindando apoyo personalizado, experiencia profesional y un compromiso de poner sus intereses primero.",
 
-  "about.approach.title": "No solo encontramos préstamos. Estructuramos decisiones.",
-  "about.approach.body1": "Comenzamos por entender su panorama financiero completo — no solo para qué califica, sino qué tiene realmente sentido.",
-  "about.approach.body2": "A partir de ahí, estructuramos opciones de financiamiento que se alinean con sus prioridades — para que vea no solo lo que puede hacer, sino lo que debería hacer.",
-  "about.approach.body3": "La estructura correcta no solo lo aprueba — lo prepara para lo que viene después.",
+  "about.philosophy.title": "Nuestra Filosofía",
+  "about.philosophy.principle1.title": "Orientación Antes que Transacciones",
+  "about.philosophy.principle1.body": "Tomamos tiempo para entender sus metas antes de recomendar cualquier producto o camino.",
+  "about.philosophy.principle2.title": "La Educación Empodera Mejores Decisiones",
+  "about.philosophy.principle2.body": "Explicaciones claras de opciones, compromisos e implicaciones le ayudan a evaluar con confianza.",
+  "about.philosophy.principle3.title": "Soluciones Personalizadas",
+  "about.philosophy.principle3.body": "El financiamiento debe reflejar su situación, no un guion único ni el menú de un solo prestamista.",
+  "about.philosophy.principle4.title": "Las Relaciones Importan",
+  "about.philosophy.principle4.body": "Construimos asociaciones a largo plazo basadas en confianza, comunicación y respeto mutuo.",
+  "about.philosophy.principle5.title": "La Claridad Genera Confianza",
+  "about.philosophy.principle5.body": "La transparencia en cada paso le ayuda a avanzar con certeza, no con conjeturas.",
 
-  "about.loanStructure.title": "No todos los préstamos son iguales",
-  "about.loanStructure.body1": "Dos prestatarios pueden calificar para el mismo préstamo — y aun así tomar decisiones muy diferentes. La diferencia está en la estructura: plazo, flexibilidad de pago y cómo las piezas encajan con sus planes.",
-  "about.loanStructure.body2": "Ahí es donde invertimos nuestro tiempo — antes de que usted se comprometa.",
+  "about.founders.title": "Construido sobre Experiencia. Impulsado por Propósito.",
+  "about.founders.intro1":
+    "Infinite Home Lending fue fundada por Javier Cifuentes y Alma Jaramillo, dos profesionales hipotecarios experimentados que comparten el compromiso de ayudar a los clientes a tomar decisiones financieras informadas mediante orientación, educación y servicio personalizado.",
+  "about.founders.intro2":
+    "Su visión fue crear una correduría hipotecaria basada en relaciones, confianza y éxito a largo plazo, donde los clientes se sientan apoyados, informados y empoderados durante todo el camino de financiamiento de vivienda.",
+  "about.founders.javier.name": "Javier Cifuentes",
+  "about.founders.javier.role": "Fundador",
+  "about.founders.javier.statement":
+    "Ayudar a individuos y familias a navegar decisiones hipotecarias importantes con claridad, estrategia y confianza.",
+  "about.founders.javier.imageAlt": "Javier Cifuentes, Fundador de Infinite Home Lending",
+  "about.founders.javier.highlight1": "Más de 24 años de experiencia en préstamos hipotecarios",
+  "about.founders.javier.highlight2": "Liderazgo en ventas hipotecarias y desarrollo de equipos",
+  "about.founders.javier.highlight3": "Experiencia en financiamiento estratégico y asesoría",
+  "about.founders.javier.highlight4": "Educación al cliente y orientación para la toma de decisiones",
+  "about.founders.javier.highlight5": "Enfoque centrado en relaciones a largo plazo",
+  "about.founders.alma.name": "Alma Jaramillo",
+  "about.founders.alma.role": "Co-Fundadora",
+  "about.founders.alma.statement":
+    "Construir relaciones de confianza mediante orientación personalizada, comunicación clara y un compromiso con el éxito del cliente.",
+  "about.founders.alma.imageAlt": "Alma Jaramillo, Co-Fundadora de Infinite Home Lending",
+  "about.founders.alma.highlight1": "Más de 20 años de experiencia en hipotecas y banca",
+  "about.founders.alma.highlight2": "Orientación de financiamiento personalizada",
+  "about.founders.alma.highlight3": "Análisis de prestatarios complejos e ingresos",
+  "about.founders.alma.highlight4": "Apoyo bilingüe en inglés y español",
+  "about.founders.alma.highlight5": "Compromiso con la comunicación y la atención al cliente",
 
-  "about.costOfWrong.title": "El costo de equivocarse",
-  "about.costOfWrong.body1": "El peso total de una hipoteca rara vez se siente el día del cierre. Aparece después — en flexibilidad, oportunidad y si su financiamiento sigue siendo adecuado cuando la vida cambia.",
-  "about.costOfWrong.body2": "Preferimos mostrar ese compromiso antes de que firme, en lugar de ayudarlo a deshacerlo años después.",
-  "about.costOfWrong.calloutLabel": "Realidad que la mayoría pasa por alto",
-  "about.costOfWrong.calloutTitle": "El impacto de una decisión hipotecaria",
-  "about.costOfWrong.calloutSub": "se siente con frecuencia después — no al inicio.",
+  "about.founders.modal.close": "Cerrar",
+  "about.founders.javier.linkLetter": "Un mensaje de Javier →",
+  "about.founders.javier.linkBio": "Biografía →",
+  "about.founders.javier.linkLinkedIn": "Conectar en LinkedIn ↗",
+  "about.founders.javier.linkLinkedInAria": "Conectar con Javier Cifuentes en LinkedIn",
+  "about.founders.javier.crosslinkBioPrompt": "¿Desea conocer más sobre la trayectoria de Javier?",
+  "about.founders.javier.crosslinkLetterPrompt":
+    "Conozca por qué Javier fundó Infinite Home Lending.",
+  "about.founders.alma.linkLetter": "Un mensaje de Alma →",
+  "about.founders.alma.linkBio": "Biografía →",
+  "about.founders.alma.linkLinkedIn": "Conectar en LinkedIn ↗",
+  "about.founders.alma.linkLinkedInAria": "Conectar con Alma Jaramillo en LinkedIn",
+  "about.founders.alma.crosslinkBioPrompt": "¿Desea conocer más sobre la trayectoria de Alma?",
+  "about.founders.alma.crosslinkLetterPrompt":
+    "Conozca por qué Alma cofundó Infinite Home Lending.",
 
-  "about.founderMessage.opening": "Cuando fundamos Infinite Home Lending, surgió de una observación simple.",
-  "about.founderMessage.p1": "Después de más de dos décadas en la industria hipotecaria — liderando equipos, navegando diferentes ciclos del mercado y trabajando en miles de escenarios reales con clientes — vimos un patrón consistente. Demasiadas personas tomaban una de las decisiones financieras más importantes de sus vidas sin claridad, sin suficientes opciones y sin una estrategia real detrás. No era que las personas no hicieran las preguntas correctas; es que el proceso en sí no estaba diseñado para apoyarlas. Con demasiada frecuencia, los incentivos en el ecosistema hipotecario más amplio siguen recompensando la velocidad y el volumen sobre el ajuste, lo que puede dejar a los prestatarios avanzando sin el panorama completo que merecen.",
-  "about.founderMessage.p2": "La mayoría de las experiencias hipotecarias están diseñadas para cerrar préstamos, no para guiar decisiones. Y esa diferencia importa más de lo que la mayoría de las personas se da cuenta cuando los riesgos son tan altos: una hipoteca no es un producto de una sola vez. Es una palanca que afecta cómo construye patrimonio, cómo absorbe impactos financieros y cuánta flexibilidad conserva cuando la vida cambia.",
-  "about.founderMessage.pullQuote": "Porque no solo está eligiendo un préstamo. Está eligiendo cómo avanza su vida — qué tan flexible es su futuro, qué tan seguro se siente en sus decisiones y qué tan preparado está cuando la vida inevitablemente cambia.",
-  "about.founderMessage.p3": "Con los años, hemos visto cómo la estructura de un préstamo puede apoyar los planes a largo plazo de alguien — o limitarlos silenciosamente. Y en muchos casos, ese impacto no se comprende completamente hasta mucho después, cuando es más difícil de ajustar.",
-  "about.founderMessage.p4": "Por eso construimos Infinite Home Lending de manera diferente. Nos enfocamos en la estructura antes que en el producto, en la comprensión antes que en el compromiso, y en la orientación que realmente refleja sus metas — no solo lo que encaja en un sistema. Como correduría independiente, estamos posicionados para alinearnos con el prestatario, no con el menú de un solo prestamista, para poder ser directos sobre los compromisos y sobre lo que se mantiene con el tiempo.",
-  "about.founderMessage.p5": "Nuestro rol es simple: ayudarle a entender sus opciones, reflexionar sobre sus decisiones y avanzar con confianza.",
-  "about.founderMessage.p6": "Ese es el estándar al que nos comprometemos y la experiencia que aspiramos a brindar a cada cliente con quien trabajamos.",
+  "about.founders.javier.letter.title": "Un mensaje de Javier",
+  "about.founders.javier.letter.lead":
+    "Cuando iniciamos Infinite Home Lending, partió de una observación simple.",
+  "about.founders.javier.letter.p1":
+    "Después de más de dos décadas en la industria hipotecaria—liderando equipos, navegando diferentes ciclos del mercado y trabajando con miles de escenarios reales de clientes—vimos un patrón consistente. Demasiadas personas estaban tomando una de las decisiones financieras más importantes de sus vidas sin claridad, sin suficientes opciones y sin una estrategia real detrás. No era que la gente no hiciera las preguntas correctas; era que el proceso mismo no estaba diseñado para apoyarlos. Con demasiada frecuencia, los incentivos del ecosistema hipotecario amplio aún premian la velocidad y el volumen por encima del ajuste, lo que puede dejar a los prestatarios avanzando sin el panorama completo que merecen.",
+  "about.founders.javier.letter.p2":
+    "La mayoría de las experiencias hipotecarias están diseñadas para cerrar préstamos, no para guiar decisiones. Y esa diferencia importa más de lo que la mayoría de la gente imagina cuando las apuestas son tan altas: una hipoteca no es un producto de una sola vez. Es una palanca que afecta cómo construye patrimonio, cómo absorbe choques financieros y cuánta flexibilidad conserva cuando la vida cambia.",
+  "about.founders.javier.letter.pullquote":
+    "Porque no solo está eligiendo un préstamo. Está eligiendo cómo avanza su vida—qué tan flexible será su futuro, qué tan seguro se siente en sus decisiones y qué tan preparado está cuando la vida inevitablemente cambia.",
+  "about.founders.javier.letter.p3":
+    "A lo largo de los años, hemos visto cómo la estructura de un préstamo puede apoyar los planes a largo plazo de alguien—o limitarlos silenciosamente. Y en muchos casos, ese impacto no se comprende del todo hasta mucho después, cuando es más difícil ajustar.",
+  "about.founders.javier.letter.p4":
+    "Por eso construimos Infinite Home Lending de manera diferente. Nos enfocamos en la estructura antes que en el producto, en la comprensión antes del compromiso y en una orientación que refleje realmente sus metas—no solo lo que encaja en un sistema. Como correduría independiente, estamos posicionados para alinearnos con el prestatario, no con el menú de un solo prestamista, para ser directos sobre los compromisos y sobre lo que se sostiene con el tiempo.",
+  "about.founders.javier.letter.p5":
+    "Nuestro rol es simple: ayudarle a entender sus opciones, reflexionar sobre sus decisiones y avanzar con confianza.",
+  "about.founders.javier.letter.p6":
+    "Ese es el estándar al que nos exigimos, y esa es la experiencia que buscamos ofrecer a cada cliente con quien trabajamos.",
 
-  "about.coFounderMessage.opening": "En cada préstamo en el que he trabajado, hay un momento en que los números dejan de ser solo números y la decisión se vuelve real.",
-  "about.coFounderMessage.p1": "Es una familia preparándose para un nuevo capítulo, un cliente tratando de tomar la decisión correcta con información incompleta, o alguien cuya situación financiera no encaja perfectamente en un proceso estándar y requiere un nivel más profundo de comprensión.",
-  "about.coFounderMessage.p2": "Ahí es donde verdaderamente comienza nuestro rol.",
-  "about.coFounderMessage.p3": "Durante los últimos 20+ años, he trabajado con una amplia variedad de prestatarios, incluidos clientes independientes, perfiles de crédito complejos y escenarios que requieren paciencia, precisión y estructuración reflexiva en lugar de un resultado apresurado.",
-  "about.coFounderMessage.p4": "Lo que he visto de manera consistente es que cuando las personas se sienten escuchadas y entienden completamente sus opciones, toman mejores decisiones — no necesariamente más rápido, sino con mayor claridad y confianza.",
-  "about.coFounderMessage.p5": "La diferencia está en cómo se aborda el proceso.",
-  "about.coFounderMessage.p6": "Se refleja en las conversaciones que ocurren al principio, los detalles que se evalúan cuidadosamente y la capacidad de estructurar un préstamo de una manera que se alinee con cómo alguien realmente vive — no solo lo que las pautas permiten en papel.",
-  "about.coFounderMessage.p7": "Ese es el estándar que traigo a cada interacción con el cliente.",
-  "about.coFounderMessage.p8": "En Infinite Home Lending, no abordamos este proceso como una lista de verificación. Lo abordamos como una responsabilidad — guiar, simplificar y asegurar que cada decisión se tome con contexto completo, tanto para hoy como para lo que viene después.",
-  "about.coFounderMessage.p9": "Cuando ese nivel de claridad está presente, los clientes se sienten más seguros y el resultado se convierte en algo en lo que pueden verdaderamente confiar.",
+  "about.founders.javier.bio.title": "Sobre Javier",
+  "about.founders.javier.bio.p1":
+    "Javier Cifuentes ha pasado más de 23 años dentro de algunas de las organizaciones hipotecarias más grandes del país — y esa experiencia es precisamente lo que lo llevó a construir algo diferente.",
+  "about.founders.javier.bio.p2":
+    "Su carrera comenzó en 2002 como oficial de préstamos en Silver Spring, Maryland, originando préstamos un prestatario a la vez. Desde allí, el camino pasó por la gestión de sucursales, el liderazgo en ventas y, finalmente, las filas ejecutivas de instituciones nacionales: Prosperity Mortgage, Wells Fargo Home Mortgage, George Mason Mortgage y, por último, Bank of America, donde pasó casi ocho años como Vicepresidente y Líder del Mercado de Préstamos para todo el mercado de Maryland.",
+  "about.founders.javier.bio.p3":
+    "En el camino, Javier construyó y lideró equipos de producción hipotecaria, moldeó estándares de cumplimiento, desarrolló redes de referidos y entrenó a originadores a través de algunos de los entornos de tasas más volátiles que ha visto la industria. En 2023, ese trabajo fue reconocido con el Premio Pinnacle Diamond de Bank of America — otorgado al 1% superior de líderes a nivel nacional.",
+  "about.founders.javier.bio.p4":
+    "Pero cuanto más tiempo Javier lideró dentro de grandes instituciones, más claro se volvió algo: los sistemas construidos para servir volumen no siempre estaban construidos para servir a las personas. Los prestatarios obtenían aprobación rápida y cerraban a tiempo — y aun así terminaban con préstamos que en realidad no encajaban con sus vidas.",
+  "about.founders.javier.bio.p5":
+    "Esa observación es lo que lo llevó a fundar Infinite Home Lending — una firma construida desde cero para poner la estrategia y la estructura por encima de la velocidad, y para dar a cada cliente el tipo de experiencia de asesoría que pasó dos décadas ayudando a las grandes instituciones a intentar, y a menudo luchar, por ofrecer a escala.",
+  "about.founders.javier.bio.p6":
+    "Javier tiene una Licenciatura en Ingeniería Civil de la Universidad La Salle en Bogotá, Colombia — una formación en pensamiento estructural que, en muchos sentidos, anticipó la forma en que ahora aborda la estrategia hipotecaria: construir primero la base correcta, y todo lo demás se sostiene.",
+  "about.founders.javier.bio.p7":
+    "En casa, la vida de Javier está llena — su esposa e hija son lo más importante para él, y cuatro perros se aseguran de que ninguna cena quede sin supervisión. Esa casa llena es exactamente la razón por la que cocinar significa tanto para él: no hay nada que disfrute más que reunir a familiares y amigos alrededor de una mesa que él mismo ha preparado. Viajar es la otra mitad: descubrir nuevos lugares, nuevas culturas y la historia detrás de ellos, a menudo con las personas que más ama a su lado. Entre viajes y cenas, siempre se mantiene activo y busca el próximo lugar que valga la pena explorar.",
 
-  "about.clarity.heading": "La claridad lo cambia todo.",
-  "about.clarity.body": "Cuando entiende sus opciones, todo lo demás se vuelve más fácil — las decisiones, el momento oportuno, la confianza para avanzar.",
-  "about.clarity.wantsTitle": "Lo que las personas realmente quieren de una experiencia hipotecaria",
-  "about.clarity.wantsBody": "La mayoría de las personas no buscan más ruido.",
-  "about.clarity.wantsBody2": "Buscan claridad, confianza y alguien que realmente entienda su situación.",
-  "about.clarity.pullQuote": "Ese es el estándar que creemos que merece cada prestatario.",
+  "about.founders.alma.letter.title": "Un mensaje de Alma",
+  "about.founders.alma.letter.lead":
+    "En cada préstamo en el que he trabajado, hay un momento en que los números dejan de ser solo números y la decisión se vuelve real.",
+  "about.founders.alma.letter.p1":
+    "Es una familia preparándose para un nuevo capítulo, un cliente tratando de tomar la decisión correcta con información incompleta, o alguien cuya situación financiera no encaja en un proceso estándar y requiere un nivel más profundo de comprensión.",
+  "about.founders.alma.letter.p2": "Ahí es donde nuestro rol realmente comienza.",
+  "about.founders.alma.letter.p3":
+    "Durante más de 20 años, he trabajado con una amplia gama de prestatarios, incluidos clientes independientes, perfiles de crédito complejos y escenarios que requieren paciencia, precisión y estructuración reflexiva en lugar de un resultado apresurado.",
+  "about.founders.alma.letter.p4":
+    "Lo que he visto consistentemente es que cuando las personas se sienten escuchadas y comprenden plenamente sus opciones, toman mejores decisiones—no necesariamente más rápidas, sino con mayor claridad y confianza.",
+  "about.founders.alma.letter.p5": "La diferencia está en cómo se aborda el proceso.",
+  "about.founders.alma.letter.p6":
+    "Se refleja en las conversaciones que ocurren al inicio, en los detalles que se evalúan cuidadosamente y en la capacidad de estructurar un préstamo de una manera que se alinee con cómo alguien realmente vive—no solo con lo que permiten las pautas en papel.",
+      "about.founders.alma.letter.p7": "Ese es el estándar que aporto a cada interacción con el cliente.",
+      "about.founders.alma.letter.p8":
+        "En Infinite Home Lending, no abordamos este proceso como una lista de verificación. Lo abordamos como una responsabilidad—guiar, simplificar y asegurar que cada decisión se tome con contexto completo, tanto para hoy como para lo que viene.",
+      "about.founders.alma.letter.p9":
+        "Cuando ese nivel de claridad está presente, los clientes se sienten más seguros y el resultado es algo que realmente pueden respaldar.",
 
-  "about.wants.straightAnswers.title": "Respuestas directas",
-  "about.wants.straightAnswers.body": "Lenguaje claro y contexto honesto — no una pared de jerga cuando los riesgos son altos.",
-  "about.wants.roomToExplore.title": "Espacio para explorar",
-  "about.wants.roomToExplore.body": "Opciones reales para comparar para que pueda avanzar con confianza, no con suposiciones.",
-  "about.wants.guidanceThatFits.title": "Orientación que encaja",
-  "about.wants.guidanceThatFits.body": "Asesoramiento adaptado a su situación — no un guion único que ignora los matices.",
-  "about.wants.planYouCanTrust.title": "Un plan en el que puede confiar",
-  "about.wants.planYouCanTrust.body": "Una estructura que sigue teniendo sentido años después — ya sea su primera vivienda o su próximo capítulo.",
+  "about.founders.alma.bio.title": "Sobre Alma",
+  "about.founders.alma.bio.p1":
+    "Alma Jaramillo ha pasado más de 20 años construyendo algo que no aparece fácilmente en un currículum: confianza.",
+  "about.founders.alma.bio.p2":
+    "Su carrera comenzó en 2005 como Banquera de Relaciones en BB&T, donde durante una década hizo el trabajo silencioso y poco glamoroso de conocer las situaciones financieras completas de sus clientes — no solo sus solicitudes de préstamo. Esa base moldeó todo lo que siguió. En 2015, pasó a la originación hipotecaria como Oficial de Préstamos y Vicepresidenta Asistente en BB&T, y en 2018 se unió a Bank of America como Asesora de Soluciones de Crédito, donde ha pasado años originando hipotecas residenciales y especializándose en algunos de los escenarios de prestatarios más complejos del negocio — ingresos de trabajadores independientes, crédito en capas y financiamiento de propiedades de inversión que no encaja ordenadamente en una caja de suscripción estándar.",
+  "about.founders.alma.bio.p3":
+    "Lo que distingue a Alma no es solo la habilidad técnica, aunque tiene de sobra. Es la paciencia. Los prestatarios a quienes les han dicho \"no\" en otro lugar, o que han sido apresurados por un proceso que no se tomó el tiempo de entender su situación completa, consistentemente encuentran el camino hacia ella — y consistentemente obtienen una estructura que realmente funciona para cómo viven, no solo lo que las pautas permiten en papel.",
+  "about.founders.alma.bio.p4":
+    "Fluida en inglés y español, Alma ha pasado su carrera sirviendo a prestatarios en Maryland, Washington, D.C. y Virginia con el tipo de comprensión bilingüe y bicultural que no se puede enseñar en un entrenamiento de cumplimiento — solo se gana a través de dos décadas de estar presente para las personas.",
+  "about.founders.alma.bio.p5":
+    "Como Co-Fundadora de Infinite Home Lending, Alma aporta ese mismo estándar a cada interacción con el cliente: estructura antes que velocidad, comprensión antes que compromiso, y un nivel de cuidado que convierte una transacción en una relación.",
 
-  "about.independent.title": "Más opciones. Mayor comprensión.",
-  "about.independent.body1": "La mayoría de los prestamistas solo pueden ofrecer lo que tienen.",
-  "about.independent.body2": "Estamos construidos de manera diferente.",
-  "about.independent.body3": "Como correduría independiente, trabajamos con una amplia red de socios prestamistas — para poder estructurar el financiamiento alrededor de su situación en lugar de forzarlo en un menú limitado.",
+  "about.quote.text":
+    "Creemos que cada prestatario merece orientación reflexiva, comunicación transparente y soluciones adaptadas a sus metas únicas.",
+  "about.quote.attribution": "Javier Cifuentes y Alma Jaramillo",
 
-  "about.coreValues.strategic.title": "Pensamiento Estratégico",
-  "about.coreValues.strategic.body": "Abordamos cada hipoteca como una decisión financiera — alineando la estructura con su dirección a largo plazo.",
-  "about.coreValues.communication.title": "Comunicación Clara",
-  "about.coreValues.communication.body": "Lo mantenemos informado en cada paso, para que siempre sepa dónde están las cosas y qué viene después.",
-  "about.coreValues.execution.title": "Ejecución Disciplinada",
-  "about.coreValues.execution.body": "Gestionamos cada préstamo con precisión, estructura y atención al detalle de principio a fin.",
+  "about.process.title": "Cómo Trabajamos",
+  "about.process.subtitle": "Un proceso de asesoría claro, desde la primera conversación hasta el cierre y más allá.",
+  "about.process.step1.title": "Escuchar",
+  "about.process.step1.desc": "Entender metas, prioridades y circunstancias.",
+  "about.process.step2.title": "Evaluar",
+  "about.process.step2.desc": "Revisar opciones disponibles e identificar soluciones apropiadas.",
+  "about.process.step3.title": "Educar",
+  "about.process.step3.desc": "Explicar beneficios, compromisos y consideraciones.",
+  "about.process.step4.title": "Guiar",
+  "about.process.step4.desc": "Ayudar a los clientes a tomar decisiones informadas.",
+  "about.process.step5.title": "Apoyar",
+  "about.process.step5.desc": "Permanecer disponibles antes, durante y después del cierre.",
 
-  "about.finalCta.title": "¿Listo para una experiencia hipotecaria construida alrededor de su vida?",
-  "about.finalCta.body": "Sin presión. Solo un camino claro y estructurado hacia adelante.",
-  "about.finalCta.talkStrategy": "¿Prefiere hablar de estrategia primero?",
+  "about.audience.title": "A Quién Servimos",
+  "about.audience.firstTime.title": "Compradores Primerizos",
+  "about.audience.firstTime.body": "Orientación clara sobre asequibilidad, momento oportuno y el camino hacia su primera vivienda.",
+  "about.audience.moveUp.title": "Compradores que Suben de Vivienda",
+  "about.audience.moveUp.body": "Apoyo reflexivo para navegar patrimonio, momento oportuno y financiamiento para su próximo capítulo.",
+  "about.audience.veterans.title": "Veteranos",
+  "about.audience.veterans.body": "Orientación alineada con historial de servicio, beneficios y metas de vivienda a largo plazo.",
+  "about.audience.selfEmployed.title": "Prestatarios Independientes",
+  "about.audience.selfEmployed.body": "Soluciones para perfiles de ingresos no tradicionales y situaciones financieras complejas.",
+  "about.audience.investors.title": "Inversores Inmobiliarios",
+  "about.audience.investors.body": "Financiamiento estratégico alineado con objetivos de portafolio, flujo de caja y planes de crecimiento.",
+  "about.audience.retirees.title": "Jubilados y Pre-Jubilados",
+  "about.audience.retirees.body": "Opciones especializadas, incluida orientación sobre hipotecas inversas para la planificación en etapas posteriores.",
+  "about.audience.bilingualTitle": "Hablamos Español",
+  "about.audience.bilingualBody": "Orientación hipotecaria personalizada en inglés y español.",
+
+  "about.finalCta.title": "Claridad. Orientación. Confianza.",
+  "about.finalCta.body":
+    "Ya sea que esté comprando una vivienda, refinanciando, invirtiendo o explorando opciones de financiamiento especializadas, estamos aquí para ayudarle a avanzar con una estrategia diseñada en torno a sus metas.",
+  "about.finalCta.cta": "Agendar una Consulta",
+
+  "about.compliance.heading": "Licencias y cumplimiento",
+  "about.compliance.javier": "Javier Cifuentes",
+  "about.compliance.alma": "Alma Jaramillo",
+  "about.compliance.nmlsLink": "Acceso al Consumidor NMLS",
 
   // Knowledge Center
   "knowledge.eyebrow": "Centro de Conocimiento",
@@ -2223,6 +2733,170 @@ export const es = {
   "rrm.verdict.closerLook.lower": "menor",
   "rrm.verdict.closerLook.higher": "mayor",
   "rrm.keyInsight": "Esto es lo que la mayoría pasa por alto:\n\nEl refinanciamiento no solo cambia su tasa — restablece cómo funciona su préstamo con el tiempo.\n\nLos primeros años son de interés intensivo. Cuando reinicia el reloj, vuelve a pagar más interés de nuevo.\n\nPor eso un pago más bajo no siempre significa un mejor resultado.",
+
+  // Compliance Center
+  "compliance.eyebrow": "Cumplimiento",
+  "compliance.placeholder.body":
+    "Esta página está en preparación. El contenido completo se publicará aquí pronto. Para consultas inmediatas, contacte Info@infinitehomelending.com o (301) 507-7609.",
+
+  "compliance.privacy.meta.title": "Política de privacidad",
+  "compliance.privacy.meta.description":
+    "Cómo Infinite Home Lending recopila, usa y protege la información enviada a través de nuestro sitio web, formularios, correo electrónico, SMS y el chat de Sarah AI.",
+  "compliance.privacy.title": "Política de privacidad",
+  "compliance.privacy.lastUpdated": "Última actualización: junio de 2026",
+  "compliance.privacy.intro.title": "Resumen",
+  "compliance.privacy.intro.p1":
+    "Infinite Home Lending («IHL», «nosotros» o «nuestro») respeta su privacidad. Esta Política de privacidad explica cómo recopilamos, usamos y protegemos la información cuando visita nuestro sitio web, envía formularios, se comunica con nosotros o interactúa con nuestros servicios, incluido Sarah, nuestra concierge hipotecaria con IA.",
+  "compliance.privacy.collect.title": "Información que recopilamos",
+  "compliance.privacy.collect.p1":
+    "Podemos recopilar información que usted proporciona voluntariamente e información generada por el uso de nuestro sitio web y servicios.",
+  "compliance.privacy.collect.p2": "Esto puede incluir:",
+  "compliance.privacy.collect.item1":
+    "Información de contacto e consultas enviada a través de formularios del sitio web (como nombre, correo electrónico, número de teléfono y detalles sobre sus metas hipotecarias).",
+  "compliance.privacy.collect.item2":
+    "Información que proporciona al contactar a Infinite Home Lending por teléfono, correo electrónico u otros canales directos.",
+  "compliance.privacy.collect.item3":
+    "Mensajes y contexto de interacciones con Sarah, nuestro asistente de chat con IA, incluidas las preguntas que formula y las respuestas proporcionadas durante su sesión.",
+  "compliance.privacy.collect.item4":
+    "Comunicaciones por correo electrónico que envía o recibe de IHL relacionadas con consultas hipotecarias, citas o actualizaciones de servicio.",
+  "compliance.privacy.collect.item5":
+    "Información relacionada con SMS cuando opta por recibir mensajes de texto de IHL, incluido su número móvil y preferencias de mensajes.",
+  "compliance.privacy.use.title": "Cómo usamos la información",
+  "compliance.privacy.use.p1": "Usamos la información que recopilamos para:",
+  "compliance.privacy.use.item1":
+    "Responder consultas y proporcionar orientación hipotecaria, programación de citas y atención al cliente.",
+  "compliance.privacy.use.item2":
+    "Enviar actualizaciones relacionadas con solicitudes, comunicaciones de servicio e información que usted solicite.",
+  "compliance.privacy.use.item3":
+    "Mejorar nuestro sitio web, herramientas y experiencia del cliente, incluida la orientación asistida por IA a través de Sarah.",
+  "compliance.privacy.use.item4":
+    "Mantener registros requeridos para cumplimiento, control de calidad y operaciones comerciales.",
+  "compliance.privacy.sms.title": "Comunicaciones SMS y privacidad",
+  "compliance.privacy.sms.p1":
+    "Si opta por recibir mensajes SMS de Infinite Home Lending, podemos enviar actualizaciones relacionadas con hipotecas, recordatorios de citas y comunicaciones de servicio al número móvil que proporcione.",
+  "compliance.privacy.sms.p2":
+    "La información móvil no se compartirá con terceros ni afiliados con fines de marketing o promocionales.",
+  "compliance.privacy.sms.p3":
+    "La frecuencia de mensajes varía. Pueden aplicarse tarifas de mensajes y datos. Puede responder STOP para cancelar la suscripción o HELP para asistencia. Consulte nuestros Términos y condiciones de SMS para detalles completos del programa.",
+
+  "compliance.sms.meta.title": "Términos y condiciones de SMS",
+  "compliance.sms.meta.description":
+    "Términos para mensajes SMS de Infinite Home Lending, incluidos tipos de mensajes, frecuencia, instrucciones de cancelación e información de contacto.",
+  "compliance.sms.title": "Términos y condiciones de SMS",
+  "compliance.sms.lastUpdated": "Última actualización: junio de 2026",
+  "compliance.sms.program.title": "Descripción del programa SMS",
+  "compliance.sms.program.p1":
+    "Al optar por recibir mensajes de texto de Infinite Home Lending, acepta recibir comunicaciones SMS relacionadas con su consulta hipotecaria, solicitud o relación de servicio continua con IHL.",
+  "compliance.sms.messages.title": "Tipos de mensajes que puede recibir",
+  "compliance.sms.messages.p1": "Los mensajes pueden incluir:",
+  "compliance.sms.messages.item1": "Consultas hipotecarias y comunicaciones de seguimiento",
+  "compliance.sms.messages.item2": "Recordatorios de citas",
+  "compliance.sms.messages.item3": "Actualizaciones relacionadas con solicitudes o servicios",
+  "compliance.sms.messages.item4": "Comunicaciones de atención al cliente",
+  "compliance.sms.frequency.title": "Frecuencia de mensajes",
+  "compliance.sms.frequency.p1":
+    "La frecuencia de mensajes varía según su consulta, el estado de su solicitud y sus preferencias de comunicación.",
+  "compliance.sms.rates.title": "Tarifas de mensajes y datos",
+  "compliance.sms.rates.p1":
+    "Pueden aplicarse tarifas de mensajes y datos. Contacte a su operador inalámbrico para detalles sobre su plan.",
+  "compliance.sms.stop.title": "Instrucciones para cancelar",
+  "compliance.sms.stop.p1":
+    "Responda STOP para cancelar la suscripción a mensajes SMS de Infinite Home Lending en cualquier momento.",
+  "compliance.sms.help.title": "Ayuda",
+  "compliance.sms.help.p1":
+    "Responda HELP para asistencia con mensajes SMS de Infinite Home Lending.",
+  "compliance.sms.privacy.title": "Política de privacidad",
+  "compliance.sms.privacy.p1":
+    "Para información sobre cómo recopilamos y usamos información personal, consulte nuestra",
+  "compliance.sms.privacy.link": "Política de privacidad",
+
+  "compliance.footer.title": "¿Preguntas?",
+  "compliance.footer.body":
+    "Si tiene preguntas sobre nuestras prácticas de privacidad, información de licencias, comunicaciones SMS o políticas de cumplimiento, contáctenos.",
+
+  "compliance.terms.title": "Términos de uso",
+  "compliance.terms.meta.title": "Términos de uso",
+  "compliance.terms.meta.description":
+    "Términos que rigen el uso del sitio web y los servicios digitales de Infinite Home Lending.",
+  "compliance.terms.lastUpdated": "Última actualización: junio de 2026",
+  "compliance.terms.acceptance.title": "Aceptación de los términos",
+  "compliance.terms.acceptance.p1":
+    "Al acceder o utilizar el sitio web, herramientas y servicios digitales de Infinite Home Lending, usted acepta estos Términos de uso. Si no está de acuerdo, no utilice nuestro sitio web ni nuestros servicios.",
+  "compliance.terms.educational.title": "Descargo de contenido educativo",
+  "compliance.terms.educational.p1":
+    "La información proporcionada en este sitio web—incluidos artículos, calculadoras, herramientas y orientación general—es únicamente con fines educativos e informativos. No constituye asesoramiento legal, fiscal o financiero, y no debe utilizarse como sustituto de consulta con profesionales calificados.",
+  "compliance.terms.noCommitment.title": "Sin compromiso hipotecario",
+  "compliance.terms.noCommitment.p1":
+    "El uso de este sitio web, el envío de formularios o la comunicación con Infinite Home Lending no constituye una solicitud de préstamo, aprobación, bloqueo de tasa o compromiso de préstamo. Todos los productos están sujetos a aprobación crediticia, suscripción y pautas del programa aplicables.",
+  "compliance.terms.sarah.title": "Descargo del asistente de IA (Sarah)",
+  "compliance.terms.sarah.p1":
+    "Sarah es la concierge hipotecaria con IA de Infinite Home Lending. Sarah no es una asesora hipotecaria ni oficial de préstamos con licencia. Las respuestas proporcionadas a través de Sarah son únicamente con fines educativos generales y no constituyen asesoramiento de préstamos, preaprobación ni compromiso de financiamiento.",
+  "compliance.terms.ip.title": "Propiedad intelectual",
+  "compliance.terms.ip.p1":
+    "Todo el contenido de este sitio web—incluidos textos, gráficos, logotipos, herramientas y software—es propiedad de Infinite Home Lending o sus licenciantes y está protegido por las leyes de propiedad intelectual aplicables. No puede reproducir, distribuir ni crear obras derivadas sin consentimiento previo por escrito.",
+  "compliance.terms.thirdParty.title": "Enlaces de terceros",
+  "compliance.terms.thirdParty.p1":
+    "Este sitio web puede contener enlaces a sitios web o recursos de terceros. Infinite Home Lending no es responsable del contenido, políticas o prácticas de sitios de terceros. El acceso a enlaces externos es bajo su propio criterio y riesgo.",
+  "compliance.terms.liability.title": "Limitación de responsabilidad",
+  "compliance.terms.liability.p1":
+    "En la máxima medida permitida por la ley, Infinite Home Lending no será responsable de daños directos, indirectos, incidentales o consecuentes derivados del uso de este sitio web, herramientas o servicios digitales, incluida la confianza en la información proporcionada a través del sitio o el asistente de IA.",
+  "compliance.terms.contact.title": "Información de contacto",
+  "compliance.terms.contact.p1":
+    "Para preguntas sobre estos Términos de uso, contacte a Infinite Home Lending utilizando la información a continuación.",
+
+  "compliance.licensing.title": "Información de licencias",
+  "compliance.licensing.meta.title": "Información de licencias",
+  "compliance.licensing.meta.description":
+    "Información de NMLS, licencias estatales y divulgación de originadores de préstamos hipotecarios de Infinite Home Lending.",
+  "compliance.licensing.lastUpdated": "Última actualización: junio de 2026",
+  "compliance.licensing.company.title": "Información de la empresa",
+  "compliance.licensing.company.p1":
+    "Infinite Home Lending es una correduría hipotecaria comprometida con divulgaciones de licencias transparentes y cumplimiento regulatorio.",
+  "compliance.licensing.company.nmlsLabel": "NMLS ID de la empresa:",
+  "compliance.licensing.states.title": "Licencias estatales",
+  "compliance.licensing.states.item1": "Licencia de Corredor Hipotecario de Washington, D.C. (activa)",
+  "compliance.licensing.states.item2": "Licencia de Maryland pendiente de aprobación",
+  "compliance.licensing.states.item3": "Licencia de Virginia pendiente de aprobación",
+  "compliance.licensing.mlo.title": "Originadores de préstamos hipotecarios",
+  "compliance.licensing.mlo.p1":
+    "Los siguientes profesionales hipotecarios con licencia están asociados con Infinite Home Lending:",
+  "compliance.licensing.mlo.javier.name": "Javier Cifuentes",
+  "compliance.licensing.mlo.javier.role": "Fundador y Director General",
+  "compliance.licensing.mlo.alma.name": "Alma Jaramillo",
+  "compliance.licensing.mlo.alma.role": "Co-Fundadora",
+  "compliance.licensing.consumerAccess.title": "NMLS Consumer Access",
+  "compliance.licensing.consumerAccess.p1":
+    "La información de licencias de Infinite Home Lending y sus originadores de préstamos hipotecarios puede verificarse a través de NMLS Consumer Access, la base de datos pública oficial del Nationwide Multistate Licensing System.",
+  "compliance.licensing.consumerAccess.link": "Visitar NMLS Consumer Access",
+  "compliance.licensing.equalHousing.title": "Igualdad de oportunidades de vivienda",
+  "compliance.licensing.equalHousing.p1":
+    "Infinite Home Lending es una empresa de Igualdad de Oportunidades de Vivienda. No discriminamos por raza, color, religión, origen nacional, sexo, estado familiar, discapacidad ni ninguna otra característica protegida bajo las leyes de vivienda justa aplicables.",
+
+  "compliance.equalHousing.title": "Igualdad de oportunidades de vivienda",
+  "compliance.equalHousing.meta.title": "Igualdad de oportunidades de vivienda",
+  "compliance.equalHousing.meta.description":
+    "Declaración de igualdad de oportunidades de vivienda, clases protegidas y compromiso de préstamos justos de Infinite Home Lending.",
+  "compliance.equalHousing.lastUpdated": "Última actualización: junio de 2026",
+  "compliance.equalHousing.statement.title": "Declaración de vivienda justa",
+  "compliance.equalHousing.statement.p1":
+    "Infinite Home Lending apoya los principios de vivienda justa e igualdad de oportunidades en todos los aspectos del préstamo residencial. Estamos comprometidos a proporcionar orientación y servicios hipotecarios sin discriminación.",
+  "compliance.equalHousing.classes.title": "Clases protegidas",
+  "compliance.equalHousing.classes.p1":
+    "Según la Ley de Vivienda Justa, es ilegal discriminar en transacciones relacionadas con vivienda con base en:",
+  "compliance.equalHousing.classes.item1": "Raza",
+  "compliance.equalHousing.classes.item2": "Color",
+  "compliance.equalHousing.classes.item3": "Religión",
+  "compliance.equalHousing.classes.item4": "Origen nacional",
+  "compliance.equalHousing.classes.item5": "Sexo (incluida identidad de género y orientación sexual)",
+  "compliance.equalHousing.classes.item6": "Estado familiar",
+  "compliance.equalHousing.classes.item7": "Discapacidad",
+  "compliance.equalHousing.commitment.title": "Nuestro compromiso",
+  "compliance.equalHousing.commitment.p1":
+    "Infinite Home Lending se dedica a tratar a cada cliente, socio y miembro de la comunidad con respeto, equidad y transparencia. Capacitamos a nuestro equipo para cumplir con los estándares de préstamos justos y garantizar que la orientación hipotecaria se proporcione equitativamente a todos los prestatarios calificados.",
+  "compliance.equalHousing.hud.title": "Recursos de HUD",
+  "compliance.equalHousing.hud.p1":
+    "Si cree que ha experimentado discriminación en vivienda, puede presentar una queja ante el Departamento de Vivienda y Desarrollo Urbano de EE.UU. (HUD). Recursos adicionales de vivienda justa están disponibles a través de la Oficina de Vivienda Justa e Igualdad de Oportunidades de HUD.",
+  "compliance.equalHousing.hud.link": "HUD — Vivienda justa e igualdad de oportunidades",
 
   // Language toggle
   "lang.toggle.en": "EN",

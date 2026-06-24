@@ -12,6 +12,7 @@ import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Solutions from "./pages/Solutions";
+import LoanProgramDetailPage from "./pages/LoanProgramDetail";
 import HowItWorks from "./pages/HowItWorks";
 import Contact from "./pages/Contact";
 import LoanSimulator from "./pages/LoanSimulator";
@@ -47,6 +48,11 @@ import AnalyticsDashboard from "./pages/AnalyticsDashboard";
 import MADashboard from "./pages/MADashboard";
 import CareersPage from "./pages/CareersPage";
 import CareersAssetCapture from "./pages/CareersAssetCapture";
+import PrivacyPolicyPage from "./pages/compliance/PrivacyPolicyPage";
+import SmsTermsPage from "./pages/compliance/SmsTermsPage";
+import TermsOfUsePage from "./pages/compliance/TermsOfUsePage";
+import LicensingPage from "./pages/compliance/LicensingPage";
+import EqualHousingPage from "./pages/compliance/EqualHousingPage";
 import { SarahCareersFloating } from "./components/careers/SarahCareersFloating";
 import { shouldShowCareersSarahUi } from "./config/careersSarah";
 
@@ -94,9 +100,15 @@ const AppContent = () => {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/solutions" element={<Solutions />} />
+          <Route path="/solutions/programs/:programId" element={<LoanProgramDetailPage />} />
           <Route path="/how-we-work" element={<HowItWorks />} />
           <Route path="/how-it-works" element={<HowItWorks />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+          <Route path="/sms-terms" element={<SmsTermsPage />} />
+          <Route path="/terms-of-use" element={<TermsOfUsePage />} />
+          <Route path="/licensing" element={<LicensingPage />} />
+          <Route path="/equal-housing" element={<EqualHousingPage />} />
           <Route path="/careers" element={<CareersPage />} />
           <Route path="/careers-asset-capture/:asset" element={<CareersAssetCapture />} />
           <Route path="/smart-tools" element={<SmartTools />} />
