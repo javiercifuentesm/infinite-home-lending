@@ -1,0 +1,1 @@
+export { FoundersFeaturePostInstagram } from "./FoundersFeaturePostInstagram";

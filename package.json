@@ -9,6 +9,7 @@
   "scripts": {
     "postinstall": "patch-package",
     "dev": "vite --port=3000 --host=0.0.0.0",
+    "social:preview": "vite --port=3000 --host=0.0.0.0 --open /social-preview.html",
     "build": "vite build",
     "preview": "vite preview",
     "clean": "rm -rf dist",
@@ -32,6 +33,7 @@
     "cors": "^2.8.6",
     "dotenv": "^17.2.3",
     "express": "^4.21.2",
+    "html-to-image": "^1.11.13",
     "jspdf": "^4.2.1",
     "jspdf-autotable": "^5.0.7",
     "lucide-react": "^0.546.0",

@@ -65,7 +65,7 @@ const PARTNER_STARTERS = [
 ];
 
 const GUEST_GREETINGS = [
-  "Hi there! I'm Nexio, the strategic AI partner for IHL's Deal Desk. I help real estate agents in MD, DC, and VA close smarter deals with tools built for the deal table. Are you familiar with The Deal Desk?",
+  "Hi there! I'm Nexio, the strategic AI partner for IHL's Deal Desk. I help real estate agents in DC and MD close smarter deals with tools built for the deal table. Are you familiar with The Deal Desk?",
   "Welcome! I'm Nexio — Infinite Home Lending's Deal Desk intelligence. I'm here to show you how our partner tools can help you win more listings, qualify buyers faster, and structure stronger offers. What market do you primarily work in?",
   "Hey! I'm Nexio, your IHL Deal Desk partner. We've built 12 tools specifically for agents like you — from offer optimization to seller net sheets. Want a quick tour of what's available?",
 ];
@@ -253,7 +253,7 @@ const NexioHeader = ({ onEnd, onSave, messageCount = 0 }: NexioHeaderProps) => (
           <p style={{ color: "#C6A15B", fontSize: "15px", fontWeight: 700 }}>Nexio</p>
           <span style={{ backgroundColor: "rgba(34,197,94,0.15)", color: "#22c55e", fontSize: "10px", fontWeight: 600, padding: "2px 6px", borderRadius: "20px", border: "1px solid rgba(34,197,94,0.3)" }}>ONLINE</span>
         </div>
-        <p style={{ color: "rgba(247,247,245,0.4)", fontSize: "11px" }}>IHL Deal Desk · MD · DC · VA</p>
+        <p style={{ color: "rgba(247,247,245,0.4)", fontSize: "11px" }}>IHL Deal Desk · DC · MD</p>
       </div>
     </div>
     <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
@@ -916,7 +916,7 @@ function NexioInner({ isPartner }: { isPartner: boolean }) {
     });
     doc.setFillColor(11, 42, 74); doc.rect(0, 282, pageWidth, 15, "F");
     doc.setTextColor(198, 161, 91); doc.setFontSize(8);
-    doc.text("Infinite Home Lending · Washington, DC · infinitehomelending.com", margin, 290);
+    doc.text("Infinite Home Lending · Washington, DC & Maryland · infinitehomelending.com", margin, 290);
     doc.save(`IHL-Nexio-${Date.now()}.pdf`);
   }, [messages]);
 

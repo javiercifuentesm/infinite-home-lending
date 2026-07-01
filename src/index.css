@@ -1137,6 +1137,28 @@ html {
     }
   }
 
+  /* Bank Statement — self-employed business owner; left band for text overlay */
+  .hero-image-img--bank-statement {
+    object-position: 40% 26%;
+  }
+
+  @media (max-width: 767px) {
+    .hero-image-img--bank-statement {
+      object-position: 44% 22%;
+    }
+  }
+
+  /* 1099 Income — home office contractor; centered crop */
+  .hero-image-img--income1099 {
+    object-position: center;
+  }
+
+  @media (max-width: 767px) {
+    .hero-image-img--income1099 {
+      object-position: center;
+    }
+  }
+
   /**
    * Optional tweak — slightly favor upper band (houses + faces):
    * object-position: 50% 20%;
@@ -1815,6 +1837,58 @@ html {
     margin-top: 0;
   }
 
+  /**
+   * Spanish Bank Statement — exactly two headline lines; second line never wraps.
+   */
+  .solutions-hero-framed[data-lang="es"][data-active-slide="bank-statement"]
+    .hero-headline.solutions-hero-headline--es-bank-statement {
+    max-width: none;
+  }
+
+  .solutions-hero-headline--es-bank-statement .solutions-hero-headline__line {
+    display: block;
+    white-space: nowrap;
+  }
+
+  .solutions-hero-headline--es-bank-statement .solutions-hero-headline__line--second {
+    white-space: nowrap;
+    font-size: calc(1em - 0.0625rem);
+    letter-spacing: -0.012em;
+  }
+
+  .solutions-hero-headline--es-income1099 .solutions-hero-headline__line {
+    display: block;
+  }
+
+  /**
+   * English 1099 Income — two-line headline; both lines match H1 type/size.
+   */
+  .solutions-hero-framed[data-lang="en"][data-active-slide="income1099"]
+    .hero-headline.solutions-hero-headline--en-income1099 {
+    max-width: none;
+  }
+
+  .solutions-hero-headline--en-income1099 .solutions-hero-headline__line {
+    display: block;
+  }
+
+  .solutions-hero-headline--en-income1099 .solutions-hero-headline__line--second {
+    margin-top: 0.125rem;
+    font-size: inherit;
+    letter-spacing: inherit;
+    line-height: inherit;
+    font-weight: inherit;
+    font-family: inherit;
+    color: inherit;
+  }
+
+  @media (max-width: 767px) {
+    .solutions-hero-headline--es-bank-statement .solutions-hero-headline__line--second {
+      font-size: clamp(1.2rem, 5.75vw, calc(1em - 0.0625rem));
+      letter-spacing: -0.018em;
+    }
+  }
+
   .solutions-hero-text {
     max-width: 720px;
   }
@@ -2177,6 +2251,88 @@ html {
     letter-spacing: 0.01em;
     color: rgb(255 255 255 / 0.75);
     text-align: left;
+  }
+
+  /**
+   * Mobile-only carousel arrows — centered below disclaimer (≤767px).
+   */
+  .solutions-hero-mobile-nav {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(1.5rem, 5vw, 2rem);
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    pointer-events: auto;
+  }
+
+  .solutions-hero-mobile-nav__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: clamp(3rem, 12vw, 3.5rem);
+    height: clamp(3rem, 12vw, 3.5rem);
+    padding: 0;
+    margin: 0;
+    border: 1px solid var(--color-gold);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--color-gold);
+    cursor: pointer;
+    transition:
+      background-color 0.28s ease,
+      border-color 0.28s ease,
+      color 0.28s ease,
+      box-shadow 0.28s ease,
+      transform 0.2s ease;
+  }
+
+  .solutions-hero-mobile-nav__btn svg {
+    width: 1.375rem;
+    height: 1.375rem;
+  }
+
+  .solutions-hero-mobile-nav__btn:hover,
+  .solutions-hero-mobile-nav__btn:active {
+    background: var(--color-navy);
+    border-color: var(--color-gold);
+    color: var(--color-gold);
+    box-shadow: 0 0 18px rgb(197 160 89 / 0.22);
+  }
+
+  .solutions-hero-mobile-nav__btn:active {
+    transform: scale(0.96);
+  }
+
+  .solutions-hero-mobile-nav__btn:focus-visible {
+    outline: none;
+    box-shadow:
+      0 0 0 2px rgb(10 25 47 / 0.85),
+      0 0 0 4px rgb(197 160 89 / 0.45);
+  }
+
+  @media (max-width: 767px) {
+    .solutions-hero-bottom-zone__nav--mobile {
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      max-width: 100%;
+      min-height: clamp(3rem, 12vw, 3.5rem);
+      margin-inline: 0;
+      padding-inline: 0;
+    }
+
+    .solutions-hero-mobile-nav {
+      display: flex;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .solutions-hero-mobile-nav {
+      display: none !important;
+    }
   }
 
   .solutions-hero-program-nav {
@@ -2716,124 +2872,18 @@ html {
     .solutions-hero-best-for-pill {
       white-space: normal;
     }
-
-    .solutions-hero-disclosure {
-      max-width: none;
-      font-size: 0.75rem;
-    }
   }
 
   /**
-   * Mobile solutions hero — structural layout fix (all langs at ≤767px).
-   * Root cause: absolute inner + grid align-content:end clips badge/headline under navbar.
+   * Mobile EN typography and spacing (≤767px). Layout flow lives in unlayered block below.
    */
   @media (max-width: 767px) {
-    .hero.solutions-hero {
-      margin-top: 0;
-    }
-
-    .hero.solutions-hero .hero-framed .hero-inner.solutions-hero-inner {
-      position: relative !important;
-      inset: auto !important;
-      height: auto !important;
-      min-height: 0 !important;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start !important;
-      width: 100%;
-      padding-bottom: var(--loan-hero-nav-bottom-padding, 0.875rem);
-    }
-
-    .hero.solutions-hero .hero-content.solutions-hero-content {
-      display: flex !important;
-      flex-direction: column !important;
-      justify-content: flex-start !important;
-      align-content: flex-start !important;
-      align-items: stretch !important;
-      max-height: none !important;
-      height: auto !important;
-      min-height: 0 !important;
-      flex: 0 1 auto !important;
-      width: 100%;
-      padding-top: calc(
-        var(--site-header-height) + env(safe-area-inset-top, 0px) + 1rem
-      ) !important;
-      padding-bottom: 0;
-      row-gap: 0;
-    }
-
-    .hero.solutions-hero .solutions-hero-main-zone {
-      flex: 0 0 auto;
-      min-height: 0;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .hero.solutions-hero .solutions-hero-slide-stack {
-      position: relative;
-      height: auto;
-      min-height: 0;
-      overflow: visible;
-    }
-
-    .hero.solutions-hero .solutions-hero-slide-panel:not(.is-active) {
-      position: absolute !important;
-      inset: auto !important;
-      top: 0;
-      left: 0;
-      right: 0;
-      width: 100%;
-      height: 0 !important;
-      min-height: 0 !important;
-      overflow: hidden !important;
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-    }
-
-    .hero.solutions-hero .solutions-hero-slide-panel.is-active {
-      position: relative !important;
-      inset: auto !important;
-      height: auto !important;
-      min-height: 0 !important;
-      overflow: visible !important;
-      opacity: 1;
-      visibility: visible;
-      pointer-events: auto;
-    }
-
-    .hero.solutions-hero .solutions-hero-slide-content {
-      animation: none !important;
-      transform: none !important;
-    }
-
-    .hero.solutions-hero .solutions-hero-framed {
-      display: flex;
-      flex-direction: column;
-      height: auto;
-      min-height: 100svh;
-      max-height: none;
-    }
-
-    /** Hide Sarah idle FAB on /solutions mobile (orb renders outside hero DOM). */
-    body.ihl-solutions-page [data-sarah-fab="idle"] {
-      display: none !important;
-      visibility: hidden !important;
-      pointer-events: none !important;
-      opacity: 0 !important;
-    }
-
-    /**
-     * Mobile EN — compact typography and two-pill program nav (English only).
-     */
     .hero.solutions-hero[lang="en"] {
       --loan-hero-badge-top: 0;
       --loan-hero-badge-headline-gap: 0.625rem;
       --loan-hero-content-bottom-gap: 0.7rem;
       --loan-hero-tags-cta-gap: 0.75rem;
-      --loan-hero-cta-disclosure-gap: 1.25rem;
-      --loan-hero-disclosure-nav-gap: 0.375rem;
-      --loan-hero-nav-bottom-padding: clamp(0.625rem, 1.25vh, 0.875rem);
+      --loan-hero-cta-disclosure-gap: clamp(1rem, 3vw, 1.25rem);
       --loan-hero-bottom-best-for-min: 2.625rem;
       --loan-hero-bottom-cta-min: 2.375rem;
       --loan-hero-bottom-disclosure-min: 2rem;
@@ -2845,12 +2895,12 @@ html {
       --loan-hero-card-icon-glyph: 0.8125rem;
       --loan-hero-features-gap: 0.4rem;
       --loan-hero-features-top: 0.7rem;
-      --loan-hero-headline-size: 1.5rem;
+      --loan-hero-headline-size: 2.15rem;
       --loan-hero-headline-leading: 1.1;
       --loan-hero-subtext-size: 0.875rem;
       --loan-hero-subtext-leading: 1.42;
       --loan-hero-cta-padding: 0.75rem 1.35rem;
-      --loan-hero-disclosure-size: 0.71875rem;
+      --loan-hero-disclosure-size: 0.6875rem;
     }
 
     .hero.solutions-hero[lang="en"] .solutions-hero-bottom-zone {
@@ -2862,7 +2912,7 @@ html {
     .hero.solutions-hero[lang="en"] .hero-headline.solutions-hero-headline {
       font-size: var(--loan-hero-headline-size);
       line-height: var(--loan-hero-headline-leading);
-      max-width: 22ch;
+      max-width: none;
     }
 
     .hero.solutions-hero[lang="en"] .solutions-hero-subtext {
@@ -2897,6 +2947,49 @@ html {
       gap: 0.28rem;
     }
 
+    /**
+     * Mobile — darken background images for readability (all programs, EN + ES).
+     */
+    .hero.solutions-hero .hero-overlay.solutions-hero-overlay {
+      background: rgba(0, 0, 0, 0.4);
+    }
+
+    /**
+     * Mobile — center lower content block (all programs, EN + ES).
+     * Shared axis: Ideal para / Best For → CTA → disclaimer → arrows.
+     */
+    .hero.solutions-hero .solutions-hero-bottom-zone__best-for {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+
+    .hero.solutions-hero .solutions-hero-best-for {
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 22rem;
+      margin-inline: auto;
+    }
+
+    .hero.solutions-hero .solutions-hero-best-for-label {
+      text-align: center;
+      width: 100%;
+    }
+
+    .hero.solutions-hero .solutions-hero-best-for-pills {
+      justify-content: center;
+      width: 100%;
+    }
+
+    .hero.solutions-hero .solutions-hero-bottom-zone__nav--mobile {
+      width: 100%;
+      max-width: 100%;
+      margin-inline: 0;
+      padding-inline: 0;
+    }
+
     .solutions-hero[lang="en"] .solutions-hero-bottom-stack {
       min-height: calc(
         var(--loan-hero-bottom-best-for-min) + var(--loan-hero-tags-cta-gap) +
@@ -2905,66 +2998,72 @@ html {
       );
     }
 
-    .solutions-hero[lang="en"] .solutions-hero-bottom-zone__cta {
-      justify-content: center;
+    .solutions-hero[lang="en"] .solutions-hero-disclosure,
+    .solutions-hero[lang="es"] .solutions-hero-disclosure {
+      display: block;
+      font-size: 11px;
+      line-height: 1.4;
+      max-width: 92%;
+      width: 100%;
+      margin-inline: auto;
+      text-align: center;
+      color: rgb(255 255 255 / 0.65);
+      overflow-wrap: normal;
+      word-break: normal;
     }
 
-    .solutions-hero[lang="en"] .solutions-hero-bottom-zone__cta .hero-primary {
+    .solutions-hero[lang="en"] .solutions-hero-bottom-zone__disclosure,
+    .solutions-hero[lang="es"] .solutions-hero-bottom-zone__disclosure {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      margin-top: 16px;
+    }
+
+    .solutions-hero[lang="en"] .solutions-hero-bottom-zone__cta,
+    .solutions-hero[lang="es"] .solutions-hero-bottom-zone__cta {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .solutions-hero[lang="en"] .solutions-hero-bottom-zone__cta .hero-primary,
+    .solutions-hero[lang="es"] .solutions-hero-bottom-zone__cta .hero-primary {
       width: 88%;
       max-width: 22rem;
       min-height: 44px;
       margin-inline: auto;
       box-sizing: border-box;
-      padding: var(--loan-hero-cta-padding);
+      padding: 0.75rem 1.35rem;
+      text-align: center;
     }
 
-    .solutions-hero[lang="en"] .solutions-hero-disclosure {
-      font-size: var(--loan-hero-disclosure-size);
-      line-height: 1.38;
+    /**
+     * Spanish Bank Statement mobile — vertical rhythm aligned to HELOC reference.
+     * Compensates for shorter forced two-line headline; bottom tokens match HELOC.
+     */
+    .solutions-hero-framed[data-lang="es"][data-active-slide="bank-statement"] {
+      --loan-hero-content-bottom-gap: 1rem;
+      --loan-hero-features-top: 2.4rem;
+      --loan-hero-features-gap: 0.65rem;
+      --loan-hero-tags-cta-gap: 1.25rem;
     }
 
-    /* Pill track — centered two-pill viewport, arrows outside clip */
-    .solutions-hero[lang="en"] .solutions-hero-bottom-zone__nav {
-      width: 100%;
-      max-width: 100%;
-      margin-inline: 0;
-      padding-inline: 0;
-      box-sizing: border-box;
+    .solutions-hero-framed[data-lang="es"][data-active-slide="bank-statement"]
+      .hero-headline.solutions-hero-headline--es-bank-statement {
+      margin-bottom: 0.625rem;
     }
 
-    .solutions-hero[lang="en"] .solutions-hero-program-nav {
-      width: 100%;
+    .solutions-hero-framed[data-lang="es"][data-active-slide="bank-statement"]
+      .solutions-hero-headline--es-bank-statement
+      .solutions-hero-headline__line--second {
+      margin-top: 0.125rem;
     }
 
-    .solutions-hero[lang="en"] .solutions-hero-badges-shell {
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-      max-width: 100%;
-      gap: 0.375rem;
-    }
-
-    .solutions-hero[lang="en"] .solutions-hero-badges-clip {
-      flex: 0 0 auto;
-      width: auto;
-      min-width: 0;
-      max-width: calc(100% - 2.75rem);
-      overflow: hidden;
-    }
-
-    .solutions-hero[lang="en"] .solutions-hero-badges-clip[data-fit-window="mobile-en"] {
-      flex: 0 0 auto;
-    }
-
-    .solutions-hero[lang="en"] .solutions-hero-badges-viewport {
-      scroll-snap-type: x mandatory;
-      scroll-padding-inline: 0;
-    }
-
-    .solutions-hero[lang="en"] .solutions-hero-badge {
-      scroll-snap-align: start;
-      scroll-snap-stop: always;
-      flex-shrink: 0;
+    .solutions-hero-framed[data-lang="es"][data-active-slide="bank-statement"]
+      .solutions-hero-slide-panel.is-active
+      .solutions-hero-subtext {
+      margin-top: 1rem;
     }
   }
 
@@ -3774,5 +3873,245 @@ html {
   @page {
     size: letter;
     margin: 0.5in;
+  }
+}
+
+/**
+ * Loan Solutions mobile hero — approved mockup layout (unlayered; ≤767px).
+ * Normal document flow, arrow nav, Sarah corner clearance.
+ */
+@media (max-width: 767px) {
+  body.ihl-solutions-page .hero.solutions-hero {
+    margin-top: 0 !important;
+    overflow: visible !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    --loan-hero-cta-disclosure-gap: clamp(1rem, 3vw, 1.25rem);
+    --loan-hero-disclosure-nav-gap: clamp(1.5rem, 4.5vw, 2rem);
+    --loan-hero-mobile-sarah-gap: clamp(2rem, 5.5vw, 2.5rem);
+    --loan-hero-sarah-stack-height: 6.25rem;
+    --loan-hero-nav-bottom-padding: calc(
+      var(--loan-hero-mobile-sarah-gap) + var(--loan-hero-sarah-stack-height) +
+        max(0.25rem, env(safe-area-inset-bottom, 0px))
+    );
+  }
+
+  body.ihl-solutions-page .hero.solutions-hero .hero-framed.solutions-hero-framed {
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: visible !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+  }
+
+  body.ihl-solutions-page .hero.solutions-hero .hero-overlay.solutions-hero-overlay {
+    background: rgba(0, 0, 0, 0.4) !important;
+  }
+
+  body.ihl-solutions-page .hero.solutions-hero .hero-inner.solutions-hero-inner {
+    position: relative !important;
+    inset: auto !important;
+    transform: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    overflow: visible !important;
+    height: auto !important;
+    min-height: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  body.ihl-solutions-page .hero.solutions-hero .hero-content.solutions-hero-content {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    align-content: flex-start !important;
+    align-items: stretch !important;
+    overflow: visible !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    flex: 0 1 auto !important;
+    transform: none !important;
+    padding-top: calc(
+      var(--site-header-height) + env(safe-area-inset-top, 0px) + 1rem
+    ) !important;
+    padding-bottom: 0 !important;
+  }
+
+  body.ihl-solutions-page .hero.solutions-hero .solutions-hero-main-zone,
+  body.ihl-solutions-page .hero.solutions-hero .solutions-hero-slide-stack,
+  body.ihl-solutions-page .hero.solutions-hero .solutions-hero-slide-panel.is-active,
+  body.ihl-solutions-page .hero.solutions-hero .solutions-hero-slide-main,
+  body.ihl-solutions-page .hero.solutions-hero .solutions-hero-slide-content {
+    position: relative !important;
+    overflow: visible !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    transform: none !important;
+  }
+
+  body.ihl-solutions-page .hero.solutions-hero .solutions-hero-slide-stack {
+    --loan-hero-slide-stack-height: auto !important;
+  }
+
+  body.ihl-solutions-page .hero.solutions-hero .solutions-hero-slide-panel:not(.is-active) {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
+  body.ihl-solutions-page .hero.solutions-hero .solutions-hero-slide-content,
+  body.ihl-solutions-page .hero.solutions-hero .loan-hero-badge-row {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  body.ihl-solutions-page .hero.solutions-hero .solutions-hero-bottom-zone {
+    row-gap: var(--loan-hero-disclosure-nav-gap) !important;
+    padding-bottom: var(--loan-hero-nav-bottom-padding) !important;
+  }
+
+  body.ihl-solutions-page .hero.solutions-hero .solutions-hero-bottom-zone__best-for {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+  }
+
+  body.ihl-solutions-page .hero.solutions-hero .solutions-hero-best-for {
+    flex-direction: column !important;
+    align-items: center !important;
+    width: 100% !important;
+    max-width: 22rem !important;
+    margin-inline: auto !important;
+  }
+
+  body.ihl-solutions-page .hero.solutions-hero .solutions-hero-best-for-label {
+    text-align: center !important;
+    width: 100%;
+  }
+
+  body.ihl-solutions-page .hero.solutions-hero .solutions-hero-best-for-pills {
+    justify-content: center !important;
+    width: 100%;
+  }
+
+  body.ihl-solutions-page .hero.solutions-hero .solutions-hero-bottom-zone__nav--mobile {
+    display: flex !important;
+    justify-content: center !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-inline: 0 !important;
+    padding-inline: 0 !important;
+  }
+
+  body.ihl-solutions-page [data-sarah-fab="idle"] {
+    bottom: max(0.25rem, env(safe-area-inset-bottom, 0px)) !important;
+    right: max(0.75rem, env(safe-area-inset-right, 0px)) !important;
+  }
+
+  body.ihl-solutions-page .hero.solutions-hero[lang="en"] .solutions-hero-disclosure,
+  body.ihl-solutions-page .hero.solutions-hero[lang="es"] .solutions-hero-disclosure {
+    display: block;
+    font-size: 11px !important;
+    line-height: 1.4 !important;
+    max-width: 92% !important;
+    width: 100%;
+    margin-inline: auto !important;
+    text-align: center !important;
+    color: rgb(255 255 255 / 0.65) !important;
+    overflow-wrap: normal;
+    word-break: normal;
+    hyphens: manual;
+  }
+
+  body.ihl-solutions-page .hero.solutions-hero[lang="en"] .solutions-hero-bottom-zone__disclosure,
+  body.ihl-solutions-page .hero.solutions-hero[lang="es"] .solutions-hero-bottom-zone__disclosure {
+    display: flex !important;
+    justify-content: center !important;
+    width: 100% !important;
+    margin-top: 16px !important;
+  }
+
+  body.ihl-solutions-page .hero.solutions-hero[lang="en"] .solutions-hero-bottom-zone__cta,
+  body.ihl-solutions-page .hero.solutions-hero[lang="es"] .solutions-hero-bottom-zone__cta {
+    display: flex !important;
+    justify-content: center !important;
+    width: 100% !important;
+  }
+
+  body.ihl-solutions-page .hero.solutions-hero[lang="en"] .solutions-hero-bottom-zone__cta .hero-primary,
+  body.ihl-solutions-page .hero.solutions-hero[lang="es"] .solutions-hero-bottom-zone__cta .hero-primary {
+    width: 88% !important;
+    max-width: 22rem !important;
+    min-height: 44px;
+    margin-inline: auto !important;
+    box-sizing: border-box;
+    padding: 0.75rem 1.35rem !important;
+    text-align: center !important;
+  }
+
+  body.ihl-solutions-page .hero.solutions-hero[lang="en"] .hero-headline.solutions-hero-headline {
+    font-size: 2.15rem !important;
+    line-height: 1.1 !important;
+    max-width: none !important;
+  }
+
+  body.ihl-solutions-page
+    .hero.solutions-hero[lang="es"]
+    .hero-framed.solutions-hero-framed[data-active-slide="bank-statement"] {
+    --loan-hero-content-bottom-gap: 1rem;
+    --loan-hero-features-top: 2.4rem;
+    --loan-hero-features-gap: 0.65rem;
+    --loan-hero-tags-cta-gap: 1.25rem;
+  }
+
+  body.ihl-solutions-page
+    .hero.solutions-hero[lang="es"]
+    .hero-framed.solutions-hero-framed[data-active-slide="bank-statement"]
+    .hero-headline.solutions-hero-headline--es-bank-statement {
+    margin-bottom: 0.625rem;
+  }
+
+  body.ihl-solutions-page
+    .hero.solutions-hero[lang="es"]
+    .hero-framed.solutions-hero-framed[data-active-slide="bank-statement"]
+    .solutions-hero-slide-panel.is-active
+    .solutions-hero-subtext {
+    margin-top: 1rem;
+  }
+
+  body.ihl-solutions-page
+    .hero.solutions-hero[lang="es"]
+    .hero-framed.solutions-hero-framed[data-active-slide="bank-statement"]
+    .solutions-hero-features {
+    margin-top: var(--loan-hero-features-top);
+    gap: var(--loan-hero-features-gap);
+  }
+
+  body.ihl-solutions-page
+    .hero.solutions-hero[lang="es"]
+    .hero-headline.solutions-hero-headline--es-bank-statement
+    .solutions-hero-headline__line {
+    white-space: nowrap !important;
+  }
+
+  body.ihl-solutions-page
+    .hero.solutions-hero[lang="es"]
+    .hero-headline.solutions-hero-headline--es-bank-statement
+    .solutions-hero-headline__line--second {
+    font-size: clamp(1.2rem, 5.75vw, calc(1em - 0.0625rem));
+    letter-spacing: -0.018em;
+    margin-top: 0.125rem;
   }
 }

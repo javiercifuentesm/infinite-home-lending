@@ -26,9 +26,6 @@ function calcNetProceeds(salePrice: number, mortgageBalance: number, county: str
     "Howard, MD": 0.01,
     "Anne Arundel, MD": 0.01,
     "Washington, DC": 0.01375,
-    "Fairfax, VA": 0.0025,
-    "Arlington, VA": 0.0025,
-    "Alexandria, VA": 0.0025,
   };
   const taxRate = transferTaxRates[county] ?? 0.01;
   const transferTax = Math.round(salePrice * taxRate);
@@ -345,7 +342,7 @@ export function DealDeskGate({ onAuth }: DealDeskGateProps) {
                     maxWidth: "380px",
                   }}
                 >
-                  Real math, real data, real scripts — at the moment that matters. 12 tools built for MD·DC·VA agents who close.
+                  Real math, real data, real scripts — at the moment that matters. 12 tools built for DC and MD agents who close.
                 </p>
 
                 <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "1.75rem" }}>
@@ -353,7 +350,7 @@ export function DealDeskGate({ onAuth }: DealDeskGateProps) {
                     { title: "12 live deal execution tools", sub: "From listing appointment to closing table" },
                     { title: "Nexio — The Deal Desk Virtual Assistant", sub: "Your market. Your tools. Your deals — worked in your favor" },
                     { title: "Intelligence Loop", sub: "Daily signals, compliance alerts & negotiation leverage" },
-                    { title: "Real MD·DC·VA market data", sub: "Transfer taxes, rate tiers, median prices by neighborhood" },
+                    { title: "Real DC and MD market data", sub: "Transfer taxes, rate tiers, median prices by neighborhood" },
                   ].map((f) => (
                     <div key={f.title} style={{ display: "flex", gap: "10px", alignItems: "flex-start" }}>
                       <div
@@ -452,7 +449,7 @@ export function DealDeskGate({ onAuth }: DealDeskGateProps) {
                     { value: "12", label: "Live tools" },
                     { value: "$430k", label: "Median owner net worth" },
                     { value: "Nexio", label: "AI Virtual Assistant" },
-                    { value: "MD·DC·VA", label: "Markets" },
+                    { value: "DC and MD", label: "Markets" },
                   ].map((s) => (
                     <div key={s.label}>
                       <div style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: "1.1rem", fontWeight: 500, color: "#C6A15B" }}>{s.value}</div>
@@ -508,7 +505,7 @@ export function DealDeskGate({ onAuth }: DealDeskGateProps) {
                   The tool you bring to every listing appointment.
                 </div>
                 <div style={{ fontFamily: "sans-serif", fontSize: "12px", color: "#9ca3af", lineHeight: 1.6 }}>
-                  Three price scenarios. Real MD-DC-VA transfer taxes. Already done before you knock.
+                  Three price scenarios. Real DC and MD transfer taxes. Already done before you knock.
                 </div>
               </div>
 
@@ -547,9 +544,6 @@ export function DealDeskGate({ onAuth }: DealDeskGateProps) {
                     <option value="Howard, MD">Howard, MD</option>
                     <option value="Anne Arundel, MD">Anne Arundel, MD</option>
                     <option value="Washington, DC">Washington, DC</option>
-                    <option value="Fairfax, VA">Fairfax, VA</option>
-                    <option value="Arlington, VA">Arlington, VA</option>
-                    <option value="Alexandria, VA">Alexandria, VA</option>
                   </select>
                 </div>
                 <div>
@@ -833,7 +827,7 @@ export function DealDeskGate({ onAuth }: DealDeskGateProps) {
                 {
                   tag: "🟢 Negotiation Leverage",
                   title: "Greater DC market starting to rebalance — buyers gaining ground",
-                  source: "Google News · DMV",
+                  source: "Google News · DC and Maryland area",
                 },
               ].map((item) => (
                 <div

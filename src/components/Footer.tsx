@@ -3,6 +3,7 @@ import { Facebook, Instagram, Linkedin, Mail, MapPin, Phone } from "lucide-react
 import { IHLLogo } from "./IHLLogo";
 import { useLanguage } from "../i18n/LanguageContext";
 import { en } from "../i18n/en";
+import "../components/compliance/complianceLegal.css";
 
 const OFFICE_LINES = ["7272 Wisconsin Avenue, 9th Floor", "Bethesda, MD 20814"] as const;
 const PHONE_DISPLAY = "(301) 507-7609";
@@ -35,10 +36,10 @@ const Footer = () => {
       />
 
       <div className="relative z-[3] mx-auto max-w-7xl px-5 pb-0 pt-16 sm:px-6 lg:px-8 lg:pt-20">
-        <div className="grid gap-12 lg:grid-cols-12 lg:gap-10 xl:gap-14">
+        <div className="site-footer-zones grid gap-12 lg:grid-cols-[minmax(0,15rem)_1fr_minmax(0,18rem)] lg:grid-rows-[auto_auto] lg:items-start lg:gap-x-10 lg:gap-y-8 xl:gap-x-14">
 
           {/* Brand column */}
-          <div className="lg:col-span-4">
+          <div className="site-footer-brand order-1 lg:col-start-1 lg:row-start-1">
             <Link
               to="/"
               aria-label="Infinite Home Lending"
@@ -74,58 +75,99 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Company nav */}
-          <div className="lg:col-span-2">
-            <h2 className="font-sans text-[10px] font-semibold uppercase tracking-[0.22em] text-[#C5A059]">
-              {t("footer.company")}
-            </h2>
-            <ul className="mt-5 flex flex-col gap-3">
-              {[
-                { labelKey: "footer.aboutUs", to: "/about" },
-                { labelKey: "footer.howWeWork", to: "/how-it-works" },
-                { labelKey: "footer.loanSolutions", to: "/solutions" },
-                { labelKey: "footer.knowledgeCenter", to: "/knowledge-center" },
-                { labelKey: "footer.contact", to: "/contact" },
-              ].map(({ labelKey, to }) => (
-                <li key={to}>
-                  <Link
-                    to={to}
-                    className="font-sans text-[13px] text-slate-500 transition-colors duration-150 hover:text-navy"
-                  >
-                    {t(labelKey)}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+          <div className="site-footer-eho-mark order-2 lg:col-start-1 lg:row-start-2">
+            <Link
+              to="/equal-housing"
+              aria-label={t("footer.complianceEqualHousing")}
+              className="site-footer-eho-link inline-block rounded-[3px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C5A059]/45 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F7F7F5]"
+            >
+              <img
+                src="/equal-housing.png"
+                alt={t("footer.complianceEqualHousing")}
+                className="site-footer-eho-logo"
+              />
+            </Link>
           </div>
 
-          {/* Resources nav */}
-          <div className="lg:col-span-2">
-            <h2 className="font-sans text-[10px] font-semibold uppercase tracking-[0.22em] text-[#C5A059]">
-              {t("footer.resources")}
-            </h2>
-            <ul className="mt-5 flex flex-col gap-3">
-              {[
-                { labelKey: "footer.smartTools", to: "/smart-tools" },
-                { labelKey: "footer.dealDesk", to: "/deal-desk" },
-                { labelKey: "footer.calculators", to: "/calculators" },
-                { labelKey: "footer.askSarah", to: "/" },
-                { labelKey: "footer.startPreApproval", to: "/get-started" },
-              ].map(({ labelKey, to }) => (
-                <li key={to}>
-                  <Link
-                    to={to}
-                    className="font-sans text-[13px] text-slate-500 transition-colors duration-150 hover:text-navy"
-                  >
-                    {t(labelKey)}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+          {/* Middle nav group — Company, Resources, Compliance */}
+          <div className="site-footer-nav-center order-3 lg:col-start-2 lg:row-start-1 lg:row-span-2">
+            <div className="site-footer-nav-group grid gap-10 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-10 xl:gap-x-12">
+              <div>
+                <h2 className="font-sans text-[10px] font-semibold uppercase tracking-[0.22em] text-[#C5A059]">
+                  {t("footer.company")}
+                </h2>
+                <ul className="mt-5 flex flex-col gap-3">
+                  {[
+                    { labelKey: "footer.aboutUs", to: "/about" },
+                    { labelKey: "footer.howWeWork", to: "/how-it-works" },
+                    { labelKey: "footer.loanSolutions", to: "/solutions" },
+                    { labelKey: "footer.knowledgeCenter", to: "/knowledge-center" },
+                    { labelKey: "footer.contact", to: "/contact" },
+                  ].map(({ labelKey, to }) => (
+                    <li key={to}>
+                      <Link
+                        to={to}
+                        className="font-sans text-[13px] text-slate-500 transition-colors duration-150 hover:text-navy"
+                      >
+                        {t(labelKey)}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div>
+                <h2 className="font-sans text-[10px] font-semibold uppercase tracking-[0.22em] text-[#C5A059]">
+                  {t("footer.resources")}
+                </h2>
+                <ul className="mt-5 flex flex-col gap-3">
+                  {[
+                    { labelKey: "footer.smartTools", to: "/smart-tools" },
+                    { labelKey: "footer.dealDesk", to: "/deal-desk" },
+                    { labelKey: "footer.calculators", to: "/calculators" },
+                    { labelKey: "footer.askSarah", to: "/" },
+                    { labelKey: "footer.startPreApproval", to: "/get-started" },
+                  ].map(({ labelKey, to }) => (
+                    <li key={to}>
+                      <Link
+                        to={to}
+                        className="font-sans text-[13px] text-slate-500 transition-colors duration-150 hover:text-navy"
+                      >
+                        {t(labelKey)}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="site-footer-compliance-col sm:col-span-2 lg:col-span-1">
+                <h2 className="font-sans text-[10px] font-semibold uppercase tracking-[0.22em] text-[#C5A059]">
+                  {t("footer.compliance")}
+                </h2>
+                <ul className="mt-5 flex flex-col gap-3">
+                  {[
+                    { labelKey: "footer.compliancePrivacy", to: "/privacy-policy" },
+                    { labelKey: "footer.complianceTerms", to: "/terms-of-use" },
+                    { labelKey: "footer.complianceSms", to: "/sms-terms" },
+                    { labelKey: "footer.complianceLicensing", to: "/licensing" },
+                    { labelKey: "footer.complianceEqualHousing", to: "/equal-housing" },
+                  ].map(({ labelKey, to }) => (
+                    <li key={to}>
+                      <Link
+                        to={to}
+                        className="site-footer-compliance-link block font-sans text-[13px] leading-snug text-slate-500 transition-colors duration-150 hover:text-navy"
+                      >
+                        {t(labelKey)}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
           </div>
 
           {/* Contact cards */}
-          <div className="flex flex-col gap-3 lg:col-span-4">
+          <div className="site-footer-contact order-4 flex flex-col gap-3 lg:col-start-3 lg:row-start-1 lg:row-span-2 lg:justify-self-end lg:w-full lg:max-w-[18rem]">
             <h2 className="font-sans text-[10px] font-semibold uppercase tracking-[0.22em] text-[#C5A059]">
               {t("footer.getInTouch")}
             </h2>
@@ -182,7 +224,6 @@ const Footer = () => {
         {/* Legal strip */}
         <div className="mt-14 border-t border-slate-200/80 py-8">
           <div className="flex flex-col items-center gap-3 text-center font-sans text-[11px] text-slate-400">
-            {/* Top row — all key info on one line */}
             <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
               <span className="text-slate-500">© {year} Infinite Home Lending.</span>
               <a
@@ -196,26 +237,16 @@ const Footer = () => {
               <span className="text-slate-300">·</span>
               <span>{t("footer.nmls")}</span>
               <span className="text-slate-300">·</span>
-              <a href="#" className="transition-colors hover:text-navy">
+              <Link to="/privacy-policy" className="transition-colors hover:text-navy">
                 {t("footer.privacy")}
-              </a>
+              </Link>
               <span className="text-slate-300">·</span>
-              <a href="#" className="transition-colors hover:text-navy">
+              <Link to="/terms-of-use" className="transition-colors hover:text-navy">
                 {t("footer.terms")}
-              </a>
+              </Link>
             </div>
 
-            {/* Bottom row — disclaimer */}
             <p className="text-[10px] text-slate-400/80">{t("footer.loanDisclaimer")}</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Equal Housing strip */}
-      <div className="border-t border-slate-200/60 bg-slate-100/80">
-        <div className="mx-auto max-w-7xl px-5 py-6 sm:px-6 lg:px-8">
-          <div className="housing-logo-footer">
-            <img src="/equal-housing.png" alt="Equal Housing Opportunity" />
           </div>
         </div>
       </div>

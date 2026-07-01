@@ -27,6 +27,7 @@ export type SolutionSlideId =
   | "fha203k"
   | "vaRenovation"
   | "bank-statement"
+  | "income1099"
   | "asset-utilization"
   | "reverse"
   | "jumbo"
@@ -138,6 +139,24 @@ export const SOLUTION_SLIDES: readonly SolutionSlideConfig[] = [
     badgeEmoji: "🎖",
     badgeLabelKey: "solutions.hero.slides.vaRenovation.badgeLabel",
     features: [{ icon: "percent" }, { icon: "layers" }, { icon: "home" }],
+    bestForCount: 4,
+    ctaTo: "/contact",
+  },
+  {
+    id: "bank-statement",
+    imageSrc: "/images/solutions/bank-statement-hero.png",
+    badgeEmoji: "📊",
+    badgeLabelKey: "solutions.hero.slides.bank-statement.badgeLabel",
+    features: [{ icon: "file-off" }, { icon: "layers" }, { icon: "percent" }],
+    bestForCount: 4,
+    ctaTo: "/contact",
+  },
+  {
+    id: "income1099",
+    imageSrc: "/images/solutions/income1099-hero.png",
+    badgeEmoji: "💼",
+    badgeLabelKey: "solutions.hero.slides.income1099.badgeLabel",
+    features: [{ icon: "layers" }, { icon: "file-off" }, { icon: "building" }],
     bestForCount: 4,
     ctaTo: "/contact",
   },

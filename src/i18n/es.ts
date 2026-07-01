@@ -12,36 +12,37 @@ export const es = {
   "footer.askSarah": "Pregunta a Sarah",
 
   "sarah.askSarah": "Habla con Sarah",
+  "sarah.subtitle": "Concierge Hipotecaria · DC · MD",
   "sarah.disclaimer":
     "Sarah es nuestra Concierge Hipotecaria de IHL. No es una asesora hipotecaria con licencia. La información proporcionada es únicamente con fines educativos.",
 
   "trustBar.nmls": "NMLS #2831765",
-  "trustBar.region": "Washington, D.C.",
+  "trustBar.region": "Washington, D.C. y Maryland",
   "trustBar.equalHousing": "Prestamista de Vivienda Equitativa",
 
   "home.meta.title": "Inicio",
   "home.meta.description":
-    "Asesoría hipotecaria premium en Washington, DC. Compare opciones de préstamo, use calculadoras inteligentes y reciba orientación clara según sus metas—no solo una tasa.",
+    "Asesoría hipotecaria premium en Washington, D.C. y Maryland. Compare opciones de préstamo, use calculadoras inteligentes y reciba orientación clara según sus metas—no solo una tasa.",
   "about.meta.title": "Nosotros",
   "about.meta.description":
     "Conozca quién es Infinite Home Lending, por qué existe y cómo nuestro enfoque de asesoría ayuda a los prestatarios a navegar el financiamiento de vivienda con claridad y confianza.",
   "solutions.meta.title": "Soluciones de Préstamo",
   "solutions.meta.description":
-    "Compare préstamos convencionales, FHA, VA, USDA, refinanciamiento, HELOC y opciones especializadas en Washington, DC antes de elegir una estructura.",
+    "Compare préstamos convencionales, FHA, VA, USDA, refinanciamiento, HELOC y opciones especializadas en Washington, D.C. y Maryland antes de elegir una estructura.",
   "howItWorks.meta.description":
-    "Descubra cómo Infinite Home Lending guía a prestatarios en Washington, DC desde la primera llamada hasta el cierre—con hitos claros y apoyo directo del asesor.",
+    "Descubra cómo Infinite Home Lending guía a prestatarios en Washington, D.C. y Maryland desde la primera llamada hasta el cierre—con hitos claros y apoyo directo del asesor.",
   "contact.meta.title": "Contáctenos",
   "contact.meta.description":
-    "Contacte a Infinite Home Lending sobre compra, refinanciamiento o capital en Washington, DC. Comparta sus metas y reciba próximos pasos claros de asesores licenciados.",
+    "Contacte a Infinite Home Lending sobre compra, refinanciamiento o capital en Washington, D.C. y Maryland. Comparta sus metas y reciba próximos pasos claros de asesores licenciados.",
   "smartTools.meta.title": "Herramientas Inteligentes",
   "smartTools.meta.description":
-    "Calculadoras hipotecarias gratuitas para compradores y propietarios en Washington, DC. Modele pagos, patrimonio, costos de esperar e impacto del crédito antes de solicitar.",
+    "Calculadoras hipotecarias gratuitas para compradores y propietarios en Washington, D.C. y Maryland. Modele pagos, patrimonio, costos de esperar e impacto del crédito antes de solicitar.",
   "knowledge.meta.title": "Centro de Conocimiento",
   "knowledge.meta.description":
-    "Guías hipotecarias para Washington, DC—compra, refinanciamiento, tipos de préstamo y números explicados sin jerga. Encuentre respuestas claras antes de decidir.",
+    "Guías hipotecarias para Washington, D.C. y Maryland—compra, refinanciamiento, tipos de préstamo y números explicados sin jerga. Encuentre respuestas claras antes de decidir.",
 
   // Footer
-  "footer.tagline": "Asesoría hipotecaria de alto nivel, diseñada alrededor de su vida — no solo de su tasa. Atendemos Washington, D.C.",
+  "footer.tagline": "Asesoría hipotecaria de alto nivel, diseñada alrededor de su vida — no solo de su tasa. Atendemos Washington, D.C. y Maryland",
   "footer.slogan": "Préstamos a su medida. Posibilidades infinitas.",
   "footer.company": "Empresa",
   "footer.resources": "Recursos",
@@ -56,10 +57,11 @@ export const es = {
   "footer.contact": "Contacto",
   "footer.smartTools": "Herramientas inteligentes",
   "footer.dealDesk": "Deal Desk",
+  "dealDesk.partnerCTA.serviceArea": "Para profesionales inmobiliarios con licencia en Washington, D.C. y Maryland.",
   "footer.calculators": "Calculadoras",
   "footer.startPreApproval": "Iniciar pre-aprobación",
   "footer.rights": "Todos los derechos reservados.",
-  "footer.nmls": "Licenciado en Washington, D.C.",
+  "footer.nmls": "Licenciado en Washington, D.C. y Maryland",
   "footer.loanDisclaimer": "Todos los préstamos están sujetos a aprobación de crédito. Las tasas y condiciones pueden cambiar sin previo aviso.",
   "footer.serving": "Atendemos Washington, D.C.",
   "footer.privacy": "Política de privacidad",
@@ -217,16 +219,17 @@ export const es = {
   "home.finalCta.disclaimer": "Sin obligación — la consulta inicial no afecta su puntaje de crédito.",
 
   // Home — Trust section
-  "home.trust.title": "Orientación de confianza, respaldada por experiencia real",
-  "home.trust.subtitle": "Ayudamos a nuestros clientes a tomar decisiones hipotecarias con confianza, enfocándonos en la estructura, no solo en la tasa.",
+  "home.trust.eyebrow": "La Experiencia Detrás de Infinite Home Lending",
+  "home.trust.title": "Orientación de confianza, respaldada\u00A0por\u00A0experiencia\u00A0real",
+  "home.trust.subtitle": "A lo largo de sus carreras, nuestros fundadores han ayudado a los clientes a tomar decisiones hipotecarias con confianza, enfocándose en la estructura — encontrando la solución correcta para cada situación financiera, no solo la mejor tasa.",
   "home.trust.metric1.value": "$100M+",
-  "home.trust.metric1.label": "Préstamos estructurados",
-  "home.trust.metric2.value": "25+",
-  "home.trust.metric2.label": "Años de experiencia",
-  "home.trust.metric3.value": "Cientos",
-  "home.trust.metric3.label": "Propietarios asesorados",
+  "home.trust.metric1.label": "Préstamos Originados",
+  "home.trust.metric2.value": "40+",
+  "home.trust.metric2.label": "Años de Experiencia Combinada",
+  "home.trust.metric3.value": "1,000+",
+  "home.trust.metric3.label": "Familias Orientadas",
   "home.trust.metric4.value": "Licenciados",
-  "home.trust.metric4.label": "y en cumplimiento",
+  "home.trust.metric4.label": "y en Cumplimiento",
 
   // Home — Reviews
   "home.reviews.title": "Cada cliente. Cada situación.",
@@ -338,7 +341,7 @@ export const es = {
   "contact.purchase.property.where.question": "¿Dónde planea comprar?",
   "contact.purchase.property.where.body": "Esto nos ayuda a entender su mercado y guiarle con más precisión.",
   "contact.purchase.property.comingSoon": "Próximamente",
-  "contact.purchase.property.expanding": "Actualmente con licencia en Washington, DC.",
+  "contact.purchase.property.expanding": "Licenciado en Washington, D.C. y Maryland.",
   "contact.purchase.property.county.question": "¿En qué condado está interesado?",
   "contact.purchase.property.county.placeholder": "Seleccione un condado",
   "contact.purchase.property.city.question": "¿Qué ciudad o área?",
@@ -492,7 +495,7 @@ export const es = {
   "smartTools.eyebrow": "Infinite Home Lending",
   "smartTools.title": "Herramientas Inteligentes",
   "smartTools.subtitle": "Herramientas interactivas diseñadas para brindar claridad en decisiones hipotecarias reales.",
-  "smartTools.builtFor": "Desarrollado para DC",
+  "smartTools.builtFor": "Diseñado para Washington, D.C. y Maryland",
   "smartTools.featuredTool": "Herramienta Destacada",
   "smartTools.allTools": "Todas las Herramientas",
   "smartTools.mostUsed": "Más Utilizada",
@@ -2008,6 +2011,50 @@ export const es = {
   "solutions.hero.slides.vaRenovation.cta": "Explorar Renovación VA →",
   "solutions.hero.slides.vaRenovation.imageAlt":
     "Veterano con su familia en una vivienda luminosa con detalles sutiles de renovación que representa los beneficios del préstamo VA de renovación",
+  "solutions.hero.slides.bank-statement.badgeLabel": "Estados de Cuenta",
+  "solutions.hero.slides.bank-statement.eyebrow": "Estados de cuenta bancarios",
+  "solutions.hero.slides.bank-statement.headline":
+    "Trabajador independiente.\nSin declaraciones de impuestos.",
+  "solutions.hero.slides.bank-statement.subheadline":
+    "Califique con estados de cuenta personales o comerciales. Sin declaraciones de impuestos, formularios W-2 ni recibos de pago.",
+  "solutions.hero.slides.bank-statement.feature.0.title": "No se requieren declaraciones de impuestos",
+  "solutions.hero.slides.bank-statement.feature.0.desc":
+    "Califique con depósitos bancarios personales o comerciales en lugar de declaraciones o W-2.",
+  "solutions.hero.slides.bank-statement.feature.1.title": "Use 12 o 24 meses de estados de cuenta bancarios",
+  "solutions.hero.slides.bank-statement.feature.1.desc":
+    "Documente ingresos con 12 o 24 meses de estados de cuenta promediados.",
+  "solutions.hero.slides.bank-statement.feature.2.title": "Califique con 25% de propiedad del negocio",
+  "solutions.hero.slides.bank-statement.feature.2.desc":
+    "Umbrales flexibles para dueños de negocios, socios y contratistas.",
+  "solutions.hero.slides.bank-statement.bestFor.0": "Trabajadores independientes",
+  "solutions.hero.slides.bank-statement.bestFor.1": "Dueños de negocios",
+  "solutions.hero.slides.bank-statement.bestFor.2": "Contratistas",
+  "solutions.hero.slides.bank-statement.bestFor.3": "Inversionistas",
+  "solutions.hero.slides.bank-statement.cta": "Explorar préstamos de estados de cuenta bancarios →",
+  "solutions.hero.slides.bank-statement.imageAlt":
+    "Dueño de un pequeño negocio trabajador independiente con delantal profesional, representando préstamos con estados de cuenta bancarios para emprendedores",
+  "solutions.hero.slides.income1099.badgeLabel": "Ingresos 1099",
+  "solutions.hero.slides.income1099.eyebrow": "Préstamo con ingresos 1099",
+  "solutions.hero.slides.income1099.headline":
+    "¿Contratista independiente?\nHay otra forma de calificar.",
+  "solutions.hero.slides.income1099.subheadline":
+    "Califique utilizando sus ingresos documentados en formularios 1099 en lugar de declaraciones de impuestos tradicionales. Ideal para contratistas independientes, freelancers, consultores y otros profesionales que reciben ingresos 1099.",
+  "solutions.hero.slides.income1099.feature.0.title": "Use sus ingresos 1099",
+  "solutions.hero.slides.income1099.feature.0.desc":
+    "Califique utilizando uno o dos años de ingresos documentados en formularios 1099.",
+  "solutions.hero.slides.income1099.feature.1.title": "No se requieren declaraciones de impuestos",
+  "solutions.hero.slides.income1099.feature.1.desc":
+    "Los prestatarios elegibles pueden calificar sin declaraciones de impuestos tradicionales.",
+  "solutions.hero.slides.income1099.feature.2.title": "Ideal para contratistas independientes",
+  "solutions.hero.slides.income1099.feature.2.desc":
+    "Perfecto para contratistas independientes, freelancers, consultores y otros profesionales que reciben ingresos 1099.",
+  "solutions.hero.slides.income1099.bestFor.0": "Contratistas independientes",
+  "solutions.hero.slides.income1099.bestFor.1": "Freelancers",
+  "solutions.hero.slides.income1099.bestFor.2": "Consultores",
+  "solutions.hero.slides.income1099.bestFor.3": "Trabajadores independientes",
+  "solutions.hero.slides.income1099.cta": "Explorar préstamos con ingresos 1099 →",
+  "solutions.hero.slides.income1099.imageAlt":
+    "Contratista independiente trabajando en una laptop en una oficina moderna y luminosa, representando préstamos con ingresos 1099 para freelancers y trabajadores independientes",
   "solutions.hero.slides.heloc.badgeLabel": "HELOC",
   "solutions.hero.slides.heloc.eyebrow": "Financiamiento con Patrimonio",
   "solutions.hero.slides.heloc.headline":
@@ -2855,7 +2902,7 @@ export const es = {
   "compliance.licensing.company.nmlsLabel": "NMLS ID de la empresa:",
   "compliance.licensing.states.title": "Licencias estatales",
   "compliance.licensing.states.item1": "Licencia de Corredor Hipotecario de Washington, D.C. (activa)",
-  "compliance.licensing.states.item2": "Licencia de Maryland pendiente de aprobación",
+  "compliance.licensing.states.item2": "Licencia Hipotecaria de Maryland (activa)",
   "compliance.licensing.states.item3": "Licencia de Virginia pendiente de aprobación",
   "compliance.licensing.mlo.title": "Originadores de préstamos hipotecarios",
   "compliance.licensing.mlo.p1":

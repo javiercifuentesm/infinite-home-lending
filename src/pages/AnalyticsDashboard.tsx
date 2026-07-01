@@ -116,7 +116,7 @@ function exportPdf(leads: LeadRow[], filter = "ALL") {
   doc.rect(0, H - 12, W, 12, "F");
   doc.setTextColor(198, 161, 91);
   doc.setFontSize(8);
-  doc.text("Infinite Home Lending · Washington, DC · infinitehomelending.com", 14, H - 4);
+  doc.text("Infinite Home Lending · Washington, DC & Maryland · infinitehomelending.com", 14, H - 4);
   doc.setTextColor(255, 255, 255);
   doc.text("NMLS #2831765 · Confidential", W - 14, H - 4, { align: "right" });
   doc.save(`IHL-Leads-${filter}-${Date.now()}.pdf`);
@@ -251,7 +251,7 @@ function LeadDetailPanel({ lead, onClose }: { lead: LeadRow; onClose: () => void
     ["Express consent provided via IHL Mortgage Concierge widget", "Always identify yourself and Infinite Home Lending", "Honor any Do Not Call requests immediately", "First contact = consultation, not a sales call", "Log in CRM immediately after first outreach"].forEach((c) => { if (y > H - 20) { doc.addPage(); y = 20; } doc.text(`✓ ${c}`, 18, y); y += 7; });
     doc.setFillColor(11, 42, 74); doc.rect(0, H - 12, W, 12, "F");
     doc.setTextColor(198, 161, 91); doc.setFontSize(8);
-    doc.text("Infinite Home Lending · Washington, DC · infinitehomelending.com", 14, H - 4);
+    doc.text("Infinite Home Lending · Washington, DC & Maryland · infinitehomelending.com", 14, H - 4);
     doc.setTextColor(255, 255, 255);
     doc.text("NMLS #2831765 · Confidential — Internal Use Only", W - 14, H - 4, { align: "right" });
     doc.save(`IHL-Lead-${lead.name.replace(/\s+/g, "-")}-${Date.now()}.pdf`);

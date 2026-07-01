@@ -14,6 +14,10 @@ import {
   LayoutGrid,
   MessageSquare,
   ListOrdered,
+  ShieldCheck,
+  TrendingUp,
+  Wallet,
+  type LucideIcon,
 } from "lucide-react";
 
 const INFINITE_PATH_STAGE_DEFS = [
@@ -80,6 +84,56 @@ const COMPARISON_ROW_KEYS = [
   },
 ] as const;
 
+const WHY_INSIGHT_CARDS = [
+  {
+    titleKey: "howItWorks.why.card1.title",
+    bodyKey: "howItWorks.why.card1.body",
+    Icon: Wallet,
+  },
+  {
+    titleKey: "howItWorks.why.card2.title",
+    bodyKey: "howItWorks.why.card2.body",
+    Icon: TrendingUp,
+  },
+  {
+    titleKey: "howItWorks.why.card3.title",
+    bodyKey: "howItWorks.why.card3.body",
+    Icon: ShieldCheck,
+  },
+] as const;
+
+const WHY_INSIGHT_BODY_CLASS =
+  "type-body text-[15px] lg:text-base text-slate-600 font-normal leading-[1.65]";
+
+function WhyInsightCard({
+  titleKey,
+  bodyKey,
+  Icon,
+  t,
+}: {
+  titleKey: string;
+  bodyKey: string;
+  Icon: LucideIcon;
+  t: (key: string) => string;
+}) {
+  return (
+    <article className="how-why-insight-card card-home flex h-full min-h-0 flex-col rounded-[4px] border border-slate-200/90 bg-white p-7 lg:p-8 text-left shadow-[0_10px_32px_rgba(10,25,47,0.05)]">
+      <div className="mb-6 shrink-0">
+        <div className="how-why-insight-accent mb-4 h-[2px] w-10 bg-gold" aria-hidden />
+        <div className="how-why-insight-icon-wrap mb-4 flex h-10 w-10 items-center justify-center rounded-[4px] border border-gold/20 bg-gold/[0.06] text-gold">
+          <Icon className="how-why-insight-icon h-[1.125rem] w-[1.125rem]" strokeWidth={1.75} aria-hidden />
+        </div>
+        <h3 className="type-heading-sans flex min-h-[2.75rem] items-end text-gold leading-[1.35]">
+          {t(titleKey)}
+        </h3>
+      </div>
+      <div className="flex min-h-0 flex-1 flex-col">
+        <p className={WHY_INSIGHT_BODY_CLASS}>{t(bodyKey)}</p>
+      </div>
+    </article>
+  );
+}
+
 const sectionMotion = {
   initial: { opacity: 0, y: 18 },
   whileInView: { opacity: 1, y: 0 },
@@ -107,7 +161,7 @@ function StrategicPullQuote({ children }: { children: ReactNode }) {
 
 export default function HowItWorks() {
   const reduceMotion = usePrefersReducedMotion();
-  const { t, lang } = useLanguage();
+  const { t } = useLanguage();
   const pathSectionRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress: pathProgress } = useScroll({
     target: pathSectionRef,
@@ -452,26 +506,20 @@ export default function HowItWorks() {
 
       {/* 5. Trust reinforcement */}
       <section className="section-y border-b border-slate-100 bg-white">
-        <motion.div {...sectionMotion} className="max-w-3xl mx-auto px-6 text-center">
-          <h2 className="type-editorial-section-title text-[1.85rem] sm:text-3xl lg:text-[2.35rem] mb-8 leading-[1.1]">
-            {t("howItWorks.why.title")}
-          </h2>
-          <div className="space-y-6 text-left sm:text-center">
-            <p className="type-body text-slate-600">
+        <motion.div {...sectionMotion} className="max-w-7xl mx-auto px-6">
+          <div className="max-w-3xl mx-auto text-center mb-12 lg:mb-16">
+            <h2 className="type-editorial-section-title text-[1.85rem] sm:text-3xl lg:text-[2.35rem] mb-6 lg:mb-7 leading-[1.1]">
+              {t("howItWorks.why.title")}
+            </h2>
+            <p className="type-body text-slate-600 max-w-[46rem] lg:max-w-[48rem] mx-auto leading-[1.7] text-pretty">
               {t("howItWorks.why.body1")}
             </p>
-            <p className="type-body text-slate-600">
-              {t("howItWorks.why.body2")}
-            </p>
-            <p className="type-body text-slate-600 font-semibold text-[15px] lg:text-base">
-              {t("howItWorks.why.body3")}
-            </p>
-            <p className="type-body text-navy font-medium text-[15px] lg:text-base">
-              {t("howItWorks.why.body4")}
-            </p>
-            <p className="type-body text-slate-600">
-              {t("howItWorks.why.body5")}
-            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto items-stretch">
+            {WHY_INSIGHT_CARDS.map((card) => (
+              <WhyInsightCard key={card.titleKey} {...card} t={t} />
+            ))}
           </div>
         </motion.div>
       </section>

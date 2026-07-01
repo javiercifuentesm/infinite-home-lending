@@ -222,9 +222,10 @@ type SarahHeaderProps = {
   onEnd: () => void;
   onSave?: () => void;
   messageCount?: number;
+  subtitle: string;
 };
 
-const SarahHeader = ({ onEnd, onSave, messageCount = 0 }: SarahHeaderProps) => (
+const SarahHeader = ({ onEnd, onSave, messageCount = 0, subtitle }: SarahHeaderProps) => (
   <div style={{ padding: "14px 18px", borderBottom: "1px solid rgba(198,161,91,0.12)", background: "linear-gradient(135deg, rgba(198,161,91,0.08) 0%, transparent 100%)", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
     <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
       <SarahOrb size="md" showOnlineDot static />
@@ -233,7 +234,7 @@ const SarahHeader = ({ onEnd, onSave, messageCount = 0 }: SarahHeaderProps) => (
           <p style={{ color: "#C6A15B", fontSize: "15px", fontWeight: 700 }}>Sarah</p>
           <span style={{ backgroundColor: "rgba(34,197,94,0.15)", color: "#22c55e", fontSize: "10px", fontWeight: 600, padding: "2px 6px", borderRadius: "20px", border: "1px solid rgba(34,197,94,0.3)" }}>ONLINE</span>
         </div>
-        <p style={{ color: "rgba(247,247,245,0.4)", fontSize: "11px" }}>IHL Mortgage Concierge · MD · DC · VA</p>
+        <p style={{ color: "rgba(247,247,245,0.4)", fontSize: "11px" }}>{subtitle}</p>
       </div>
     </div>
     <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
@@ -445,7 +446,7 @@ function MortgageConciergeInner({ assetCapture = false }: { assetCapture?: boole
         "¡Hola! Soy Sarah de Infinite Home Lending. Ya sea que esté listo para comprar, pensando en refinanciar, buscando acceder al patrimonio de su vivienda o con curiosidad sobre una hipoteca inversa — estoy aquí para hacer el proceso simple y sin estrés. ¿En qué puedo ayudarle?",
         "¡Hola y bienvenido! Soy Sarah de Infinite Home Lending. Mi objetivo es ayudarle a encontrar el mejor camino — ya sea comprando una nueva vivienda, refinanciando la actual, explorando un HELOC o considerando una hipoteca inversa. ¿Qué tiene en mente hoy?",
         "¡Hola! Soy Sarah, su guía hipotecaria personal en Infinite Home Lending. Puedo ayudarle con todo, desde comprar su primera vivienda hasta refinanciar, desbloquear el patrimonio de su hogar o explorar opciones de hipoteca inversa. Sin presión — solo orientación útil. ¿Por dónde le gustaría comenzar?",
-        "¡Hola! Soy Sarah de Infinite Home Lending, atendiendo Maryland, DC y Virginia. Ayudo a compradores y propietarios a encontrar la solución correcta — ya sea un préstamo de compra, una refinanciación, un HELOC o una hipoteca inversa. ¿Qué le gustaría explorar hoy?",
+        "¡Hola! Soy Sarah de Infinite Home Lending, atendiendo Washington, D.C. y Maryland. Ayudo a compradores y propietarios a encontrar la solución correcta — ya sea un préstamo de compra, una refinanciación, un HELOC o una hipoteca inversa. ¿Qué le gustaría explorar hoy?",
       ]
     : [
         "Hi there! I'm Sarah with Infinite Home Lending. My job is to help you make the best mortgage decision for your situation — whether that's buying a home, refinancing, accessing your home equity, or exploring a reverse mortgage. Where would you like to start?",
@@ -453,7 +454,7 @@ function MortgageConciergeInner({ assetCapture = false }: { assetCapture?: boole
         "Hi! Sarah here from Infinite Home Lending. Whether you're ready to buy, thinking about refinancing, looking to access your home equity, or curious about a reverse mortgage — I'm here to make the process simple and stress-free. What can I help you with?",
         "Hello and welcome! I'm Sarah with Infinite Home Lending. My goal is to help you find the right path forward — whether that means purchasing a new home, refinancing your current one, exploring a HELOC, or considering a reverse mortgage. What's on your mind today?",
         "Hi there! I'm Sarah, your personal mortgage guide at Infinite Home Lending. I can help with everything from buying your first home to refinancing, unlocking your home equity, or exploring reverse mortgage options. No pressure — just helpful guidance. Where would you like to begin?",
-        "Hi! I'm Sarah with Infinite Home Lending, serving Maryland, DC, and Virginia. I help homebuyers and homeowners find the right solution — whether that's a purchase loan, a refinance, a HELOC, or a reverse mortgage. What would you like to explore today?",
+        "Hi! I'm Sarah with Infinite Home Lending, serving Washington, DC and Maryland. I help homebuyers and homeowners find the right solution — whether that's a purchase loan, a refinance, a HELOC, or a reverse mortgage. What would you like to explore today?",
       ];
 
   const [screen, setScreen] = useState<Screen>(assetCapture ? "widget" : "idle");
@@ -950,7 +951,7 @@ function MortgageConciergeInner({ assetCapture = false }: { assetCapture?: boole
     <>
       <SarahKeyframes />
 
-      {/* SCREEN 1 — Idle orb (hidden on /solutions mobile — pill nav must stay unobstructed) */}
+      {/* SCREEN 1 — Idle orb */}
       {screen === "idle" && (
         <button
           type="button"
@@ -1002,7 +1003,7 @@ function MortgageConciergeInner({ assetCapture = false }: { assetCapture?: boole
                 }
           }
         >
-          <SarahHeader onEnd={handleEndConversation} messageCount={messages.length} />
+          <SarahHeader onEnd={handleEndConversation} messageCount={messages.length} subtitle={t("sarah.subtitle")} />
           <div
             style={{
               padding: "18px 18px 12px",
@@ -1107,7 +1108,7 @@ function MortgageConciergeInner({ assetCapture = false }: { assetCapture?: boole
             }}
             className="md:rounded-2xl md:mx-8"
           >
-            <SarahHeader onEnd={handleEndConversation} onSave={downloadPDF} messageCount={messages.length} />
+            <SarahHeader onEnd={handleEndConversation} onSave={downloadPDF} messageCount={messages.length} subtitle={t("sarah.subtitle")} />
 
             {/* Messages */}
             <div ref={scrollContainerRef} style={{ flex: 1, overflowY: "auto", padding: "18px", display: "flex", flexDirection: "column", gap: "16px", scrollbarWidth: "thin", scrollbarColor: "rgba(198,161,91,0.15) transparent" }}>
@@ -1186,25 +1187,8 @@ type MortgageConciergeProps = { assetCapture?: boolean };
 
 export default function MortgageConcierge({ assetCapture = false }: MortgageConciergeProps) {
   const location = useLocation();
-  const [isMobile, setIsMobile] = useState(
-    () => typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches,
-  );
-
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 767px)");
-    const sync = () => setIsMobile(mq.matches);
-    sync();
-    mq.addEventListener("change", sync);
-    return () => mq.removeEventListener("change", sync);
-  }, []);
-
-  const hideOnSolutionsMobile =
-    !assetCapture &&
-    isMobile &&
-    (location.pathname === "/solutions" || location.pathname === "/solutions/");
 
   if (!assetCapture && location.pathname.startsWith("/deal-desk")) return null;
-  if (hideOnSolutionsMobile) return null;
 
   return <MortgageConciergeInner assetCapture={assetCapture} />;
 }

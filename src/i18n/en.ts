@@ -12,11 +12,12 @@ export const en = {
   "footer.askSarah": "Ask Sarah",
 
   "sarah.askSarah": "Ask Sarah",
+  "sarah.subtitle": "IHL Mortgage Concierge · DC · MD",
   "sarah.disclaimer":
     "Sarah is our IHL Mortgage Concierge — not a licensed advisor. Information is educational only.",
 
   "trustBar.nmls": "NMLS #2831765",
-  "trustBar.region": "Washington, D.C.",
+  "trustBar.region": "Washington, DC & Maryland",
   "trustBar.equalHousing": "Equal Housing Lender",
 
   "home.meta.title": "Home",
@@ -32,16 +33,16 @@ export const en = {
     "See how Infinite Home Lending guides MD, DC, and VA borrowers from first call to closing—with clear milestones, proactive updates, and advisor-led support.",
   "contact.meta.title": "Contact Us",
   "contact.meta.description":
-    "Contact Infinite Home Lending for purchase, refinance, or equity questions in MD, DC, and VA. Share your goals and get clear next steps from licensed advisors.",
+    "Contact Infinite Home Lending for purchase, refinance, or equity questions in Washington, DC & Maryland. Share your goals and get clear next steps from licensed advisors.",
   "smartTools.meta.title": "Smart Tools",
   "smartTools.meta.description":
-    "Free interactive mortgage calculators for Washington, DC buyers and homeowners. Model payments, equity, waiting costs, and credit impact before you apply.",
+    "Free interactive mortgage calculators for Washington, DC & Maryland buyers and homeowners. Model payments, equity, waiting costs, and credit impact before you apply.",
   "knowledge.meta.title": "Knowledge Center",
   "knowledge.meta.description":
     "Mortgage guides for Maryland, DC, and Virginia—buying, refinancing, loan types, and numbers explained without jargon. Find clear answers before you decide.",
 
   // Footer
-  "footer.tagline": "Premium mortgage guidance built around your life — not just your rate. Serving Washington, D.C.",
+  "footer.tagline": "Premium mortgage guidance built around your life — not just your rate. Serving Washington, DC & Maryland",
   "footer.slogan": "Tailored Lending. Infinite Possibilities.",
   "footer.company": "Company",
   "footer.resources": "Resources",
@@ -56,10 +57,11 @@ export const en = {
   "footer.contact": "Contact",
   "footer.smartTools": "Smart Tools",
   "footer.dealDesk": "Deal Desk",
+  "dealDesk.partnerCTA.serviceArea": "For licensed real estate professionals in Washington, DC & Maryland.",
   "footer.calculators": "Calculators",
   "footer.startPreApproval": "Start Pre-Approval",
   "footer.rights": "All rights reserved.",
-  "footer.nmls": "Licensed in Washington, DC.",
+  "footer.nmls": "Licensed in Washington, DC & Maryland",
   "footer.loanDisclaimer": "All loans subject to credit approval. Rates and terms subject to change without notice.",
   "footer.serving": "Serving Washington, D.C.",
   "footer.privacy": "Privacy Policy",
@@ -216,14 +218,15 @@ export const en = {
   "home.finalCta.disclaimer": "No obligation — initial consultation does not affect your credit score.",
 
   // Home — Trust section
+  "home.trust.eyebrow": "The Experience Behind Infinite Home Lending",
   "home.trust.title": "Trusted guidance, built on real experience",
-  "home.trust.subtitle": "We help clients make confident mortgage decisions by focusing on structure, not just rates.",
+  "home.trust.subtitle": "Through their careers, our founders have helped clients make confident mortgage decisions by focusing on structure — finding the right solution for each financial situation, not just the best rate.",
   "home.trust.metric1.value": "$100M+",
-  "home.trust.metric1.label": "Loans Structured",
-  "home.trust.metric2.value": "25+",
-  "home.trust.metric2.label": "Years Experience",
-  "home.trust.metric3.value": "Hundreds",
-  "home.trust.metric3.label": "Homeowners Guided",
+  "home.trust.metric1.label": "Loans Originated",
+  "home.trust.metric2.value": "40+",
+  "home.trust.metric2.label": "Years Combined Experience",
+  "home.trust.metric3.value": "1,000+",
+  "home.trust.metric3.label": "Families Guided",
   "home.trust.metric4.value": "Licensed",
   "home.trust.metric4.label": "& Compliant",
 
@@ -337,7 +340,7 @@ export const en = {
   "contact.purchase.property.where.question": "Where are you planning to buy?",
   "contact.purchase.property.where.body": "This helps us understand your market and guide you more precisely.",
   "contact.purchase.property.comingSoon": "Coming soon",
-  "contact.purchase.property.expanding": "We're expanding into Virginia and D.C. soon.",
+  "contact.purchase.property.expanding": "Licensed in Washington, DC & Maryland.",
   "contact.purchase.property.county.question": "Which county are you interested in?",
   "contact.purchase.property.county.placeholder": "Select a county",
   "contact.purchase.property.city.question": "Which city or area?",
@@ -491,7 +494,7 @@ export const en = {
   "smartTools.eyebrow": "Infinite Home Lending",
   "smartTools.title": "Smart Tools",
   "smartTools.subtitle": "Interactive tools designed to bring clarity to real mortgage decisions.",
-  "smartTools.builtFor": "Built for DC",
+  "smartTools.builtFor": "Built for Washington, DC & Maryland",
   "smartTools.featuredTool": "Featured Tool",
   "smartTools.allTools": "All Tools",
   "smartTools.mostUsed": "Most Used",
@@ -1852,6 +1855,8 @@ export const en = {
   "solutions.hero.navLabel": "Financing programs",
   "solutions.hero.navScrollPrev": "Scroll programs left",
   "solutions.hero.navScrollNext": "Scroll programs right",
+  "solutions.hero.navProgramPrev": "Previous program",
+  "solutions.hero.navProgramNext": "Next program",
   "solutions.hero.featuresLabel": "Program features",
   "solutions.hero.bestForLabel": "Best for",
   "solutions.hero.disclosure":
@@ -2007,6 +2012,50 @@ export const en = {
   "solutions.hero.slides.vaRenovation.cta": "Explore VA Renovation →",
   "solutions.hero.slides.vaRenovation.imageAlt":
     "Veteran with family in a bright home with subtle renovation details representing VA renovation loan benefits",
+  "solutions.hero.slides.bank-statement.badgeLabel": "Bank Statement",
+  "solutions.hero.slides.bank-statement.eyebrow": "Bank Statement Loans",
+  "solutions.hero.slides.bank-statement.headline":
+    "For Self-Employed Borrowers. No tax returns required.",
+  "solutions.hero.slides.bank-statement.subheadline":
+    "A bank statement loan allows self-employed borrowers to qualify using their personal or business bank statements instead of tax returns, W-2s, or paystubs.",
+  "solutions.hero.slides.bank-statement.feature.0.title": "No Tax Returns Required",
+  "solutions.hero.slides.bank-statement.feature.0.desc":
+    "Qualify with personal or business bank deposits instead of tax returns or W-2s.",
+  "solutions.hero.slides.bank-statement.feature.1.title": "Use 12 or 24 Months of Bank Statements",
+  "solutions.hero.slides.bank-statement.feature.1.desc":
+    "Document income with 12 or 24 months of averaged personal or business statements.",
+  "solutions.hero.slides.bank-statement.feature.2.title": "Qualify With 25% Business Ownership",
+  "solutions.hero.slides.bank-statement.feature.2.desc":
+    "Flexible ownership thresholds for business owners, partners, and contractors.",
+  "solutions.hero.slides.bank-statement.bestFor.0": "Self-Employed",
+  "solutions.hero.slides.bank-statement.bestFor.1": "Business Owners",
+  "solutions.hero.slides.bank-statement.bestFor.2": "Contractors",
+  "solutions.hero.slides.bank-statement.bestFor.3": "Investors",
+  "solutions.hero.slides.bank-statement.cta": "Explore Bank Statement Loans →",
+  "solutions.hero.slides.bank-statement.imageAlt":
+    "Self-employed small business owner in a professional apron, representing bank statement loan programs for entrepreneurs and independent workers",
+  "solutions.hero.slides.income1099.badgeLabel": "1099 Income",
+  "solutions.hero.slides.income1099.eyebrow": "1099 Income Loan",
+  "solutions.hero.slides.income1099.headline":
+    "Independent Contractor?\nUse your documented 1099 income to qualify.",
+  "solutions.hero.slides.income1099.subheadline":
+    "Instead of traditional tax returns. Designed for independent contractors, freelancers, consultants, and gig workers with consistent earnings.",
+  "solutions.hero.slides.income1099.feature.0.title": "Use Your 1099 Income",
+  "solutions.hero.slides.income1099.feature.0.desc":
+    "Qualify using one or two years of documented 1099 earnings.",
+  "solutions.hero.slides.income1099.feature.1.title": "No Tax Returns Required",
+  "solutions.hero.slides.income1099.feature.1.desc":
+    "Eligible borrowers may qualify without traditional tax returns.",
+  "solutions.hero.slides.income1099.feature.2.title": "Built for Independent Contractors",
+  "solutions.hero.slides.income1099.feature.2.desc":
+    "Ideal for freelancers, consultants, gig workers, and other professionals receiving 1099 income.",
+  "solutions.hero.slides.income1099.bestFor.0": "Independent Contractors",
+  "solutions.hero.slides.income1099.bestFor.1": "Freelancers",
+  "solutions.hero.slides.income1099.bestFor.2": "Consultants",
+  "solutions.hero.slides.income1099.bestFor.3": "Gig Workers",
+  "solutions.hero.slides.income1099.cta": "Explore 1099 Income Loans →",
+  "solutions.hero.slides.income1099.imageAlt":
+    "Independent contractor working on a laptop in a bright home office, representing 1099 income loan programs for freelancers and gig workers",
   "solutions.hero.slides.heloc.badgeLabel": "HELOC",
   "solutions.hero.slides.heloc.eyebrow": "Home Equity Financing",
   "solutions.hero.slides.heloc.headline": "Put Your Home's Equity To Work For Your Next Chapter.",
@@ -2847,7 +2896,7 @@ export const en = {
   "compliance.licensing.company.nmlsLabel": "Company NMLS ID:",
   "compliance.licensing.states.title": "State Licensing",
   "compliance.licensing.states.item1": "Washington, D.C. Mortgage Broker License (active)",
-  "compliance.licensing.states.item2": "Maryland License Pending Approval",
+  "compliance.licensing.states.item2": "Maryland Mortgage Lender License (active)",
   "compliance.licensing.states.item3": "Virginia License Pending Approval",
   "compliance.licensing.mlo.title": "Mortgage Loan Originators",
   "compliance.licensing.mlo.p1":

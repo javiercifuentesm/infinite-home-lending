@@ -1,0 +1,207 @@
+/**
+ * Week 1 · Day 2 — "The Why"
+ * Square canvas (1200×1200) — spacing driven by platform layout profile tokens.
+ */
+
+@import "../../config/editorialHeroImageTreatment.css";
+
+.fe-conv {
+  --fe-navy: #0a192f;
+  --fe-gold-champagne: #9a7b3a;
+  --fe-white: #ffffff;
+  --fe-slate-500: #64748b;
+  --fe-font-heading: "Cormorant Garamond", serif;
+  --fe-font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  /* Layout profile defaults (facebookSquare) — overridden via inline CSS vars */
+  --conv-hero-height: 581px;
+  --conv-hero-padding-top: 40px;
+  --conv-hero-padding-x: 40px;
+  --conv-editorial-padding-top: 40px;
+  --conv-editorial-padding-x: 56px;
+  --conv-bottom-padding: 54px;
+  --conv-headline-margin-bottom: 18px;
+  --conv-body-statement-gap: 14px;
+  --conv-logo-margin-top: 44px;
+  --conv-tagline-margin-top: 18px;
+
+  position: relative;
+  box-sizing: border-box;
+  width: 1200px;
+  height: 1200px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--fe-white);
+  color: var(--fe-navy);
+  font-family: var(--fe-font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow: hidden;
+}
+
+.fe-conv *,
+.fe-conv *::before,
+.fe-conv *::after {
+  box-sizing: border-box;
+}
+
+.fe-conv__hero {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 var(--conv-hero-height);
+  height: var(--conv-hero-height);
+  max-height: var(--conv-hero-height);
+  min-height: 0;
+  overflow: hidden;
+  padding: var(--conv-hero-padding-top) var(--conv-hero-padding-x) 0;
+}
+
+.fe-conv__hero-frame {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow:
+    0 24px 56px -20px rgb(10 25 47 / 0.2),
+    0 0 0 1px rgb(10 25 47 / 0.04);
+}
+
+.fe-conv__hero-media {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #fafafa;
+}
+
+.fe-conv__hero-media::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 48px;
+  pointer-events: none;
+  z-index: 1;
+  background: linear-gradient(to bottom, transparent 0%, rgb(255 255 255 / 0.65) 55%, #ffffff 100%);
+}
+
+.fe-conv__hero-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 44%;
+  transform: scale(var(--ihl-editorial-hero-scale-conversation));
+  filter: var(--ihl-editorial-hero-filter-conversation);
+}
+
+.fe-conv__hero-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 320px;
+  background: linear-gradient(to bottom, #f8f9fa 0%, #ffffff 100%);
+  font-family: var(--fe-font-heading);
+  font-size: 1.75rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: rgb(10 25 47 / 0.1);
+}
+
+.fe-conv__editorial {
+  position: relative;
+  z-index: 1;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: center;
+  padding: var(--conv-editorial-padding-top) var(--conv-editorial-padding-x)
+    var(--conv-bottom-padding);
+  min-height: 0;
+}
+
+.fe-conv__headline {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  margin: 0 0 var(--conv-headline-margin-bottom);
+  max-width: 12ch;
+  font-family: var(--fe-font-heading);
+  font-size: 53px;
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  color: var(--fe-navy);
+}
+
+.fe-conv__headline-line {
+  display: block;
+}
+
+.fe-conv__body {
+  max-width: 540px;
+  margin: 0;
+}
+
+.fe-conv__supporting {
+  margin: 0;
+  font-family: var(--fe-font-heading);
+  font-size: 22px;
+  line-height: 1.55;
+  font-weight: 600;
+  letter-spacing: -0.006em;
+  color: var(--fe-navy);
+}
+
+.fe-conv__mission {
+  margin: var(--conv-body-statement-gap) 0 0;
+  max-width: 24em;
+  margin-inline: auto;
+  font-family: var(--fe-font-body);
+  font-size: 17px;
+  line-height: 1.6;
+  font-weight: 400;
+  color: var(--fe-slate-500);
+}
+
+.fe-conv__signature {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 580px;
+  margin-top: 0;
+  padding-top: var(--conv-logo-margin-top);
+}
+
+.fe-conv__signature-logo {
+  display: block;
+  height: 114px;
+  width: auto;
+  max-width: 450px;
+  object-fit: contain;
+  opacity: 0.97;
+  background-color: transparent;
+}
+
+.fe-conv__signature-tagline {
+  margin: var(--conv-tagline-margin-top) 0 0;
+  font-family: var(--fe-font-heading);
+  font-size: 20px;
+  font-weight: 500;
+  font-style: italic;
+  font-synthesis: none;
+  letter-spacing: -0.008em;
+  line-height: 1.35;
+  color: var(--fe-gold-champagne);
+  white-space: nowrap;
+}

@@ -69,7 +69,7 @@ export function LoanProductDetailModal({ product, onClose }: LoanProductDetailMo
             role="dialog"
             aria-modal="true"
             aria-labelledby={titleId}
-            className="relative z-[1] flex w-full max-w-4xl flex-col rounded-t-[6px] border border-slate-200/90 bg-white shadow-[0_24px_80px_rgba(10,25,47,0.16)] sm:rounded-[4px] sm:shadow-[0_24px_80px_rgba(10,25,47,0.14)] max-h-[100dvh] sm:max-h-[min(92dvh,880px)] min-h-0"
+            className="relative z-[1] flex w-full max-w-5xl flex-col rounded-t-[6px] border border-slate-200/90 bg-white shadow-[0_24px_80px_rgba(10,25,47,0.16)] sm:rounded-[4px] sm:shadow-[0_24px_80px_rgba(10,25,47,0.14)] max-h-[100dvh] sm:max-h-[min(94dvh,920px)] min-h-0"
             initial={reduceMotion ? false : { opacity: 0, scale: 0.98, y: 12 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.98, y: 8 }}

@@ -1,0 +1,12 @@
+/**
+ * Shared hero-image treatment for flagship editorial templates.
+ * Values match the approved Days 2–4 posts and EDITORIAL_HERO_IMAGE_CSS in
+ * editorialPhotographyStyle.ts — update both when the standard changes.
+ */
+
+:root {
+  --ihl-editorial-hero-filter: brightness(1.03) saturate(1.04);
+  --ihl-editorial-hero-filter-conversation: brightness(1.04) saturate(1.05);
+  --ihl-editorial-hero-scale: 1.08;
+  --ihl-editorial-hero-scale-conversation: 1.16;
+}

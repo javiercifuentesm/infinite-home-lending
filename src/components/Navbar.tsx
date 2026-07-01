@@ -20,7 +20,7 @@ function isDealDeskActive(pathname: string): boolean {
 }
 
 const Navbar = () => {
-  const { t } = useLanguage();
+  const { lang, t } = useLanguage();
   const smartToolsLinks = getSmartToolsForHub().map((tool) => ({
     nameKey: tool.nameKey,
     path: tool.path,
@@ -173,14 +173,16 @@ const Navbar = () => {
 
         <div className="nav-actions hidden md:flex">
           <LanguageToggle variant="header" />
-          <Link
-            to="/deal-desk"
-            className="nav-btn-realtors"
-            aria-current={dealDeskActive ? "page" : undefined}
-          >
-            <Users className="h-4 w-4 shrink-0" strokeWidth={2} aria-hidden />
-            {t("nav.forRealtors")}
-          </Link>
+          {lang === "en" && (
+            <Link
+              to="/deal-desk"
+              className="nav-btn-realtors"
+              aria-current={dealDeskActive ? "page" : undefined}
+            >
+              <Users className="h-4 w-4 shrink-0" strokeWidth={2} aria-hidden />
+              {t("nav.forRealtors")}
+            </Link>
+          )}
         </div>
 
         <button
@@ -278,15 +280,17 @@ const Navbar = () => {
             <LanguageToggle variant="header" />
           </div>
 
-          <Link
-            to="/deal-desk"
-            onClick={() => setIsOpen(false)}
-            className="nav-btn-realtors w-full justify-center mt-2"
-            aria-current={dealDeskActive ? "page" : undefined}
-          >
-            <Users className="h-4 w-4 shrink-0" strokeWidth={2} aria-hidden />
-            {t("nav.forRealtors")}
-          </Link>
+          {lang === "en" && (
+            <Link
+              to="/deal-desk"
+              onClick={() => setIsOpen(false)}
+              className="nav-btn-realtors w-full justify-center mt-2"
+              aria-current={dealDeskActive ? "page" : undefined}
+            >
+              <Users className="h-4 w-4 shrink-0" strokeWidth={2} aria-hidden />
+              {t("nav.forRealtors")}
+            </Link>
+          )}
           </div>
         </motion.div>
       )}

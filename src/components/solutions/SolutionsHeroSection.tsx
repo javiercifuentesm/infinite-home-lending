@@ -32,8 +32,23 @@ function SolutionSlideMain({
   total: number;
   isActive: boolean;
 }) {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const imageAltKey = getSolutionSlideKey(slide.id, "imageAlt");
+  const headlineKey = getSolutionSlideKey(slide.id, "headline");
+  const headline = t(headlineKey);
+  const isSplitHeadline =
+    headline.includes("\n") &&
+    ((lang === "es" && (slide.id === "bank-statement" || slide.id === "income1099")) ||
+      (lang === "en" && slide.id === "income1099"));
+  const splitHeadlineLines = isSplitHeadline ? headline.split("\n") : null;
+  const splitHeadlineClass =
+    lang === "es" && slide.id === "bank-statement"
+      ? " solutions-hero-headline--es-bank-statement"
+      : lang === "es" && slide.id === "income1099"
+        ? " solutions-hero-headline--es-income1099"
+        : lang === "en" && slide.id === "income1099"
+          ? " solutions-hero-headline--en-income1099"
+          : "";
 
   return (
     <div
@@ -43,9 +58,18 @@ function SolutionSlideMain({
     >
       <h1
         id={isActive ? "solutions-hero-heading" : undefined}
-        className="hero-headline solutions-hero-headline"
+        className={`hero-headline solutions-hero-headline${isSplitHeadline ? splitHeadlineClass : ""}`}
       >
-        {t(getSolutionSlideKey(slide.id, "headline"))}
+        {splitHeadlineLines ? (
+          <>
+            <span className="solutions-hero-headline__line">{splitHeadlineLines[0]}</span>
+            <span className="solutions-hero-headline__line solutions-hero-headline__line--second">
+              {splitHeadlineLines[1]}
+            </span>
+          </>
+        ) : (
+          headline
+        )}
       </h1>
 
       <p className="hero-subtext solutions-hero-subtext">
@@ -93,7 +117,7 @@ function SolutionSlidePanel({
       className={`solutions-hero-slide-panel${isActive ? " is-active" : ""}`}
       role="tabpanel"
       id={isActive ? "solutions-hero-panel" : undefined}
-      aria-labelledby={`solutions-hero-tab-${slide.id}`}
+      aria-labelledby={isActive ? "solutions-hero-heading" : undefined}
       aria-hidden={!isActive}
       tabIndex={isActive ? 0 : -1}
       inert={!isActive ? true : undefined}
@@ -262,6 +286,7 @@ export function SolutionsHeroSection() {
         className="hero-framed solutions-hero-framed"
         data-lang={lang}
         data-active-slide={activeSlide?.id}
+        data-feature-count={activeSlide?.features.length}
         data-transition={transitionMode}
         data-cinematic-enter={cinematicEnter ? "true" : "false"}
         onTouchStart={onTouchStart}
@@ -281,7 +306,11 @@ export function SolutionsHeroSection() {
                       ? " hero-image-img--conventional"
                       : slide.id === "jumbo"
                         ? " hero-image-img--jumbo"
-                        : ""
+                        : slide.id === "bank-statement"
+                          ? " hero-image-img--bank-statement"
+                          : slide.id === "income1099"
+                            ? " hero-image-img--income1099"
+                            : ""
                 }`}
                 src={slide.imageSrc}
                 alt=""
@@ -322,6 +351,8 @@ export function SolutionsHeroSection() {
               slides={SOLUTION_SLIDES}
               activeIndex={safeIndex}
               onSelect={handleSelectProgram}
+              onPrev={goPrev}
+              onNext={goNext}
               onNavInteractionStart={handleNavInteractionStart}
               onNavInteractionEnd={handleNavInteractionEnd}
             />

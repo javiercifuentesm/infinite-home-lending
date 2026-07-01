@@ -41,7 +41,7 @@ const THUMB_RESUME_AFTER_MS = 2500;
 const THUMB_STRIP_PERF_CAP = 24;
 
 export function HeroSection() {
-  const { t } = useLanguage();
+  const { lang, t } = useLanguage();
   const [index, setIndex] = useState(0);
   const [heroHovered, setHeroHovered] = useState(false);
   /** When true, CSS animation on the track is paused (interaction + post-interaction cooldown). */
@@ -182,12 +182,13 @@ export function HeroSection() {
   return (
     <>
       <section
+        lang={lang}
         className={`hero mb-0 pb-0 ${heroHovered ? "hero--paused" : ""}`}
         aria-labelledby="hero-heading"
         onMouseEnter={() => setHeroHovered(true)}
         onMouseLeave={() => setHeroHovered(false)}
       >
-      <div className="hero-framed" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+      <div className="hero-framed" data-lang={lang} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
         <div className="hero-image-stack" aria-hidden="true">
           {HERO_ROTATION.map((asset, i) => (
             <div

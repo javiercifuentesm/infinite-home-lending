@@ -240,7 +240,7 @@ export function GateAccess({ onAuth }: GateAccessProps) {
               )}
 
               <p className="gate-access__fine">
-                Free for IHL partner agents in MD, DC, and VA. No subscription. Infinite Home Lending — NMLS #2831765.
+                Free for IHL partner agents in DC and MD. No subscription. Infinite Home Lending, LLC — NMLS #2831765.
               </p>
             </div>
           </div>

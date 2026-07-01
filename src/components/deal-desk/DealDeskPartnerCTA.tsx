@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
+import { useLanguage } from "../../i18n/LanguageContext";
 
 export function DealDeskPartnerCTA() {
+  const { t } = useLanguage();
   return (
     <section className="relative px-4 py-20 sm:px-6 lg:px-8">
       {/* Glass card CTA */}
@@ -49,7 +51,7 @@ export function DealDeskPartnerCTA() {
           Become a Deal Desk Partner →
         </Link>
         <p className="mt-6 font-sans text-[11px]" style={{ color: "rgba(247,247,245,0.3)" }}>
-          For licensed real estate professionals in Washington, DC.
+          {t("dealDesk.partnerCTA.serviceArea")}
         </p>
       </div>
     </section>

@@ -1,0 +1,648 @@
+/**
+ * About page — spacing, scroll offset, and presentation polish.
+ * Architecture unchanged; visual rhythm and hierarchy only.
+ */
+.about-page {
+  --about-scroll-offset: calc(var(--site-header-height, 100px) + 1.25rem);
+  --about-card-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --about-card-duration: 300ms;
+}
+
+.about-page .about-anchor-section {
+  scroll-margin-top: var(--about-scroll-offset);
+}
+
+/* Comfortable separation from sticky header when scrolling into view */
+.about-page .about-section {
+  padding-top: 4.5rem;
+  padding-bottom: 4.5rem;
+}
+
+@media (min-width: 1024px) {
+  .about-page .about-section {
+    padding-top: 5.5rem;
+    padding-bottom: 5.5rem;
+  }
+}
+
+.about-page .about-section--hero-bridge {
+  padding-top: 3.25rem;
+  padding-bottom: 3.25rem;
+}
+
+@media (min-width: 1024px) {
+  .about-page .about-section--hero-bridge {
+    padding-top: 3.75rem;
+    padding-bottom: 3.75rem;
+  }
+}
+
+.about-page .about-section--story-open {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
+
+@media (min-width: 1024px) {
+  .about-page .about-section--story-open {
+    padding-top: 6rem;
+    padding-bottom: 5.5rem;
+  }
+}
+
+.about-page .about-section--quote {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
+
+@media (min-width: 1024px) {
+  .about-page .about-section--quote {
+    padding-top: 6.5rem;
+    padding-bottom: 6.5rem;
+  }
+}
+
+.about-page .about-section--cta {
+  padding-top: 5.5rem;
+  padding-bottom: 6.5rem;
+}
+
+@media (min-width: 1024px) {
+  .about-page .about-section--cta {
+    padding-top: 6.5rem;
+    padding-bottom: 7.5rem;
+  }
+}
+
+/* Hero → credibility handoff */
+.about-page .about-hero {
+  padding-bottom: 3.5rem;
+}
+
+@media (min-width: 1024px) {
+  .about-page .about-hero {
+    padding-bottom: 4.5rem;
+  }
+}
+
+/* Credibility cards */
+.about-page .about-credibility-card {
+  min-height: 100%;
+}
+
+.about-page .about-credibility-stat {
+  font-size: clamp(1.75rem, 2.4vw, 2.125rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.about-page .about-credibility-label {
+  max-width: 16rem;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  letter-spacing: 0.04em;
+  text-wrap: balance;
+}
+
+@media (min-width: 1024px) {
+  .about-page .about-credibility-label {
+    font-size: 0.875rem;
+    max-width: 13.5rem;
+  }
+}
+
+/* Founder cards — executive presentation */
+.about-page .about-founder-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.about-page .about-founder-portrait {
+  flex-shrink: 0;
+}
+
+.about-page .about-founder-meta {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.about-page .about-founder-name {
+  font-size: clamp(1.375rem, 2vw, 1.625rem);
+  line-height: 1.15;
+}
+
+.about-page .about-founder-role {
+  margin-top: 0.5rem;
+  font-size: 0.6875rem;
+  letter-spacing: 0.13em;
+  line-height: 1.35;
+}
+
+.about-page .about-founder-statement {
+  margin-top: 0.875rem;
+  font-size: 0.9375rem;
+  line-height: 1.62;
+  font-weight: 500;
+  font-style: italic;
+  letter-spacing: -0.01em;
+  max-width: 34ch;
+  text-wrap: pretty;
+}
+
+.about-page .about-founder-nmls {
+  margin-top: 0.875rem;
+  padding-top: 0.875rem;
+  border-top: 1px solid rgb(226 232 240 / 0.85);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.about-page .about-founder-highlights {
+  margin-top: 1.375rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.about-page .about-founder-highlights li {
+  align-items: flex-start;
+  gap: 0.625rem;
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.about-page .about-founder-highlights li svg {
+  margin-top: 0.1875rem;
+}
+
+.about-page .about-founder-actions {
+  margin-top: auto;
+  padding-top: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.about-page .about-founder-linkedin-row {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgb(226 232 240 / 0.95);
+}
+
+.about-page .about-founder-linkedin-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4375rem;
+  max-width: 100%;
+  font-family: inherit;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: rgb(10 25 47);
+  text-decoration: none;
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+.about-page .about-founder-linkedin-link span {
+  text-wrap: pretty;
+}
+
+.about-page .about-founder-linkedin-icon {
+  flex-shrink: 0;
+}
+
+.about-page .about-founder-linkedin-link:hover {
+  color: rgb(51 65 85);
+}
+
+.about-page .about-founder-linkedin-link:focus-visible {
+  color: rgb(51 65 85);
+  outline: none;
+  box-shadow: 0 0 0 2px rgb(10 102 194 / 0.28);
+  border-radius: 2px;
+}
+
+.about-page .about-founder-primary-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.625rem;
+  width: 100%;
+}
+
+.about-page .about-founder-action-link {
+  appearance: none;
+  border: none;
+  background: none;
+  padding: 0;
+  font-family: inherit;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: rgb(197 160 89);
+  cursor: pointer;
+  text-align: right;
+  text-decoration: none;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 100% 100%;
+  background-repeat: no-repeat;
+  background-size: 0 1px;
+  transition:
+    color 0.2s ease,
+    opacity 0.2s ease,
+    background-size 0.25s ease;
+}
+
+.about-page .about-founder-action-link--letter {
+  font-weight: 600;
+  opacity: 1;
+}
+
+.about-page .about-founder-action-link--meet {
+  font-weight: 500;
+  opacity: 0.78;
+}
+
+.about-page .about-founder-action-link:hover,
+.about-page .about-founder-action-link:focus-visible {
+  color: rgb(166 132 68);
+  opacity: 1;
+  background-position: 0 100%;
+  background-size: 100% 1px;
+  outline: none;
+}
+
+.about-page .about-founder-action-link:focus-visible {
+  box-shadow: 0 0 0 2px rgb(197 160 89 / 0.35);
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-page .about-founder-action-link {
+    transition: color 0.2s ease;
+    background-size: 100% 1px;
+  }
+}
+
+/* Founder story modal — mobile header (portaled outside .about-page) */
+.about-founder-modal-root .about-founder-modal-mobile-title {
+  flex: 1;
+}
+
+/* Founder story modal — desktop positioning below sticky site header */
+.about-founder-modal-root {
+  z-index: 1100;
+}
+
+@media (min-width: 640px) {
+  .about-founder-modal-root {
+    top: calc(var(--site-header-height, 100px) + 1rem);
+    bottom: 1rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    align-items: center;
+  }
+
+  .about-founder-modal-root .about-founder-modal-panel {
+    max-height: min(calc(100vh - var(--site-header-height, 100px) - 2rem), 880px);
+  }
+}
+
+/* Founder story modal — cross-link (portaled outside .about-page) */
+.about-founder-modal-root .about-founder-modal-crosslink {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.625rem;
+}
+
+.about-founder-modal-root .about-founder-action-link {
+  appearance: none;
+  border: none;
+  background: none;
+  padding: 0;
+  font-family: inherit;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: rgb(197 160 89);
+  cursor: pointer;
+  text-align: left;
+  text-decoration: none;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 100% 100%;
+  background-repeat: no-repeat;
+  background-size: 0 1px;
+  transition:
+    color 0.2s ease,
+    opacity 0.2s ease,
+    background-size 0.25s ease;
+}
+
+.about-founder-modal-root .about-founder-action-link--letter {
+  font-weight: 600;
+  opacity: 1;
+}
+
+.about-founder-modal-root .about-founder-action-link--meet {
+  font-weight: 500;
+  opacity: 0.78;
+}
+
+.about-founder-modal-root .about-founder-action-link:hover,
+.about-founder-modal-root .about-founder-action-link:focus-visible {
+  color: rgb(166 132 68);
+  opacity: 1;
+  background-position: 0 100%;
+  background-size: 100% 1px;
+  outline: none;
+}
+
+.about-founder-modal-root .about-founder-action-link:focus-visible {
+  box-shadow: 0 0 0 2px rgb(197 160 89 / 0.35);
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-founder-modal-root .about-founder-action-link {
+    transition: color 0.2s ease;
+    background-size: 100% 1px;
+  }
+}
+
+/* Hero image — landscape crop with object-fit cover */
+.about-page .about-hero-image {
+  aspect-ratio: 5 / 4;
+}
+
+.about-page .about-hero-image img {
+  object-fit: cover;
+  transform: scale(1.01);
+  transform-origin: center center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-page .about-hero-image img {
+    transform: none;
+  }
+}
+
+/* Pull quote — emotional pause */
+.about-page .about-pull-quote {
+  position: relative;
+}
+
+.about-page .about-pull-quote::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 42%, rgba(197, 160, 89, 0.06), transparent 62%);
+}
+
+.about-page .about-pull-quote-text {
+  font-size: clamp(1.45rem, 2.6vw, 2.125rem);
+  line-height: 1.52;
+  max-width: 40ch;
+}
+
+/* How We Work — process connector (desktop) */
+.about-page .about-process-grid {
+  position: relative;
+}
+
+@media (min-width: 1024px) {
+  .about-page .about-process-grid::before {
+    content: "";
+    position: absolute;
+    top: 4.35rem;
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.18) 8%,
+      rgba(255, 255, 255, 0.18) 92%,
+      transparent
+    );
+    pointer-events: none;
+  }
+}
+
+.about-page .about-process-step {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+@media (min-width: 1024px) {
+  .about-page .about-process-step-num {
+    background: #0b2a4a;
+    align-self: flex-start;
+    padding-right: 0.35rem;
+  }
+}
+
+/* Philosophy — centered second row */
+.about-page .about-philosophy-row-two {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .about-page .about-philosophy-row-two {
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+
+  .about-page .about-philosophy-row-two .about-philosophy-card {
+    flex: 0 1 calc((100% - 4rem) / 3);
+    max-width: calc((100% - 4rem) / 3);
+  }
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  .about-page .about-philosophy-row-two .about-philosophy-card {
+    flex: 0 1 calc((100% - 1.5rem) / 2);
+    max-width: calc((100% - 1.5rem) / 2);
+  }
+}
+
+@media (max-width: 639px) {
+  .about-page .about-philosophy-row-two .about-philosophy-card {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+}
+
+/* CTA → compliance separation */
+.about-page .about-section--cta {
+  border-bottom: none;
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.about-page .about-cta-actions {
+  padding-bottom: 0.5rem;
+}
+
+@media (max-width: 639px) {
+  .about-page .about-section {
+    padding-top: 3.75rem;
+    padding-bottom: 3.75rem;
+  }
+
+  .about-page .about-section--quote {
+    padding-top: 4.25rem;
+    padding-bottom: 4.25rem;
+  }
+
+  .about-page .about-section--cta {
+    padding-top: 4.5rem;
+    padding-bottom: 5.5rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Flagship card hover — pointer devices only; disabled for reduced motion
+   -------------------------------------------------------------------------- */
+@media (hover: hover) and (pointer: fine) {
+  .about-page .about-credibility-card,
+  .about-page .about-philosophy-card,
+  .about-page .about-founder-card,
+  .about-page .about-process-step,
+  .about-page .about-audience-card {
+    transition:
+      transform var(--about-card-duration) var(--about-card-ease),
+      box-shadow var(--about-card-duration) var(--about-card-ease),
+      border-color var(--about-card-duration) var(--about-card-ease),
+      background-color var(--about-card-duration) var(--about-card-ease);
+  }
+
+  .about-page .about-credibility-icon,
+  .about-page .about-philosophy-accent,
+  .about-page .about-process-step-icon,
+  .about-page .about-audience-icon-wrap,
+  .about-page .about-audience-icon {
+    transition:
+      color var(--about-card-duration) var(--about-card-ease),
+      opacity var(--about-card-duration) var(--about-card-ease),
+      background-color var(--about-card-duration) var(--about-card-ease),
+      border-color var(--about-card-duration) var(--about-card-ease),
+      width var(--about-card-duration) var(--about-card-ease);
+  }
+
+  /* Credibility band */
+  .about-page .about-credibility-card:hover {
+    transform: translateY(-4px);
+    border-color: rgb(198 161 91 / 0.38);
+    background-color: rgb(255 255 255 / 0.07);
+    box-shadow:
+      0 14px 36px rgb(0 0 0 / 0.22),
+      0 0 0 1px rgb(198 161 91 / 0.14),
+      0 0 28px rgb(198 161 91 / 0.08);
+  }
+
+  .about-page .about-credibility-card:hover .about-credibility-icon {
+    color: #d4b06a;
+    opacity: 1;
+  }
+
+  /* Philosophy */
+  .about-page .about-philosophy-card:hover {
+    transform: translateY(-4px);
+    border-color: rgb(198 161 91 / 0.28);
+    box-shadow: 0 18px 44px rgb(10 25 47 / 0.1);
+  }
+
+  .about-page .about-philosophy-card:hover .about-philosophy-accent {
+    width: 2.75rem;
+    background-color: rgb(198 161 91 / 0.72);
+  }
+
+  /* Founder — restrained executive lift */
+  .about-page .about-founder-card:hover {
+    transform: translateY(-3px);
+    border-color: rgb(198 161 91 / 0.22);
+    box-shadow: 0 20px 48px rgb(10 25 47 / 0.09);
+  }
+
+  /* How We Work */
+  .about-page .about-process-step:hover {
+    transform: translateY(-4px);
+    border-color: rgb(255 255 255 / 0.22);
+    background-color: rgb(255 255 255 / 0.07);
+    box-shadow:
+      0 14px 32px rgb(0 0 0 / 0.18),
+      0 0 0 1px rgb(198 161 91 / 0.12);
+  }
+
+  .about-page .about-process-step:hover .about-process-step-icon {
+    color: #d4b06a;
+  }
+
+  .about-page .about-process-step:hover .about-process-step-num {
+    color: rgb(198 161 91 / 0.95);
+  }
+
+  /* Who We Serve */
+  .about-page .about-audience-card:hover {
+    transform: translateY(-4px);
+    border-color: rgb(198 161 91 / 0.26);
+    box-shadow: 0 16px 40px rgb(10 25 47 / 0.09);
+  }
+
+  .about-page .about-audience-card:hover .about-audience-icon-wrap {
+    border-color: rgb(198 161 91 / 0.38);
+    background-color: rgb(198 161 91 / 0.11);
+  }
+
+  .about-page .about-audience-card:hover .about-audience-icon {
+    color: #b8924f;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-page .about-credibility-card,
+  .about-page .about-philosophy-card,
+  .about-page .about-founder-card,
+  .about-page .about-process-step,
+  .about-page .about-audience-card {
+    transition: none;
+  }
+
+  .about-page .about-credibility-card:hover,
+  .about-page .about-philosophy-card:hover,
+  .about-page .about-founder-card:hover,
+  .about-page .about-process-step:hover,
+  .about-page .about-audience-card:hover {
+    transform: none;
+  }
+
+  .about-page .about-credibility-icon,
+  .about-page .about-philosophy-accent,
+  .about-page .about-process-step-icon,
+  .about-page .about-audience-icon-wrap,
+  .about-page .about-audience-icon {
+    transition: none;
+  }
+
+  .about-page .about-philosophy-card:hover .about-philosophy-accent {
+    width: 2.5rem;
+  }
+}

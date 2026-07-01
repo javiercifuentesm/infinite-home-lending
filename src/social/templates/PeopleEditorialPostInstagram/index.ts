@@ -1,0 +1,1 @@
+export { PeopleEditorialPostInstagram } from "./PeopleEditorialPostInstagram";

@@ -1,0 +1,102 @@
+import { useState } from "react";
+import type { PeopleEditorialPostProps } from "../../types";
+import { PEOPLE_EDITORIAL_DEFAULTS } from "../PeopleEditorialPost/defaults";
+import "./peopleEditorialPostInstagram.css";
+
+export function PeopleEditorialPostInstagram(props: PeopleEditorialPostProps) {
+  const {
+    editorialQuote = PEOPLE_EDITORIAL_DEFAULTS.editorialQuote,
+    headline = PEOPLE_EDITORIAL_DEFAULTS.headline,
+    supportingText = PEOPLE_EDITORIAL_DEFAULTS.supportingText,
+    footerTagline = PEOPLE_EDITORIAL_DEFAULTS.footerTagline,
+    logoSrc = PEOPLE_EDITORIAL_DEFAULTS.logoSrc,
+    logoAlt = PEOPLE_EDITORIAL_DEFAULTS.logoAlt,
+    heroImageSrc = PEOPLE_EDITORIAL_DEFAULTS.heroImageSrc,
+    heroImageAlt = PEOPLE_EDITORIAL_DEFAULTS.heroImageAlt,
+    className = "",
+  } = props;
+
+  const [heroFailed, setHeroFailed] = useState(false);
+
+  const quoteLines = editorialQuote
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+  const headlineLines = headline
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+  return (
+    <article
+      className={`fe-people-ig${className ? ` ${className}` : ""}`}
+      data-social-canvas="people-editorial-v1-instagram"
+      data-social-size="1080x1350"
+      data-founder-collection="v1.0"
+      aria-label={headlineLines.join(" ")}
+    >
+      <div className="fe-people-ig__hero">
+        <figure className="fe-people-ig__hero-frame">
+          <div className="fe-people-ig__hero-media">
+            {!heroFailed ? (
+              <img
+                src={heroImageSrc}
+                alt={heroImageAlt}
+                className="fe-people-ig__hero-image"
+                width={972}
+                height={700}
+                decoding="sync"
+                draggable={false}
+                onError={() => setHeroFailed(true)}
+              />
+            ) : (
+              <div className="fe-people-ig__hero-fallback" aria-hidden="true">
+                The People
+              </div>
+            )}
+          </div>
+        </figure>
+      </div>
+
+      <div className="fe-people-ig__editorial">
+        <blockquote className="fe-people-ig__quote" cite="">
+          {quoteLines.map((line, index) => (
+            <span
+              key={line}
+              className={`fe-people-ig__quote-line${
+                index === 0
+                  ? " fe-people-ig__quote-line--lead"
+                  : " fe-people-ig__quote-line--support"
+              }`}
+            >
+              {line}
+            </span>
+          ))}
+        </blockquote>
+
+        <h1 className="fe-people-ig__headline">
+          {headlineLines.map((line) => (
+            <span key={line} className="fe-people-ig__headline-line">
+              {line}
+            </span>
+          ))}
+        </h1>
+
+        <p className="fe-people-ig__supporting">{supportingText}</p>
+
+        <div className="fe-people-ig__signature" aria-label="Brand signature">
+          <img
+            src={logoSrc}
+            alt={logoAlt}
+            className="fe-people-ig__signature-logo"
+            width={405}
+            height={103}
+            decoding="sync"
+            draggable={false}
+          />
+          <p className="fe-people-ig__signature-tagline">{footerTagline}</p>
+        </div>
+      </div>
+    </article>
+  );
+}

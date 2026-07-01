@@ -92,7 +92,7 @@ export default function DealDesk() {
             style={{ color: "rgba(247,247,245,0.4)" }}
           >
             The Deal Desk tools are for licensed real estate professionals. All calculator outputs are educational estimates and do not constitute loan
-            commitments. IHL is a licensed mortgage broker in MD, DC, and VA.{" "}
+            commitments. IHL is a licensed mortgage broker in DC and MD.{" "}
             <Link
               to="/deal-desk/playbook"
               className="font-semibold underline decoration-[#C6A15B]/50"

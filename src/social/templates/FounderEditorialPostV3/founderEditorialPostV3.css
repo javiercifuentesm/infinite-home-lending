@@ -1,0 +1,254 @@
+/**
+ * Founder Collection™ v1.0 — FounderEditorialPostV3
+ * Status: Brand Approved
+ * Visual language aligned to InfiniteHomeLending.com
+ */
+
+.fe-v3 {
+  /* Site tokens (@theme in index.css) */
+  --fe-navy: #0a192f;
+  --fe-gold: #c5a059;
+  --fe-gold-champagne: #9a7b3a;
+  --fe-surface: #f8f9fa;
+  --fe-white: #ffffff;
+  --fe-slate-100: #f1f5f9;
+  --fe-slate-500: #64748b;
+  --fe-slate-600: #475569;
+  --fe-font-heading: "Cormorant Garamond", serif;
+  --fe-font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  position: relative;
+  box-sizing: border-box;
+  width: 1200px;
+  height: 1200px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--fe-white);
+  color: var(--fe-navy);
+  font-family: var(--fe-font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow: hidden;
+}
+
+/* Barely-there depth — site uses flat white, not textured stationery */
+.fe-v3::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 120% 65% at 50% -6%,
+    rgb(248 249 250 / 0.55) 0%,
+    transparent 50%
+  );
+  z-index: 0;
+}
+
+.fe-v3 *,
+.fe-v3 *::before,
+.fe-v3 *::after {
+  box-sizing: border-box;
+}
+
+/* ── Hero photography (~58% of canvas) ── */
+.fe-v3__hero {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 58%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 48px 32px;
+  background: transparent;
+}
+
+.fe-v3__portraits {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 1080px;
+  height: 100%;
+}
+
+/* Matches LeadershipPortrait on About page */
+.fe-v3__portrait {
+  position: relative;
+  margin: 0;
+  flex: 1 1 0;
+  max-width: 520px;
+  height: 100%;
+  max-height: 640px;
+  overflow: hidden;
+  border-radius: 22px;
+  border: 1px solid rgb(197 160 89 / 0.25);
+  background: var(--fe-white);
+  box-shadow:
+    0 22px 58px -14px rgb(10 25 47 / 0.24),
+    0 0 0 1px rgb(197 160 89 / 0.15);
+}
+
+.fe-v3__portrait::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    to top,
+    rgb(10 25 47 / 0.04) 0%,
+    transparent 45%,
+    rgb(255 255 255 / 0.08) 100%
+  );
+}
+
+.fe-v3__portrait-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 22%;
+}
+
+.fe-v3__portrait-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, var(--fe-surface) 0%, var(--fe-white) 100%);
+  font-family: var(--fe-font-heading);
+  font-size: 2.5rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: rgb(10 25 47 / 0.1);
+}
+
+/* ── Centered message — site type scale & rhythm ── */
+.fe-v3__message {
+  position: relative;
+  z-index: 1;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: center;
+  padding: 0 48px 45px;
+  min-height: 0;
+}
+
+/* type-eyebrow pill — About hero */
+.fe-v3__eyebrow {
+  display: inline-block;
+  margin: 0 0 28px;
+  padding: 8px 20px;
+  border-radius: 4px;
+  border: 1px solid var(--fe-slate-100);
+  background: var(--fe-surface);
+  font-family: var(--fe-font-body);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--fe-gold);
+}
+
+/* type-display — site h1 tracking */
+.fe-v3__headline {
+  margin: 0 0 28px;
+  max-width: 14ch;
+  font-family: var(--fe-font-heading);
+  font-size: 46px;
+  font-weight: 600;
+  line-height: 1.06;
+  letter-spacing: -0.035em;
+  color: var(--fe-navy);
+}
+
+.fe-v3__byline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35em 0.45em;
+  margin: 0 0 24px;
+  font-family: var(--fe-font-heading);
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.35;
+  color: rgb(10 25 47 / 0.52);
+}
+
+.fe-v3__byline-amp {
+  font-style: italic;
+  font-size: 15px;
+  color: rgb(10 25 47 / 0.32);
+}
+
+.fe-v3__body {
+  max-width: 580px;
+  margin-bottom: 0;
+}
+
+/* type-lead + type-body-lg */
+.fe-v3__paragraph {
+  margin: 0;
+  font-size: 20px;
+  line-height: 1.65;
+  font-weight: 400;
+  color: var(--fe-slate-500);
+}
+
+.fe-v3__paragraph--opening {
+  font-size: 22px;
+  line-height: 1.65;
+  font-weight: 500;
+  color: var(--fe-navy);
+  letter-spacing: -0.006em;
+}
+
+.fe-v3__paragraph + .fe-v3__paragraph {
+  margin-top: 1em;
+}
+
+/* ── Brand signature — letter closing ── */
+.fe-v3__signature {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 580px;
+  margin-top: 26px;
+  padding-top: 0;
+}
+
+/* footer.slogan — scaled for export readability */
+.fe-v3__signature-tagline {
+  margin: 18px 0 0;
+  font-family: var(--fe-font-heading);
+  font-size: 20px;
+  font-weight: 500;
+  font-style: italic;
+  font-synthesis: none;
+  letter-spacing: -0.008em;
+  line-height: 1.35;
+  color: var(--fe-gold-champagne);
+  white-space: nowrap;
+}
+
+/* site-navbar-logo — header lockup visibility */
+.fe-v3__signature-logo {
+  display: block;
+  height: 114px;
+  width: auto;
+  max-width: 450px;
+  object-fit: contain;
+  opacity: 0.97;
+  background-color: transparent;
+}

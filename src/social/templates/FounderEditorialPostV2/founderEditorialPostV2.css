@@ -1,0 +1,282 @@
+/**
+ * FounderEditorialPostV2 — publication opening spread.
+ * Full-bleed editorial layout; not a card-in-frame social graphic.
+ */
+
+.fe-v2 {
+  --fe-navy: #0a192f;
+  --fe-gold: #c5a059;
+  --fe-surface: #f8f9fb;
+  --fe-white: #ffffff;
+  --fe-slate-100: #eef1f5;
+  --fe-slate-200: #e2e8f0;
+  --fe-slate-500: #64748b;
+  --fe-slate-600: #475569;
+  --fe-font-heading: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --fe-font-body: "Inter", system-ui, -apple-system, sans-serif;
+
+  box-sizing: border-box;
+  width: 1200px;
+  height: 1200px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--fe-white);
+  color: var(--fe-navy);
+  font-family: var(--fe-font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow: hidden;
+}
+
+.fe-v2 *,
+.fe-v2 *::before,
+.fe-v2 *::after {
+  box-sizing: border-box;
+}
+
+/* ── Masthead ── */
+.fe-v2__masthead {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 88px;
+  padding: 0 56px;
+  border-bottom: 1px solid var(--fe-slate-100);
+  background: var(--fe-white);
+}
+
+.fe-v2__masthead-mark {
+  display: block;
+  height: 28px;
+  width: auto;
+  max-width: 120px;
+  object-fit: contain;
+  opacity: 0.92;
+}
+
+.fe-v2__masthead-series {
+  margin: 0;
+  font-family: var(--fe-font-body);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgb(10 25 47 / 0.45);
+}
+
+.fe-v2__masthead-sep {
+  padding-inline: 0.35em;
+  color: rgb(197 160 89 / 0.7);
+}
+
+/* ── Main spread ── */
+.fe-v2__spread {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 520px 1fr;
+}
+
+.fe-v2__visual {
+  position: relative;
+  background: linear-gradient(165deg, var(--fe-surface) 0%, var(--fe-white) 72%);
+  border-right: 1px solid var(--fe-slate-100);
+}
+
+.fe-v2__visual::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 72%,
+    rgb(255 255 255 / 0.55) 100%
+  );
+  pointer-events: none;
+}
+
+.fe-v2__visual-inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  height: 100%;
+  padding: 48px 40px 48px 48px;
+  align-content: center;
+}
+
+.fe-v2__portrait {
+  margin: 0;
+  overflow: hidden;
+  border-radius: 4px;
+  border: 1px solid rgb(226 232 240 / 0.9);
+  background: var(--fe-white);
+  aspect-ratio: 4 / 5;
+  box-shadow:
+    0 24px 48px rgb(10 25 47 / 0.1),
+    0 8px 20px rgb(10 25 47 / 0.05);
+}
+
+.fe-v2__portrait-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 18%;
+}
+
+.fe-v2__portrait-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(168deg, var(--fe-surface) 0%, var(--fe-slate-100) 100%);
+  font-family: var(--fe-font-heading);
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: rgb(10 25 47 / 0.08);
+}
+
+/* ── Letter column ── */
+.fe-v2__letter {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 56px 64px 56px 56px;
+  text-align: left;
+}
+
+.fe-v2__eyebrow {
+  display: inline-block;
+  align-self: flex-start;
+  margin-bottom: 32px;
+  padding: 8px 18px;
+  border-radius: 4px;
+  border: 1px solid var(--fe-slate-100);
+  background: var(--fe-surface);
+  font-family: var(--fe-font-body);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fe-gold);
+}
+
+.fe-v2__headline {
+  margin: 0 0 24px;
+  max-width: 11.5ch;
+  font-family: var(--fe-font-heading);
+  font-size: 56px;
+  font-weight: 600;
+  line-height: 1.04;
+  letter-spacing: -0.032em;
+  color: var(--fe-navy);
+}
+
+.fe-v2__byline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35em 0.5em;
+  margin: 0 0 36px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--fe-slate-100);
+  font-family: var(--fe-font-heading);
+  font-size: 19px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  line-height: 1.4;
+  color: rgb(10 25 47 / 0.5);
+}
+
+.fe-v2__byline-amp {
+  font-style: italic;
+  font-size: 16px;
+  color: rgb(10 25 47 / 0.32);
+}
+
+.fe-v2__body {
+  max-width: 36ch;
+}
+
+.fe-v2__paragraph {
+  margin: 0;
+  font-size: 21px;
+  line-height: 1.68;
+  font-weight: 400;
+  color: var(--fe-slate-600);
+}
+
+.fe-v2__paragraph--opening {
+  font-size: 23px;
+  line-height: 1.58;
+  font-weight: 500;
+  color: rgb(10 25 47 / 0.8);
+  letter-spacing: -0.008em;
+}
+
+.fe-v2__paragraph + .fe-v2__paragraph {
+  margin-top: 1.25em;
+}
+
+/* ── Colophon ── */
+.fe-v2__colophon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  min-height: 132px;
+  padding: 28px 56px;
+  background: var(--fe-navy);
+  border-top: 1px solid rgb(255 255 255 / 0.06);
+  background-image: radial-gradient(
+    ellipse 80% 120% at 50% -20%,
+    rgb(197 160 89 / 0.1) 0%,
+    transparent 55%
+  );
+}
+
+.fe-v2__colophon-tagline {
+  margin: 0;
+  max-width: 14ch;
+  font-family: var(--fe-font-heading);
+  font-size: 26px;
+  font-weight: 600;
+  font-style: italic;
+  letter-spacing: -0.012em;
+  line-height: 1.32;
+  color: rgb(255 255 255 / 0.94);
+}
+
+.fe-v2__colophon-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.fe-v2__colophon-logo {
+  display: block;
+  height: 72px;
+  width: auto;
+  max-width: 280px;
+  object-fit: contain;
+  opacity: 0.96;
+}
+
+.fe-v2__colophon-url {
+  margin: 0;
+  font-family: var(--fe-font-body);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: rgb(197 160 89 / 0.88);
+}

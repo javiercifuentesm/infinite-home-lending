@@ -73,7 +73,11 @@ function ToolGridCard({
 }
 
 export default function SmartTools() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
+  const serviceAreaLabel =
+    lang === "es"
+      ? "Diseñado para Washington, D.C. y Maryland"
+      : "Built for Washington, DC & Maryland";
   usePageMetadata({
     title: t("smartTools.meta.title"),
     description: t("smartTools.meta.description"),
@@ -103,7 +107,7 @@ export default function SmartTools() {
             </p>
             <p className="mt-4 flex items-center gap-2 text-[13px] text-slate-500">
               <MapPin className="h-4 w-4 shrink-0 text-[#C9A84C]" strokeWidth={1.75} aria-hidden="true" />
-              <span>{t("smartTools.builtFor")}</span>
+              <span>{serviceAreaLabel}</span>
             </p>
           </div>
         </header>

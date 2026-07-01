@@ -43,7 +43,7 @@ const REVIEW_TAB_SPECS = [
 */
 
 const Home = () => {
-  const { t } = useLanguage();
+  const { lang, t } = useLanguage();
   usePageMetadata({
     title: t("home.meta.title"),
     description: t("home.meta.description"),
@@ -258,6 +258,9 @@ const Home = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
             >
+              <p className="type-label text-[#C6A15B] tracking-[0.18em] mb-5">
+                {t("home.trust.eyebrow")}
+              </p>
               <h2 className="type-section-title text-[1.85rem] sm:text-3xl lg:text-[2.375rem] mb-6 max-w-[22ch] mx-auto leading-[1.2]">
                 {t("home.trust.title")}
               </h2>
@@ -776,7 +779,9 @@ const Home = () => {
             <h2 className="type-section-title-lg text-white mb-8 text-[2.15rem] sm:text-4xl lg:text-[3.15rem] max-w-[18ch] mx-auto leading-[1.15]">
               {t("home.finalCta.title")}
             </h2>
-            <p className="font-sans text-lg sm:text-xl text-slate-400 mb-10 max-w-2xl mx-auto font-normal leading-[1.65]">
+            <p
+              className={`home-final-cta-subtitle font-sans text-lg sm:text-xl text-slate-400 mb-10 mx-auto font-normal leading-[1.65]${lang === "es" ? " home-final-cta-subtitle--es" : ""}`}
+            >
               {t("home.finalCta.subtitle")}
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-6 sm:gap-7">

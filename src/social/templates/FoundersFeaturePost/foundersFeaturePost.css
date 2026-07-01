@@ -1,0 +1,202 @@
+/**
+ * Week 1 · Day 3 — Meet the Founders
+ * Square canvas (1200×1200) — editorial founder feature layout.
+ */
+
+.fe-founders {
+  --fe-navy: #0a192f;
+  --fe-gold-champagne: #9a7b3a;
+  --fe-white: #ffffff;
+  --fe-slate-500: #64748b;
+  --fe-font-heading: "Cormorant Garamond", serif;
+  --fe-font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  position: relative;
+  box-sizing: border-box;
+  width: 1200px;
+  height: 1200px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--fe-white);
+  color: var(--fe-navy);
+  font-family: var(--fe-font-body);
+  padding: 44px 48px 48px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow: hidden;
+}
+
+.fe-founders *,
+.fe-founders *::before,
+.fe-founders *::after {
+  box-sizing: border-box;
+}
+
+.fe-founders__header {
+  width: 100%;
+  max-width: 720px;
+  text-align: center;
+}
+
+.fe-founders__headline {
+  margin: 0 0 22px;
+  font-family: var(--fe-font-heading);
+  font-size: 52px;
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  color: var(--fe-navy);
+}
+
+.fe-founders__intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 36px;
+}
+
+.fe-founders__lead {
+  margin: 0;
+  font-family: var(--fe-font-heading);
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.006em;
+  color: var(--fe-navy);
+}
+
+.fe-founders__supporting {
+  margin: 8px 0 0;
+  max-width: 34em;
+  font-family: var(--fe-font-body);
+  font-size: 17px;
+  line-height: 1.58;
+  font-weight: 400;
+  color: var(--fe-slate-500);
+}
+
+.fe-founders__cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  width: 100%;
+  max-width: 920px;
+  flex: 1 1 auto;
+  min-height: 0;
+  align-content: start;
+}
+
+.fe-founders__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.fe-founders__portrait {
+  position: relative;
+  margin: 0 0 16px;
+  width: 100%;
+  max-width: 200px;
+  height: 248px;
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid rgb(197 160 89 / 0.22);
+  background: var(--fe-white);
+  box-shadow:
+    0 18px 44px -16px rgb(10 25 47 / 0.18),
+    0 0 0 1px rgb(197 160 89 / 0.12);
+}
+
+.fe-founders__portrait::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    to top,
+    rgb(10 25 47 / 0.04) 0%,
+    transparent 42%,
+    rgb(255 255 255 / 0.06) 100%
+  );
+}
+
+.fe-founders__portrait-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 22%;
+}
+
+.fe-founders__portrait-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, #f8f9fa 0%, #ffffff 100%);
+  font-family: var(--fe-font-heading);
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: rgb(10 25 47 / 0.1);
+}
+
+.fe-founders__card-name {
+  margin: 0 0 10px;
+  font-family: var(--fe-font-heading);
+  font-size: 21px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--fe-navy);
+}
+
+.fe-founders__card-mission {
+  margin: 0;
+  max-width: 22em;
+  font-family: var(--fe-font-body);
+  font-size: 15px;
+  line-height: 1.58;
+  font-weight: 400;
+  color: var(--fe-slate-500);
+}
+
+.fe-founders__signature {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 580px;
+  margin-top: auto;
+  padding-top: 28px;
+}
+
+.fe-founders__signature-logo {
+  display: block;
+  height: 96px;
+  width: auto;
+  max-width: 400px;
+  object-fit: contain;
+  opacity: 0.97;
+  background-color: transparent;
+}
+
+.fe-founders__signature-tagline {
+  margin: 16px 0 0;
+  font-family: var(--fe-font-heading);
+  font-size: 19px;
+  font-weight: 500;
+  font-style: italic;
+  font-synthesis: none;
+  letter-spacing: -0.008em;
+  line-height: 1.35;
+  color: var(--fe-gold-champagne);
+  white-space: nowrap;
+}

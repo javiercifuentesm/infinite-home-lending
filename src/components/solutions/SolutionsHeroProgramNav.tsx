@@ -10,28 +10,20 @@ const DEFAULT_WINDOW_START_INDEX = 0;
 const DEFAULT_WINDOW_END_INDEX = 5;
 const DEFAULT_WINDOW_SIZE =
   DEFAULT_WINDOW_END_INDEX - DEFAULT_WINDOW_START_INDEX + 1;
-const DESKTOP_CLIP_MQ = "(min-width: 769px)";
-const MOBILE_CLIP_MQ = "(max-width: 767px)";
-/** English mobile — show two full pills in the clip viewport. */
-const MOBILE_WINDOW_SIZE = 2;
+const DESKTOP_CLIP_MQ = "(min-width: 768px)";
 /** Chevron click scrolls ~2 pills for a smooth discoverability nudge. */
 const HINT_SCROLL_PILLS = 2;
-const MOBILE_HINT_SCROLL_PILLS = 1;
 
-type ClipMode = "desktop" | "mobile-en" | "none";
+type ClipMode = "desktop" | "none";
 
-function getClipMode(lang: string): ClipMode {
+function getClipMode(): ClipMode {
   if (typeof window === "undefined") return "none";
   if (window.matchMedia(DESKTOP_CLIP_MQ).matches) return "desktop";
-  if (lang === "en" && window.matchMedia(MOBILE_CLIP_MQ).matches) return "mobile-en";
   return "none";
 }
 
-function getWindowSize(lang: string, total: number): number {
-  const mode = getClipMode(lang);
-  if (mode === "desktop") return DEFAULT_WINDOW_SIZE;
-  if (mode === "mobile-en") return MOBILE_WINDOW_SIZE;
-  return total;
+function getWindowSize(total: number): number {
+  return getClipMode() === "desktop" ? DEFAULT_WINDOW_SIZE : total;
 }
 
 type PillScrollAlign = "center" | "start" | "end";
@@ -119,39 +111,32 @@ export function SolutionsHeroProgramNav({
     const clip = clipRef.current;
     if (!clip) return;
 
-    const mode = getClipMode(lang);
+    const mode = getClipMode();
     if (mode === "none") {
       clip.style.removeProperty("width");
       clip.removeAttribute("data-fit-window");
       return;
     }
 
-    const windowSize = mode === "desktop" ? DEFAULT_WINDOW_SIZE : MOBILE_WINDOW_SIZE;
-    const endSlideIndex = Math.min(total - 1, startSlideIndex + windowSize - 1);
+    const endSlideIndex = Math.min(total - 1, startSlideIndex + DEFAULT_WINDOW_SIZE - 1);
     const span = measureWindowSpan(startSlideIndex, endSlideIndex);
     if (!span) return;
 
-    const clipBuffer = mode === "mobile-en" ? 4 : 0;
     const maxWidth = clip.parentElement?.clientWidth ?? span;
-    clip.style.width = `${Math.min(span + clipBuffer, maxWidth)}px`;
+    clip.style.width = `${Math.min(span, maxWidth)}px`;
     clip.dataset.fitWindow = mode;
-  }, [lang, measureWindowSpan, total]);
+  }, [measureWindowSpan, total]);
 
   const computeWindowStartSlide = useCallback(
     (slideIndex: number) => {
-      const mode = getClipMode(lang);
-      const windowSize = getWindowSize(lang, total);
+      const windowSize = getWindowSize(total);
       const maxStart = Math.max(0, total - windowSize);
-
-      if (mode === "mobile-en") {
-        return Math.min(Math.max(0, slideIndex - 1), maxStart);
-      }
 
       if (slideIndex <= 2) return 0;
       if (slideIndex >= total - 3) return maxStart;
       return slideIndex - 2;
     },
-    [lang, total],
+    [total],
   );
 
   const getCopySpan = useCallback(() => {
@@ -312,18 +297,17 @@ export function SolutionsHeroProgramNav({
     (direction: -1 | 1) => {
       const anchorLoop = findAnchorLoopIndex();
       const anchorSlide = anchorLoop % total;
-      const windowSize = getWindowSize(lang, total);
-      const hintScroll = getClipMode(lang) === "mobile-en" ? MOBILE_HINT_SCROLL_PILLS : HINT_SCROLL_PILLS;
+      const windowSize = getWindowSize(total);
       const nextStart = Math.max(
         0,
         Math.min(
           total - windowSize,
-          anchorSlide + direction * hintScroll,
+          anchorSlide + direction * HINT_SCROLL_PILLS,
         ),
       );
       scrollToWindow(nextStart, !reducedMotion);
     },
-    [findAnchorLoopIndex, lang, reducedMotion, scrollToWindow, total],
+    [findAnchorLoopIndex, reducedMotion, scrollToWindow, total],
   );
 
   const handleHintClick = useCallback(
@@ -384,7 +368,7 @@ export function SolutionsHeroProgramNav({
         if (!viewport || !pill) return;
         const pillLeft = getPillLeftInTrack(pill);
         if (Math.abs(viewport.scrollLeft - pillLeft) > 2) {
-          const windowSize = getWindowSize(lang, total);
+          const windowSize = getWindowSize(total);
           const startSlide = Math.max(
             0,
             Math.min(total - windowSize, anchorSlide),
