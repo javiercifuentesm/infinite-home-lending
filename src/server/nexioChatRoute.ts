@@ -329,8 +329,8 @@ export function createNexioChatRouter() {
         res.setHeader("Cache-Control", "no-cache");
         res.setHeader("Connection", "keep-alive");
         const response = lang === "es"
-          ? "Para detalles específicos sobre programas de asistencia para el pago inicial, le recomiendo conectarse directamente con Javier o Alma en IHL — esa conversación es donde realmente ocurre el valor estratégico para su cliente."
-          : "For specific program details and what might work for your client's situation, I'd connect directly with Javier or Alma at IHL — that conversation is where the real strategic value happens.";
+          ? "Para detalles específicos sobre programas de asistencia para el pago inicial, le recomiendo conectarse directamente con un Asesor Hipotecario de IHL — esa conversación es donde realmente ocurre el valor estratégico para su cliente."
+          : "For specific program details and what might work for your client's situation, I'd connect directly with an IHL Mortgage Advisor — that conversation is where the real strategic value happens.";
         res.write(`data: ${JSON.stringify({ text: response })}\n\n`);
         res.write(`data: ${JSON.stringify({ done: true })}\n\n`);
         res.end();
