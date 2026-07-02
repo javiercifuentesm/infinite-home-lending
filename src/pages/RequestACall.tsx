@@ -111,7 +111,11 @@ export default function RequestACall() {
       <div className="mx-auto w-full max-w-xl px-5 pt-10 sm:px-6 sm:pt-14">
         <div className="border border-[#E5E5E0] bg-white px-6 py-8 sm:px-10 sm:py-10">
           <div className="mb-8 flex justify-center border-b border-[#E5E5E0] pb-8">
-            <IHLLogo className="h-10 w-auto sm:h-11" fetchPriority="high" />
+            <IHLLogo
+              className="h-20 w-auto sm:h-24"
+              fetchPriority="high"
+              style={{ maxWidth: "min(100%, 280px)" }}
+            />
           </div>
 
           {submitted ? (
