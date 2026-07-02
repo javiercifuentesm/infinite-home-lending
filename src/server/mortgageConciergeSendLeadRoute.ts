@@ -6,6 +6,7 @@ import { appendLead } from "./leadsStore";
 import { createOrUpdateHubSpotContact } from "./hubspotClient";
 import { buildSarahLeadHubSpotNotes, rateFromStructured } from "./hubspotFormFields";
 import { sendBrevoWelcomeEmail } from "./brevoEmailRoute";
+import { normalizePhone } from "./phoneUtils";
 import { Router, type Request, type Response } from "express";
 
 /*
@@ -1870,7 +1871,10 @@ export function createMortgageConciergeSendLeadRouter(): Router {
         }),
         `Sarah AI Conversation Transcript:\n${tRaw}`,
       ],
-      extraProperties: hubSpotPayload.extraProperties,
+      extraProperties: {
+        ...hubSpotPayload.extraProperties,
+        ihl_phone_normalized: normalizePhone(hubSpotPayload.phone ?? ""),
+      },
     })
       .then(() => {
         console.log("[hubspot][sarah] HubSpot contact sync succeeded for:", lead_email);

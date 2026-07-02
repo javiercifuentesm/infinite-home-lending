@@ -22,7 +22,15 @@ const IHL_HUBSPOT_PROPERTIES = {
   aiSourcedLead: "ai_sourced_lead",
   /** IHL Lead Status dropdown — set on create only; never overwrite on update. */
   ihlLeadStatus: "ihl_lead_status",
+  phoneNormalized: "ihl_phone_normalized",
 } as const;
+
+export const HUBSPOT_CONTACT_RECORD_BASE_URL =
+  "https://app.hubspot.com/contacts/246447376/record/0-1";
+
+export function getHubSpotContactRecordUrl(contactId: string): string {
+  return `${HUBSPOT_CONTACT_RECORD_BASE_URL}/${contactId}`;
+}
 
 /** Cached internal enum value for the "New / Unworked" ihl_lead_status option (from HubSpot property API). */
 let cachedNewUnworkedIhlLeadStatus: string | null = null;
@@ -260,7 +268,9 @@ function buildDealName(
     .trim();
 
   const nameBase =
-    fullName && fullName !== "Unknown" ? fullName : input.email.trim().toLowerCase();
+    fullName && fullName !== "Unknown"
+      ? fullName
+      : input.email?.trim().toLowerCase() || input.phone?.trim() || "Unknown";
 
   return `${nameBase} — ${loanPurpose}`;
 }
@@ -499,4 +509,242 @@ export async function createOrUpdateHubSpotContact(input: HubSpotContactInput): 
   }
 
   await attachHubSpotNotes(contactId, notes, apiKey);
+}
+
+export type RequestACallHubSpotResult = {
+  contactId: string | null;
+  matchType: "new" | "matched" | "skipped";
+};
+
+type HubSpotSearchContact = {
+  id: string;
+  properties: Record<string, string>;
+};
+
+/** Find an existing contact by ihl_phone_normalized (CRM Search API). */
+export async function findHubSpotContactByNormalizedPhone(
+  phoneNormalized: string,
+): Promise<HubSpotSearchContact | null> {
+  const apiKey = process.env.HUBSPOT_API_KEY;
+  if (!apiKey || !phoneNormalized) return null;
+
+  const response = await fetch(`${HUBSPOT_API}/crm/v3/objects/contacts/search`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      filterGroups: [
+        {
+          filters: [
+            {
+              propertyName: IHL_HUBSPOT_PROPERTIES.phoneNormalized,
+              operator: "EQ",
+              value: phoneNormalized,
+            },
+          ],
+        },
+      ],
+      properties: [
+        "firstname",
+        "lastname",
+        "email",
+        "phone",
+        IHL_HUBSPOT_PROPERTIES.loanPurpose,
+        IHL_HUBSPOT_PROPERTIES.ihlLeadStatus,
+        IHL_HUBSPOT_PROPERTIES.phoneNormalized,
+      ],
+      limit: 1,
+    }),
+  });
+
+  if (!response.ok) {
+    const errText = await response.text().catch(() => "");
+    console.warn("[hubspot] contact search by phone failed:", response.status, errText);
+    return null;
+  }
+
+  const data = (await response.json()) as {
+    results?: { id?: string; properties?: Record<string, string> }[];
+  };
+  const hit = data.results?.[0];
+  if (!hit?.id) return null;
+
+  return {
+    id: hit.id,
+    properties: hit.properties ?? {},
+  };
+}
+
+function buildRequestACallNotes(params: {
+  bestTimeToReach: string;
+  focusNotes: string;
+  matchType: "new" | "matched";
+}): string[] {
+  const notes = [
+    `[Request a Call — ${params.matchType === "matched" ? "matched existing contact by phone" : "new contact"}]`,
+    `Best day & time to reach: ${params.bestTimeToReach}`,
+  ];
+  if (params.focusNotes.trim()) {
+    notes.push(`Call focus: ${params.focusNotes.trim()}`);
+  }
+  return notes;
+}
+
+function buildPhoneOnlyContactProperties(params: {
+  firstName: string;
+  lastName: string;
+  phone: string;
+  phoneNormalized: string;
+  loanPurpose: string;
+  leadSource: string;
+  newUnworkedIhlLeadStatus?: string;
+}): Record<string, string> {
+  const properties: Record<string, string> = {
+    firstname: params.firstName.trim() || "Unknown",
+    lastname: params.lastName.trim(),
+    phone: params.phone.trim(),
+    [IHL_HUBSPOT_PROPERTIES.phoneNormalized]: params.phoneNormalized,
+    [IHL_HUBSPOT_PROPERTIES.loanPurpose]: params.loanPurpose,
+    [IHL_HUBSPOT_PROPERTIES.leadSource]: params.leadSource,
+    city: "Washington",
+    state: "DC",
+    hubspot_owner_id: IHL_DEFAULT_HUBSPOT_OWNER_ID,
+    [IHL_HUBSPOT_PROPERTIES.nmls]: "2831765",
+    [IHL_HUBSPOT_PROPERTIES.market]: "Washington, DC",
+  };
+
+  if (params.newUnworkedIhlLeadStatus) {
+    properties[IHL_HUBSPOT_PROPERTIES.ihlLeadStatus] = params.newUnworkedIhlLeadStatus;
+  }
+
+  return properties;
+}
+
+/**
+ * Request a Call — phone-first HubSpot sync.
+ * Matches existing contacts by ihl_phone_normalized; creates phone-only contacts when no match.
+ */
+export async function syncRequestACallHubSpotContact(params: {
+  fullName: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  phoneNormalized: string;
+  loanPurposeLabel: string;
+  bestTimeToReach: string;
+  focusNotes: string;
+}): Promise<RequestACallHubSpotResult> {
+  const apiKey = process.env.HUBSPOT_API_KEY;
+  if (!apiKey) {
+    console.warn("[hubspot] HUBSPOT_API_KEY not configured — skipping request-a-call sync");
+    return { contactId: null, matchType: "skipped" };
+  }
+
+  if (!params.phoneNormalized || params.phoneNormalized.length < 10) {
+    console.warn("[hubspot] request-a-call — invalid normalized phone, skipping CRM sync");
+    return { contactId: null, matchType: "skipped" };
+  }
+
+  const existing = await findHubSpotContactByNormalizedPhone(params.phoneNormalized);
+
+  if (existing) {
+    const updateProperties: Record<string, string> = {
+      [IHL_HUBSPOT_PROPERTIES.phoneNormalized]: params.phoneNormalized,
+    };
+
+    const currentLoanPurpose =
+      existing.properties[IHL_HUBSPOT_PROPERTIES.loanPurpose]?.trim() ?? "";
+    if (params.loanPurposeLabel && !currentLoanPurpose) {
+      updateProperties[IHL_HUBSPOT_PROPERTIES.loanPurpose] = params.loanPurposeLabel;
+    }
+
+    const patchResponse = await fetch(
+      `${HUBSPOT_API}/crm/v3/objects/contacts/${existing.id}`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ properties: updateProperties }),
+      },
+    );
+
+    if (!patchResponse.ok) {
+      const errText = await patchResponse.text().catch(() => "");
+      throw new Error(`HubSpot contact update error ${patchResponse.status}: ${errText}`);
+    }
+
+    const matchedNotes = buildRequestACallNotes({
+      bestTimeToReach: params.bestTimeToReach,
+      focusNotes: params.focusNotes,
+      matchType: "matched",
+    });
+    await attachHubSpotNotes(existing.id, matchedNotes, apiKey);
+
+    return { contactId: existing.id, matchType: "matched" };
+  }
+
+  const newUnworkedIhlLeadStatus = await fetchNewUnworkedIhlLeadStatus(apiKey);
+  const createProperties = buildPhoneOnlyContactProperties({
+    firstName: params.firstName,
+    lastName: params.lastName,
+    phone: params.phone,
+    phoneNormalized: params.phoneNormalized,
+    loanPurpose: params.loanPurposeLabel,
+    leadSource: "Request a Call",
+    newUnworkedIhlLeadStatus: newUnworkedIhlLeadStatus ?? undefined,
+  });
+
+  const createResponse = await fetch(`${HUBSPOT_API}/crm/v3/objects/contacts`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ properties: createProperties }),
+  });
+
+  if (!createResponse.ok) {
+    const errText = await createResponse.text().catch(() => "");
+    throw new Error(`HubSpot contact create error ${createResponse.status}: ${errText}`);
+  }
+
+  const created = (await createResponse.json()) as { id?: string };
+  const contactId = created.id ?? null;
+  if (!contactId) {
+    console.warn("[hubspot] request-a-call create succeeded but no contact id returned");
+    return { contactId: null, matchType: "skipped" };
+  }
+
+  const dealInput: HubSpotContactInput = {
+    name: params.fullName,
+    email: "",
+    firstName: params.firstName,
+    lastName: params.lastName,
+    phone: params.phone,
+    loanPurpose: params.loanPurposeLabel,
+  };
+
+  try {
+    await createHubSpotDealForNewContact({
+      contactId,
+      input: dealInput,
+      contactProperties: createProperties,
+      apiKey,
+    });
+  } catch (err) {
+    console.warn("[hubspot-deal] request-a-call deal creation failed — contact sync continues:", err);
+  }
+
+  const newNotes = buildRequestACallNotes({
+    bestTimeToReach: params.bestTimeToReach,
+    focusNotes: params.focusNotes,
+    matchType: "new",
+  });
+  await attachHubSpotNotes(contactId, newNotes, apiKey);
+
+  return { contactId, matchType: "new" };
 }

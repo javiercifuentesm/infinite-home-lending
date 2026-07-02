@@ -10,6 +10,7 @@ import { Resend } from "resend";
 import { createOrUpdateHubSpotContact } from "./hubspotClient";
 import { extractContactFormHubSpotFields } from "./hubspotFormFields";
 import { sendBrevoWelcomeEmail } from "./brevoEmailRoute";
+import { normalizePhone } from "./phoneUtils";
 
 const GET_URL_EXPIRES_SEC = 86400;
 const MAX_ANSWER_ENTRIES = 48;
@@ -63,6 +64,7 @@ function syncContactFormToHubSpot(params: {
     extraProperties: {
       ...formFields.extraProperties,
       ...(isPartnerCta ? { ihl_pipeline: "referral" } : {}),
+      ihl_phone_normalized: normalizePhone(phone),
     },
   })
     .then(() => {

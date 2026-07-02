@@ -15,6 +15,7 @@ import Solutions from "./pages/Solutions";
 import LoanProgramDetailPage from "./pages/LoanProgramDetail";
 import HowItWorks from "./pages/HowItWorks";
 import Contact from "./pages/Contact";
+import RequestACall from "./pages/RequestACall";
 import LoanSimulator from "./pages/LoanSimulator";
 import BuyVsWaitAnalyzer from "./pages/BuyVsWaitAnalyzer";
 import RefinanceRealMath from "./pages/RefinanceRealMath";
@@ -104,6 +105,7 @@ const AppContent = () => {
           <Route path="/how-we-work" element={<HowItWorks />} />
           <Route path="/how-it-works" element={<HowItWorks />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/request-a-call" element={<RequestACall />} />
           <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
           <Route path="/sms-terms" element={<SmsTermsPage />} />
           <Route path="/terms-of-use" element={<TermsOfUsePage />} />

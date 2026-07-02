@@ -7,6 +7,7 @@ import { createUploadUrlRouter } from "./uploadUrlRoute";
 import { createMortgageConciergeSendLeadRouter } from "./mortgageConciergeSendLeadRoute";
 import { createAssignLeadRouter } from "./assignLeadRoute";
 import { createSubmitLeadRouter } from "./submitLeadRoute";
+import { createRequestACallRouter } from "./requestACallRoute";
 import {
   createIntelligenceLoopRouter,
   fetchFredRate,
@@ -211,6 +212,7 @@ app.use("/api", createUploadUrlRouter());
 app.use("/api", createMortgageConciergeSendLeadRouter());
 app.use("/api", createAssignLeadRouter());
 app.use("/api", createSubmitLeadRouter());
+app.use("/api", createRequestACallRouter());
 app.use("/api", createAnalyticsRouter());
 app.use("/api", createIntelligenceLoopRouter());
 app.use("/api", createIntelligenceBriefRouter());
