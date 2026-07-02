@@ -21,6 +21,13 @@ const LOAN_PURPOSE_OPTIONS: Record<string, string> = {
   reverse: "Reverse Mortgage",
 };
 
+const BEST_DAY_OPTIONS = new Set(["Weekdays", "Weekends", "Either Works"]);
+const BEST_TIME_OPTIONS = new Set(["Morning", "Afternoon", "Evening"]);
+
+function formatBestTimeToReach(bestDay: string, bestTime: string): string {
+  return `${bestDay}, ${bestTime}`;
+}
+
 function validatePhone(phone: string): boolean {
   return normalizePhone(phone).length >= 10;
 }
@@ -109,14 +116,16 @@ export function createRequestACallRouter(): Router {
         fullName?: string;
         phone?: string;
         loanPurpose?: string;
-        bestTimeToReach?: string;
+        bestDay?: string;
+        bestTime?: string;
         focusNotes?: string;
       };
 
       const fullName = String(body.fullName ?? "").trim();
       const phone = String(body.phone ?? "").trim();
       const loanPurpose = String(body.loanPurpose ?? "").trim();
-      const bestTimeToReach = String(body.bestTimeToReach ?? "").trim();
+      const bestDay = String(body.bestDay ?? "").trim();
+      const bestTime = String(body.bestTime ?? "").trim();
       const focusNotes = String(body.focusNotes ?? "").trim();
 
       if (!fullName) {
@@ -128,11 +137,15 @@ export function createRequestACallRouter(): Router {
       if (!loanPurpose || !LOAN_PURPOSE_OPTIONS[loanPurpose]) {
         return res.status(400).json({ error: "Please select a loan purpose." });
       }
-      if (!bestTimeToReach) {
-        return res.status(400).json({ error: "Best day and time to reach you is required." });
+      if (!bestDay || !BEST_DAY_OPTIONS.has(bestDay)) {
+        return res.status(400).json({ error: "Please select the best day to reach you." });
+      }
+      if (!bestTime || !BEST_TIME_OPTIONS.has(bestTime)) {
+        return res.status(400).json({ error: "Please select the best time to reach you." });
       }
 
       const loanPurposeLabel = LOAN_PURPOSE_OPTIONS[loanPurpose];
+      const bestTimeToReach = formatBestTimeToReach(bestDay, bestTime);
       const { firstName, lastName } = splitFullName(fullName);
       const phoneNormalized = normalizePhone(phone);
 

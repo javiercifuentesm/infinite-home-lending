@@ -11,11 +11,15 @@ const LOAN_PURPOSE_OPTIONS = [
   { value: "reverse", label: "Reverse mortgage" },
 ] as const;
 
+const BEST_DAY_OPTIONS = ["Weekdays", "Weekends", "Either Works"] as const;
+const BEST_TIME_OPTIONS = ["Morning", "Afternoon", "Evening"] as const;
+
 type FormState = {
   fullName: string;
   phone: string;
   loanPurpose: string;
-  bestTimeToReach: string;
+  bestDay: string;
+  bestTime: string;
   focusNotes: string;
 };
 
@@ -23,7 +27,8 @@ const INITIAL: FormState = {
   fullName: "",
   phone: "",
   loanPurpose: "",
-  bestTimeToReach: "",
+  bestDay: "",
+  bestTime: "",
   focusNotes: "",
 };
 
@@ -32,6 +37,8 @@ const labelClass =
 
 const fieldClass =
   "w-full border border-[#E5E5E0] bg-white px-4 py-3.5 text-sm text-[#2E2E2E] outline-none transition-colors focus:border-[#0B2A4A]";
+
+const selectClass = `${fieldClass} appearance-none bg-[url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%228%22 viewBox=%220 0 12 8%22%3E%3Cpath fill=%22%230B2A4A%22 d=%22M1 1l5 5 5-5%22/%3E%3C/svg%3E')] bg-[length:12px_8px] bg-[position:right_1rem_center] bg-no-repeat pr-10`;
 
 export default function RequestACall() {
   usePageMetadata({
@@ -67,8 +74,12 @@ export default function RequestACall() {
       setError("Please select a loan purpose.");
       return;
     }
-    if (!form.bestTimeToReach.trim()) {
-      setError("Please tell us the best day and time to reach you.");
+    if (!form.bestDay) {
+      setError("Please select the best day to reach you.");
+      return;
+    }
+    if (!form.bestTime) {
+      setError("Please select the best time to reach you.");
       return;
     }
 
@@ -83,7 +94,8 @@ export default function RequestACall() {
           fullName: form.fullName.trim(),
           phone: form.phone.trim(),
           loanPurpose: form.loanPurpose,
-          bestTimeToReach: form.bestTimeToReach.trim(),
+          bestDay: form.bestDay,
+          bestTime: form.bestTime,
           focusNotes: form.focusNotes.trim() || undefined,
         }),
       });
@@ -179,6 +191,7 @@ export default function RequestACall() {
                     type="tel"
                     autoComplete="tel"
                     required
+                    placeholder="(312) 234-2345"
                     value={form.phone}
                     onChange={(e) => update("phone", e.target.value)}
                     className={fieldClass}
@@ -194,7 +207,7 @@ export default function RequestACall() {
                     required
                     value={form.loanPurpose}
                     onChange={(e) => update("loanPurpose", e.target.value)}
-                    className={`${fieldClass} appearance-none bg-[url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%228%22 viewBox=%220 0 12 8%22%3E%3Cpath fill=%22%230B2A4A%22 d=%22M1 1l5 5 5-5%22/%3E%3C/svg%3E')] bg-[length:12px_8px] bg-[position:right_1rem_center] bg-no-repeat pr-10`}
+                    className={selectClass}
                   >
                     <option value="" disabled>
                       Select loan purpose
@@ -208,18 +221,47 @@ export default function RequestACall() {
                 </div>
 
                 <div>
-                  <label htmlFor="rac-best-time" className={labelClass}>
-                    Best day &amp; time to reach you *
+                  <label htmlFor="rac-best-day" className={labelClass}>
+                    Best day to reach you *
                   </label>
-                  <input
-                    id="rac-best-time"
-                    type="text"
+                  <select
+                    id="rac-best-day"
                     required
-                    placeholder="e.g. Weekday mornings, Tuesday after 3pm"
-                    value={form.bestTimeToReach}
-                    onChange={(e) => update("bestTimeToReach", e.target.value)}
-                    className={fieldClass}
-                  />
+                    value={form.bestDay}
+                    onChange={(e) => update("bestDay", e.target.value)}
+                    className={selectClass}
+                  >
+                    <option value="" disabled>
+                      Select best day
+                    </option>
+                    {BEST_DAY_OPTIONS.map((opt) => (
+                      <option key={opt} value={opt}>
+                        {opt}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label htmlFor="rac-best-time" className={labelClass}>
+                    Best time to reach you *
+                  </label>
+                  <select
+                    id="rac-best-time"
+                    required
+                    value={form.bestTime}
+                    onChange={(e) => update("bestTime", e.target.value)}
+                    className={selectClass}
+                  >
+                    <option value="" disabled>
+                      Select best time
+                    </option>
+                    {BEST_TIME_OPTIONS.map((opt) => (
+                      <option key={opt} value={opt}>
+                        {opt}
+                      </option>
+                    ))}
+                  </select>
                 </div>
 
                 <div>
