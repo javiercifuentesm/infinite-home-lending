@@ -259,6 +259,13 @@ function emailValid(email: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
 }
 
+function phoneValid(phone: string): boolean {
+  return phone.replace(/\D/g, "").length >= 10;
+}
+
+const contactSmsRadioClass =
+  "mt-1 h-4 w-4 shrink-0 border border-[#E5E7EB] text-[#0B2A4A] focus:ring-2 focus:ring-[#C6A15B]/25 focus:ring-offset-0";
+
 function formatPhoneNumber(value: string): string {
   const cleaned = value.replace(/\D/g, "").slice(0, 10);
   if (!cleaned) return "";
@@ -425,6 +432,8 @@ export function StrategicContactExperience() {
   });
   const [email, setEmail] = useState(() => searchParams.get("email") ?? "");
   const [phone, setPhone] = useState("");
+  const [smsConsent, setSmsConsent] = useState<boolean | null>(null);
+  const [smsConsentShowError, setSmsConsentShowError] = useState(false);
   const [contextNote] = useState(() => {
     const topic = searchParams.get("topic");
     if (topic === "buy-vs-wait") {
@@ -841,7 +850,7 @@ export function StrategicContactExperience() {
     phoneTime,
   ]);
 
-  const canSubmit = firstName.trim().length > 0 && emailValid(email);
+  const canSubmit = firstName.trim().length > 0 && emailValid(email) && phoneValid(phone);
 
   const goNext = () => {
     if (step === 0 && reasonId === "reverse") {
@@ -1315,7 +1324,17 @@ export function StrategicContactExperience() {
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!canSubmit || submitInProgress) return;
+    if (submitInProgress) return;
+
+    if (smsConsent === null) {
+      setSmsConsentShowError(true);
+      return;
+    }
+
+    if (!firstName.trim() || !emailValid(email) || !phoneValid(phone)) {
+      return;
+    }
+
     setSubmitError(null);
     setSubmitInProgress(true);
 
@@ -1371,7 +1390,8 @@ export function StrategicContactExperience() {
           firstName: firstName.trim(),
           lastName: lastName.trim(),
           email: email.trim(),
-          phone: phone.trim() || undefined,
+          phone: phone.trim(),
+          smsConsent,
           path: mapReasonIdToLeadPath(reasonId),
           answers,
           hasUploadedStatement,
@@ -1392,6 +1412,8 @@ export function StrategicContactExperience() {
         return;
       }
       setSubmitted(true);
+      setSmsConsent(null);
+      setSmsConsentShowError(false);
     } catch {
       setSubmitError(t("contact.error.network"));
     } finally {
@@ -1880,7 +1902,7 @@ export function StrategicContactExperience() {
                         </div>
                         <div className="space-y-2">
                           <label htmlFor="sc-first" className="font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">
-                            {t("contact.step.details.name.label")}
+                            {t("contact.step.details.name.label")} *
                           </label>
                           <input
                             id="sc-first"
@@ -1895,7 +1917,7 @@ export function StrategicContactExperience() {
                         </div>
                         <div className="space-y-2">
                           <label htmlFor="sc-email" className="font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">
-                            {t("contact.step.details.email.label")}
+                            {t("contact.step.details.email.label")} *
                           </label>
                           <input
                             id="sc-email"
@@ -1920,19 +1942,96 @@ export function StrategicContactExperience() {
                         </div>
                         <div className="space-y-2">
                           <label htmlFor="sc-phone" className="font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">
-                            {t("contact.step.details.phone.label")}{" "}
-                            <span className="font-normal text-slate-400">{t("contact.step.details.phone.optional")}</span>
+                            {t("contact.step.details.phone.label")} *
                           </label>
                           <input
                             id="sc-phone"
+                            required
                             type="tel"
                             autoComplete="tel"
                             value={phone}
                             onChange={(e) => setPhone(formatPhoneNumber(e.target.value))}
-                            className="w-full rounded-xl border border-[#E5E7EB] bg-white px-4 py-3.5 font-sans text-[15px] text-navy outline-none transition-colors focus:border-[#C6A15B] focus:ring-2 focus:ring-[#C6A15B]/25"
+                            aria-invalid={phone.length > 0 && !phoneValid(phone)}
+                            className={`w-full rounded-xl border bg-white px-4 py-3.5 font-sans text-[15px] text-navy outline-none transition-colors focus:ring-2 focus:ring-[#C6A15B]/25 ${
+                              phone.length > 0 && !phoneValid(phone)
+                                ? "border-red-400/80 focus:border-red-500"
+                                : "border-[#E5E7EB] focus:border-[#C6A15B]"
+                            }`}
                             placeholder={t("contact.step.details.phone.placeholder")}
                           />
+                          {phone.length > 0 && !phoneValid(phone) ? (
+                            <p className="font-sans text-[13px] text-red-600" role="alert">
+                              {t("contact.step.details.phone.error")}
+                            </p>
+                          ) : null}
                         </div>
+                        <fieldset className="space-y-3 border-0 p-0">
+                          <legend className="font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">
+                            {t("contact.step.details.sms.legend")}
+                          </legend>
+                          <div className="space-y-4">
+                            <div className="flex items-start gap-3">
+                              <input
+                                id="sc-sms-consent-yes"
+                                name="smsConsent"
+                                type="radio"
+                                value="yes"
+                                checked={smsConsent === true}
+                                onChange={() => {
+                                  setSmsConsent(true);
+                                  setSmsConsentShowError(false);
+                                }}
+                                className={contactSmsRadioClass}
+                              />
+                              <label
+                                htmlFor="sc-sms-consent-yes"
+                                className="cursor-pointer font-sans text-[14px] leading-relaxed text-navy"
+                              >
+                                {t("contact.step.details.sms.yes")}
+                              </label>
+                            </div>
+                            <div className="flex items-start gap-3">
+                              <input
+                                id="sc-sms-consent-no"
+                                name="smsConsent"
+                                type="radio"
+                                value="no"
+                                checked={smsConsent === false}
+                                onChange={() => {
+                                  setSmsConsent(false);
+                                  setSmsConsentShowError(false);
+                                }}
+                                className={contactSmsRadioClass}
+                              />
+                              <label
+                                htmlFor="sc-sms-consent-no"
+                                className="cursor-pointer font-sans text-[14px] leading-relaxed text-navy"
+                              >
+                                {t("contact.step.details.sms.no")}
+                              </label>
+                            </div>
+                          </div>
+                          {smsConsentShowError && smsConsent === null ? (
+                            <p className="font-sans text-[13px] text-red-600" role="alert">
+                              {t("contact.step.details.sms.error")}
+                            </p>
+                          ) : null}
+                          <p className="font-sans text-[13px] leading-relaxed text-slate-600">
+                            <a
+                              href="https://www.infinitehomelending.com/privacy-policy"
+                              className="text-[#0B2A4A] underline decoration-[#C6A15B]/60 underline-offset-2 hover:text-[#C6A15B] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]/40"
+                            >
+                              {t("contact.step.details.sms.privacyLink")}
+                            </a>
+                            <span aria-hidden="true"> | </span>
+                            <a
+                              href="https://www.infinitehomelending.com/sms-terms"
+                              className="text-[#0B2A4A] underline decoration-[#C6A15B]/60 underline-offset-2 hover:text-[#C6A15B] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]/40"
+                            >
+                              {t("contact.step.details.sms.termsLink")}
+                            </a>
+                          </p>
+                        </fieldset>
                       </div>
                     </motion.div>
                   )}

@@ -318,8 +318,16 @@ export const en = {
   "contact.step.details.email.placeholder": "you@email.com",
   "contact.step.details.email.error": "Enter a valid email address.",
   "contact.step.details.phone.label": "Phone",
-  "contact.step.details.phone.optional": "(optional)",
   "contact.step.details.phone.placeholder": "(301) 555-0100",
+  "contact.step.details.phone.error": "Enter a valid phone number.",
+  "contact.step.details.sms.legend": "SMS Communication Preference *",
+  "contact.step.details.sms.yes":
+    "Yes, I agree to receive SMS text messages from Infinite Home Lending regarding my inquiry, loan application, loan status, appointment reminders, document requests, and customer support. Message frequency varies. Message and data rates may apply. Reply STOP to opt out or HELP for assistance. Consent is not a condition of purchasing any products or services.",
+  "contact.step.details.sms.no":
+    "No, I do not agree to receive SMS text messages from Infinite Home Lending.",
+  "contact.step.details.sms.privacyLink": "Privacy Policy",
+  "contact.step.details.sms.termsLink": "SMS Terms & Conditions",
+  "contact.step.details.sms.error": "Please select Yes or No for SMS communications.",
 
   "contact.btn.back": "Back",
   "contact.btn.continue": "Continue",

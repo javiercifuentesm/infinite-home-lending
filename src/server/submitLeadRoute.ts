@@ -11,6 +11,13 @@ import { createOrUpdateHubSpotContact } from "./hubspotClient";
 import { extractContactFormHubSpotFields } from "./hubspotFormFields";
 import { sendBrevoWelcomeEmail } from "./brevoEmailRoute";
 import { normalizePhone } from "./phoneUtils";
+import {
+  buildContactSmsConsentRecord,
+  contactSmsConsentNoteLines,
+  parseContactSmsConsent,
+  parseContactSubmittedLang,
+  type ContactSmsConsentRecord,
+} from "./contactSmsConsent";
 
 const GET_URL_EXPIRES_SEC = 86400;
 const MAX_ANSWER_ENTRIES = 48;
@@ -44,8 +51,9 @@ function syncContactFormToHubSpot(params: {
   phone: string;
   path: string;
   keyInsights: Record<string, unknown>;
+  smsConsentRecord: ContactSmsConsentRecord;
 }): void {
-  const { name, firstName, lastName, email, phone, path, keyInsights } = params;
+  const { name, firstName, lastName, email, phone, path, keyInsights, smsConsentRecord } = params;
   const isPartnerCta = isDealDeskPartnerLead(keyInsights);
   const formFields = extractContactFormHubSpotFields(path, keyInsights, { firstName, lastName });
 
@@ -60,7 +68,7 @@ function syncContactFormToHubSpot(params: {
     purchaseTimeline: formFields.purchaseTimeline,
     leadStatus: formFields.leadStatus,
     aiSourced: false,
-    notes: formFields.notes,
+    notes: [...formFields.notes, ...contactSmsConsentNoteLines(smsConsentRecord)],
     extraProperties: {
       ...formFields.extraProperties,
       ...(isPartnerCta ? { ihl_pipeline: "referral" } : {}),
@@ -778,6 +786,10 @@ function validateEmail(email: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
 }
 
+function validatePhone(phone: string): boolean {
+  return normalizePhone(phone).length >= 10;
+}
+
 /** Human goal line for refinance / HELOC property snapshot (presentation only). */
 function inferRefinanceGoalLabel(answers: Record<string, unknown>): string {
   const haystack = `${JSON.stringify(answers)}`.toLowerCase();
@@ -1014,9 +1026,20 @@ function buildEmailHtml(params: {
   /** Presigned GET URL for uploaded PDF; not a public S3 URL. */
   documentUrl: string | null;
   submittedLang: "en" | "es";
+  smsConsentRecord: ContactSmsConsentRecord;
 }): string {
-  const { name, email, phone, path, answers, entries, hasUploadedStatement, documentUrl, submittedLang } =
-    params;
+  const {
+    name,
+    email,
+    phone,
+    path,
+    answers,
+    entries,
+    hasUploadedStatement,
+    documentUrl,
+    submittedLang,
+    smsConsentRecord,
+  } = params;
 
   const snap = extractClientSnapshotFields(answers);
   const opportunitySnapshot = createOpportunitySnapshot({ path, answers, hasUploadedStatement });
@@ -1274,6 +1297,12 @@ function buildEmailHtml(params: {
     ${tableRow("Name", name)}
     <tr><td style="padding:8px 0;font-size:13px;color:#64748b;width:38%;vertical-align:top;line-height:1.7;">Email</td><td style="padding:8px 0;font-size:14px;vertical-align:top;line-height:1.7;"><a href="mailto:${escapeHtml(email)}" style="color:#0f172a;text-decoration:none;">${escapeHtml(email)}</a></td></tr>
     ${tableRow("Phone", phone || "—")}
+    ${tableRow("SMS Consent", smsConsentRecord.smsConsent)}
+    ${tableRow("SMS Consent Decision", smsConsentRecord.smsConsentDecision)}
+    ${tableRow("SMS Consent Source", smsConsentRecord.smsConsentSource)}
+    ${tableRow("SMS Consent Disclosure Version", smsConsentRecord.smsConsentDisclosureVersion)}
+    ${tableRow("SMS Consent Disclosure Language", smsConsentRecord.smsConsentDisclosureLanguage)}
+    ${tableRow("SMS Consent Timestamp", smsConsentRecord.smsConsentTimestamp)}
     ${tableRow("Where they are", snap.stage)}
     ${tableRow("Priority", snap.priority)}
     ${tableRow("Best time to connect", snap.bestTime)}
@@ -1413,10 +1442,10 @@ export function createSubmitLeadRouter(): Router {
 
       const body = req.body as Record<string, unknown>;
 
-      const firstName =
+      const firstNameRaw =
         (typeof body.firstName === "string" ? body.firstName.trim() : "") ||
-        (typeof body.name === "string" ? body.name.trim() : "") ||
-        "Unknown";
+        (typeof body.name === "string" ? body.name.trim() : "");
+      const firstName = firstNameRaw || "";
       const lastName = typeof body.lastName === "string" ? body.lastName.trim() : "";
       const name = [firstName, lastName].filter(Boolean).join(" ") || firstName;
       const emailRaw = typeof body.email === "string" ? body.email.trim() : "";
@@ -1429,17 +1458,36 @@ export function createSubmitLeadRouter(): Router {
       const fileKey =
         typeof body.fileKey === "string" && body.fileKey.trim().length > 0 ? body.fileKey.trim() : null;
 
-      const submittedLang =
-        typeof body.submittedLang === "string" && body.submittedLang === "es" ? "es" : "en";
+      const submittedLang = parseContactSubmittedLang(body);
 
       const answersRaw =
         body.answers !== null && typeof body.answers === "object" && !Array.isArray(body.answers)
           ? (body.answers as Record<string, unknown>)
           : {};
 
+      if (!firstName) {
+        return res.status(400).json({ error: "Name is required." });
+      }
+
       if (!email || !validateEmail(email)) {
         return res.status(400).json({ error: "Valid email is required." });
       }
+
+      if (!phone || !validatePhone(phone)) {
+        return res.status(400).json({ error: "Valid phone number is required." });
+      }
+
+      const smsConsentParsed = parseContactSmsConsent(body);
+      if (!smsConsentParsed.ok) {
+        return res.status(400).json({ error: smsConsentParsed.error });
+      }
+
+      const submissionTimestamp = new Date().toISOString();
+      const smsConsentRecord = buildContactSmsConsentRecord(
+        smsConsentParsed.value,
+        submissionTimestamp,
+        submittedLang,
+      );
 
       if (!ALLOWED_PATHS.has(path)) {
         return res.status(400).json({ error: "Invalid path." });
@@ -1476,6 +1524,7 @@ export function createSubmitLeadRouter(): Router {
         hasUploadedStatement,
         documentUrl,
         submittedLang,
+        smsConsentRecord,
       });
       console.log("STEP 2: After buildEmailHtml");
 
@@ -1530,7 +1579,16 @@ export function createSubmitLeadRouter(): Router {
 
       console.log("STEP 4: After Resend — Email sent successfully");
 
-      syncContactFormToHubSpot({ name, firstName, lastName, email, phone, path, keyInsights });
+      syncContactFormToHubSpot({
+        name,
+        firstName,
+        lastName,
+        email,
+        phone,
+        path,
+        keyInsights,
+        smsConsentRecord,
+      });
 
       return res.status(200).json({
         ok: true,
