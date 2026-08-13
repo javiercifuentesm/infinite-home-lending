@@ -24,6 +24,32 @@ const LOAN_PURPOSE_OPTIONS: Record<string, string> = {
 const BEST_DAY_OPTIONS = new Set(["Weekdays", "Weekends", "Either Works"]);
 const BEST_TIME_OPTIONS = new Set(["Morning", "Afternoon", "Evening"]);
 
+const SMS_CONSENT_SOURCE = "/request-a-call";
+const SMS_CONSENT_DISCLOSURE_VERSION = "IHL-SMS-v1-2026-08";
+
+type SmsConsentRecord = {
+  smsConsent: "Yes" | "No";
+  smsConsentSource: string;
+  smsConsentDisclosureVersion: string;
+  smsConsentTimestamp: string;
+};
+
+function parseSmsConsent(body: Record<string, unknown>): boolean {
+  return body.smsConsent === true;
+}
+
+function buildSmsConsentRecord(
+  smsConsent: boolean,
+  submissionTimestamp: string,
+): SmsConsentRecord {
+  return {
+    smsConsent: smsConsent ? "Yes" : "No",
+    smsConsentSource: SMS_CONSENT_SOURCE,
+    smsConsentDisclosureVersion: SMS_CONSENT_DISCLOSURE_VERSION,
+    smsConsentTimestamp: submissionTimestamp,
+  };
+}
+
 function formatBestTimeToReach(bestDay: string, bestTime: string): string {
   return `${bestDay}, ${bestTime}`;
 }
@@ -51,6 +77,7 @@ async function sendRequestACallEmail(fields: {
   focusNotes: string;
   contactId: string | null;
   matchType: "new" | "matched" | "skipped";
+  smsConsentRecord: SmsConsentRecord;
 }): Promise<void> {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
@@ -78,6 +105,10 @@ async function sendRequestACallEmail(fields: {
       <table cellpadding="0" cellspacing="0" style="width:100%;font-size:14px;line-height:1.6;border-top:1px solid #e2e8f0;">
         <tr><td style="padding:10px 0;color:#64748b;width:160px;border-bottom:1px solid #f1f5f9;">Full name</td><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;">${e(fields.fullName)}</td></tr>
         <tr><td style="padding:10px 0;color:#64748b;border-bottom:1px solid #f1f5f9;">Phone</td><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;">${e(fields.phone)}</td></tr>
+        <tr><td style="padding:10px 0;color:#64748b;border-bottom:1px solid #f1f5f9;">SMS Consent</td><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;">${e(fields.smsConsentRecord.smsConsent)}</td></tr>
+        <tr><td style="padding:10px 0;color:#64748b;border-bottom:1px solid #f1f5f9;">SMS Consent Source</td><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;">${e(fields.smsConsentRecord.smsConsentSource)}</td></tr>
+        <tr><td style="padding:10px 0;color:#64748b;border-bottom:1px solid #f1f5f9;">SMS Consent Disclosure Version</td><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;">${e(fields.smsConsentRecord.smsConsentDisclosureVersion)}</td></tr>
+        <tr><td style="padding:10px 0;color:#64748b;border-bottom:1px solid #f1f5f9;">SMS Consent Timestamp</td><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;">${e(fields.smsConsentRecord.smsConsentTimestamp)}</td></tr>
         <tr><td style="padding:10px 0;color:#64748b;border-bottom:1px solid #f1f5f9;">Loan purpose</td><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;">${e(fields.loanPurposeLabel)}</td></tr>
         <tr><td style="padding:10px 0;color:#64748b;border-bottom:1px solid #f1f5f9;">Best day &amp; time</td><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;">${e(fields.bestTimeToReach)}</td></tr>
       </table>
@@ -115,6 +146,7 @@ export function createRequestACallRouter(): Router {
       const body = req.body as {
         fullName?: string;
         phone?: string;
+        smsConsent?: boolean;
         loanPurpose?: string;
         bestDay?: string;
         bestTime?: string;
@@ -148,6 +180,9 @@ export function createRequestACallRouter(): Router {
       const bestTimeToReach = formatBestTimeToReach(bestDay, bestTime);
       const { firstName, lastName } = splitFullName(fullName);
       const phoneNormalized = normalizePhone(phone);
+      const submissionTimestamp = new Date().toISOString();
+      const smsConsent = parseSmsConsent(body);
+      const smsConsentRecord = buildSmsConsentRecord(smsConsent, submissionTimestamp);
 
       let hubSpotResult: Awaited<ReturnType<typeof syncRequestACallHubSpotContact>> = {
         contactId: null,
@@ -164,6 +199,8 @@ export function createRequestACallRouter(): Router {
           loanPurposeLabel,
           bestTimeToReach,
           focusNotes,
+          smsConsent,
+          smsConsentTimestamp: submissionTimestamp,
         });
       } catch (err) {
         console.error("[hubspot] request-a-call sync failed:", err);
@@ -177,6 +214,7 @@ export function createRequestACallRouter(): Router {
         focusNotes,
         contactId: hubSpotResult.contactId,
         matchType: hubSpotResult.matchType,
+        smsConsentRecord,
       });
 
       return res.status(200).json({

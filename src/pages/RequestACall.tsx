@@ -17,6 +17,7 @@ const BEST_TIME_OPTIONS = ["Morning", "Afternoon", "Evening"] as const;
 type FormState = {
   fullName: string;
   phone: string;
+  smsConsent: boolean;
   loanPurpose: string;
   bestDay: string;
   bestTime: string;
@@ -26,6 +27,7 @@ type FormState = {
 const INITIAL: FormState = {
   fullName: "",
   phone: "",
+  smsConsent: false,
   loanPurpose: "",
   bestDay: "",
   bestTime: "",
@@ -40,6 +42,9 @@ const fieldClass =
 
 const selectClass = `${fieldClass} appearance-none bg-[url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%228%22 viewBox=%220 0 12 8%22%3E%3Cpath fill=%22%230B2A4A%22 d=%22M1 1l5 5 5-5%22/%3E%3C/svg%3E')] bg-[length:12px_8px] bg-[position:right_1rem_center] bg-no-repeat pr-10`;
 
+const checkboxClass =
+  "mt-0.5 h-4 w-4 shrink-0 border border-[#E5E5E0] text-[#0B2A4A] focus:ring-[#0B2A4A] focus:ring-offset-0";
+
 export default function RequestACall() {
   usePageMetadata({
     title: "Request a Call | Infinite Home Lending",
@@ -53,7 +58,7 @@ export default function RequestACall() {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const update = (key: keyof FormState, value: string) => {
+  const update = (key: keyof FormState, value: string | boolean) => {
     setForm((prev) => ({ ...prev, [key]: value }));
     setError(null);
   };
@@ -93,6 +98,7 @@ export default function RequestACall() {
         body: JSON.stringify({
           fullName: form.fullName.trim(),
           phone: form.phone.trim(),
+          smsConsent: form.smsConsent === true,
           loanPurpose: form.loanPurpose,
           bestDay: form.bestDay,
           bestTime: form.bestTime,
@@ -196,6 +202,44 @@ export default function RequestACall() {
                     onChange={(e) => update("phone", e.target.value)}
                     className={fieldClass}
                   />
+                </div>
+
+                <div className="space-y-2">
+                  <div className="flex items-start gap-3">
+                    <input
+                      id="rac-sms-consent"
+                      name="smsConsent"
+                      type="checkbox"
+                      checked={form.smsConsent}
+                      onChange={(e) => update("smsConsent", e.target.checked)}
+                      className={checkboxClass}
+                    />
+                    <label
+                      htmlFor="rac-sms-consent"
+                      className="cursor-pointer text-sm leading-relaxed text-[#2E2E2E]"
+                    >
+                      I agree to receive SMS text messages from Infinite Home Lending regarding
+                      my inquiry, loan application, loan status, appointment reminders, document
+                      requests, and customer support. Message frequency varies. Message and data
+                      rates may apply. Reply STOP to opt out or HELP for assistance. Consent is not
+                      a condition of purchasing any products or services.
+                    </label>
+                  </div>
+                  <p className="pl-7 text-sm leading-relaxed text-[#2E2E2E]">
+                    <a
+                      href="https://www.infinitehomelending.com/privacy-policy"
+                      className="text-[#0B2A4A] underline decoration-[#C6A15B]/60 underline-offset-2 hover:text-[#C6A15B]"
+                    >
+                      Privacy Policy
+                    </a>
+                    <span aria-hidden="true"> | </span>
+                    <a
+                      href="https://www.infinitehomelending.com/sms-terms"
+                      className="text-[#0B2A4A] underline decoration-[#C6A15B]/60 underline-offset-2 hover:text-[#C6A15B]"
+                    >
+                      SMS Terms &amp; Conditions
+                    </a>
+                  </p>
                 </div>
 
                 <div>

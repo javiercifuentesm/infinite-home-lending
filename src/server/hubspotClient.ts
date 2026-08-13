@@ -581,10 +581,16 @@ function buildRequestACallNotes(params: {
   bestTimeToReach: string;
   focusNotes: string;
   matchType: "new" | "matched";
+  smsConsent: boolean;
+  smsConsentTimestamp: string;
 }): string[] {
   const notes = [
     `[Request a Call — ${params.matchType === "matched" ? "matched existing contact by phone" : "new contact"}]`,
     `Best day & time to reach: ${params.bestTimeToReach}`,
+    `SMS Consent: ${params.smsConsent ? "Yes" : "No"}`,
+    `SMS Consent Source: /request-a-call`,
+    `SMS Consent Disclosure Version: IHL-SMS-v1-2026-08`,
+    `SMS Consent Timestamp: ${params.smsConsentTimestamp}`,
   ];
   if (params.focusNotes.trim()) {
     notes.push(`Call focus: ${params.focusNotes.trim()}`);
@@ -635,6 +641,8 @@ export async function syncRequestACallHubSpotContact(params: {
   loanPurposeLabel: string;
   bestTimeToReach: string;
   focusNotes: string;
+  smsConsent: boolean;
+  smsConsentTimestamp: string;
 }): Promise<RequestACallHubSpotResult> {
   const apiKey = process.env.HUBSPOT_API_KEY;
   if (!apiKey) {
@@ -681,6 +689,8 @@ export async function syncRequestACallHubSpotContact(params: {
       bestTimeToReach: params.bestTimeToReach,
       focusNotes: params.focusNotes,
       matchType: "matched",
+      smsConsent: params.smsConsent,
+      smsConsentTimestamp: params.smsConsentTimestamp,
     });
     await attachHubSpotNotes(existing.id, matchedNotes, apiKey);
 
@@ -743,6 +753,8 @@ export async function syncRequestACallHubSpotContact(params: {
     bestTimeToReach: params.bestTimeToReach,
     focusNotes: params.focusNotes,
     matchType: "new",
+    smsConsent: params.smsConsent,
+    smsConsentTimestamp: params.smsConsentTimestamp,
   });
   await attachHubSpotNotes(contactId, newNotes, apiKey);
 
