@@ -1,8 +1,9 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { PageContainer } from "../components/PageContainer";
 import { IHLLogo } from "../components/IHLLogo";
 import { usePageMetadata } from "../hooks/usePageMetadata";
 import { apiUrl } from "../lib/apiBase";
+import { formatPhoneNumber } from "../lib/formatPhoneNumber";
 
 const LOAN_PURPOSE_OPTIONS = [
   { value: "purchase", label: "Purchase a home" },
@@ -11,14 +12,55 @@ const LOAN_PURPOSE_OPTIONS = [
   { value: "reverse", label: "Reverse mortgage" },
 ] as const;
 
-const BEST_DAY_OPTIONS = ["Weekdays", "Weekends", "Either Works"] as const;
-const BEST_TIME_OPTIONS = ["Morning", "Afternoon", "Evening"] as const;
+const BEST_DAY_OPTIONS = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+] as const;
+
+const BEST_TIME_OPTIONS = [
+  "9:00 AM",
+  "10:00 AM",
+  "11:00 AM",
+  "12:00 PM",
+  "1:00 PM",
+  "2:00 PM",
+  "3:00 PM",
+  "4:00 PM",
+  "5:00 PM",
+  "6:00 PM",
+  "7:00 PM",
+] as const;
+
+const LEAD_SOURCE_OPTIONS = [
+  "Facebook",
+  "Instagram",
+  "Google Search",
+  "Referral – Friend or Family",
+  "Realtor Referral",
+  "Other Lending Professional",
+  "Other",
+] as const;
+
+const UTM_PARAM_KEYS = [
+  "utm_source",
+  "utm_medium",
+  "utm_campaign",
+  "utm_content",
+  "utm_term",
+] as const;
+
+type UtmParams = Partial<Record<(typeof UTM_PARAM_KEYS)[number], string>>;
 
 type FormState = {
   fullName: string;
   phone: string;
   smsConsent: boolean;
+  email: string;
   loanPurpose: string;
+  leadSource: string;
   bestDay: string;
   bestTime: string;
   focusNotes: string;
@@ -28,11 +70,17 @@ const INITIAL: FormState = {
   fullName: "",
   phone: "",
   smsConsent: false,
+  email: "",
   loanPurpose: "",
+  leadSource: "",
   bestDay: "",
   bestTime: "",
   focusNotes: "",
 };
+
+function isValidEmail(email: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+}
 
 const labelClass =
   "mb-2 block text-[11px] font-medium uppercase tracking-[0.1em] text-[#0B2A4A]";
@@ -54,6 +102,7 @@ export default function RequestACall() {
   });
 
   const [form, setForm] = useState<FormState>(INITIAL);
+  const [utmParams, setUtmParams] = useState<UtmParams>({});
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -62,6 +111,16 @@ export default function RequestACall() {
     setForm((prev) => ({ ...prev, [key]: value }));
     setError(null);
   };
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const captured: UtmParams = {};
+    for (const key of UTM_PARAM_KEYS) {
+      const value = params.get(key)?.trim();
+      if (value) captured[key] = value;
+    }
+    setUtmParams(captured);
+  }, []);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -75,8 +134,16 @@ export default function RequestACall() {
       setError("Please enter your best phone number.");
       return;
     }
+    if (!form.email.trim() || !isValidEmail(form.email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
     if (!form.loanPurpose) {
       setError("Please select a loan purpose.");
+      return;
+    }
+    if (!form.leadSource) {
+      setError("Please select how you heard about us.");
       return;
     }
     if (!form.bestDay) {
@@ -99,10 +166,13 @@ export default function RequestACall() {
           fullName: form.fullName.trim(),
           phone: form.phone.trim(),
           smsConsent: form.smsConsent === true,
+          email: form.email.trim(),
           loanPurpose: form.loanPurpose,
+          leadSource: form.leadSource,
           bestDay: form.bestDay,
           bestTime: form.bestTime,
           focusNotes: form.focusNotes.trim() || undefined,
+          ...utmParams,
         }),
       });
 
@@ -199,7 +269,7 @@ export default function RequestACall() {
                     required
                     placeholder="(312) 234-2345"
                     value={form.phone}
-                    onChange={(e) => update("phone", e.target.value)}
+                    onChange={(e) => update("phone", formatPhoneNumber(e.target.value))}
                     className={fieldClass}
                   />
                 </div>
@@ -243,6 +313,21 @@ export default function RequestACall() {
                 </div>
 
                 <div>
+                  <label htmlFor="rac-email" className={labelClass}>
+                    Email *
+                  </label>
+                  <input
+                    id="rac-email"
+                    type="email"
+                    autoComplete="email"
+                    required
+                    value={form.email}
+                    onChange={(e) => update("email", e.target.value)}
+                    className={fieldClass}
+                  />
+                </div>
+
+                <div>
                   <label htmlFor="rac-loan-purpose" className={labelClass}>
                     Loan purpose *
                   </label>
@@ -259,6 +344,28 @@ export default function RequestACall() {
                     {LOAN_PURPOSE_OPTIONS.map((opt) => (
                       <option key={opt.value} value={opt.value}>
                         {opt.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label htmlFor="rac-lead-source" className={labelClass}>
+                    How did you hear about us? *
+                  </label>
+                  <select
+                    id="rac-lead-source"
+                    required
+                    value={form.leadSource}
+                    onChange={(e) => update("leadSource", e.target.value)}
+                    className={selectClass}
+                  >
+                    <option value="" disabled>
+                      Select an option
+                    </option>
+                    {LEAD_SOURCE_OPTIONS.map((opt) => (
+                      <option key={opt} value={opt}>
+                        {opt}
                       </option>
                     ))}
                   </select>

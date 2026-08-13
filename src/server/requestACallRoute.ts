@@ -21,8 +21,45 @@ const LOAN_PURPOSE_OPTIONS: Record<string, string> = {
   reverse: "Reverse Mortgage",
 };
 
-const BEST_DAY_OPTIONS = new Set(["Weekdays", "Weekends", "Either Works"]);
-const BEST_TIME_OPTIONS = new Set(["Morning", "Afternoon", "Evening"]);
+const BEST_DAY_OPTIONS = new Set([
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+]);
+
+const BEST_TIME_OPTIONS = new Set([
+  "9:00 AM",
+  "10:00 AM",
+  "11:00 AM",
+  "12:00 PM",
+  "1:00 PM",
+  "2:00 PM",
+  "3:00 PM",
+  "4:00 PM",
+  "5:00 PM",
+  "6:00 PM",
+  "7:00 PM",
+]);
+
+const LEAD_SOURCE_OPTIONS = new Set([
+  "Facebook",
+  "Instagram",
+  "Google Search",
+  "Referral – Friend or Family",
+  "Realtor Referral",
+  "Other Lending Professional",
+  "Other",
+]);
+
+const UTM_PARAM_KEYS = [
+  "utm_source",
+  "utm_medium",
+  "utm_campaign",
+  "utm_content",
+  "utm_term",
+] as const;
 
 const SMS_CONSENT_SOURCE = "/request-a-call";
 const SMS_CONSENT_DISCLOSURE_VERSION = "IHL-SMS-v1-2026-08";
@@ -50,12 +87,27 @@ function buildSmsConsentRecord(
   };
 }
 
+type UtmParams = Partial<Record<(typeof UTM_PARAM_KEYS)[number], string>>;
+
+function parseUtmParams(body: Record<string, unknown>): UtmParams {
+  const utm: UtmParams = {};
+  for (const key of UTM_PARAM_KEYS) {
+    const value = String(body[key] ?? "").trim();
+    if (value) utm[key] = value;
+  }
+  return utm;
+}
+
 function formatBestTimeToReach(bestDay: string, bestTime: string): string {
   return `${bestDay}, ${bestTime}`;
 }
 
 function validatePhone(phone: string): boolean {
   return normalizePhone(phone).length >= 10;
+}
+
+function validateEmail(email: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
 }
 
 function splitFullName(fullName: string): { firstName: string; lastName: string } {
@@ -72,9 +124,12 @@ function splitFullName(fullName: string): { firstName: string; lastName: string 
 async function sendRequestACallEmail(fields: {
   fullName: string;
   phone: string;
+  email: string;
   loanPurposeLabel: string;
+  leadSource: string;
   bestTimeToReach: string;
   focusNotes: string;
+  utmParams: UtmParams;
   contactId: string | null;
   matchType: "new" | "matched" | "skipped";
   smsConsentRecord: SmsConsentRecord;
@@ -96,6 +151,11 @@ async function sendRequestACallEmail(fields: {
     ? `<p style="margin:0 0 20px;"><a href="${e(getHubSpotContactRecordUrl(fields.contactId))}" style="color:#0B2A4A;font-weight:600;">Open contact in HubSpot →</a></p>`
     : "";
 
+  const utmRows = UTM_PARAM_KEYS.filter((key) => fields.utmParams[key]).map(
+    (key) =>
+      `<tr><td style="padding:10px 0;color:#64748b;border-bottom:1px solid #f1f5f9;">${e(key)}</td><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;">${e(fields.utmParams[key] ?? "")}</td></tr>`,
+  );
+
   const html = `
     <div style="font-family:Inter,Arial,sans-serif;max-width:560px;color:#2E2E2E;">
       <h2 style="color:#0B2A4A;margin:0 0 16px;font-family:Georgia,serif;">New Request a Call — ${e(fields.fullName)}</h2>
@@ -109,8 +169,11 @@ async function sendRequestACallEmail(fields: {
         <tr><td style="padding:10px 0;color:#64748b;border-bottom:1px solid #f1f5f9;">SMS Consent Source</td><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;">${e(fields.smsConsentRecord.smsConsentSource)}</td></tr>
         <tr><td style="padding:10px 0;color:#64748b;border-bottom:1px solid #f1f5f9;">SMS Consent Disclosure Version</td><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;">${e(fields.smsConsentRecord.smsConsentDisclosureVersion)}</td></tr>
         <tr><td style="padding:10px 0;color:#64748b;border-bottom:1px solid #f1f5f9;">SMS Consent Timestamp</td><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;">${e(fields.smsConsentRecord.smsConsentTimestamp)}</td></tr>
+        <tr><td style="padding:10px 0;color:#64748b;border-bottom:1px solid #f1f5f9;">Email</td><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;">${e(fields.email)}</td></tr>
         <tr><td style="padding:10px 0;color:#64748b;border-bottom:1px solid #f1f5f9;">Loan purpose</td><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;">${e(fields.loanPurposeLabel)}</td></tr>
+        <tr><td style="padding:10px 0;color:#64748b;border-bottom:1px solid #f1f5f9;">How did you hear about us?</td><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;">${e(fields.leadSource)}</td></tr>
         <tr><td style="padding:10px 0;color:#64748b;border-bottom:1px solid #f1f5f9;">Best day &amp; time</td><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;">${e(fields.bestTimeToReach)}</td></tr>
+        ${utmRows.join("")}
       </table>
       <p style="margin:20px 0 8px;color:#64748b;font-size:12px;text-transform:uppercase;letter-spacing:0.08em;">Call focus (optional)</p>
       <p style="margin:0;font-size:14px;line-height:1.7;white-space:pre-wrap;">${e(fields.focusNotes || "—")}</p>
@@ -147,18 +210,28 @@ export function createRequestACallRouter(): Router {
         fullName?: string;
         phone?: string;
         smsConsent?: boolean;
+        email?: string;
         loanPurpose?: string;
+        leadSource?: string;
         bestDay?: string;
         bestTime?: string;
         focusNotes?: string;
+        utm_source?: string;
+        utm_medium?: string;
+        utm_campaign?: string;
+        utm_content?: string;
+        utm_term?: string;
       };
 
       const fullName = String(body.fullName ?? "").trim();
       const phone = String(body.phone ?? "").trim();
+      const email = String(body.email ?? "").trim();
       const loanPurpose = String(body.loanPurpose ?? "").trim();
+      const leadSource = String(body.leadSource ?? "").trim();
       const bestDay = String(body.bestDay ?? "").trim();
       const bestTime = String(body.bestTime ?? "").trim();
       const focusNotes = String(body.focusNotes ?? "").trim();
+      const utmParams = parseUtmParams(body);
 
       if (!fullName) {
         return res.status(400).json({ error: "Full name is required." });
@@ -166,8 +239,14 @@ export function createRequestACallRouter(): Router {
       if (!phone || !validatePhone(phone)) {
         return res.status(400).json({ error: "A valid phone number is required." });
       }
+      if (!email || !validateEmail(email)) {
+        return res.status(400).json({ error: "Please enter a valid email address." });
+      }
       if (!loanPurpose || !LOAN_PURPOSE_OPTIONS[loanPurpose]) {
         return res.status(400).json({ error: "Please select a loan purpose." });
+      }
+      if (!leadSource || !LEAD_SOURCE_OPTIONS.has(leadSource)) {
+        return res.status(400).json({ error: "Please select how you heard about us." });
       }
       if (!bestDay || !BEST_DAY_OPTIONS.has(bestDay)) {
         return res.status(400).json({ error: "Please select the best day to reach you." });
@@ -196,9 +275,12 @@ export function createRequestACallRouter(): Router {
           lastName,
           phone,
           phoneNormalized,
+          email,
           loanPurposeLabel,
+          leadSource,
           bestTimeToReach,
           focusNotes,
+          utmParams,
           smsConsent,
           smsConsentTimestamp: submissionTimestamp,
         });
@@ -209,9 +291,12 @@ export function createRequestACallRouter(): Router {
       await sendRequestACallEmail({
         fullName,
         phone,
+        email,
         loanPurposeLabel,
+        leadSource,
         bestTimeToReach,
         focusNotes,
+        utmParams,
         contactId: hubSpotResult.contactId,
         matchType: hubSpotResult.matchType,
         smsConsentRecord,

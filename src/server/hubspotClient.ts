@@ -25,6 +25,27 @@ const IHL_HUBSPOT_PROPERTIES = {
   phoneNormalized: "ihl_phone_normalized",
 } as const;
 
+const HUBSPOT_UTM_PROPERTIES = [
+  "utm_source",
+  "utm_medium",
+  "utm_campaign",
+  "utm_content",
+  "utm_term",
+] as const;
+
+export type HubSpotUtmParams = Partial<Record<(typeof HUBSPOT_UTM_PROPERTIES)[number], string>>;
+
+function applyUtmProperties(
+  properties: Record<string, string>,
+  utmParams?: HubSpotUtmParams,
+): void {
+  if (!utmParams) return;
+  for (const key of HUBSPOT_UTM_PROPERTIES) {
+    const value = utmParams[key]?.trim();
+    if (value) properties[key] = value;
+  }
+}
+
 export const HUBSPOT_CONTACT_RECORD_BASE_URL =
   "https://app.hubspot.com/contacts/246447376/record/0-1";
 
@@ -603,6 +624,7 @@ function buildPhoneOnlyContactProperties(params: {
   lastName: string;
   phone: string;
   phoneNormalized: string;
+  email: string;
   loanPurpose: string;
   leadSource: string;
   newUnworkedIhlLeadStatus?: string;
@@ -611,6 +633,7 @@ function buildPhoneOnlyContactProperties(params: {
     firstname: params.firstName.trim() || "Unknown",
     lastname: params.lastName.trim(),
     phone: params.phone.trim(),
+    email: params.email.trim(),
     [IHL_HUBSPOT_PROPERTIES.phoneNormalized]: params.phoneNormalized,
     [IHL_HUBSPOT_PROPERTIES.loanPurpose]: params.loanPurpose,
     [IHL_HUBSPOT_PROPERTIES.leadSource]: params.leadSource,
@@ -638,9 +661,12 @@ export async function syncRequestACallHubSpotContact(params: {
   lastName: string;
   phone: string;
   phoneNormalized: string;
+  email: string;
   loanPurposeLabel: string;
+  leadSource: string;
   bestTimeToReach: string;
   focusNotes: string;
+  utmParams?: HubSpotUtmParams;
   smsConsent: boolean;
   smsConsentTimestamp: string;
 }): Promise<RequestACallHubSpotResult> {
@@ -662,11 +688,26 @@ export async function syncRequestACallHubSpotContact(params: {
       [IHL_HUBSPOT_PROPERTIES.phoneNormalized]: params.phoneNormalized,
     };
 
+    if (params.leadSource) {
+      const currentLeadSource =
+        existing.properties[IHL_HUBSPOT_PROPERTIES.leadSource]?.trim() ?? "";
+      if (!currentLeadSource) {
+        updateProperties[IHL_HUBSPOT_PROPERTIES.leadSource] = params.leadSource;
+      }
+    }
+
+    const currentEmail = existing.properties.email?.trim() ?? "";
+    if (params.email && !currentEmail) {
+      updateProperties.email = params.email.trim();
+    }
+
     const currentLoanPurpose =
       existing.properties[IHL_HUBSPOT_PROPERTIES.loanPurpose]?.trim() ?? "";
     if (params.loanPurposeLabel && !currentLoanPurpose) {
       updateProperties[IHL_HUBSPOT_PROPERTIES.loanPurpose] = params.loanPurposeLabel;
     }
+
+    applyUtmProperties(updateProperties, params.utmParams);
 
     const patchResponse = await fetch(
       `${HUBSPOT_API}/crm/v3/objects/contacts/${existing.id}`,
@@ -703,10 +744,12 @@ export async function syncRequestACallHubSpotContact(params: {
     lastName: params.lastName,
     phone: params.phone,
     phoneNormalized: params.phoneNormalized,
+    email: params.email,
     loanPurpose: params.loanPurposeLabel,
-    leadSource: "Request a Call",
+    leadSource: params.leadSource,
     newUnworkedIhlLeadStatus: newUnworkedIhlLeadStatus ?? undefined,
   });
+  applyUtmProperties(createProperties, params.utmParams);
 
   const createResponse = await fetch(`${HUBSPOT_API}/crm/v3/objects/contacts`, {
     method: "POST",
@@ -731,7 +774,7 @@ export async function syncRequestACallHubSpotContact(params: {
 
   const dealInput: HubSpotContactInput = {
     name: params.fullName,
-    email: "",
+    email: params.email,
     firstName: params.firstName,
     lastName: params.lastName,
     phone: params.phone,
