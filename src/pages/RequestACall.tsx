@@ -298,6 +298,9 @@ export default function RequestACall() {
                   <p className="pl-7 text-sm leading-relaxed text-[#2E2E2E]">
                     <a
                       href="https://www.infinitehomelending.com/privacy-policy"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="Privacy Policy (opens in a new tab)"
                       className="text-[#0B2A4A] underline decoration-[#C6A15B]/60 underline-offset-2 hover:text-[#C6A15B]"
                     >
                       Privacy Policy
@@ -305,6 +308,9 @@ export default function RequestACall() {
                     <span aria-hidden="true"> | </span>
                     <a
                       href="https://www.infinitehomelending.com/sms-terms"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="SMS Terms & Conditions (opens in a new tab)"
                       className="text-[#0B2A4A] underline decoration-[#C6A15B]/60 underline-offset-2 hover:text-[#C6A15B]"
                     >
                       SMS Terms &amp; Conditions

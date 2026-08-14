@@ -2019,6 +2019,9 @@ export function StrategicContactExperience() {
                           <p className="font-sans text-[13px] leading-relaxed text-slate-600">
                             <a
                               href="https://www.infinitehomelending.com/privacy-policy"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label={t("contact.step.details.sms.privacyLink.aria")}
                               className="text-[#0B2A4A] underline decoration-[#C6A15B]/60 underline-offset-2 hover:text-[#C6A15B] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]/40"
                             >
                               {t("contact.step.details.sms.privacyLink")}
@@ -2026,6 +2029,9 @@ export function StrategicContactExperience() {
                             <span aria-hidden="true"> | </span>
                             <a
                               href="https://www.infinitehomelending.com/sms-terms"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label={t("contact.step.details.sms.termsLink.aria")}
                               className="text-[#0B2A4A] underline decoration-[#C6A15B]/60 underline-offset-2 hover:text-[#C6A15B] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C6A15B]/40"
                             >
                               {t("contact.step.details.sms.termsLink")}

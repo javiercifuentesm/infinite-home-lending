@@ -326,7 +326,9 @@ export const en = {
   "contact.step.details.sms.no":
     "No, I do not agree to receive SMS text messages from Infinite Home Lending.",
   "contact.step.details.sms.privacyLink": "Privacy Policy",
+  "contact.step.details.sms.privacyLink.aria": "Privacy Policy (opens in a new tab)",
   "contact.step.details.sms.termsLink": "SMS Terms & Conditions",
+  "contact.step.details.sms.termsLink.aria": "SMS Terms & Conditions (opens in a new tab)",
   "contact.step.details.sms.error": "Please select Yes or No for SMS communications.",
 
   "contact.btn.back": "Back",
