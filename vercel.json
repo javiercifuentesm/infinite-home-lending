@@ -39,6 +39,14 @@
       "destination": "https://my-homeownership-path-ihl.javiercifuentesm.chatgpt.site/api/send-feedback"
     },
     {
+      "source": "/My-Home-Equity-Review",
+      "destination": "https://my-home-equity-review-ihl.javiercifuentesm.chatgpt.site"
+    },
+    {
+      "source": "/My-Home-Equity-Review/:path*",
+      "destination": "https://my-home-equity-review-ihl.javiercifuentesm.chatgpt.site/:path*"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
