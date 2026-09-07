@@ -1,17 +1,34 @@
 {
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "redirects": [
+  "rewrites": [
     {
       "source": "/my-homeownership-path",
-      "destination": "/my-homeownership-path/",
-      "permanent": true
-    }
-  ],
-  "rewrites": [
+      "destination": "https://my-homeownership-path-ihl.javiercifuentesm.chatgpt.site"
+    },
     {
       "source": "/my-homeownership-path/:path*",
       "destination": "https://my-homeownership-path-ihl.javiercifuentesm.chatgpt.site/:path*"
+    },
+    {
+      "source": "/app.js",
+      "destination": "https://my-homeownership-path-ihl.javiercifuentesm.chatgpt.site/app.js"
+    },
+    {
+      "source": "/styles.css",
+      "destination": "https://my-homeownership-path-ihl.javiercifuentesm.chatgpt.site/styles.css"
+    },
+    {
+      "source": "/brand.css",
+      "destination": "https://my-homeownership-path-ihl.javiercifuentesm.chatgpt.site/brand.css"
+    },
+    {
+      "source": "/ihl-logo.png",
+      "destination": "https://my-homeownership-path-ihl.javiercifuentesm.chatgpt.site/ihl-logo.png"
+    },
+    {
+      "source": "/ihl-logo-email.png",
+      "destination": "https://my-homeownership-path-ihl.javiercifuentesm.chatgpt.site/ihl-logo-email.png"
     },
     {
       "source": "/api/send-plan",
