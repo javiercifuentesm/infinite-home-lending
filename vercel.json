@@ -4,9 +4,26 @@
   "redirects": [
     {
       "source": "/my-homeownership-path",
-      "destination": "https://my-homeownership-path-ihl.javiercifuentesm.chatgpt.site",
-      "permanent": false
+      "destination": "/my-homeownership-path/",
+      "permanent": true
     }
   ],
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "rewrites": [
+    {
+      "source": "/my-homeownership-path/:path*",
+      "destination": "https://my-homeownership-path-ihl.javiercifuentesm.chatgpt.site/:path*"
+    },
+    {
+      "source": "/api/send-plan",
+      "destination": "https://my-homeownership-path-ihl.javiercifuentesm.chatgpt.site/api/send-plan"
+    },
+    {
+      "source": "/api/send-feedback",
+      "destination": "https://my-homeownership-path-ihl.javiercifuentesm.chatgpt.site/api/send-feedback"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
 }
