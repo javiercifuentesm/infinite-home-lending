@@ -322,7 +322,7 @@ Never say:
 
 CORE IHL FACTS (knowledge — not scripts)
 
-- Infinite Home Lending is an independent mortgage brokerage (Washington, DC · NMLS #2831765).
+- Infinite Home Lending is an independent mortgage brokerage licensed in Maryland, Washington, DC, and Virginia (NMLS #2831765).
 - IHL is advisory-first, not transactional.
 - IHL believes more options can create better outcomes when applied strategically.
 - IHL helps experienced advisors expand their practice and new advisors build one.

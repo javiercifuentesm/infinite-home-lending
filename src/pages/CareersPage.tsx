@@ -110,14 +110,14 @@ const IHL_FOUNDATIONS = [
   "Advisor Intelligence",
   "Institutional Infrastructure",
   "Client-First Advisory",
-  "Washington, DC Focus",
+  "DMV Market Focus",
   "Founder-Led Firm",
 ] as const;
 
 const INSTITUTIONAL_METRICS = [
   { label: "Advisor Model", value: "Broker Independence" },
   { label: "Technology", value: "AI-Powered Infrastructure" },
-  { label: "Market", value: "Washington, DC Focused" },
+  { label: "Market", value: "MD · DC · VA Focused" },
 ] as const;
 
 const FOUNDER_LETTER = [
@@ -162,7 +162,7 @@ const LOOKING_FOR = [
   {
     title: "You prefer depth in one market over breadth without focus.",
     detail:
-      "Washington, DC is where we are planted. Our tools, intelligence, and energy are built for this market.",
+      "The DMV is where we are planted. Our tools, intelligence, and energy are built for Maryland, Washington, DC, and Virginia.",
   },
 ] as const;
 
@@ -299,7 +299,7 @@ export default function CareersPage() {
   usePageMetadata({
     title: "Careers | Infinite Home Lending",
     description:
-      "Join Infinite Home Lending as a Mortgage Advisor in Washington, DC. An institutional platform for advisors who approach lending as strategic counsel.",
+      "Explore Mortgage Advisor careers with Infinite Home Lending across Maryland, Washington, DC, and Virginia—an advisory-first platform for disciplined professionals.",
     canonical: "https://www.infinitehomelending.com/careers",
   });
 
@@ -345,7 +345,7 @@ export default function CareersPage() {
                   className="max-w-md text-[15px] leading-[1.75]"
                   style={{ ...lightBody, margin: "0 0 32px" }}
                 >
-                  Infinite Home Lending is a Washington, DC mortgage brokerage for advisors who
+                  Infinite Home Lending is a DMV mortgage brokerage serving Maryland, Washington, DC, and Virginia for advisors who
                   approach lending as strategic counsel — with institutional tools, broker
                   independence, and a culture of disciplined execution.
                 </p>
@@ -808,8 +808,8 @@ export default function CareersPage() {
         <div className="grid gap-12 lg:grid-cols-2">
           <div>
             <ul className="space-y-4 text-sm leading-relaxed" style={lightBody}>
-              <li>Location: Washington, DC (in-person or hybrid)</li>
-              <li>License required: Active NMLS license, DC jurisdiction preferred</li>
+              <li>Market: Maryland, Washington, DC, and Virginia (in-person, field-based, or hybrid as assigned)</li>
+              <li>License required: Active NMLS license and authorization in each jurisdiction served</li>
               <li>Experience: 2+ years originating residential mortgages</li>
               <li>Languages: English required; Spanish a strong plus</li>
               <li>Start: As soon as the right person is found</li>

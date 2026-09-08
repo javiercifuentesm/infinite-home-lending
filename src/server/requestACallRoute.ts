@@ -126,6 +126,7 @@ async function sendRequestACallEmail(fields: {
   phone: string;
   email: string;
   loanPurposeLabel: string;
+  propertyState: string;
   leadSource: string;
   bestTimeToReach: string;
   focusNotes: string;
@@ -171,6 +172,7 @@ async function sendRequestACallEmail(fields: {
         <tr><td style="padding:10px 0;color:#64748b;border-bottom:1px solid #f1f5f9;">SMS Consent Timestamp</td><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;">${e(fields.smsConsentRecord.smsConsentTimestamp)}</td></tr>
         <tr><td style="padding:10px 0;color:#64748b;border-bottom:1px solid #f1f5f9;">Email</td><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;">${e(fields.email)}</td></tr>
         <tr><td style="padding:10px 0;color:#64748b;border-bottom:1px solid #f1f5f9;">Loan purpose</td><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;">${e(fields.loanPurposeLabel)}</td></tr>
+        <tr><td style="padding:10px 0;color:#64748b;border-bottom:1px solid #f1f5f9;">Property state</td><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;">${e(fields.propertyState)}</td></tr>
         <tr><td style="padding:10px 0;color:#64748b;border-bottom:1px solid #f1f5f9;">How did you hear about us?</td><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;">${e(fields.leadSource)}</td></tr>
         <tr><td style="padding:10px 0;color:#64748b;border-bottom:1px solid #f1f5f9;">Best day &amp; time</td><td style="padding:10px 0;border-bottom:1px solid #f1f5f9;">${e(fields.bestTimeToReach)}</td></tr>
         ${utmRows.join("")}
@@ -212,6 +214,7 @@ export function createRequestACallRouter(): Router {
         smsConsent?: boolean;
         email?: string;
         loanPurpose?: string;
+        propertyState?: string;
         leadSource?: string;
         bestDay?: string;
         bestTime?: string;
@@ -227,6 +230,7 @@ export function createRequestACallRouter(): Router {
       const phone = String(body.phone ?? "").trim();
       const email = String(body.email ?? "").trim();
       const loanPurpose = String(body.loanPurpose ?? "").trim();
+      const propertyState = String(body.propertyState ?? "").trim().toUpperCase();
       const leadSource = String(body.leadSource ?? "").trim();
       const bestDay = String(body.bestDay ?? "").trim();
       const bestTime = String(body.bestTime ?? "").trim();
@@ -244,6 +248,9 @@ export function createRequestACallRouter(): Router {
       }
       if (!loanPurpose || !LOAN_PURPOSE_OPTIONS[loanPurpose]) {
         return res.status(400).json({ error: "Please select a loan purpose." });
+      }
+      if (!new Set(["MD", "DC", "VA"]).has(propertyState)) {
+        return res.status(400).json({ error: "Please select a licensed property state." });
       }
       if (!leadSource || !LEAD_SOURCE_OPTIONS.has(leadSource)) {
         return res.status(400).json({ error: "Please select how you heard about us." });
@@ -293,6 +300,7 @@ export function createRequestACallRouter(): Router {
         phone,
         email,
         loanPurposeLabel,
+        propertyState,
         leadSource,
         bestTimeToReach,
         focusNotes,

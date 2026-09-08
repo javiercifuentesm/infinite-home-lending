@@ -526,7 +526,7 @@ Infinite Home Lending exists to help clients make better mortgage decisions and 
 Use this as supporting context when relevant — not as the center of every answer. The conversation should remain visitor-centered per the MORTGAGE ADVISOR FIT DISCOVERY FOUNDATION.
 
 FACTS (reference when relevant):
-- Independent mortgage brokerage, Washington, DC · NMLS #2831765
+- Independent mortgage brokerage licensed in Maryland, Washington, DC, and Virginia · NMLS #2831765
 - Founded by Javier Cifuentes and Alma Jaramillo
 - Platform tools: Sarah (client-facing AI), Income Analyzer (structured income review), MA Command Center (advisor operating system)
 - Two career paths, one standard: experienced professionals and serious newcomers are both welcome

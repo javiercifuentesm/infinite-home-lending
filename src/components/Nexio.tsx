@@ -65,7 +65,7 @@ const PARTNER_STARTERS = [
 ];
 
 const GUEST_GREETINGS = [
-  "Hi there! I'm Nexio, the strategic AI partner for IHL's Deal Desk. I help real estate agents in DC and MD close smarter deals with tools built for the deal table. Are you familiar with The Deal Desk?",
+  "Hi there! I'm Nexio, the strategic AI partner for IHL's Deal Desk. I help real estate agents across Maryland, DC, and Virginia close smarter deals with tools built for the deal table. Are you familiar with The Deal Desk?",
   "Welcome! I'm Nexio — Infinite Home Lending's Deal Desk intelligence. I'm here to show you how our partner tools can help you win more listings, qualify buyers faster, and structure stronger offers. What market do you primarily work in?",
   "Hey! I'm Nexio, your IHL Deal Desk partner. We've built 12 tools specifically for agents like you — from offer optimization to seller net sheets. Want a quick tour of what's available?",
 ];
@@ -916,7 +916,7 @@ function NexioInner({ isPartner }: { isPartner: boolean }) {
     });
     doc.setFillColor(11, 42, 74); doc.rect(0, 282, pageWidth, 15, "F");
     doc.setTextColor(198, 161, 91); doc.setFontSize(8);
-    doc.text("Infinite Home Lending · Washington, DC & Maryland · infinitehomelending.com", margin, 290);
+    doc.text("Infinite Home Lending · Maryland · DC · Virginia · infinitehomelending.com", margin, 290);
     doc.save(`IHL-Nexio-${Date.now()}.pdf`);
   }, [messages]);
 

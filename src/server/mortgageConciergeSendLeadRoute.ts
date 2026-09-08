@@ -1228,18 +1228,38 @@ function generateComplianceNote(): string {
 export type MortgageAdvisor = {
   name: string;
   email: string;
+  licensedStates: string[];
 };
 
 export function getMortgageAdvisors(): MortgageAdvisor[] {
   const raw =
-    process.env.MORTGAGE_ADVISORS ?? "Alma Jaramillo:Alma.Jaramillo@infinitehomelending.com";
+    process.env.MORTGAGE_ADVISORS ?? "Alma Jaramillo:Alma.Jaramillo@infinitehomelending.com:MD|DC";
   return raw
     .split(",")
     .map((entry) => {
-      const [name, email] = entry.trim().split(":");
-      return { name: name?.trim() ?? "", email: email?.trim() ?? "" };
+      const [name, email, states = ""] = entry.trim().split(":");
+      const licensedStates = states
+        .split("|")
+        .map((state) => state.trim().toUpperCase())
+        .filter((state) => ["MD", "DC", "VA"].includes(state));
+      return { name: name?.trim() ?? "", email: email?.trim() ?? "", licensedStates };
     })
     .filter((ma) => ma.name && ma.email);
+}
+
+export function isAdvisorAuthorizedForState(advisor: MortgageAdvisor, propertyState: string): boolean {
+  const normalized = propertyState.trim().toUpperCase();
+  return !normalized || advisor.licensedStates.includes(normalized);
+}
+
+export function detectPropertyState(text: string, explicitState?: unknown): string {
+  const explicit = String(explicitState ?? "").trim().toUpperCase();
+  if (["MD", "DC", "VA"].includes(explicit)) return explicit;
+  const normalized = text.toLowerCase();
+  if (/\bvirginia\b|\bnorthern va\b|\bnova\b/.test(normalized)) return "VA";
+  if (/\bmaryland\b/.test(normalized)) return "MD";
+  if (/\bwashington,?\s*d\.?c\.?\b|\bdistrict of columbia\b/.test(normalized)) return "DC";
+  return "";
 }
 
 /* ── Token store (in-memory) ── */
@@ -1258,6 +1278,7 @@ export type AssignmentToken = {
   preferredContact: string;
   transactionType: string;
   transactionEmoji: string;
+  propertyState: string;
   transcript: string;
   html: string;
   createdAt: number;
@@ -1312,6 +1333,15 @@ export function generateAssignmentSection(
   tokens: { ma: MortgageAdvisor; token: string }[],
   baseUrl: string,
 ): string {
+  if (tokens.length === 0) {
+    return `
+      <tr>
+        <td style="background-color:#FFF7ED;border-top:3px solid #F59E0B;padding:28px 40px;">
+          <p style="margin:0 0 6px;color:#9A3412;font-size:13px;font-weight:bold;">Manual assignment required</p>
+          <p style="margin:0;color:#7C2D12;font-size:12px;line-height:1.5;">No configured Mortgage Advisor is authorized for the detected property state. Verify the individual MLO license and sponsorship before assignment.</p>
+        </td>
+      </tr>`;
+  }
   const buttons = tokens
     .map(
       ({ ma, token }) => `
@@ -1822,6 +1852,7 @@ export function createMortgageConciergeSendLeadRouter(): Router {
     } = b;
 
     const tRaw = String(transcript ?? "");
+    const propertyState = detectPropertyState(tRaw, b.property_state);
     const visitorTranscript = getVisitorOnlyTranscript(tRaw);
     const { type: transactionType, emoji: transactionEmoji } = detectTransactionType(visitorTranscript);
     const purchaseTimeline = tRaw.match(/(\d+)\s*(month|year)/i)?.[0] ?? "";
@@ -1917,7 +1948,9 @@ export function createMortgageConciergeSendLeadRouter(): Router {
       String(time ?? ""),
     );
 
-    const advisors = getMortgageAdvisors();
+    const advisors = getMortgageAdvisors().filter((ma) =>
+      isAdvisorAuthorizedForState(ma, propertyState),
+    );
     const baseUrl = process.env.API_BASE_URL ?? "https://infinite-home-lending-production.up.railway.app";
 
     const advisorTokens = advisors.map((ma) => ({
@@ -1936,6 +1969,7 @@ export function createMortgageConciergeSendLeadRouter(): Router {
         preferredContact: String(preferred_contact ?? ""),
         transactionType,
         transactionEmoji,
+        propertyState,
         transcript: tRaw,
         html: "",
       }),

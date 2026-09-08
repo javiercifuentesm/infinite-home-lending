@@ -119,17 +119,17 @@ const ALL_PROGRAMS: ProgramOverview[] = [
   {
     name: "Down Payment Assistance Programs",
     emoji: "🤝",
-    tagline: "Washington, DC & Maryland have active programs that most buyers don't know exist.",
+    tagline: "Maryland, Washington, DC & Virginia have active programs that many buyers don't know exist.",
     bestFor: "First-time buyers, moderate-income buyers, and buyers in specific professions or geographic areas — eligibility varies by program.",
     whatMakesItDifferent: "DPA programs are offered by state and local housing agencies to reduce the barrier of the down payment and closing costs. MD, DC, and VA each have multiple active programs. IHL stays current on all active programs and can quickly determine eligibility.",
     questionsToAskIHL: [
-      "What DPA programs are currently active in Washington, DC & Maryland?",
+      "What DPA programs are currently active in Maryland, Washington, DC & Virginia?",
       "Does my buyer's situation make them a candidate for any programs?",
       "How does DPA affect the offer — do sellers see it differently?",
       "Can DPA be combined with other loan types?",
       "What's the timeline impact of using a DPA program?",
     ],
-    whatToTellYourClient: "\"Washington, DC & Maryland have programs that help buyers with down payment and closing costs — and most people have no idea they exist or that they might qualify. I want IHL to check your eligibility before we assume you need to come up with the full amount yourself.\"",
+    whatToTellYourClient: "\"Maryland, Washington, DC & Virginia have programs that may help eligible buyers with down payment and closing costs. I want IHL to check the current options before we assume you need to provide the full amount yourself.\"",
     highlighted: false,
   },
   {

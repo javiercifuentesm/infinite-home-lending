@@ -1454,6 +1454,7 @@ export function createSubmitLeadRouter(): Router {
       const clientSessionId =
         typeof body.clientId === "string" ? body.clientId.trim().slice(0, 120) : "";
       const path = typeof body.path === "string" ? body.path.trim() : "";
+      const propertyState = typeof body.propertyState === "string" ? body.propertyState.trim().toUpperCase() : "";
       const hasUploadedStatement = Boolean(body.hasUploadedStatement);
       const fileKey =
         typeof body.fileKey === "string" && body.fileKey.trim().length > 0 ? body.fileKey.trim() : null;
@@ -1492,8 +1493,12 @@ export function createSubmitLeadRouter(): Router {
       if (!ALLOWED_PATHS.has(path)) {
         return res.status(400).json({ error: "Invalid path." });
       }
+      if (!["MD", "DC", "VA"].includes(propertyState)) {
+        return res.status(400).json({ error: "Valid property state is required." });
+      }
 
       const keyInsights: Record<string, unknown> = {};
+      keyInsights["Property state"] = propertyState;
       const entries = Object.entries(answersRaw).slice(0, MAX_ANSWER_ENTRIES);
       for (const [k, v] of entries) {
         keyInsights[k.slice(0, 120)] = v;

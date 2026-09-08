@@ -4,8 +4,10 @@ import { AnimatePresence, motion, type HTMLMotionProps } from "motion/react";
 import {
   getCitiesForDCArea,
   getCitiesForMarylandCounty,
+  getCitiesForVirginiaCounty,
   DC_AREA_KEYS,
   MARYLAND_COUNTY_KEYS,
+  VIRGINIA_COUNTY_KEYS,
 } from "../../data/purchaseLocations";
 import { useLanguage } from "../../i18n/LanguageContext";
 
@@ -14,8 +16,8 @@ export type PurchaseFlowStep = "inactive" | "intro" | "property" | "price" | "do
 export type PurchaseDataState = {
   hasProperty: boolean | null;
   address: string;
-  /** Structured location when “still exploring” — DC & MD (licensed markets). */
-  locationState: "" | "DC" | "MD";
+  /** Structured location when “still exploring” — IHL licensed markets. */
+  locationState: "" | "DC" | "MD" | "VA";
   locationCounty: string;
   locationCity: string;
   purchasePriceStr: string;
@@ -277,6 +279,22 @@ export function PurchasePathStep({ purchaseFlowStep, purchaseData, setPurchaseDa
                 >
                   Maryland
                 </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setPurchaseData((d) => ({
+                      ...d,
+                      locationState: "VA",
+                      locationCounty: "",
+                      locationCity: "",
+                    }))
+                  }
+                  className={`card-option contact-card-transition py-4 text-center font-sans text-[15px] font-semibold text-[#0B2A4A] ${
+                    purchaseData.locationState === "VA" ? "card-option--selected" : ""
+                  }`}
+                >
+                  Virginia
+                </button>
               </div>
               <p className="text-center font-sans text-[12px] leading-relaxed text-slate-500">
                 {t("contact.purchase.property.expanding")}
@@ -361,6 +379,45 @@ export function PurchasePathStep({ purchaseFlowStep, purchaseData, setPurchaseDa
                     </select>
                   </motion.div>
                 ) : null}
+                {purchaseData.locationState === "VA" ? (
+                  <motion.div
+                    id="purchase-anchor-county"
+                    key="county-layer-va"
+                    initial={reducedMotion ? false : { opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={reducedMotion ? undefined : { opacity: 0, y: -6 }}
+                    transition={{ duration: reducedMotion ? 0 : 0.3 }}
+                    className="space-y-3"
+                  >
+                    <h4 className="text-center font-heading text-[15px] font-semibold text-[#0B2A4A] sm:text-base">
+                      {t("contact.purchase.property.county.question")}
+                    </h4>
+                    <label htmlFor="sc-purchase-county-va" className="sr-only">
+                      Virginia county or independent city (optional)
+                    </label>
+                    <select
+                      id="sc-purchase-county-va"
+                      name="purchaseCountyVa"
+                      value={purchaseData.locationCounty}
+                      onChange={(e) =>
+                        setPurchaseData((d) => ({
+                          ...d,
+                          locationCounty: e.target.value,
+                          locationCity: "",
+                        }))
+                      }
+                      className="time-picker w-full"
+                      aria-label="Virginia county or independent city (optional)"
+                    >
+                      <option value="">{t("contact.purchase.property.county.placeholder")}</option>
+                      {VIRGINIA_COUNTY_KEYS.map((county) => (
+                        <option key={county} value={county}>
+                          {county}
+                        </option>
+                      ))}
+                    </select>
+                  </motion.div>
+                ) : null}
               </AnimatePresence>
 
               <AnimatePresence mode="wait">
@@ -423,6 +480,39 @@ export function PurchasePathStep({ purchaseFlowStep, purchaseData, setPurchaseDa
                     >
                       <option value="">{t("contact.purchase.property.city.placeholder")}</option>
                       {getCitiesForMarylandCounty(purchaseData.locationCounty).map((city) => (
+                        <option key={city} value={city}>
+                          {city}
+                        </option>
+                      ))}
+                    </select>
+                  </motion.div>
+                ) : null}
+                {purchaseData.locationState === "VA" && purchaseData.locationCounty ? (
+                  <motion.div
+                    id="purchase-anchor-city"
+                    key="city-layer-va"
+                    initial={reducedMotion ? false : { opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={reducedMotion ? undefined : { opacity: 0, y: -6 }}
+                    transition={{ duration: reducedMotion ? 0 : 0.3 }}
+                    className="space-y-3"
+                  >
+                    <h4 className="text-center font-heading text-[15px] font-semibold text-[#0B2A4A] sm:text-base">
+                      {t("contact.purchase.property.city.question")}
+                    </h4>
+                    <label htmlFor="sc-purchase-city-select-va" className="sr-only">
+                      Virginia city or area (optional)
+                    </label>
+                    <select
+                      id="sc-purchase-city-select-va"
+                      name="purchaseCitySelectVa"
+                      value={purchaseData.locationCity}
+                      onChange={(e) => setPurchaseData((d) => ({ ...d, locationCity: e.target.value }))}
+                      className="time-picker w-full"
+                      aria-label="Virginia city or area (optional)"
+                    >
+                      <option value="">{t("contact.purchase.property.city.placeholder")}</option>
+                      {getCitiesForVirginiaCounty(purchaseData.locationCounty).map((city) => (
                         <option key={city} value={city}>
                           {city}
                         </option>

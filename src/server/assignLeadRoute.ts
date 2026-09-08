@@ -3,6 +3,7 @@ import {
   getAssignmentToken,
   markTokenUsed,
   getMortgageAdvisors,
+  isAdvisorAuthorizedForState,
   escapeHtml,
   type AssignmentToken,
 } from "./mortgageConciergeSendLeadRoute";
@@ -243,7 +244,7 @@ function buildReviewPage(entry: AssignmentToken): string {
   const e = escapeHtml;
   const advisors = getMortgageAdvisors();
   const otherAdvisors = advisors
-    .filter((ma) => ma.email !== entry.maEmail)
+    .filter((ma) => ma.email !== entry.maEmail && isAdvisorAuthorizedForState(ma, entry.propertyState))
     .map(
       (ma) => `
         <a href="/api/assign-lead/review?token=${entry.token}&override=${encodeURIComponent(ma.email)}"
@@ -460,7 +461,9 @@ export function createAssignLeadRouter(): Router {
 
     if (overrideEmail) {
       const advisors = getMortgageAdvisors();
-      const newMA = advisors.find((ma) => ma.email === overrideEmail);
+      const newMA = advisors.find(
+        (ma) => ma.email === overrideEmail && isAdvisorAuthorizedForState(ma, entry.propertyState),
+      );
       if (newMA) {
         entry.maName = newMA.name;
         entry.maEmail = newMA.email;
@@ -482,6 +485,13 @@ export function createAssignLeadRouter(): Router {
 
     if (entry.used) {
       return res.status(410).send(buildExpiredPage("This lead has already been assigned."));
+    }
+
+    const configuredAdvisor = getMortgageAdvisors().find((ma) => ma.email === entry.maEmail);
+    if (!configuredAdvisor || !isAdvisorAuthorizedForState(configuredAdvisor, entry.propertyState)) {
+      return res.status(403).send(
+        buildExpiredPage("This advisor is not authorized for the property's state. Select an authorized advisor."),
+      );
     }
 
     const apiKey = process.env.RESEND_API_KEY;

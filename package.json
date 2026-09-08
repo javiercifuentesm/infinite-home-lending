@@ -18,6 +18,7 @@
     "server": "tsx src/server/server.ts",
     "server:agent-v3": "tsx src/server/server.ts",
     "verify:horizon": "tsx src/lib/verifyHorizonMonotonicity.ts",
+    "verify:virginia": "node --import tsx scripts/verify-virginia-activation.ts",
     "process-logo": ".venv/bin/python scripts/process-ihl-logo.py"
   },
   "dependencies": {

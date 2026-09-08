@@ -12,37 +12,37 @@ export const es = {
   "footer.askSarah": "Pregunta a Sarah",
 
   "sarah.askSarah": "Habla con Sarah",
-  "sarah.subtitle": "Concierge Hipotecaria · DC · MD",
+  "sarah.subtitle": "Concierge Hipotecaria · MD · DC · VA",
   "sarah.disclaimer":
     "Sarah es nuestra Concierge Hipotecaria de IHL. No es una asesora hipotecaria con licencia. La información proporcionada es únicamente con fines educativos.",
 
   "trustBar.nmls": "NMLS #2831765",
-  "trustBar.region": "Washington, D.C. y Maryland",
+  "trustBar.region": "Maryland, Washington, D.C. y Virginia",
   "trustBar.equalHousing": "Prestamista de Vivienda Equitativa",
 
   "home.meta.title": "Inicio",
   "home.meta.description":
-    "Asesoría hipotecaria premium en Washington, D.C. y Maryland. Compare opciones de préstamo, use calculadoras inteligentes y reciba orientación clara según sus metas—no solo una tasa.",
+    "Asesoría hipotecaria premium en Maryland, Washington, D.C. y Virginia. Compare opciones de préstamo, use calculadoras inteligentes y reciba orientación según sus metas.",
   "about.meta.title": "Nosotros",
   "about.meta.description":
     "Conozca quién es Infinite Home Lending, por qué existe y cómo nuestro enfoque de asesoría ayuda a los prestatarios a navegar el financiamiento de vivienda con claridad y confianza.",
   "solutions.meta.title": "Soluciones de Préstamo",
   "solutions.meta.description":
-    "Compare préstamos convencionales, FHA, VA, USDA, refinanciamiento, HELOC y opciones especializadas en Washington, D.C. y Maryland antes de elegir una estructura.",
+    "Compare préstamos convencionales, FHA, VA, USDA, refinanciamiento, HELOC y opciones especializadas en Maryland, Washington, D.C. y Virginia.",
   "howItWorks.meta.description":
-    "Descubra cómo Infinite Home Lending guía a prestatarios en Washington, D.C. y Maryland desde la primera llamada hasta el cierre—con hitos claros y apoyo directo del asesor.",
+    "Descubra cómo Infinite Home Lending guía a prestatarios en Maryland, Washington, D.C. y Virginia desde la primera llamada hasta el cierre.",
   "contact.meta.title": "Contáctenos",
   "contact.meta.description":
-    "Contacte a Infinite Home Lending sobre compra, refinanciamiento o capital en Washington, D.C. y Maryland. Comparta sus metas y reciba próximos pasos claros de asesores licenciados.",
+    "Contacte a Infinite Home Lending sobre compra, refinanciamiento o capital en Maryland, Washington, D.C. y Virginia. Comparta sus metas y reciba próximos pasos claros.",
   "smartTools.meta.title": "Herramientas Inteligentes",
   "smartTools.meta.description":
-    "Calculadoras hipotecarias gratuitas para compradores y propietarios en Washington, D.C. y Maryland. Modele pagos, patrimonio, costos de esperar e impacto del crédito antes de solicitar.",
+    "Calculadoras hipotecarias gratuitas para compradores y propietarios en Maryland, Washington, D.C. y Virginia. Modele pagos, patrimonio, espera y crédito.",
   "knowledge.meta.title": "Centro de Conocimiento",
   "knowledge.meta.description":
-    "Guías hipotecarias para Washington, D.C. y Maryland—compra, refinanciamiento, tipos de préstamo y números explicados sin jerga. Encuentre respuestas claras antes de decidir.",
+    "Guías hipotecarias para Maryland, Washington, D.C. y Virginia—compra, refinanciamiento, tipos de préstamo y números explicados sin jerga.",
 
   // Footer
-  "footer.tagline": "Asesoría hipotecaria de alto nivel, diseñada alrededor de su vida — no solo de su tasa. Atendemos Washington, D.C. y Maryland",
+  "footer.tagline": "Asesoría hipotecaria de alto nivel, diseñada alrededor de su vida — no solo de su tasa. Atendemos Maryland, Washington, D.C. y Virginia",
   "footer.slogan": "Préstamos a su medida. Posibilidades infinitas.",
   "footer.company": "Empresa",
   "footer.resources": "Recursos",
@@ -57,13 +57,13 @@ export const es = {
   "footer.contact": "Contacto",
   "footer.smartTools": "Herramientas inteligentes",
   "footer.dealDesk": "Deal Desk",
-  "dealDesk.partnerCTA.serviceArea": "Para profesionales inmobiliarios con licencia en Washington, D.C. y Maryland.",
+  "dealDesk.partnerCTA.serviceArea": "Para profesionales inmobiliarios con licencia en Maryland, Washington, D.C. y Virginia.",
   "footer.calculators": "Calculadoras",
   "footer.startPreApproval": "Iniciar pre-aprobación",
   "footer.rights": "Todos los derechos reservados.",
-  "footer.nmls": "Licenciado en Washington, D.C. y Maryland",
+  "footer.nmls": "Con licencia en Maryland, Washington, D.C. y Virginia",
   "footer.loanDisclaimer": "Todos los préstamos están sujetos a aprobación de crédito. Las tasas y condiciones pueden cambiar sin previo aviso.",
-  "footer.serving": "Atendemos Washington, D.C.",
+  "footer.serving": "Atendemos Maryland, Washington, D.C. y Virginia",
   "footer.privacy": "Política de privacidad",
   "footer.terms": "Términos de uso",
   "footer.compliance": "Cumplimiento",
@@ -351,7 +351,7 @@ export const es = {
   "contact.purchase.property.where.question": "¿Dónde planea comprar?",
   "contact.purchase.property.where.body": "Esto nos ayuda a entender su mercado y guiarle con más precisión.",
   "contact.purchase.property.comingSoon": "Próximamente",
-  "contact.purchase.property.expanding": "Licenciado en Washington, D.C. y Maryland.",
+  "contact.purchase.property.expanding": "Con licencia en Maryland, Washington, D.C. y Virginia.",
   "contact.purchase.property.county.question": "¿En qué condado está interesado?",
   "contact.purchase.property.county.placeholder": "Seleccione un condado",
   "contact.purchase.property.city.question": "¿Qué ciudad o área?",
@@ -505,7 +505,7 @@ export const es = {
   "smartTools.eyebrow": "Infinite Home Lending",
   "smartTools.title": "Herramientas Inteligentes",
   "smartTools.subtitle": "Herramientas interactivas diseñadas para brindar claridad en decisiones hipotecarias reales.",
-  "smartTools.builtFor": "Diseñado para Washington, D.C. y Maryland",
+  "smartTools.builtFor": "Diseñado para Maryland, Washington, D.C. y Virginia",
   "smartTools.featuredTool": "Herramienta Destacada",
   "smartTools.allTools": "Todas las Herramientas",
   "smartTools.mostUsed": "Más Utilizada",
@@ -2905,7 +2905,7 @@ export const es = {
   "compliance.licensing.meta.title": "Información de licencias",
   "compliance.licensing.meta.description":
     "Información de NMLS, licencias estatales y divulgación de originadores de préstamos hipotecarios de Infinite Home Lending.",
-  "compliance.licensing.lastUpdated": "Última actualización: junio de 2026",
+  "compliance.licensing.lastUpdated": "Última actualización: septiembre de 2026",
   "compliance.licensing.company.title": "Información de la empresa",
   "compliance.licensing.company.p1":
     "Infinite Home Lending es una correduría hipotecaria comprometida con divulgaciones de licencias transparentes y cumplimiento regulatorio.",
@@ -2913,7 +2913,7 @@ export const es = {
   "compliance.licensing.states.title": "Licencias estatales",
   "compliance.licensing.states.item1": "Licencia de Corredor Hipotecario de Washington, D.C. (activa)",
   "compliance.licensing.states.item2": "Licencia Hipotecaria de Maryland (activa)",
-  "compliance.licensing.states.item3": "Licencia de Virginia pendiente de aprobación",
+  "compliance.licensing.states.item3": "Virginia Broker License — MC-8214 (aprobada el 3 de septiembre de 2026)",
   "compliance.licensing.mlo.title": "Originadores de préstamos hipotecarios",
   "compliance.licensing.mlo.p1":
     "Los siguientes profesionales hipotecarios con licencia están asociados con Infinite Home Lending:",

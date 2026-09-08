@@ -446,7 +446,7 @@ function MortgageConciergeInner({ assetCapture = false }: { assetCapture?: boole
         "¡Hola! Soy Sarah de Infinite Home Lending. Ya sea que esté listo para comprar, pensando en refinanciar, buscando acceder al patrimonio de su vivienda o con curiosidad sobre una hipoteca inversa — estoy aquí para hacer el proceso simple y sin estrés. ¿En qué puedo ayudarle?",
         "¡Hola y bienvenido! Soy Sarah de Infinite Home Lending. Mi objetivo es ayudarle a encontrar el mejor camino — ya sea comprando una nueva vivienda, refinanciando la actual, explorando un HELOC o considerando una hipoteca inversa. ¿Qué tiene en mente hoy?",
         "¡Hola! Soy Sarah, su guía hipotecaria personal en Infinite Home Lending. Puedo ayudarle con todo, desde comprar su primera vivienda hasta refinanciar, desbloquear el patrimonio de su hogar o explorar opciones de hipoteca inversa. Sin presión — solo orientación útil. ¿Por dónde le gustaría comenzar?",
-        "¡Hola! Soy Sarah de Infinite Home Lending, atendiendo Washington, D.C. y Maryland. Ayudo a compradores y propietarios a encontrar la solución correcta — ya sea un préstamo de compra, una refinanciación, un HELOC o una hipoteca inversa. ¿Qué le gustaría explorar hoy?",
+        "¡Hola! Soy Sarah de Infinite Home Lending, atendiendo Maryland, Washington, D.C. y Virginia. Ayudo a compradores y propietarios a encontrar la solución correcta — ya sea un préstamo de compra, una refinanciación, un HELOC o una hipoteca inversa. ¿Qué le gustaría explorar hoy?",
       ]
     : [
         "Hi there! I'm Sarah with Infinite Home Lending. My job is to help you make the best mortgage decision for your situation — whether that's buying a home, refinancing, accessing your home equity, or exploring a reverse mortgage. Where would you like to start?",
@@ -454,7 +454,7 @@ function MortgageConciergeInner({ assetCapture = false }: { assetCapture?: boole
         "Hi! Sarah here from Infinite Home Lending. Whether you're ready to buy, thinking about refinancing, looking to access your home equity, or curious about a reverse mortgage — I'm here to make the process simple and stress-free. What can I help you with?",
         "Hello and welcome! I'm Sarah with Infinite Home Lending. My goal is to help you find the right path forward — whether that means purchasing a new home, refinancing your current one, exploring a HELOC, or considering a reverse mortgage. What's on your mind today?",
         "Hi there! I'm Sarah, your personal mortgage guide at Infinite Home Lending. I can help with everything from buying your first home to refinancing, unlocking your home equity, or exploring reverse mortgage options. No pressure — just helpful guidance. Where would you like to begin?",
-        "Hi! I'm Sarah with Infinite Home Lending, serving Washington, DC and Maryland. I help homebuyers and homeowners find the right solution — whether that's a purchase loan, a refinance, a HELOC, or a reverse mortgage. What would you like to explore today?",
+        "Hi! I'm Sarah with Infinite Home Lending, serving Maryland, Washington, DC, and Virginia. I help homebuyers and homeowners find the right solution — whether that's a purchase loan, a refinance, a HELOC, or a reverse mortgage. What would you like to explore today?",
       ];
 
   const [screen, setScreen] = useState<Screen>(assetCapture ? "widget" : "idle");

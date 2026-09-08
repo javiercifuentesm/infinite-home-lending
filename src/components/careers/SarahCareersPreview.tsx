@@ -23,7 +23,7 @@ const CONVERSATION = [
   },
   {
     role: "sarah" as const,
-    text: "Advisors who think strategically, communicate clearly, and prefer depth in one market over volume across many. Washington, DC is where the firm is focused.",
+    text: "Advisors who think strategically, communicate clearly, and prefer depth in the DMV over volume without focus. Maryland, Washington, DC, and Virginia are the firm's core markets.",
   },
 ];
 

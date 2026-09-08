@@ -392,6 +392,7 @@ export function StrategicContactExperience() {
   const [phoneDay, setPhoneDay] = useState<string | null>(null);
   const [phoneTime, setPhoneTime] = useState("");
   const [notes, setNotes] = useState("");
+  const [propertyState, setPropertyState] = useState<"" | "MD" | "DC" | "VA">("");
 
   /** Purchase path — only when “I’m planning to buy a home” is selected. */
   const [purchaseFlowStep, setPurchaseFlowStep] = useState<PurchaseFlowStep>("inactive");
@@ -655,7 +656,7 @@ export function StrategicContactExperience() {
       prevPurchaseCountyRef.current = "__init__";
       return;
     }
-    if (purchaseData.locationState !== "MD" && purchaseData.locationState !== "DC") return;
+    if (purchaseData.locationState !== "MD" && purchaseData.locationState !== "DC" && purchaseData.locationState !== "VA") return;
     const c = purchaseData.locationCounty;
     if (prevPurchaseCountyRef.current === "__init__") {
       prevPurchaseCountyRef.current = c;
@@ -707,9 +708,9 @@ export function StrategicContactExperience() {
   const purchaseContextPayload = useMemo(() => {
     if (reasonId !== "buy" || purchaseFlowStep !== "complete") return "";
     const locationData =
-      (purchaseData.locationState === "MD" || purchaseData.locationState === "DC") && purchaseData.locationCounty.trim() && purchaseData.locationCity.trim()
+      (purchaseData.locationState === "MD" || purchaseData.locationState === "DC" || purchaseData.locationState === "VA") && purchaseData.locationCounty.trim() && purchaseData.locationCity.trim()
         ? {
-            state: purchaseData.locationState as "MD" | "DC",
+            state: purchaseData.locationState as "MD" | "DC" | "VA",
             county: normalizeCountyForPayload(purchaseData.locationCounty),
             city: purchaseData.locationCity.trim(),
           }
@@ -850,7 +851,7 @@ export function StrategicContactExperience() {
     phoneTime,
   ]);
 
-  const canSubmit = firstName.trim().length > 0 && emailValid(email) && phoneValid(phone);
+  const canSubmit = firstName.trim().length > 0 && emailValid(email) && phoneValid(phone) && propertyState !== "";
 
   const goNext = () => {
     if (step === 0 && reasonId === "reverse") {
@@ -1331,7 +1332,7 @@ export function StrategicContactExperience() {
       return;
     }
 
-    if (!firstName.trim() || !emailValid(email) || !phoneValid(phone)) {
+    if (!firstName.trim() || !emailValid(email) || !phoneValid(phone) || !propertyState) {
       return;
     }
 
@@ -1374,6 +1375,7 @@ export function StrategicContactExperience() {
       answers["Best time to call"] = phoneTime.trim();
     }
     if (notes.trim()) answers["Notes"] = notes.trim();
+    answers["Property state"] = propertyState;
     if (contextNote) answers["Entry context"] = contextNote;
     if (purchaseContextPayload) answers["Purchase path (structured)"] = purchaseContextPayload;
     if (refinanceContextPayload) answers["Refinance path (structured)"] = refinanceContextPayload;
@@ -1398,6 +1400,7 @@ export function StrategicContactExperience() {
           fileKey: mortgageStatementFileKey ?? undefined,
           clientId: leadClientId,
           submittedLang: lang,
+          propertyState,
         }),
       });
       let data: { ok?: boolean; error?: string } = {};
@@ -1886,6 +1889,23 @@ export function StrategicContactExperience() {
                         {t("contact.step.details.title")}
                       </h2>
                       <div className="option-group mx-auto space-y-4">
+                        <div className="space-y-2">
+                          <label htmlFor="sc-property-state" className="font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">
+                            {lang === "es" ? "Estado de la propiedad" : "Property state"} *
+                          </label>
+                          <select
+                            id="sc-property-state"
+                            required
+                            value={propertyState}
+                            onChange={(e) => setPropertyState(e.target.value as "" | "MD" | "DC" | "VA")}
+                            className="time-picker w-full"
+                          >
+                            <option value="">{lang === "es" ? "Seleccione el estado" : "Select property state"}</option>
+                            <option value="MD">Maryland</option>
+                            <option value="DC">Washington, DC</option>
+                            <option value="VA">Virginia</option>
+                          </select>
+                        </div>
                         <div className="space-y-2">
                           <label htmlFor="sc-notes" className="font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">
                             {t("contact.step.details.notes.label")}

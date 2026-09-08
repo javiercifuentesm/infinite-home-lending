@@ -76,8 +76,8 @@ export default function SmartTools() {
   const { t, lang } = useLanguage();
   const serviceAreaLabel =
     lang === "es"
-      ? "Diseñado para Washington, D.C. y Maryland"
-      : "Built for Washington, DC & Maryland";
+      ? "Diseñado para Maryland, Washington, D.C. y Virginia"
+      : "Built for Maryland, Washington, DC & Virginia";
   usePageMetadata({
     title: t("smartTools.meta.title"),
     description: t("smartTools.meta.description"),

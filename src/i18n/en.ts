@@ -12,12 +12,12 @@ export const en = {
   "footer.askSarah": "Ask Sarah",
 
   "sarah.askSarah": "Ask Sarah",
-  "sarah.subtitle": "IHL Mortgage Concierge · DC · MD",
+  "sarah.subtitle": "IHL Mortgage Concierge · MD · DC · VA",
   "sarah.disclaimer":
     "Sarah is our IHL Mortgage Concierge — not a licensed advisor. Information is educational only.",
 
   "trustBar.nmls": "NMLS #2831765",
-  "trustBar.region": "Washington, DC & Maryland",
+  "trustBar.region": "Maryland, Washington, DC & Virginia",
   "trustBar.equalHousing": "Equal Housing Lender",
 
   "home.meta.title": "Home",
@@ -33,16 +33,16 @@ export const en = {
     "See how Infinite Home Lending guides MD, DC, and VA borrowers from first call to closing—with clear milestones, proactive updates, and advisor-led support.",
   "contact.meta.title": "Contact Us",
   "contact.meta.description":
-    "Contact Infinite Home Lending for purchase, refinance, or equity questions in Washington, DC & Maryland. Share your goals and get clear next steps from licensed advisors.",
+    "Contact Infinite Home Lending for purchase, refinance, or home-equity questions in Maryland, Washington, DC, and Virginia. Share your goals and get clear next steps.",
   "smartTools.meta.title": "Smart Tools",
   "smartTools.meta.description":
-    "Free interactive mortgage calculators for Washington, DC & Maryland buyers and homeowners. Model payments, equity, waiting costs, and credit impact before you apply.",
+    "Free interactive mortgage calculators for Maryland, Washington, DC, and Virginia buyers and homeowners. Model payments, equity, waiting costs, and credit impact.",
   "knowledge.meta.title": "Knowledge Center",
   "knowledge.meta.description":
     "Mortgage guides for Maryland, DC, and Virginia—buying, refinancing, loan types, and numbers explained without jargon. Find clear answers before you decide.",
 
   // Footer
-  "footer.tagline": "Premium mortgage guidance built around your life — not just your rate. Serving Washington, DC & Maryland",
+  "footer.tagline": "Premium mortgage guidance built around your life — not just your rate. Serving Maryland, Washington, DC & Virginia",
   "footer.slogan": "Tailored Lending. Infinite Possibilities.",
   "footer.company": "Company",
   "footer.resources": "Resources",
@@ -57,13 +57,13 @@ export const en = {
   "footer.contact": "Contact",
   "footer.smartTools": "Smart Tools",
   "footer.dealDesk": "Deal Desk",
-  "dealDesk.partnerCTA.serviceArea": "For licensed real estate professionals in Washington, DC & Maryland.",
+  "dealDesk.partnerCTA.serviceArea": "For licensed real estate professionals in Maryland, Washington, DC & Virginia.",
   "footer.calculators": "Calculators",
   "footer.startPreApproval": "Start Pre-Approval",
   "footer.rights": "All rights reserved.",
-  "footer.nmls": "Licensed in Washington, DC & Maryland",
+  "footer.nmls": "Licensed in Maryland, Washington, DC & Virginia",
   "footer.loanDisclaimer": "All loans subject to credit approval. Rates and terms subject to change without notice.",
-  "footer.serving": "Serving Washington, D.C.",
+  "footer.serving": "Serving Maryland, Washington, D.C. and Virginia",
   "footer.privacy": "Privacy Policy",
   "footer.terms": "Terms of Use",
   "footer.compliance": "Compliance",
@@ -350,7 +350,7 @@ export const en = {
   "contact.purchase.property.where.question": "Where are you planning to buy?",
   "contact.purchase.property.where.body": "This helps us understand your market and guide you more precisely.",
   "contact.purchase.property.comingSoon": "Coming soon",
-  "contact.purchase.property.expanding": "Licensed in Washington, DC & Maryland.",
+  "contact.purchase.property.expanding": "Licensed in Maryland, Washington, DC & Virginia.",
   "contact.purchase.property.county.question": "Which county are you interested in?",
   "contact.purchase.property.county.placeholder": "Select a county",
   "contact.purchase.property.city.question": "Which city or area?",
@@ -504,7 +504,7 @@ export const en = {
   "smartTools.eyebrow": "Infinite Home Lending",
   "smartTools.title": "Smart Tools",
   "smartTools.subtitle": "Interactive tools designed to bring clarity to real mortgage decisions.",
-  "smartTools.builtFor": "Built for Washington, DC & Maryland",
+  "smartTools.builtFor": "Built for Maryland, Washington, DC & Virginia",
   "smartTools.featuredTool": "Featured Tool",
   "smartTools.allTools": "All Tools",
   "smartTools.mostUsed": "Most Used",
@@ -2899,7 +2899,7 @@ export const en = {
   "compliance.licensing.meta.title": "Licensing Information",
   "compliance.licensing.meta.description":
     "NMLS, state licensing, and mortgage loan originator disclosure information for Infinite Home Lending.",
-  "compliance.licensing.lastUpdated": "Last updated: June 2026",
+  "compliance.licensing.lastUpdated": "Last updated: September 2026",
   "compliance.licensing.company.title": "Company Information",
   "compliance.licensing.company.p1":
     "Infinite Home Lending is a mortgage brokerage committed to transparent licensing disclosures and regulatory compliance.",
@@ -2907,7 +2907,7 @@ export const en = {
   "compliance.licensing.states.title": "State Licensing",
   "compliance.licensing.states.item1": "Washington, D.C. Mortgage Broker License (active)",
   "compliance.licensing.states.item2": "Maryland Mortgage Lender License (active)",
-  "compliance.licensing.states.item3": "Virginia License Pending Approval",
+  "compliance.licensing.states.item3": "Virginia Broker License — MC-8214 (approved September 3, 2026)",
   "compliance.licensing.mlo.title": "Mortgage Loan Originators",
   "compliance.licensing.mlo.p1":
     "The following licensed mortgage professionals are associated with Infinite Home Lending:",

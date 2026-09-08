@@ -60,6 +60,7 @@ type FormState = {
   smsConsent: boolean;
   email: string;
   loanPurpose: string;
+  propertyState: string;
   leadSource: string;
   bestDay: string;
   bestTime: string;
@@ -72,6 +73,7 @@ const INITIAL: FormState = {
   smsConsent: false,
   email: "",
   loanPurpose: "",
+  propertyState: "",
   leadSource: "",
   bestDay: "",
   bestTime: "",
@@ -142,6 +144,10 @@ export default function RequestACall() {
       setError("Please select a loan purpose.");
       return;
     }
+    if (!form.propertyState) {
+      setError("Please select the property state.");
+      return;
+    }
     if (!form.leadSource) {
       setError("Please select how you heard about us.");
       return;
@@ -168,6 +174,7 @@ export default function RequestACall() {
           smsConsent: form.smsConsent === true,
           email: form.email.trim(),
           loanPurpose: form.loanPurpose,
+          propertyState: form.propertyState,
           leadSource: form.leadSource,
           bestDay: form.bestDay,
           bestTime: form.bestTime,
@@ -352,6 +359,26 @@ export default function RequestACall() {
                         {opt.label}
                       </option>
                     ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label htmlFor="rac-property-state" className={labelClass}>
+                    Property state *
+                  </label>
+                  <select
+                    id="rac-property-state"
+                    required
+                    value={form.propertyState}
+                    onChange={(e) => update("propertyState", e.target.value)}
+                    className={selectClass}
+                  >
+                    <option value="" disabled>
+                      Select property state
+                    </option>
+                    <option value="MD">Maryland</option>
+                    <option value="DC">Washington, DC</option>
+                    <option value="VA">Virginia</option>
                   </select>
                 </div>
 

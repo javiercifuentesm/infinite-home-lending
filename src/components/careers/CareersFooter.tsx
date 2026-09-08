@@ -23,7 +23,7 @@ export function CareersFooter() {
               className="mt-5 text-sm leading-relaxed"
               style={{ color: "rgba(46,46,46,0.65)" }}
             >
-              Infinite Home Lending is a Washington, DC mortgage brokerage built for disciplined,
+              Infinite Home Lending is a DMV mortgage brokerage serving Maryland, Washington, DC, and Virginia, built for disciplined,
               client-centered advisory practice.
             </p>
           </div>
@@ -76,7 +76,7 @@ export function CareersFooter() {
         >
           <div className="flex flex-col gap-4 text-[11px] leading-relaxed md:flex-row md:items-center md:justify-between">
             <p style={{ color: "rgba(46,46,46,0.5)" }}>
-              © {year} Infinite Home Lending. NMLS #2831765. Licensed in Washington, DC.
+              © {year} Infinite Home Lending. NMLS #2831765. Licensed in Maryland, Washington, DC, and Virginia.
             </p>
             <div className="flex flex-wrap gap-x-6 gap-y-2">
               <Link
@@ -87,14 +87,14 @@ export function CareersFooter() {
                 Main Site
               </Link>
               <a
-                href="/privacy"
+                href="/privacy-policy"
                 className="no-underline hover:underline"
                 style={{ color: "rgba(46,46,46,0.55)" }}
               >
                 Privacy Policy
               </a>
               <a
-                href="/terms"
+                href="/terms-of-use"
                 className="no-underline hover:underline"
                 style={{ color: "rgba(46,46,46,0.55)" }}
               >
