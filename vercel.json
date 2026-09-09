@@ -3,6 +3,37 @@
   "outputDirectory": "dist",
   "rewrites": [
     {
+      "source": "/my-reverse-mortgage-review",
+      "destination": "https://my-reverse-mortgage-review-ihl.javiercifuentesm.chatgpt.site"
+    },
+    {
+      "source": "/my-reverse-mortgage-review/:path*",
+      "destination": "https://my-reverse-mortgage-review-ihl.javiercifuentesm.chatgpt.site/:path*"
+    },
+    {
+      "source": "/app.js",
+      "has": [{ "type": "header", "key": "referer", "value": ".*/my-reverse-mortgage-review.*" }],
+      "destination": "https://my-reverse-mortgage-review-ihl.javiercifuentesm.chatgpt.site/app.js"
+    },
+    {
+      "source": "/styles.css",
+      "has": [{ "type": "header", "key": "referer", "value": ".*/my-reverse-mortgage-review.*" }],
+      "destination": "https://my-reverse-mortgage-review-ihl.javiercifuentesm.chatgpt.site/styles.css"
+    },
+    {
+      "source": "/ihl-logo.png",
+      "has": [{ "type": "header", "key": "referer", "value": ".*/my-reverse-mortgage-review.*" }],
+      "destination": "https://my-reverse-mortgage-review-ihl.javiercifuentesm.chatgpt.site/ihl-logo.png"
+    },
+    {
+      "source": "/reverse-hero.png",
+      "destination": "https://my-reverse-mortgage-review-ihl.javiercifuentesm.chatgpt.site/reverse-hero.png"
+    },
+    {
+      "source": "/api/send-reverse-report",
+      "destination": "https://my-reverse-mortgage-review-ihl.javiercifuentesm.chatgpt.site/api/send-reverse-report"
+    },
+    {
       "source": "/my-homeownership-path",
       "destination": "https://my-homeownership-path-ihl.javiercifuentesm.chatgpt.site"
     },
