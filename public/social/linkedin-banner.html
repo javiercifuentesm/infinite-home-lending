@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IHL LinkedIn Banner</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Lato:wght@300;400;700&display=swap');
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    width: 1128px;
+    height: 191px;
+    overflow: hidden;
+    background: #0B2A4A;
+  }
+
+  .banner {
+    width: 1128px;
+    height: 191px;
+    background: #0B2A4A;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .gold-line-top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: #C6A15B;
+  }
+
+  .gold-line-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: #C6A15B;
+  }
+
+  .center-group {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+
+  .logo-img {
+    height: 56px;
+    width: auto;
+    flex-shrink: 0;
+    filter: brightness(0) invert(1);
+  }
+
+  .divider {
+    width: 1px;
+    height: 56px;
+    background: rgba(198, 161, 91, 0.45);
+    flex-shrink: 0;
+  }
+
+  .text-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .company-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 500;
+    color: #FFFFFF;
+    letter-spacing: 0.5px;
+    line-height: 1;
+  }
+
+  .tagline {
+    font-family: 'Lato', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: #C6A15B;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+
+  .compliance {
+    position: absolute;
+    bottom: 14px;
+    right: 20px;
+    font-family: 'Lato', sans-serif;
+    font-size: 9px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.35);
+    letter-spacing: 0.5px;
+    text-align: right;
+    line-height: 1.5;
+  }
+</style>
+</head>
+<body>
+  <div class="banner">
+
+    <div class="gold-line-top"></div>
+    <div class="gold-line-bottom"></div>
+
+    <div class="center-group">
+
+      <img
+        class="logo-img"
+        src="../IHL_-_Logo.png"
+        alt="Infinite Home Lending logo"
+      />
+
+      <div class="divider"></div>
+
+      <div class="text-group">
+        <div class="company-name">Infinite Home Lending</div>
+        <div class="tagline">Tailored Lending. &nbsp;Infinite Possibilities.</div>
+      </div>
+
+    </div>
+
+    <div class="compliance">
+      NMLS #2831765 &nbsp;·&nbsp; Equal Housing Lender &nbsp;·&nbsp; Licensed in MD, DC, and VA.
+    </div>
+
+  </div>
+</body>
+</html>

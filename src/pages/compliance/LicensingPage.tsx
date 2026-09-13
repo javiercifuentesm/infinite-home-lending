@@ -1,22 +1,25 @@
 import {
   ComplianceLegalLayout,
   ComplianceMloCard,
-  ComplianceList,
   ComplianceParagraph,
   ComplianceSection,
 } from "../../components/compliance/ComplianceLegalLayout";
 import { useLanguage } from "../../i18n/LanguageContext";
 import { usePageMetadata } from "../../hooks/usePageMetadata";
+import {
+  COMPANY_NMLS_ID,
+  formatStateLicenseLine,
+  licenses,
+} from "../../config/licenses";
 
-const NMLS_COMPANY_URL =
-  "https://www.nmlsconsumeraccess.org/EntityDetails.aspx/COMPANY/2831765";
+const NMLS_COMPANY_URL = `https://www.nmlsconsumeraccess.org/EntityDetails.aspx/COMPANY/${COMPANY_NMLS_ID}`;
 const NMLS_JAVIER_URL =
   "https://www.nmlsconsumeraccess.org/EntityDetails.aspx/INDIVIDUAL/210090";
 const NMLS_ALMA_URL =
   "https://www.nmlsconsumeraccess.org/EntityDetails.aspx/INDIVIDUAL/1376746";
 
 export default function LicensingPage() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
 
   usePageMetadata({
     title: t("compliance.licensing.meta.title"),
@@ -33,19 +36,23 @@ export default function LicensingPage() {
         <p className="compliance-contact-line">
           {t("compliance.licensing.company.nmlsLabel")}{" "}
           <a href={NMLS_COMPANY_URL} target="_blank" rel="noopener noreferrer" className="compliance-inline-link">
-            2831765
+            {COMPANY_NMLS_ID}
           </a>
         </p>
       </ComplianceSection>
 
       <ComplianceSection titleKey="compliance.licensing.states.title">
-        <ComplianceList
-          itemKeys={[
-            "compliance.licensing.states.item1",
-            "compliance.licensing.states.item2",
-            "compliance.licensing.states.item3",
-          ]}
-        />
+        <ul className="compliance-list mt-1 space-y-2.5 pl-0">
+          {licenses.map((license) => (
+            <li
+              key={license.state}
+              className="compliance-list-item flex gap-3 text-[15px] leading-[1.7] text-slate-600 sm:text-[16px]"
+            >
+              <span className="mt-[0.55rem] h-1.5 w-1.5 shrink-0 rounded-full bg-gold/75" aria-hidden />
+              <span>{formatStateLicenseLine(license, lang)}</span>
+            </li>
+          ))}
+        </ul>
       </ComplianceSection>
 
       <ComplianceSection titleKey="compliance.licensing.mlo.title">

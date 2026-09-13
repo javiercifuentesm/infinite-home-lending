@@ -49,7 +49,7 @@ Founders, Infinite Home Lending
 
 Infinite Home Lending | NMLS #2831765 | Equal Housing Lender
 
-Licensed in Washington, DC`,
+Licensed in MD, DC, and VA.`,
 
     instagram: `When people think about buying a home, they usually think about interest rates, down payments, paperwork, and closing dates.
 
@@ -97,7 +97,7 @@ NMLS #2831765 | Equal Housing Lender
 
 InfiniteHomeLending.com
 
-Licensed in Washington, DC
+Licensed in MD, DC, and VA.
 
 .
 
@@ -145,7 +145,7 @@ Founders, Infinite Home Lending
 
 Infinite Home Lending | NMLS #2831765 | Equal Housing Lender
 
-Licensed in Washington, DC
+Licensed in MD, DC, and VA.
 
 InfiniteHomeLending.com`,
   },
