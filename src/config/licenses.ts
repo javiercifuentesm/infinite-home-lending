@@ -64,11 +64,14 @@ export function joinList(items: string[], locale: "en" | "es"): string {
   return locale === "es" ? `${head} y ${last}` : `${head}, and ${last}`;
 }
 
-/** Compact company licensing footprint for footers. */
+/** Compact company licensing footprint for footers, derived from active license records. */
 export function getLicensedInFooterText(locale: "en" | "es"): string {
-  return locale === "es"
-    ? "Licenciado en MD, DC y VA."
-    : "Licensed in MD, DC, and VA.";
+  const activeStateAbbreviations = licenses
+    .filter((license) => license.status === "active")
+    .map((license) => license.state);
+
+  const states = joinList(activeStateAbbreviations, locale);
+  return locale === "es" ? `Licenciado en ${states}.` : `Licensed in ${states}.`;
 }
 
 export function formatStateLicenseLine(record: LicenseRecord, locale: "en" | "es"): string {
