@@ -642,7 +642,7 @@ export function StrategicContactExperience() {
       prevPurchaseLocStateRef.current = st;
       return;
     }
-    if ((st === "MD" || st === "DC") && prevPurchaseLocStateRef.current !== st) {
+    if ((st === "MD" || st === "DC" || st === "VA") && prevPurchaseLocStateRef.current !== st) {
       prevPurchaseLocStateRef.current = st;
       const t = window.setTimeout(() => safeScroll("purchase-anchor-county", scrollBehavior), SCROLL_AFTER_MS);
       return () => window.clearTimeout(t);
@@ -655,7 +655,13 @@ export function StrategicContactExperience() {
       prevPurchaseCountyRef.current = "__init__";
       return;
     }
-    if (purchaseData.locationState !== "MD" && purchaseData.locationState !== "DC") return;
+    if (
+      purchaseData.locationState !== "MD" &&
+      purchaseData.locationState !== "DC" &&
+      purchaseData.locationState !== "VA"
+    ) {
+      return;
+    }
     const c = purchaseData.locationCounty;
     if (prevPurchaseCountyRef.current === "__init__") {
       prevPurchaseCountyRef.current = c;
@@ -707,9 +713,13 @@ export function StrategicContactExperience() {
   const purchaseContextPayload = useMemo(() => {
     if (reasonId !== "buy" || purchaseFlowStep !== "complete") return "";
     const locationData =
-      (purchaseData.locationState === "MD" || purchaseData.locationState === "DC") && purchaseData.locationCounty.trim() && purchaseData.locationCity.trim()
+      (purchaseData.locationState === "MD" ||
+        purchaseData.locationState === "DC" ||
+        purchaseData.locationState === "VA") &&
+      purchaseData.locationCounty.trim() &&
+      purchaseData.locationCity.trim()
         ? {
-            state: purchaseData.locationState as "MD" | "DC",
+            state: purchaseData.locationState as "MD" | "DC" | "VA",
             county: normalizeCountyForPayload(purchaseData.locationCounty),
             city: purchaseData.locationCity.trim(),
           }

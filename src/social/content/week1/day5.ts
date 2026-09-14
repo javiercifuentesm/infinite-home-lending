@@ -52,7 +52,7 @@ Founders, Infinite Home Lending
 
 Infinite Home Lending | NMLS #2831765 | Equal Housing Lender
 
-Licensed in Washington, DC`,
+Licensed in MD, DC, and VA.`,
 
     instagram: `Every family deserves guidance that puts people before paperwork.
 
@@ -98,7 +98,7 @@ NMLS #2831765 | Equal Housing Lender
 
 InfiniteHomeLending.com
 
-Licensed in Washington, DC
+Licensed in MD, DC, and VA.
 
 .
 
@@ -144,7 +144,7 @@ Founders, Infinite Home Lending
 
 Infinite Home Lending | NMLS #2831765 | Equal Housing Lender
 
-Licensed in Washington, DC
+Licensed in MD, DC, and VA.
 
 InfiniteHomeLending.com`,
   },

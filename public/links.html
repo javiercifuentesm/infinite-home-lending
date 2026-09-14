@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Infinite Home Lending | Links</title>
+<style>
+  :root {
+    --page-bg: #F7F3EA;
+    --navy-card: #0A2E5C;
+    --gold: #C9A15C;
+    --white: #FFFFFF;
+    --text-body: #1C2B3A;
+    --text-footer: #5C6B7A;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background-color: var(--page-bg);
+    font-family: Georgia, 'Times New Roman', serif;
+    color: var(--text-body);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px 40px;
+    min-height: 100vh;
+  }
+
+  .logo {
+    width: 320px;
+    height: auto;
+    margin-bottom: 12px;
+  }
+
+  .tagline {
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    font-weight: 600;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+
+  .intro {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    color: var(--text-body);
+    text-align: center;
+    max-width: 420px;
+    line-height: 1.5;
+    margin-bottom: 40px;
+  }
+
+  .links {
+    width: 100%;
+    max-width: 480px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .link-card {
+    background-color: var(--navy-card);
+    border-left: 3px solid var(--gold);
+    border-radius: 8px;
+    padding: 18px 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    text-decoration: none;
+    color: var(--white);
+    transition: transform 0.15s ease, background-color 0.15s ease;
+  }
+
+  .link-card:hover {
+    transform: translateY(-2px);
+    background-color: #0E3A73;
+  }
+
+  .link-icon {
+    font-size: 22px;
+    line-height: 1.3;
+  }
+
+  .link-text-title {
+    font-family: Georgia, serif;
+    font-size: 17px;
+    font-weight: 600;
+  }
+
+  .link-text-desc {
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    color: var(--white);
+    margin-top: 2px;
+  }
+
+  .socials {
+    display: flex;
+    gap: 16px;
+    margin-top: 40px;
+  }
+
+  .social-icon {
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gold);
+    text-decoration: none;
+    font-size: 16px;
+  }
+
+  footer {
+    margin-top: 32px;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    color: var(--text-footer);
+    text-align: center;
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+
+  <img src="/assets/ihl-icon-mark.png" alt="Infinite Home Lending" class="logo">
+
+  <p class="tagline">TAILORED LENDING. INFINITE POSSIBILITIES.</p>
+
+  <p class="intro">
+    We help families navigate home financing with clarity, guidance, and peace of mind.
+  </p>
+
+  <div class="links">
+    <a href="/contact" class="link-card">
+      <span class="link-icon">🏡</span>
+      <span>
+        <span class="link-text-title">Get Pre-Approved</span>
+        <span class="link-text-desc">Start your homeownership journey. Takes just a few minutes.</span>
+      </span>
+    </a>
+
+    <a href="/about" class="link-card">
+      <span class="link-icon">📖</span>
+      <span>
+        <span class="link-text-title">A Letter From Our Founders</span>
+        <span class="link-text-desc">Learn why Javier and Alma built Infinite Home Lending.</span>
+      </span>
+    </a>
+
+    <a href="/smart-tools" class="link-card">
+      <span class="link-icon">🧮</span>
+      <span>
+        <span class="link-text-title">Smart Mortgage Tools</span>
+        <span class="link-text-desc">Explore 11 interactive calculators built for DC & MD homebuyers.</span>
+      </span>
+    </a>
+
+    <a href="/contact" class="link-card">
+      <span class="link-icon">💬</span>
+      <span>
+        <span class="link-text-title">Talk to Us</span>
+        <span class="link-text-desc">Have a question? We'd love to hear about your journey.</span>
+      </span>
+    </a>
+  </div>
+
+  <div class="socials">
+    <a href="https://instagram.com/infinitehomelending" class="social-icon" aria-label="Instagram">IG</a>
+    <a href="https://facebook.com/InfiniteHomeLending" class="social-icon" aria-label="Facebook">FB</a>
+    <a href="https://linkedin.com/company/infinite-home-lending" class="social-icon" aria-label="LinkedIn">in</a>
+  </div>
+
+  <footer>
+    Infinite Home Lending | NMLS #2831765 | Equal Housing Lender<br>
+    Licensed in MD, DC, and VA.<br>
+    infinitehomelending.com
+  </footer>
+
+</body>
+</html>

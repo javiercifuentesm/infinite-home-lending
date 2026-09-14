@@ -76,7 +76,7 @@ export function CareersFooter() {
         >
           <div className="flex flex-col gap-4 text-[11px] leading-relaxed md:flex-row md:items-center md:justify-between">
             <p style={{ color: "rgba(46,46,46,0.5)" }}>
-              © {year} Infinite Home Lending. NMLS #2831765. Licensed in Washington, DC.
+              © {year} Infinite Home Lending. NMLS #2831765. Licensed in MD, DC, and VA.
             </p>
             <div className="flex flex-wrap gap-x-6 gap-y-2">
               <Link

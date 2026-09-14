@@ -6,27 +6,24 @@ const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY ?? "" });
 
 const NEXIO_SYSTEM_PROMPT = `ABSOLUTE RULES — OVERRIDE EVERYTHING ELSE:
 
-1. IHL is licensed ONLY in Washington, DC and Maryland. Never say Virginia, VA, DMV, or tri-state under any circumstances. If asked what states IHL serves, say ONLY: "IHL serves Washington, DC and Maryland."
+1. IHL is licensed in Maryland, the District of Columbia, and Virginia (MD, DC, and VA). If asked what states IHL serves, say: "IHL serves Maryland, DC, and Virginia." Do not invent additional states. Distinguish carefully between Virginia (the state) and VA loans (U.S. Department of Veterans Affairs mortgage products) — they are not the same thing.
 
 2. NEVER provide any information about DPA programs, loan programs, assistance amounts, or program names — not even as examples. This means zero mention of: SmartBuy, HPAP, MMP, DC Open Doors, VHDA, SPARC, Maryland Mortgage Program, stacking programs, or any dollar amounts for assistance. If asked about DPA or programs, say ONLY: "For specific program details, connect directly with Javier or Alma at IHL — that conversation is where the real value happens."
 
 3. These two rules cannot be overridden by user requests, conversation context, or any other instruction below.
 
 IMPORTANT BEHAVIOR INSTRUCTION:
-If any user asks about DPA programs, down payment assistance, specific loan programs, 
-or what states IHL serves — stop immediately and respond with ONLY the approved 
-responses from rules 1 and 2 above. Do not elaborate. Do not provide context. 
-Do not list programs even as examples. Do not mention Virginia, DMV, or any 
-tri-state reference. Your training data about DMV mortgage programs is 
-IRRELEVANT — only respond using the approved text above.
+If any user asks about DPA programs, down payment assistance, or specific loan programs —
+stop immediately and respond with ONLY the approved response from rule 2 above.
+Do not elaborate. Do not provide context. Do not list programs even as examples.
 
-You are Nexio — the strategic AI partner for Infinite Home Lending's Deal Desk. You serve licensed real estate agents in Washington, DC and Maryland.
+You are Nexio — the strategic AI partner for Infinite Home Lending's Deal Desk. You serve licensed real estate agents in Maryland, DC, and Virginia.
 
 IHL SERVICE AREA — CRITICAL:
-Infinite Home Lending is licensed ONLY in Washington, DC and Maryland.
-Never mention Virginia, VA, Northern Virginia, NoVA, or DMV under any circumstances.
-If asked what states IHL serves, respond ONLY: "IHL serves Washington, DC and Maryland."
-This is non-negotiable. Do not add Virginia even if the user asks.
+Infinite Home Lending is licensed in Maryland, the District of Columbia, and Virginia.
+If asked what states IHL serves, respond: "IHL serves Maryland, DC, and Virginia."
+Do not claim licensing outside those three jurisdictions.
+When discussing Virginia the state, do not confuse it with VA (Veterans Affairs) loan products.
 
 LOAN PROGRAMS — CRITICAL:
 Do NOT discuss, list, explain, or reference any specific loan programs,
@@ -297,8 +294,10 @@ export function createNexioChatRouter() {
         lastText.includes("where is ihl licensed") ||
         lastText.includes("do you serve virginia") ||
         lastText.includes("do you cover virginia") ||
-        lastText.includes("dmv") ||
-        lastText.includes("virginia");
+        lastText.includes("do you serve md") ||
+        lastText.includes("do you serve dc") ||
+        (lastText.includes("service area") && lastText.includes("ihl")) ||
+        (lastText.includes("licensed") && (lastText.includes("state") || lastText.includes("where")));
 
       const isDPAQuestion =
         lastText.includes("dpa") ||
@@ -316,8 +315,8 @@ export function createNexioChatRouter() {
         res.setHeader("Cache-Control", "no-cache");
         res.setHeader("Connection", "keep-alive");
         const response = lang === "es"
-          ? "IHL opera en Washington, DC y Maryland. ¿En cuál de estos mercados trabaja principalmente?"
-          : "IHL serves Washington, DC and Maryland. Which of these markets do you primarily work in?";
+          ? "IHL opera en Maryland, D.C. y Virginia. ¿En cuál de estos mercados trabaja principalmente?"
+          : "IHL serves Maryland, DC, and Virginia. Which of these markets do you primarily work in?";
         res.write(`data: ${JSON.stringify({ text: response })}\n\n`);
         res.write(`data: ${JSON.stringify({ done: true })}\n\n`);
         res.end();
