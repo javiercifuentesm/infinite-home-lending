@@ -1,5 +1,6 @@
 import {
   ComplianceLegalLayout,
+  ComplianceList,
   ComplianceParagraph,
   ComplianceSection,
 } from "../../components/compliance/ComplianceLegalLayout";
@@ -21,6 +22,18 @@ export default function TermsOfUsePage() {
     >
       <ComplianceSection titleKey="compliance.terms.acceptance.title">
         <ComplianceParagraph textKey="compliance.terms.acceptance.p1" />
+      </ComplianceSection>
+
+      <ComplianceSection titleKey="compliance.terms.sms.title">
+        <ComplianceParagraph textKey="compliance.terms.sms.p1" />
+        <ComplianceList
+          itemKeys={[
+            "compliance.terms.sms.item1",
+            "compliance.terms.sms.item2",
+            "compliance.terms.sms.item3",
+            "compliance.terms.sms.item4",
+          ]}
+        />
       </ComplianceSection>
 
       <ComplianceSection titleKey="compliance.terms.educational.title">

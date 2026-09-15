@@ -1,7 +1,7 @@
-/** Contact Us (/contact) — explicit Yes/No SMS preference (three-state on client, strict boolean on server). */
+/** Contact Us (/contact) — optional SMS checkbox recorded as a strict boolean on the server. */
 
 export const CONTACT_SMS_CONSENT_SOURCE = "/contact";
-export const CONTACT_SMS_CONSENT_DISCLOSURE_VERSION = "IHL-SMS-v1-2026-08";
+export const CONTACT_SMS_CONSENT_DISCLOSURE_VERSION = "IHL-SMS-v2-2026-09";
 
 export type ContactSubmittedLang = "en" | "es";
 

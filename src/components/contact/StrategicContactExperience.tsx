@@ -263,7 +263,7 @@ function phoneValid(phone: string): boolean {
   return phone.replace(/\D/g, "").length >= 10;
 }
 
-const contactSmsRadioClass =
+const contactSmsCheckboxClass =
   "mt-1 h-4 w-4 shrink-0 border border-[#E5E7EB] text-[#0B2A4A] focus:ring-2 focus:ring-[#C6A15B]/25 focus:ring-offset-0";
 
 function formatPhoneNumber(value: string): string {
@@ -432,8 +432,7 @@ export function StrategicContactExperience() {
   });
   const [email, setEmail] = useState(() => searchParams.get("email") ?? "");
   const [phone, setPhone] = useState("");
-  const [smsConsent, setSmsConsent] = useState<boolean | null>(null);
-  const [smsConsentShowError, setSmsConsentShowError] = useState(false);
+  const [smsConsent, setSmsConsent] = useState(false);
   const [contextNote] = useState(() => {
     const topic = searchParams.get("topic");
     if (topic === "buy-vs-wait") {
@@ -642,7 +641,7 @@ export function StrategicContactExperience() {
       prevPurchaseLocStateRef.current = st;
       return;
     }
-    if ((st === "MD" || st === "DC" || st === "VA") && prevPurchaseLocStateRef.current !== st) {
+    if ((st === "MD" || st === "DC") && prevPurchaseLocStateRef.current !== st) {
       prevPurchaseLocStateRef.current = st;
       const t = window.setTimeout(() => safeScroll("purchase-anchor-county", scrollBehavior), SCROLL_AFTER_MS);
       return () => window.clearTimeout(t);
@@ -655,13 +654,7 @@ export function StrategicContactExperience() {
       prevPurchaseCountyRef.current = "__init__";
       return;
     }
-    if (
-      purchaseData.locationState !== "MD" &&
-      purchaseData.locationState !== "DC" &&
-      purchaseData.locationState !== "VA"
-    ) {
-      return;
-    }
+    if (purchaseData.locationState !== "MD" && purchaseData.locationState !== "DC") return;
     const c = purchaseData.locationCounty;
     if (prevPurchaseCountyRef.current === "__init__") {
       prevPurchaseCountyRef.current = c;
@@ -713,13 +706,9 @@ export function StrategicContactExperience() {
   const purchaseContextPayload = useMemo(() => {
     if (reasonId !== "buy" || purchaseFlowStep !== "complete") return "";
     const locationData =
-      (purchaseData.locationState === "MD" ||
-        purchaseData.locationState === "DC" ||
-        purchaseData.locationState === "VA") &&
-      purchaseData.locationCounty.trim() &&
-      purchaseData.locationCity.trim()
+      (purchaseData.locationState === "MD" || purchaseData.locationState === "DC") && purchaseData.locationCounty.trim() && purchaseData.locationCity.trim()
         ? {
-            state: purchaseData.locationState as "MD" | "DC" | "VA",
+            state: purchaseData.locationState as "MD" | "DC",
             county: normalizeCountyForPayload(purchaseData.locationCounty),
             city: purchaseData.locationCity.trim(),
           }
@@ -1336,11 +1325,6 @@ export function StrategicContactExperience() {
     e.preventDefault();
     if (submitInProgress) return;
 
-    if (smsConsent === null) {
-      setSmsConsentShowError(true);
-      return;
-    }
-
     if (!firstName.trim() || !emailValid(email) || !phoneValid(phone)) {
       return;
     }
@@ -1422,8 +1406,7 @@ export function StrategicContactExperience() {
         return;
       }
       setSubmitted(true);
-      setSmsConsent(null);
-      setSmsConsentShowError(false);
+      setSmsConsent(false);
     } catch {
       setSubmitError(t("contact.error.network"));
     } finally {
@@ -1979,54 +1962,24 @@ export function StrategicContactExperience() {
                           <legend className="font-sans text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">
                             {t("contact.step.details.sms.legend")}
                           </legend>
-                          <div className="space-y-4">
-                            <div className="flex items-start gap-3">
-                              <input
-                                id="sc-sms-consent-yes"
-                                name="smsConsent"
-                                type="radio"
-                                value="yes"
-                                checked={smsConsent === true}
-                                onChange={() => {
-                                  setSmsConsent(true);
-                                  setSmsConsentShowError(false);
-                                }}
-                                className={contactSmsRadioClass}
-                              />
-                              <label
-                                htmlFor="sc-sms-consent-yes"
-                                className="cursor-pointer font-sans text-[14px] leading-relaxed text-navy"
-                              >
-                                {t("contact.step.details.sms.yes")}
-                              </label>
-                            </div>
-                            <div className="flex items-start gap-3">
-                              <input
-                                id="sc-sms-consent-no"
-                                name="smsConsent"
-                                type="radio"
-                                value="no"
-                                checked={smsConsent === false}
-                                onChange={() => {
-                                  setSmsConsent(false);
-                                  setSmsConsentShowError(false);
-                                }}
-                                className={contactSmsRadioClass}
-                              />
-                              <label
-                                htmlFor="sc-sms-consent-no"
-                                className="cursor-pointer font-sans text-[14px] leading-relaxed text-navy"
-                              >
-                                {t("contact.step.details.sms.no")}
-                              </label>
-                            </div>
+                          <div className="flex items-start gap-3">
+                            <input
+                              id="sc-sms-consent"
+                              name="smsConsent"
+                              type="checkbox"
+                              checked={smsConsent}
+                              onChange={(event) => setSmsConsent(event.target.checked)}
+                              className={contactSmsCheckboxClass}
+                            />
+                            <label
+                              htmlFor="sc-sms-consent"
+                              className="cursor-pointer font-sans text-[14px] leading-relaxed text-navy"
+                            >
+                              {t("contact.step.details.sms.yes")}
+                            </label>
                           </div>
-                          {smsConsentShowError && smsConsent === null ? (
-                            <p className="font-sans text-[13px] text-red-600" role="alert">
-                              {t("contact.step.details.sms.error")}
-                            </p>
-                          ) : null}
                           <p className="font-sans text-[13px] leading-relaxed text-slate-600">
+                            {t("contact.step.details.sms.linksPrefix")} {" "}
                             <a
                               href="https://www.infinitehomelending.com/privacy-policy"
                               target="_blank"
@@ -2038,7 +1991,7 @@ export function StrategicContactExperience() {
                             </a>
                             <span aria-hidden="true"> | </span>
                             <a
-                              href="https://www.infinitehomelending.com/sms-terms"
+                              href="https://www.infinitehomelending.com/terms-of-use"
                               target="_blank"
                               rel="noopener noreferrer"
                               aria-label={t("contact.step.details.sms.termsLink.aria")}
