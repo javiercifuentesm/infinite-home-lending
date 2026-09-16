@@ -3,6 +3,37 @@
   "outputDirectory": "dist",
   "rewrites": [
     {
+      "source": "/FREE-Homebuying-Review",
+      "destination": "https://free-homebuying-review.javiercifuentesm.chatgpt.site"
+    },
+    {
+      "source": "/FREE-Homebuying-Review/:path*",
+      "destination": "https://free-homebuying-review.javiercifuentesm.chatgpt.site/:path*"
+    },
+    {
+      "source": "/_next/:path*",
+      "destination": "https://free-homebuying-review.javiercifuentesm.chatgpt.site/_next/:path*"
+    },
+    {
+      "source": "/api/review-requests",
+      "destination": "https://free-homebuying-review.javiercifuentesm.chatgpt.site/api/review-requests"
+    },
+    {
+      "source": "/homebuying-review-conversation.png",
+      "destination": "https://free-homebuying-review.javiercifuentesm.chatgpt.site/homebuying-review-conversation.png"
+    },
+    {
+      "source": "/ihl-logo.png",
+      "has": [
+        {
+          "type": "header",
+          "key": "referer",
+          "value": ".*/FREE-Homebuying-Review.*"
+        }
+      ],
+      "destination": "https://free-homebuying-review.javiercifuentesm.chatgpt.site/ihl-logo.png"
+    },
+    {
       "source": "/my-reverse-mortgage-review",
       "destination": "https://my-reverse-mortgage-review-ihl.javiercifuentesm.chatgpt.site"
     },
@@ -12,17 +43,35 @@
     },
     {
       "source": "/app.js",
-      "has": [{ "type": "header", "key": "referer", "value": ".*/my-reverse-mortgage-review.*" }],
+      "has": [
+        {
+          "type": "header",
+          "key": "referer",
+          "value": ".*/my-reverse-mortgage-review.*"
+        }
+      ],
       "destination": "https://my-reverse-mortgage-review-ihl.javiercifuentesm.chatgpt.site/app.js"
     },
     {
       "source": "/styles.css",
-      "has": [{ "type": "header", "key": "referer", "value": ".*/my-reverse-mortgage-review.*" }],
+      "has": [
+        {
+          "type": "header",
+          "key": "referer",
+          "value": ".*/my-reverse-mortgage-review.*"
+        }
+      ],
       "destination": "https://my-reverse-mortgage-review-ihl.javiercifuentesm.chatgpt.site/styles.css"
     },
     {
       "source": "/ihl-logo.png",
-      "has": [{ "type": "header", "key": "referer", "value": ".*/my-reverse-mortgage-review.*" }],
+      "has": [
+        {
+          "type": "header",
+          "key": "referer",
+          "value": ".*/my-reverse-mortgage-review.*"
+        }
+      ],
       "destination": "https://my-reverse-mortgage-review-ihl.javiercifuentesm.chatgpt.site/ihl-logo.png"
     },
     {
