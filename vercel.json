@@ -3,6 +3,14 @@
   "outputDirectory": "dist",
   "rewrites": [
     {
+      "source": "/FREE-Home-Equity-Review",
+      "destination": "https://free-homebuying-review.javiercifuentesm.chatgpt.site/FREE-Home-Equity-Review"
+    },
+    {
+      "source": "/FREE-Home-Equity-Review/:path*",
+      "destination": "https://free-homebuying-review.javiercifuentesm.chatgpt.site/FREE-Home-Equity-Review/:path*"
+    },
+    {
       "source": "/FREE-Homebuying-Review",
       "destination": "https://free-homebuying-review.javiercifuentesm.chatgpt.site"
     },
@@ -28,7 +36,7 @@
         {
           "type": "header",
           "key": "referer",
-          "value": ".*/FREE-Homebuying-Review.*"
+          "value": ".*/FREE-(Homebuying|Home-Equity)-Review.*"
         }
       ],
       "destination": "https://free-homebuying-review.javiercifuentesm.chatgpt.site/ihl-logo.png"
