@@ -8,9 +8,11 @@ import { CalculatorWorker, actionToken } from "../src/server/calculatorAutomatio
 // Operator-only: run in the configured backend environment, never from a public endpoint.
 // Sends only the designated report/internal notification; never enrolls in nurture.
 const recipient = process.argv[2]?.trim().toLowerCase();
-const submissionId = "73d10f05-f530-40a4-85e2-4de2433dd901";
+const language = process.argv[3] || "en";
+const submissionId = language === "es" ? "4c1aa229-b909-4f5c-b060-19d2f8502f80" : "73d10f05-f530-40a4-85e2-4de2433dd901";
 let phase = "configuration";
 async function main() {
+  if (!["en", "es"].includes(language)) throw new Error("Invalid test language");
   if (recipient !== "javier.cifuentes@infinitehomelending.com") throw new Error("Unauthorized test recipient");
   for (const key of ["AWS_REGION", "AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY", "S3_BUCKET", "HUBSPOT_API_KEY", "BREVO_API_KEY"]) if (!process.env[key]) throw new Error(`Missing configuration: ${key}`);
   const secret = process.env.CALCULATOR_LINK_SECRET || process.env.BREVO_API_KEY!;
@@ -23,7 +25,7 @@ async function main() {
   phase = "private storage access";
   await durable.read();
   await durable.mutate(() => undefined);
-  const request = { submissionId, firstName: "Javier — IHL AUTOMATION TEST", email: recipient, phone: "", state: "MD", lang: "en", timeline: "exploring", emailConsent: false, inputs: { hp: 480000, rent: 2400, dp: 10, rate: 6.75, appr: -3, ri: 0, futureRate: 5, lt: 30 }, waitMonths: 6, utm: { utm_source: "automation_test", utm_medium: "controlled_inbox", utm_campaign: "calculator_acceptance_20260917" } };
+  const request = { submissionId, firstName: "Javier — IHL AUTOMATION TEST", email: recipient, phone: "", state: "MD", lang: language, timeline: "exploring", emailConsent: false, inputs: { hp: 480000, rent: 2400, dp: 10, rate: 6.75, appr: -3, ri: 0, futureRate: 5, lt: 30 }, waitMonths: 6, utm: { utm_source: "automation_test", utm_medium: "controlled_inbox", utm_campaign: "calculator_acceptance_20260917" } };
   const app = express(); app.use(express.json()); app.use(express.urlencoded({ extended: false })); app.use("/api", createCalculatorReportRouter(durable, secret, true));
   const server = app.listen(0, "127.0.0.1"); await new Promise<void>(resolve => server.once("listening", resolve));
   const base = `http://127.0.0.1:${(server.address() as { port: number }).port}/api/calculator-reports`;
@@ -53,6 +55,7 @@ async function main() {
       if (l.deliveredAt || Object.values(l.jobs).some(j => j?.status === "review")) break;
       await new Promise(resolve => setTimeout(resolve, 5000));
     }
+    if (!(await store.read()).leads[submissionId].deliveredAt) throw new Error("Report delivery not yet confirmed; inspect receipt without resending");
     phase = "signed actions";
     const scopedBefore = (await durable.read()).suppressedEmails[recipient];
     const token = actionToken(secret, submissionId, "unsubscribe");

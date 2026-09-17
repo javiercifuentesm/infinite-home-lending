@@ -221,7 +221,7 @@ if (calculatorEnabled && calculatorStore && calculatorSecret && process.env.HUBS
   const worker = new CalculatorWorker(calculatorStore, createCalculatorProviders(), {
     secret: calculatorSecret,
     baseUrl: (process.env.API_BASE_URL || "https://infinite-home-lending-production.up.railway.app").replace(/\/$/, ""),
-    nurtureEnabled: process.env.CALCULATOR_NURTURE_ENABLED === "true",
+    nurtureEnabled: process.env.CALCULATOR_NURTURE_ENABLED === "true" && process.env.CALCULATOR_REPLY_TRACKING_VERIFIED === "true",
   });
   const tick = () => worker.tick().catch(() => console.error("[calculator-automation] Worker failed; check durable queue"));
   void tick();
