@@ -55,6 +55,7 @@ async function main() {
       if (l.deliveredAt || Object.values(l.jobs).some(j => j?.status === "review")) break;
       await new Promise(resolve => setTimeout(resolve, 5000));
     }
+    if (!(await store.read()).leads[submissionId].deliveredAt) throw new Error("Report delivery not yet confirmed; inspect receipt without resending");
     phase = "signed actions";
     const scopedBefore = (await durable.read()).suppressedEmails[recipient];
     const token = actionToken(secret, submissionId, "unsubscribe");
