@@ -44,7 +44,8 @@ async function main() {
     };
     // Queue alerts are verified by mocks; this test does not generate extra alert emails.
     providers.notifyQueue = undefined;
-    let offset = 0;
+    // Resume the fixture clock after any previous poll; do not skip a persisted receipt check.
+    let offset = Math.max(0, ((await store.read()).leads[submissionId].jobs.report?.lastDeliveryCheck ?? 0) - Date.now());
     const worker = new CalculatorWorker(store, providers, { secret, baseUrl: "https://infinite-home-lending-production.up.railway.app", nurtureEnabled: false, now: () => Date.now() + offset });
     await worker.tick();
     phase = "delivery confirmation";
