@@ -9,7 +9,7 @@ export type CalculatorLead = {
   deliveredAt?: number; lastDeliveryCheck?: number; stopReason?: string; conversationAt?: number;
   jobs: Partial<Record<JobKind, Job>>;
 };
-export type CalculatorState = { version: 1; leads: Record<string, CalculatorLead>; suppressedEmails: Record<string, { at: number; reason: string }> };
+export type CalculatorState = { version: 1; lastHealthAttemptAt?: number; leads: Record<string, CalculatorLead>; suppressedEmails: Record<string, { at: number; reason: string }> };
 export interface CalculatorStore {
   read(): Promise<CalculatorState>;
   mutate<T>(change: (state: CalculatorState) => T): Promise<T>;

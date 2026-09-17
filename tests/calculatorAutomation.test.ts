@@ -123,3 +123,10 @@ test("all-cash and zero-interest inputs produce finite illustrated payments", ()
   const rows = reportRows(parseReportRequest(r));
   assert.equal(rows.find(x => x.label === "Monthly principal & interest now / later")!.value, "$0 / $0");
 });
+test("review alerts are bounded across restarts", async () => {
+  const f = fixture(); let alerts = 0;
+  f.store.state.leads[f.id].jobs.report!.status = "review";
+  f.providers.notifyQueue = async () => { alerts++; };
+  await f.worker().tick(); await f.worker().tick(); assert.equal(alerts, 1);
+  f.advance(86400000); await f.worker().tick(); assert.equal(alerts, 2);
+});

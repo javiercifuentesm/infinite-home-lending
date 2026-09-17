@@ -45,7 +45,7 @@ There are no claims of live acceptance until those checks pass.
 
 The pilot caps storage at 500 requests, intake at 100/day and three requests per email/hour. It is intentionally bounded; it is not a scalable database or a complete bot defense. Before paid traffic, add a challenge/rate limiter at the edge and migrate to a database/queue with retention policy if volume warrants it. At capacity intake stops rather than dropping records. No automatic deletion is performed.
 
-Run `npx tsx scripts/calculator-queue.ts` in the backend environment daily during the pilot. It reads queue states and message IDs without contact details or signed tokens. Review `review` jobs in Brevo logs using the submission tag and message IDs, or HubSpot activity marker for CRM jobs. Never blindly requeue uncertain sends. This version does not automatically alert on stalled/review jobs; daily operator review is required. Turn CALCULATOR_REPORTS_ENABLED off to stop intake/worker, and CALCULATOR_NURTURE_ENABLED off to pause follow-ups.
+Run `npx tsx scripts/calculator-queue.ts` in the backend environment daily during the pilot. It reads queue states and message IDs without contact details or signed tokens. Review `review` jobs in Brevo logs using the submission tag and message IDs, or HubSpot activity marker for CRM jobs. Never blindly requeue uncertain sends. Review jobs trigger at most one internal Brevo alert per day to Javier. If that alert itself fails, the backend logs the failure and attempts the next daily alert; queue inspection remains necessary during the pilot. Turn CALCULATOR_REPORTS_ENABLED off to stop intake/worker, and CALCULATOR_NURTURE_ENABLED off to pause follow-ups.
 
 ## Acquisition rollout
 

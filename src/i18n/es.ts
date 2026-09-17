@@ -591,7 +591,7 @@ export const es = {
   "tool.waiting.reframe.vs": "vs",
   "tool.waiting.slider.title": "¿Cuánto tiempo está pensando esperar?",
   "tool.waiting.slider.selected": "seleccionado",
-  "tool.waiting.slider.hint": "Desplace para ver el costo de esperar distintos periodos de tiempo.",
+  "tool.waiting.slider.hint": "Desplace para comparar escenarios con distintos periodos de espera.",
   "tool.waiting.time.month": "mes",
   "tool.waiting.time.months": "meses",
   "tool.waiting.time.year": "año",

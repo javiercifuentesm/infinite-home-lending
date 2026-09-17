@@ -18,6 +18,17 @@ export class CalculatorWorker {
     this.busy = true;
     try {
       const snapshot = await this.store.read();
+      const reviews = Object.entries(snapshot.leads).flatMap(([submissionId, lead]) => Object.entries(lead.jobs).filter(([, job]) => job?.status === "review").map(([kind, job]) => ({ submissionId, kind, error: job?.error })));
+      if (reviews.length && this.providers.notifyQueue && this.now() - (snapshot.lastHealthAttemptAt ?? 0) >= 86400000) {
+        const claimed = await this.store.mutate(s => {
+          if (this.now() - (s.lastHealthAttemptAt ?? 0) < 86400000) return false;
+          s.lastHealthAttemptAt = this.now(); return true;
+        });
+        if (claimed) {
+          try { await this.providers.notifyQueue(reviews); }
+          catch { console.error("[calculator-automation] Internal review alert failed; inspect queue"); }
+        }
+      }
       for (const [id, initial] of Object.entries(snapshot.leads)) {
         for (const kind of ["crm", "report", "advisor", "conversation", "day2", "day5"] as JobKind[]) {
           const initialJob = initial.jobs[kind];
@@ -56,7 +67,13 @@ export class CalculatorWorker {
           if (nurture) {
             if (!this.options.nurtureEnabled) continue;
             let reason: string | undefined;
-            try { reason = await this.providers.stopReason(current); } catch { continue; } // fail closed
+            try {
+              reason = await this.providers.stopReason(current);
+              for (const priorKind of ["report", "day2"] as const) {
+                const prior = current.jobs[priorKind];
+                if (!reason && prior?.messageId) reason = (await this.providers.delivery(prior.messageId)).stop;
+              }
+            } catch { continue; } // fail closed
             if (reason) await this.store.mutate(s => { s.leads[id].stopReason = reason; });
           }
           const claimed = await this.store.mutate(s => {

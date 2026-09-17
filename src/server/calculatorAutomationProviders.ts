@@ -33,6 +33,7 @@ export function renderCalculatorEmail(lead: CalculatorLead, kind: JobKind, links
 }
 
 export interface CalculatorProviders {
+  notifyQueue?(jobs: { submissionId: string; kind: string; error?: string }[]): Promise<void>;
   syncContact(lead: CalculatorLead): Promise<string>;
   syncNote(lead: CalculatorLead): Promise<string>;
   send(lead: CalculatorLead, kind: JobKind, links: { unsubscribe: string; conversation: string; booking: string }): Promise<string>;
@@ -47,6 +48,10 @@ export function createCalculatorProviders(): CalculatorProviders {
   const brevo = (path: string, method = "GET", body?: unknown) => jsonRequest(`https://api.brevo.com/v3${path}`, brevoHeaders(), method, body);
   const contactByEmail = (email: string) => hs(`/crm/v3/objects/contacts/${encodeURIComponent(email)}?idProperty=email&properties=hs_email_optout,hs_sales_email_last_replied,notes_last_contacted,engagements_last_meeting_booked,ihl_lead_status`);
   return {
+    async notifyQueue(jobs) {
+      const summary = jobs.map(j => `${j.submissionId} / ${j.kind}: ${j.error || "Review required"}`).join("\n");
+      await brevo("/smtp/email", "POST", { sender: { name: "IHL Automation", email: process.env.CALCULATOR_SENDER_EMAIL || "info@infinitehomelending.com" }, to: [{ email: "Javier.Cifuentes@infinitehomelending.com" }], subject: `Calculator automation: ${jobs.length} jobs need review`, textContent: `These persisted calculator jobs need review. Check the queue and provider logs before retrying an uncertain send.\n\n${summary}`, tags: ["ihl-calculator", "ihl-queue-review"] });
+    },
     async syncContact(lead) {
       const r = lead.request;
       try { return (await contactByEmail(r.email)).id; } catch (error) { if (!(error instanceof ProviderError) || error.status !== 404) throw error; }
