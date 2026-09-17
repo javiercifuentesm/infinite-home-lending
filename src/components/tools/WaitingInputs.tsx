@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { WAITING_LIMITS } from "../../lib/calculatorReport";
 import type { WaitingInputs } from "../../hooks/useWaitingMath";
 import { useLanguage } from "../../i18n/LanguageContext";
 
@@ -82,6 +83,9 @@ export function WaitingInputs({ inputs, onChange }: Props) {
       ],
     },
   ];
+  for (const field of fields) {
+    [field.min, field.max] = WAITING_LIMITS[field.id];
+  }
 
   const [localValues, setLocalValues] = useState<Record<string, string>>(() => ({
     hp: inputs.hp.toLocaleString("en-US", { maximumFractionDigits: 0 }),

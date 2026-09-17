@@ -1,3 +1,8 @@
+import { createCalculatorReportRouter } from "./calculatorReportRoute";
+import { S3CalculatorStore } from "./calculatorAutomationStore";
+import { CalculatorWorker } from "./calculatorAutomationWorker";
+import { createCalculatorProviders } from "./calculatorAutomationProviders";
+import { tryGetS3Client } from "./lib/s3Upload";
 import "./loadEnv";
 import cors from "cors";
 import express from "express";
@@ -206,6 +211,23 @@ app.get("/api/health", (_req, res) => {
 });
 app.use(express.json({ limit: "1mb" }));
 app.use(express.urlencoded({ extended: true }));
+
+const calculatorClient = tryGetS3Client();
+const calculatorStore = calculatorClient ? new S3CalculatorStore(calculatorClient, process.env.S3_BUCKET!) : null;
+const calculatorEnabled = process.env.CALCULATOR_REPORTS_ENABLED === "true" && Boolean(process.env.HUBSPOT_API_KEY && process.env.BREVO_API_KEY);
+const calculatorSecret = process.env.CALCULATOR_LINK_SECRET || process.env.BREVO_API_KEY || "";
+app.use("/api", createCalculatorReportRouter(calculatorStore, calculatorSecret, calculatorEnabled));
+if (calculatorEnabled && calculatorStore && calculatorSecret && process.env.HUBSPOT_API_KEY && process.env.BREVO_API_KEY) {
+  const worker = new CalculatorWorker(calculatorStore, createCalculatorProviders(), {
+    secret: calculatorSecret,
+    baseUrl: (process.env.API_BASE_URL || "https://infinite-home-lending-production.up.railway.app").replace(/\/$/, ""),
+    nurtureEnabled: process.env.CALCULATOR_NURTURE_ENABLED === "true",
+  });
+  const tick = () => worker.tick().catch(() => console.error("[calculator-automation] Worker failed; check durable queue"));
+  void tick();
+  setInterval(tick, 30000).unref();
+}
+
 
 app.use("/api/agent-v3", createAgentV3Router());
 app.use("/api", createUploadUrlRouter());
