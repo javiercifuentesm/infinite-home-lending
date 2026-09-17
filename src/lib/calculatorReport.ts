@@ -1,7 +1,7 @@
 import { calcCostForMonths, type WaitingInputs } from "../hooks/useWaitingMath";
 
 export const CALCULATOR_ID = "true-cost-of-waiting";
-export const CALCULATION_VERSION = "waiting-scenarios-v2-2026-09";
+export const CALCULATION_VERSION = "waiting-scenarios-v3-2026-09";
 export const CONSENT_VERSION = "IHL-CALCULATOR-EMAIL-v1-2026-09";
 export const EMAIL_CONSENT = {
   en: "Yes, send me up to two follow-up emails with homebuying guidance related to my scenario. Optional; I can unsubscribe anytime.",

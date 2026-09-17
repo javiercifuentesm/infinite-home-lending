@@ -1,0 +1,3424 @@
+[
+  {
+    "name": "received-email-corrected",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": -3,
+      "ri": 0,
+      "futureRate": 5,
+      "lt": 30
+    },
+    "months": 6,
+    "expected": {
+      "futurePrice": 472745.174486213,
+      "priceIncrease": -7254.825513786974,
+      "rentPaid": 14400.0,
+      "pmtNow": 2801.94377717469,
+      "pmtThen": 2284.018486549611,
+      "monthlyPmtIncrease": -517.9252906250782,
+      "extraDown": -725.4825513786973,
+      "extraClosing": -217.6447654136092,
+      "equityMissed": 2263.2817851250434,
+      "downNow": 48000.0,
+      "downLater": 47274.5174486213,
+      "cashNow": 62400.0,
+      "cashLater": 61456.87268320769
+    }
+  },
+  {
+    "name": "15y--25pct-1m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": -25,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 15
+    },
+    "months": 1,
+    "expected": {
+      "futurePrice": 468629.55637314875,
+      "priceIncrease": -11370.443626851267,
+      "rentPaid": 2400.0,
+      "pmtNow": 3822.808876937372,
+      "pmtThen": 3335.30339834343,
+      "monthlyPmtIncrease": -487.50547859394175,
+      "extraDown": -1137.0443626851268,
+      "extraClosing": -341.113308805538,
+      "equityMissed": 1392.808876937372,
+      "downNow": 48000.0,
+      "downLater": 46862.95563731487,
+      "cashNow": 62400.0,
+      "cashLater": 60921.84232850934
+    }
+  },
+  {
+    "name": "15y--25pct-6m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": -25,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 15
+    },
+    "months": 6,
+    "expected": {
+      "futurePrice": 415692.1938165306,
+      "priceIncrease": -64307.80618346945,
+      "rentPaid": 14400.0,
+      "pmtNow": 3822.808876937372,
+      "pmtThen": 2958.540638006909,
+      "monthlyPmtIncrease": -864.2682389304629,
+      "extraDown": -6430.780618346945,
+      "extraClosing": -1929.2341855040836,
+      "equityMissed": 8475.25662420824,
+      "downNow": 48000.0,
+      "downLater": 41569.219381653056,
+      "cashNow": 62400.0,
+      "cashLater": 54039.98519614897
+    }
+  },
+  {
+    "name": "15y--25pct-12m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": -25,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 15
+    },
+    "months": 12,
+    "expected": {
+      "futurePrice": 360000.0,
+      "priceIncrease": -120000.0,
+      "rentPaid": 28800.0,
+      "pmtNow": 3822.808876937372,
+      "pmtThen": 2562.171350642604,
+      "monthlyPmtIncrease": -1260.637526294768,
+      "extraDown": -12000.0,
+      "extraClosing": -3600.0,
+      "equityMissed": 17240.605891563784,
+      "downNow": 48000.0,
+      "downLater": 36000.0,
+      "cashNow": 62400.0,
+      "cashLater": 46800.0
+    }
+  },
+  {
+    "name": "15y--25pct-13m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": -25,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 15
+    },
+    "months": 13,
+    "expected": {
+      "futurePrice": 351472.1672798616,
+      "priceIncrease": -128527.83272013845,
+      "rentPaid": 31284.0,
+      "pmtNow": 3822.808876937372,
+      "pmtThen": 2501.4775487575725,
+      "monthlyPmtIncrease": -1321.3313281797994,
+      "extraDown": -12852.783272013845,
+      "extraClosing": -3855.8349816041537,
+      "equityMissed": 18730.393176641202,
+      "downNow": 48000.0,
+      "downLater": 35147.21672798615,
+      "cashNow": 62400.0,
+      "cashLater": 45691.381746382
+    }
+  },
+  {
+    "name": "15y--25pct-24m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": -25,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 15
+    },
+    "months": 24,
+    "expected": {
+      "futurePrice": 270000.0,
+      "priceIncrease": -210000.0,
+      "rentPaid": 58608.0,
+      "pmtNow": 3822.808876937372,
+      "pmtThen": 1921.628512981953,
+      "monthlyPmtIncrease": -1901.180363955419,
+      "extraDown": -21000.0,
+      "extraClosing": -6300.0,
+      "equityMissed": 35681.63959660491,
+      "downNow": 48000.0,
+      "downLater": 27000.0,
+      "cashNow": 62400.0,
+      "cashLater": 35100.0
+    }
+  },
+  {
+    "name": "15y--25pct-25m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": -25,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 15
+    },
+    "months": 25,
+    "expected": {
+      "futurePrice": 263604.12545989617,
+      "priceIncrease": -216395.87454010383,
+      "rentPaid": 61178.94,
+      "pmtNow": 3822.808876937372,
+      "pmtThen": 1876.1081615681794,
+      "monthlyPmtIncrease": -1946.7007153691925,
+      "extraDown": -21639.587454010383,
+      "extraClosing": -6491.876236203115,
+      "equityMissed": 37275.157696273185,
+      "downNow": 48000.0,
+      "downLater": 26360.412545989617,
+      "cashNow": 62400.0,
+      "cashLater": 34268.536309786505
+    }
+  },
+  {
+    "name": "15y--25pct-36m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": -25,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 15
+    },
+    "months": 36,
+    "expected": {
+      "futurePrice": 202500.0,
+      "priceIncrease": -277500.0,
+      "rentPaid": 89459.28,
+      "pmtNow": 3822.808876937372,
+      "pmtThen": 1441.2213847364649,
+      "monthlyPmtIncrease": -2381.587492200907,
+      "extraDown": -27750.0,
+      "extraClosing": -8325.0,
+      "equityMissed": 55406.68442677921,
+      "downNow": 48000.0,
+      "downLater": 20250.0,
+      "cashNow": 62400.0,
+      "cashLater": 26325.0
+    }
+  },
+  {
+    "name": "15y--3pct-1m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": -3,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 15
+    },
+    "months": 1,
+    "expected": {
+      "futurePrice": 478783.17666535836,
+      "priceIncrease": -1216.8233346416253,
+      "rentPaid": 2400.0,
+      "pmtNow": 3822.808876937372,
+      "pmtThen": 3407.568162282327,
+      "monthlyPmtIncrease": -415.2407146550447,
+      "extraDown": -121.68233346416253,
+      "extraClosing": -36.50470003924875,
+      "equityMissed": 1392.808876937372,
+      "downNow": 48000.0,
+      "downLater": 47878.31766653584,
+      "cashNow": 62400.0,
+      "cashLater": 62241.81296649659
+    }
+  },
+  {
+    "name": "15y--3pct-6m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": -3,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 15
+    },
+    "months": 6,
+    "expected": {
+      "futurePrice": 472745.174486213,
+      "priceIncrease": -7254.825513786974,
+      "rentPaid": 14400.0,
+      "pmtNow": 3822.808876937372,
+      "pmtThen": 3364.59483950865,
+      "monthlyPmtIncrease": -458.21403742872195,
+      "extraDown": -725.4825513786973,
+      "extraClosing": -217.6447654136092,
+      "equityMissed": 8475.25662420824,
+      "downNow": 48000.0,
+      "downLater": 47274.5174486213,
+      "cashNow": 62400.0,
+      "cashLater": 61456.87268320769
+    }
+  },
+  {
+    "name": "15y--3pct-12m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": -3,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 15
+    },
+    "months": 12,
+    "expected": {
+      "futurePrice": 465600.0,
+      "priceIncrease": -14400.0,
+      "rentPaid": 28800.0,
+      "pmtNow": 3822.808876937372,
+      "pmtThen": 3313.741613497768,
+      "monthlyPmtIncrease": -509.06726343960395,
+      "extraDown": -1440.0,
+      "extraClosing": -432.0,
+      "equityMissed": 17240.605891563784,
+      "downNow": 48000.0,
+      "downLater": 46560.0,
+      "cashNow": 62400.0,
+      "cashLater": 60528.0
+    }
+  },
+  {
+    "name": "15y--3pct-13m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": -3,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 15
+    },
+    "months": 13,
+    "expected": {
+      "futurePrice": 464419.68136539764,
+      "priceIncrease": -15580.318634602376,
+      "rentPaid": 31284.0,
+      "pmtNow": 3822.808876937372,
+      "pmtThen": 3305.3411174138573,
+      "monthlyPmtIncrease": -517.4677595235145,
+      "extraDown": -1558.0318634602377,
+      "extraClosing": -467.4095590380713,
+      "equityMissed": 18730.393176641202,
+      "downNow": 48000.0,
+      "downLater": 46441.96813653976,
+      "cashNow": 62400.0,
+      "cashLater": 60374.55857750169
+    }
+  },
+  {
+    "name": "15y--3pct-24m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": -3,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 15
+    },
+    "months": 24,
+    "expected": {
+      "futurePrice": 451632.0,
+      "priceIncrease": -28368.0,
+      "rentPaid": 58608.0,
+      "pmtNow": 3822.808876937372,
+      "pmtThen": 3214.329365092835,
+      "monthlyPmtIncrease": -608.479511844537,
+      "extraDown": -2836.8,
+      "extraClosing": -851.04,
+      "equityMissed": 35681.63959660491,
+      "downNow": 48000.0,
+      "downLater": 45163.2,
+      "cashNow": 62400.0,
+      "cashLater": 58712.16
+    }
+  },
+  {
+    "name": "15y--3pct-25m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": -3,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 15
+    },
+    "months": 25,
+    "expected": {
+      "futurePrice": 450487.0909244357,
+      "priceIncrease": -29512.909075564305,
+      "rentPaid": 61178.94,
+      "pmtNow": 3822.808876937372,
+      "pmtThen": 3206.1808838914417,
+      "monthlyPmtIncrease": -616.6279930459302,
+      "extraDown": -2951.2909075564307,
+      "extraClosing": -885.3872722669291,
+      "equityMissed": 37275.157696273185,
+      "downNow": 48000.0,
+      "downLater": 45048.70909244357,
+      "cashNow": 62400.0,
+      "cashLater": 58563.32182017664
+    }
+  },
+  {
+    "name": "15y--3pct-36m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": -3,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 15
+    },
+    "months": 36,
+    "expected": {
+      "futurePrice": 438083.04,
+      "priceIncrease": -41916.96,
+      "rentPaid": 89459.28,
+      "pmtNow": 3822.808876937372,
+      "pmtThen": 3117.89948414005,
+      "monthlyPmtIncrease": -704.909392797322,
+      "extraDown": -4191.696,
+      "extraClosing": -1257.5088,
+      "equityMissed": 55406.68442677921,
+      "downNow": 48000.0,
+      "downLater": 43808.304,
+      "cashNow": 62400.0,
+      "cashLater": 56950.7952
+    }
+  },
+  {
+    "name": "15y-0pct-1m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 0,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 15
+    },
+    "months": 1,
+    "expected": {
+      "futurePrice": 480000.0,
+      "priceIncrease": 0.0,
+      "rentPaid": 2400.0,
+      "pmtNow": 3822.808876937372,
+      "pmtThen": 3416.2284675234723,
+      "monthlyPmtIncrease": -406.58040941389976,
+      "extraDown": 0.0,
+      "extraClosing": 0.0,
+      "equityMissed": 1392.808876937372,
+      "downNow": 48000.0,
+      "downLater": 48000.0,
+      "cashNow": 62400.0,
+      "cashLater": 62400.0
+    }
+  },
+  {
+    "name": "15y-0pct-6m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 0,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 15
+    },
+    "months": 6,
+    "expected": {
+      "futurePrice": 480000.0,
+      "priceIncrease": 0.0,
+      "rentPaid": 14400.0,
+      "pmtNow": 3822.808876937372,
+      "pmtThen": 3416.2284675234723,
+      "monthlyPmtIncrease": -406.58040941389976,
+      "extraDown": 0.0,
+      "extraClosing": 0.0,
+      "equityMissed": 8475.25662420824,
+      "downNow": 48000.0,
+      "downLater": 48000.0,
+      "cashNow": 62400.0,
+      "cashLater": 62400.0
+    }
+  },
+  {
+    "name": "15y-0pct-12m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 0,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 15
+    },
+    "months": 12,
+    "expected": {
+      "futurePrice": 480000.0,
+      "priceIncrease": 0.0,
+      "rentPaid": 28800.0,
+      "pmtNow": 3822.808876937372,
+      "pmtThen": 3416.2284675234723,
+      "monthlyPmtIncrease": -406.58040941389976,
+      "extraDown": 0.0,
+      "extraClosing": 0.0,
+      "equityMissed": 17240.605891563784,
+      "downNow": 48000.0,
+      "downLater": 48000.0,
+      "cashNow": 62400.0,
+      "cashLater": 62400.0
+    }
+  },
+  {
+    "name": "15y-0pct-13m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 0,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 15
+    },
+    "months": 13,
+    "expected": {
+      "futurePrice": 480000.0,
+      "priceIncrease": 0.0,
+      "rentPaid": 31284.0,
+      "pmtNow": 3822.808876937372,
+      "pmtThen": 3416.2284675234723,
+      "monthlyPmtIncrease": -406.58040941389976,
+      "extraDown": 0.0,
+      "extraClosing": 0.0,
+      "equityMissed": 18730.393176641202,
+      "downNow": 48000.0,
+      "downLater": 48000.0,
+      "cashNow": 62400.0,
+      "cashLater": 62400.0
+    }
+  },
+  {
+    "name": "15y-0pct-24m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 0,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 15
+    },
+    "months": 24,
+    "expected": {
+      "futurePrice": 480000.0,
+      "priceIncrease": 0.0,
+      "rentPaid": 58608.0,
+      "pmtNow": 3822.808876937372,
+      "pmtThen": 3416.2284675234723,
+      "monthlyPmtIncrease": -406.58040941389976,
+      "extraDown": 0.0,
+      "extraClosing": 0.0,
+      "equityMissed": 35681.63959660491,
+      "downNow": 48000.0,
+      "downLater": 48000.0,
+      "cashNow": 62400.0,
+      "cashLater": 62400.0
+    }
+  },
+  {
+    "name": "15y-0pct-25m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 0,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 15
+    },
+    "months": 25,
+    "expected": {
+      "futurePrice": 480000.0,
+      "priceIncrease": 0.0,
+      "rentPaid": 61178.94,
+      "pmtNow": 3822.808876937372,
+      "pmtThen": 3416.2284675234723,
+      "monthlyPmtIncrease": -406.58040941389976,
+      "extraDown": 0.0,
+      "extraClosing": 0.0,
+      "equityMissed": 37275.157696273185,
+      "downNow": 48000.0,
+      "downLater": 48000.0,
+      "cashNow": 62400.0,
+      "cashLater": 62400.0
+    }
+  },
+  {
+    "name": "15y-0pct-36m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 0,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 15
+    },
+    "months": 36,
+    "expected": {
+      "futurePrice": 480000.0,
+      "priceIncrease": 0.0,
+      "rentPaid": 89459.28,
+      "pmtNow": 3822.808876937372,
+      "pmtThen": 3416.2284675234723,
+      "monthlyPmtIncrease": -406.58040941389976,
+      "extraDown": 0.0,
+      "extraClosing": 0.0,
+      "equityMissed": 55406.68442677921,
+      "downNow": 48000.0,
+      "downLater": 48000.0,
+      "cashNow": 62400.0,
+      "cashLater": 62400.0
+    }
+  },
+  {
+    "name": "15y-3.5pct-1m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 3.5,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 15
+    },
+    "months": 1,
+    "expected": {
+      "futurePrice": 481378.0313851568,
+      "priceIncrease": 1378.0313851567812,
+      "rentPaid": 2400.0,
+      "pmtNow": 3822.808876937372,
+      "pmtThen": 3426.0361134549585,
+      "monthlyPmtIncrease": -396.77276348241355,
+      "extraDown": 137.8031385156781,
+      "extraClosing": 41.340941554703434,
+      "equityMissed": 1392.808876937372,
+      "downNow": 48000.0,
+      "downLater": 48137.80313851568,
+      "cashNow": 62400.0,
+      "cashLater": 62579.14408007038
+    }
+  },
+  {
+    "name": "15y-3.5pct-6m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 3.5,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 15
+    },
+    "months": 6,
+    "expected": {
+      "futurePrice": 488327.7587850193,
+      "priceIncrease": 8327.758785019307,
+      "rentPaid": 14400.0,
+      "pmtNow": 3822.808876937372,
+      "pmtThen": 3475.49831467358,
+      "monthlyPmtIncrease": -347.3105622637922,
+      "extraDown": 832.7758785019306,
+      "extraClosing": 249.8327635505792,
+      "equityMissed": 8475.25662420824,
+      "downNow": 48000.0,
+      "downLater": 48832.77587850193,
+      "cashNow": 62400.0,
+      "cashLater": 63482.60864205251
+    }
+  },
+  {
+    "name": "15y-3.5pct-12m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 3.5,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 15
+    },
+    "months": 12,
+    "expected": {
+      "futurePrice": 496800.0,
+      "priceIncrease": 16800.0,
+      "rentPaid": 28800.0,
+      "pmtNow": 3822.808876937372,
+      "pmtThen": 3535.796463886794,
+      "monthlyPmtIncrease": -287.01241305057823,
+      "extraDown": 1680.0,
+      "extraClosing": 504.0,
+      "equityMissed": 17240.605891563784,
+      "downNow": 48000.0,
+      "downLater": 49680.0,
+      "cashNow": 62400.0,
+      "cashLater": 64584.0
+    }
+  },
+  {
+    "name": "15y-3.5pct-13m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 3.5,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 15
+    },
+    "months": 13,
+    "expected": {
+      "futurePrice": 498226.26248363726,
+      "priceIncrease": 18226.262483637267,
+      "rentPaid": 31284.0,
+      "pmtNow": 3822.808876937372,
+      "pmtThen": 3545.9473774258818,
+      "monthlyPmtIncrease": -276.86149951148997,
+      "extraDown": 1822.626248363727,
+      "extraClosing": 546.7878745091181,
+      "equityMissed": 18730.393176641202,
+      "downNow": 48000.0,
+      "downLater": 49822.626248363726,
+      "cashNow": 62400.0,
+      "cashLater": 64769.41412287285
+    }
+  },
+  {
+    "name": "15y-3.5pct-24m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 3.5,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 15
+    },
+    "months": 24,
+    "expected": {
+      "futurePrice": 514188.0,
+      "priceIncrease": 34188.0,
+      "rentPaid": 58608.0,
+      "pmtNow": 3822.808876937372,
+      "pmtThen": 3659.5493401228314,
+      "monthlyPmtIncrease": -163.25953681454047,
+      "extraDown": 3418.8,
+      "extraClosing": 1025.64,
+      "equityMissed": 35681.63959660491,
+      "downNow": 48000.0,
+      "downLater": 51418.8,
+      "cashNow": 62400.0,
+      "cashLater": 66844.44
+    }
+  },
+  {
+    "name": "15y-3.5pct-25m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 3.5,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 15
+    },
+    "months": 25,
+    "expected": {
+      "futurePrice": 515664.1816705646,
+      "priceIncrease": 35664.181670564576,
+      "rentPaid": 61178.94,
+      "pmtNow": 3822.808876937372,
+      "pmtThen": 3670.0555356357877,
+      "monthlyPmtIncrease": -152.75334130158413,
+      "extraDown": 3566.418167056457,
+      "extraClosing": 1069.925450116937,
+      "equityMissed": 37275.157696273185,
+      "downNow": 48000.0,
+      "downLater": 51566.41816705646,
+      "cashNow": 62400.0,
+      "cashLater": 67036.34361717339
+    }
+  },
+  {
+    "name": "15y-3.5pct-36m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 3.5,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 15
+    },
+    "months": 36,
+    "expected": {
+      "futurePrice": 532184.58,
+      "priceIncrease": 52184.58,
+      "rentPaid": 89459.28,
+      "pmtNow": 3822.808876937372,
+      "pmtThen": 3787.6335670271305,
+      "monthlyPmtIncrease": -35.17530991024137,
+      "extraDown": 5218.458,
+      "extraClosing": 1565.5374,
+      "equityMissed": 55406.68442677921,
+      "downNow": 48000.0,
+      "downLater": 53218.458,
+      "cashNow": 62400.0,
+      "cashLater": 69183.9954
+    }
+  },
+  {
+    "name": "15y-25pct-1m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 25,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 15
+    },
+    "months": 1,
+    "expected": {
+      "futurePrice": 489009.2472583229,
+      "priceIncrease": 9009.247258322894,
+      "rentPaid": 2400.0,
+      "pmtNow": 3822.808876937372,
+      "pmtThen": 3480.3485653460566,
+      "monthlyPmtIncrease": -342.4603115913155,
+      "extraDown": 900.9247258322894,
+      "extraClosing": 270.2774177496868,
+      "equityMissed": 1392.808876937372,
+      "downNow": 48000.0,
+      "downLater": 48900.92472583229,
+      "cashNow": 62400.0,
+      "cashLater": 63571.20214358198
+    }
+  },
+  {
+    "name": "15y-25pct-6m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 25,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 15
+    },
+    "months": 6,
+    "expected": {
+      "futurePrice": 536656.3145999495,
+      "priceIncrease": 56656.314599949525,
+      "rentPaid": 14400.0,
+      "pmtNow": 3822.808876937372,
+      "pmtThen": 3819.4595400262083,
+      "monthlyPmtIncrease": -3.349336911163745,
+      "extraDown": 5665.631459994953,
+      "extraClosing": 1699.6894379984858,
+      "equityMissed": 8475.25662420824,
+      "downNow": 48000.0,
+      "downLater": 53665.631459994955,
+      "cashNow": 62400.0,
+      "cashLater": 69765.32089799344
+    }
+  },
+  {
+    "name": "15y-25pct-12m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 25,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 15
+    },
+    "months": 12,
+    "expected": {
+      "futurePrice": 600000.0,
+      "priceIncrease": 120000.0,
+      "rentPaid": 28800.0,
+      "pmtNow": 3822.808876937372,
+      "pmtThen": 4270.285584404341,
+      "monthlyPmtIncrease": 447.47670746696826,
+      "extraDown": 12000.0,
+      "extraClosing": 3600.0,
+      "equityMissed": 17240.605891563784,
+      "downNow": 48000.0,
+      "downLater": 60000.0,
+      "cashNow": 62400.0,
+      "cashLater": 78000.0
+    }
+  },
+  {
+    "name": "15y-25pct-13m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 25,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 15
+    },
+    "months": 13,
+    "expected": {
+      "futurePrice": 611261.5590729036,
+      "priceIncrease": 131261.55907290362,
+      "rentPaid": 31284.0,
+      "pmtNow": 3822.808876937372,
+      "pmtThen": 4350.4357066825705,
+      "monthlyPmtIncrease": 527.6268297451986,
+      "extraDown": 13126.155907290362,
+      "extraClosing": 3937.8467721871084,
+      "equityMissed": 18730.393176641202,
+      "downNow": 48000.0,
+      "downLater": 61126.15590729036,
+      "cashNow": 62400.0,
+      "cashLater": 79464.00267947747
+    }
+  },
+  {
+    "name": "15y-25pct-24m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 25,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 15
+    },
+    "months": 24,
+    "expected": {
+      "futurePrice": 750000.0,
+      "priceIncrease": 270000.0,
+      "rentPaid": 58608.0,
+      "pmtNow": 3822.808876937372,
+      "pmtThen": 5337.856980505425,
+      "monthlyPmtIncrease": 1515.0481035680534,
+      "extraDown": 27000.0,
+      "extraClosing": 8100.0,
+      "equityMissed": 35681.63959660491,
+      "downNow": 48000.0,
+      "downLater": 75000.0,
+      "cashNow": 62400.0,
+      "cashLater": 97500.0
+    }
+  },
+  {
+    "name": "15y-25pct-25m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 25,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 15
+    },
+    "months": 25,
+    "expected": {
+      "futurePrice": 764076.9488411295,
+      "priceIncrease": 284076.94884112955,
+      "rentPaid": 61178.94,
+      "pmtNow": 3822.808876937372,
+      "pmtThen": 5438.044633353214,
+      "monthlyPmtIncrease": 1615.2357564158413,
+      "extraDown": 28407.694884112952,
+      "extraClosing": 8522.308465233886,
+      "equityMissed": 37275.157696273185,
+      "downNow": 48000.0,
+      "downLater": 76407.69488411295,
+      "cashNow": 62400.0,
+      "cashLater": 99330.00334934684
+    }
+  },
+  {
+    "name": "15y-25pct-36m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 25,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 15
+    },
+    "months": 36,
+    "expected": {
+      "futurePrice": 937500.0,
+      "priceIncrease": 457500.0,
+      "rentPaid": 89459.28,
+      "pmtNow": 3822.808876937372,
+      "pmtThen": 6672.321225631781,
+      "monthlyPmtIncrease": 2849.5123486944094,
+      "extraDown": 45750.0,
+      "extraClosing": 13725.0,
+      "equityMissed": 55406.68442677921,
+      "downNow": 48000.0,
+      "downLater": 93750.0,
+      "cashNow": 62400.0,
+      "cashLater": 121875.0
+    }
+  },
+  {
+    "name": "20y--25pct-1m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": -25,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 20
+    },
+    "months": 1,
+    "expected": {
+      "futurePrice": 468629.55637314875,
+      "priceIncrease": -11370.443626851267,
+      "rentPaid": 2400.0,
+      "pmtNow": 3284.7725221763994,
+      "pmtThen": 2783.4728876551403,
+      "monthlyPmtIncrease": -501.29963452125946,
+      "extraDown": -1137.0443626851268,
+      "extraClosing": -341.113308805538,
+      "equityMissed": 854.7725221763995,
+      "downNow": 48000.0,
+      "downLater": 46862.95563731487,
+      "cashNow": 62400.0,
+      "cashLater": 60921.84232850934
+    }
+  },
+  {
+    "name": "20y--25pct-6m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": -25,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 20
+    },
+    "months": 6,
+    "expected": {
+      "futurePrice": 415692.1938165306,
+      "priceIncrease": -64307.80618346945,
+      "rentPaid": 14400.0,
+      "pmtNow": 3284.7725221763994,
+      "pmtThen": 2469.046041511042,
+      "monthlyPmtIncrease": -815.7264806653578,
+      "extraDown": -6430.780618346945,
+      "extraClosing": -1929.2341855040836,
+      "equityMissed": 5201.299762460131,
+      "downNow": 48000.0,
+      "downLater": 41569.219381653056,
+      "cashNow": 62400.0,
+      "cashLater": 54039.98519614897
+    }
+  },
+  {
+    "name": "20y--25pct-12m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": -25,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 20
+    },
+    "months": 12,
+    "expected": {
+      "futurePrice": 360000.0,
+      "priceIncrease": -120000.0,
+      "rentPaid": 28800.0,
+      "pmtNow": 3284.7725221763994,
+      "pmtThen": 2138.2565950619696,
+      "monthlyPmtIncrease": -1146.5159271144298,
+      "extraDown": -12000.0,
+      "extraClosing": -3600.0,
+      "equityMissed": 10580.630570208461,
+      "downNow": 48000.0,
+      "downLater": 36000.0,
+      "cashNow": 62400.0,
+      "cashLater": 46800.0
+    }
+  },
+  {
+    "name": "20y--25pct-13m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": -25,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 20
+    },
+    "months": 13,
+    "expected": {
+      "futurePrice": 351472.1672798616,
+      "priceIncrease": -128527.83272013845,
+      "rentPaid": 31284.0,
+      "pmtNow": 3284.7725221763994,
+      "pmtThen": 2087.604665741355,
+      "monthlyPmtIncrease": -1197.1678564350445,
+      "extraDown": -12852.783272013845,
+      "extraClosing": -3855.8349816041537,
+      "equityMissed": 11494.919139342283,
+      "downNow": 48000.0,
+      "downLater": 35147.21672798615,
+      "cashNow": 62400.0,
+      "cashLater": 45691.381746382
+    }
+  },
+  {
+    "name": "20y--25pct-24m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": -25,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 20
+    },
+    "months": 24,
+    "expected": {
+      "futurePrice": 270000.0,
+      "priceIncrease": -210000.0,
+      "rentPaid": 58608.0,
+      "pmtNow": 3284.7725221763994,
+      "pmtThen": 1603.6924462964773,
+      "monthlyPmtIncrease": -1681.0800758799223,
+      "extraDown": -21000.0,
+      "extraClosing": -6300.0,
+      "equityMissed": 21897.968614649126,
+      "downNow": 48000.0,
+      "downLater": 27000.0,
+      "cashNow": 62400.0,
+      "cashLater": 35100.0
+    }
+  },
+  {
+    "name": "20y--25pct-25m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": -25,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 20
+    },
+    "months": 25,
+    "expected": {
+      "futurePrice": 263604.12545989617,
+      "priceIncrease": -216395.87454010383,
+      "rentPaid": 61178.94,
+      "pmtNow": 3284.7725221763994,
+      "pmtThen": 1565.7034993060163,
+      "monthlyPmtIncrease": -1719.0690228703834,
+      "extraDown": -21639.587454010383,
+      "extraClosing": -6491.876236203115,
+      "equityMissed": 22875.91721028293,
+      "downNow": 48000.0,
+      "downLater": 26360.412545989617,
+      "cashNow": 62400.0,
+      "cashLater": 34268.536309786505
+    }
+  },
+  {
+    "name": "20y--25pct-36m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": -25,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 20
+    },
+    "months": 36,
+    "expected": {
+      "futurePrice": 202500.0,
+      "priceIncrease": -277500.0,
+      "rentPaid": 89459.28,
+      "pmtNow": 3284.7725221763994,
+      "pmtThen": 1202.769334722358,
+      "monthlyPmtIncrease": -2082.0031874540414,
+      "extraDown": -27750.0,
+      "extraClosing": -8325.0,
+      "equityMissed": 34003.30955460982,
+      "downNow": 48000.0,
+      "downLater": 20250.0,
+      "cashNow": 62400.0,
+      "cashLater": 26325.0
+    }
+  },
+  {
+    "name": "20y--3pct-1m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": -3,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 20
+    },
+    "months": 1,
+    "expected": {
+      "futurePrice": 478783.17666535836,
+      "priceIncrease": -1216.8233346416253,
+      "rentPaid": 2400.0,
+      "pmtNow": 3284.7725221763994,
+      "pmtThen": 2843.781347526174,
+      "monthlyPmtIncrease": -440.9911746502253,
+      "extraDown": -121.68233346416253,
+      "extraClosing": -36.50470003924875,
+      "equityMissed": 854.7725221763995,
+      "downNow": 48000.0,
+      "downLater": 47878.31766653584,
+      "cashNow": 62400.0,
+      "cashLater": 62241.81296649659
+    }
+  },
+  {
+    "name": "20y--3pct-6m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": -3,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 20
+    },
+    "months": 6,
+    "expected": {
+      "futurePrice": 472745.174486213,
+      "priceIncrease": -7254.825513786974,
+      "rentPaid": 14400.0,
+      "pmtNow": 3284.7725221763994,
+      "pmtThen": 2807.9180198024073,
+      "monthlyPmtIncrease": -476.8545023739922,
+      "extraDown": -725.4825513786973,
+      "extraClosing": -217.6447654136092,
+      "equityMissed": 5201.299762460131,
+      "downNow": 48000.0,
+      "downLater": 47274.5174486213,
+      "cashNow": 62400.0,
+      "cashLater": 61456.87268320769
+    }
+  },
+  {
+    "name": "20y--3pct-12m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": -3,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 20
+    },
+    "months": 12,
+    "expected": {
+      "futurePrice": 465600.0,
+      "priceIncrease": -14400.0,
+      "rentPaid": 28800.0,
+      "pmtNow": 3284.7725221763994,
+      "pmtThen": 2765.478529613481,
+      "monthlyPmtIncrease": -519.2939925629187,
+      "extraDown": -1440.0,
+      "extraClosing": -432.0,
+      "equityMissed": 10580.630570208461,
+      "downNow": 48000.0,
+      "downLater": 46560.0,
+      "cashNow": 62400.0,
+      "cashLater": 60528.0
+    }
+  },
+  {
+    "name": "20y--3pct-13m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": -3,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 20
+    },
+    "months": 13,
+    "expected": {
+      "futurePrice": 464419.68136539764,
+      "priceIncrease": -15580.318634602376,
+      "rentPaid": 31284.0,
+      "pmtNow": 3284.7725221763994,
+      "pmtThen": 2758.467907100389,
+      "monthlyPmtIncrease": -526.3046150760106,
+      "extraDown": -1558.0318634602377,
+      "extraClosing": -467.4095590380713,
+      "equityMissed": 11494.919139342283,
+      "downNow": 48000.0,
+      "downLater": 46441.96813653976,
+      "cashNow": 62400.0,
+      "cashLater": 60374.55857750169
+    }
+  },
+  {
+    "name": "20y--3pct-24m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": -3,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 20
+    },
+    "months": 24,
+    "expected": {
+      "futurePrice": 451632.0,
+      "priceIncrease": -28368.0,
+      "rentPaid": 58608.0,
+      "pmtNow": 3284.7725221763994,
+      "pmtThen": 2682.5141737250765,
+      "monthlyPmtIncrease": -602.2583484513231,
+      "extraDown": -2836.8,
+      "extraClosing": -851.04,
+      "equityMissed": 21897.968614649126,
+      "downNow": 48000.0,
+      "downLater": 45163.2,
+      "cashNow": 62400.0,
+      "cashLater": 58712.16
+    }
+  },
+  {
+    "name": "20y--3pct-25m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": -3,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 20
+    },
+    "months": 25,
+    "expected": {
+      "futurePrice": 450487.0909244357,
+      "priceIncrease": -29512.909075564305,
+      "rentPaid": 61178.94,
+      "pmtNow": 3284.7725221763994,
+      "pmtThen": 2675.7138698873773,
+      "monthlyPmtIncrease": -609.0586522890222,
+      "extraDown": -2951.2909075564307,
+      "extraClosing": -885.3872722669291,
+      "equityMissed": 22875.91721028293,
+      "downNow": 48000.0,
+      "downLater": 45048.70909244357,
+      "cashNow": 62400.0,
+      "cashLater": 58563.32182017664
+    }
+  },
+  {
+    "name": "20y--3pct-36m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": -3,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 20
+    },
+    "months": 36,
+    "expected": {
+      "futurePrice": 438083.04,
+      "priceIncrease": -41916.96,
+      "rentPaid": 89459.28,
+      "pmtNow": 3284.7725221763994,
+      "pmtThen": 2602.038748513324,
+      "monthlyPmtIncrease": -682.7337736630753,
+      "extraDown": -4191.696,
+      "extraClosing": -1257.5088,
+      "equityMissed": 34003.30955460982,
+      "downNow": 48000.0,
+      "downLater": 43808.304,
+      "cashNow": 62400.0,
+      "cashLater": 56950.7952
+    }
+  },
+  {
+    "name": "20y-0pct-1m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 0,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 20
+    },
+    "months": 1,
+    "expected": {
+      "futurePrice": 480000.0,
+      "priceIncrease": 0.0,
+      "rentPaid": 2400.0,
+      "pmtNow": 3284.7725221763994,
+      "pmtThen": 2851.0087934159596,
+      "monthlyPmtIncrease": -433.76372876043985,
+      "extraDown": 0.0,
+      "extraClosing": 0.0,
+      "equityMissed": 854.7725221763995,
+      "downNow": 48000.0,
+      "downLater": 48000.0,
+      "cashNow": 62400.0,
+      "cashLater": 62400.0
+    }
+  },
+  {
+    "name": "20y-0pct-6m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 0,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 20
+    },
+    "months": 6,
+    "expected": {
+      "futurePrice": 480000.0,
+      "priceIncrease": 0.0,
+      "rentPaid": 14400.0,
+      "pmtNow": 3284.7725221763994,
+      "pmtThen": 2851.0087934159596,
+      "monthlyPmtIncrease": -433.76372876043985,
+      "extraDown": 0.0,
+      "extraClosing": 0.0,
+      "equityMissed": 5201.299762460131,
+      "downNow": 48000.0,
+      "downLater": 48000.0,
+      "cashNow": 62400.0,
+      "cashLater": 62400.0
+    }
+  },
+  {
+    "name": "20y-0pct-12m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 0,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 20
+    },
+    "months": 12,
+    "expected": {
+      "futurePrice": 480000.0,
+      "priceIncrease": 0.0,
+      "rentPaid": 28800.0,
+      "pmtNow": 3284.7725221763994,
+      "pmtThen": 2851.0087934159596,
+      "monthlyPmtIncrease": -433.76372876043985,
+      "extraDown": 0.0,
+      "extraClosing": 0.0,
+      "equityMissed": 10580.630570208461,
+      "downNow": 48000.0,
+      "downLater": 48000.0,
+      "cashNow": 62400.0,
+      "cashLater": 62400.0
+    }
+  },
+  {
+    "name": "20y-0pct-13m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 0,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 20
+    },
+    "months": 13,
+    "expected": {
+      "futurePrice": 480000.0,
+      "priceIncrease": 0.0,
+      "rentPaid": 31284.0,
+      "pmtNow": 3284.7725221763994,
+      "pmtThen": 2851.0087934159596,
+      "monthlyPmtIncrease": -433.76372876043985,
+      "extraDown": 0.0,
+      "extraClosing": 0.0,
+      "equityMissed": 11494.919139342283,
+      "downNow": 48000.0,
+      "downLater": 48000.0,
+      "cashNow": 62400.0,
+      "cashLater": 62400.0
+    }
+  },
+  {
+    "name": "20y-0pct-24m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 0,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 20
+    },
+    "months": 24,
+    "expected": {
+      "futurePrice": 480000.0,
+      "priceIncrease": 0.0,
+      "rentPaid": 58608.0,
+      "pmtNow": 3284.7725221763994,
+      "pmtThen": 2851.0087934159596,
+      "monthlyPmtIncrease": -433.76372876043985,
+      "extraDown": 0.0,
+      "extraClosing": 0.0,
+      "equityMissed": 21897.968614649126,
+      "downNow": 48000.0,
+      "downLater": 48000.0,
+      "cashNow": 62400.0,
+      "cashLater": 62400.0
+    }
+  },
+  {
+    "name": "20y-0pct-25m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 0,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 20
+    },
+    "months": 25,
+    "expected": {
+      "futurePrice": 480000.0,
+      "priceIncrease": 0.0,
+      "rentPaid": 61178.94,
+      "pmtNow": 3284.7725221763994,
+      "pmtThen": 2851.0087934159596,
+      "monthlyPmtIncrease": -433.76372876043985,
+      "extraDown": 0.0,
+      "extraClosing": 0.0,
+      "equityMissed": 22875.91721028293,
+      "downNow": 48000.0,
+      "downLater": 48000.0,
+      "cashNow": 62400.0,
+      "cashLater": 62400.0
+    }
+  },
+  {
+    "name": "20y-0pct-36m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 0,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 20
+    },
+    "months": 36,
+    "expected": {
+      "futurePrice": 480000.0,
+      "priceIncrease": 0.0,
+      "rentPaid": 89459.28,
+      "pmtNow": 3284.7725221763994,
+      "pmtThen": 2851.0087934159596,
+      "monthlyPmtIncrease": -433.76372876043985,
+      "extraDown": 0.0,
+      "extraClosing": 0.0,
+      "equityMissed": 34003.30955460982,
+      "downNow": 48000.0,
+      "downLater": 48000.0,
+      "cashNow": 62400.0,
+      "cashLater": 62400.0
+    }
+  },
+  {
+    "name": "20y-3.5pct-1m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 3.5,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 20
+    },
+    "months": 1,
+    "expected": {
+      "futurePrice": 481378.0313851568,
+      "priceIncrease": 1378.0313851567812,
+      "rentPaid": 2400.0,
+      "pmtNow": 3284.7725221763994,
+      "pmtThen": 2859.193750909054,
+      "monthlyPmtIncrease": -425.5787712673458,
+      "extraDown": 137.8031385156781,
+      "extraClosing": 41.340941554703434,
+      "equityMissed": 854.7725221763995,
+      "downNow": 48000.0,
+      "downLater": 48137.80313851568,
+      "cashNow": 62400.0,
+      "cashLater": 62579.14408007038
+    }
+  },
+  {
+    "name": "20y-3.5pct-6m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 3.5,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 20
+    },
+    "months": 6,
+    "expected": {
+      "futurePrice": 488327.7587850193,
+      "priceIncrease": 8327.758785019307,
+      "rentPaid": 14400.0,
+      "pmtNow": 3284.7725221763994,
+      "pmtThen": 2900.4723632608284,
+      "monthlyPmtIncrease": -384.300158915571,
+      "extraDown": 832.7758785019306,
+      "extraClosing": 249.8327635505792,
+      "equityMissed": 5201.299762460131,
+      "downNow": 48000.0,
+      "downLater": 48832.77587850193,
+      "cashNow": 62400.0,
+      "cashLater": 63482.60864205251
+    }
+  },
+  {
+    "name": "20y-3.5pct-12m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 3.5,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 20
+    },
+    "months": 12,
+    "expected": {
+      "futurePrice": 496800.0,
+      "priceIncrease": 16800.0,
+      "rentPaid": 28800.0,
+      "pmtNow": 3284.7725221763994,
+      "pmtThen": 2950.7941011855182,
+      "monthlyPmtIncrease": -333.97842099088126,
+      "extraDown": 1680.0,
+      "extraClosing": 504.0,
+      "equityMissed": 10580.630570208461,
+      "downNow": 48000.0,
+      "downLater": 49680.0,
+      "cashNow": 62400.0,
+      "cashLater": 64584.0
+    }
+  },
+  {
+    "name": "20y-3.5pct-13m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 3.5,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 20
+    },
+    "months": 13,
+    "expected": {
+      "futurePrice": 498226.26248363726,
+      "priceIncrease": 18226.262483637267,
+      "rentPaid": 31284.0,
+      "pmtNow": 3284.7725221763994,
+      "pmtThen": 2959.2655321908705,
+      "monthlyPmtIncrease": -325.5069899855289,
+      "extraDown": 1822.626248363727,
+      "extraClosing": 546.7878745091181,
+      "equityMissed": 11494.919139342283,
+      "downNow": 48000.0,
+      "downLater": 49822.626248363726,
+      "cashNow": 62400.0,
+      "cashLater": 64769.41412287285
+    }
+  },
+  {
+    "name": "20y-3.5pct-24m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 3.5,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 20
+    },
+    "months": 24,
+    "expected": {
+      "futurePrice": 514188.0,
+      "priceIncrease": 34188.0,
+      "rentPaid": 58608.0,
+      "pmtNow": 3284.7725221763994,
+      "pmtThen": 3054.0718947270116,
+      "monthlyPmtIncrease": -230.70062744938812,
+      "extraDown": 3418.8,
+      "extraClosing": 1025.64,
+      "equityMissed": 21897.968614649126,
+      "downNow": 48000.0,
+      "downLater": 51418.8,
+      "cashNow": 62400.0,
+      "cashLater": 66844.44
+    }
+  },
+  {
+    "name": "20y-3.5pct-25m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 3.5,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 20
+    },
+    "months": 25,
+    "expected": {
+      "futurePrice": 515664.1816705646,
+      "priceIncrease": 35664.181670564576,
+      "rentPaid": 61178.94,
+      "pmtNow": 3284.7725221763994,
+      "pmtThen": 3062.839825817551,
+      "monthlyPmtIncrease": -221.93269635884843,
+      "extraDown": 3566.418167056457,
+      "extraClosing": 1069.925450116937,
+      "equityMissed": 22875.91721028293,
+      "downNow": 48000.0,
+      "downLater": 51566.41816705646,
+      "cashNow": 62400.0,
+      "cashLater": 67036.34361717339
+    }
+  },
+  {
+    "name": "20y-3.5pct-36m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 3.5,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 20
+    },
+    "months": 36,
+    "expected": {
+      "futurePrice": 532184.58,
+      "priceIncrease": 52184.58,
+      "rentPaid": 89459.28,
+      "pmtNow": 3284.7725221763994,
+      "pmtThen": 3160.964411042457,
+      "monthlyPmtIncrease": -123.80811113394273,
+      "extraDown": 5218.458,
+      "extraClosing": 1565.5374,
+      "equityMissed": 34003.30955460982,
+      "downNow": 48000.0,
+      "downLater": 53218.458,
+      "cashNow": 62400.0,
+      "cashLater": 69183.9954
+    }
+  },
+  {
+    "name": "20y-25pct-1m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 25,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 20
+    },
+    "months": 1,
+    "expected": {
+      "futurePrice": 489009.2472583229,
+      "priceIncrease": 9009.247258322894,
+      "rentPaid": 2400.0,
+      "pmtNow": 3284.7725221763994,
+      "pmtThen": 2904.520133323329,
+      "monthlyPmtIncrease": -380.2523888530707,
+      "extraDown": 900.9247258322894,
+      "extraClosing": 270.2774177496868,
+      "equityMissed": 854.7725221763995,
+      "downNow": 48000.0,
+      "downLater": 48900.92472583229,
+      "cashNow": 62400.0,
+      "cashLater": 63571.20214358198
+    }
+  },
+  {
+    "name": "20y-25pct-6m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 25,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 20
+    },
+    "months": 6,
+    "expected": {
+      "futurePrice": 536656.3145999495,
+      "priceIncrease": 56656.314599949525,
+      "rentPaid": 14400.0,
+      "pmtNow": 3284.7725221763994,
+      "pmtThen": 3187.5247332638705,
+      "monthlyPmtIncrease": -97.24778891252919,
+      "extraDown": 5665.631459994953,
+      "extraClosing": 1699.6894379984858,
+      "equityMissed": 5201.299762460131,
+      "downNow": 48000.0,
+      "downLater": 53665.631459994955,
+      "cashNow": 62400.0,
+      "cashLater": 69765.32089799344
+    }
+  },
+  {
+    "name": "20y-25pct-12m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 25,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 20
+    },
+    "months": 12,
+    "expected": {
+      "futurePrice": 600000.0,
+      "priceIncrease": 120000.0,
+      "rentPaid": 28800.0,
+      "pmtNow": 3284.7725221763994,
+      "pmtThen": 3563.7609917699497,
+      "monthlyPmtIncrease": 278.98846959355006,
+      "extraDown": 12000.0,
+      "extraClosing": 3600.0,
+      "equityMissed": 10580.630570208461,
+      "downNow": 48000.0,
+      "downLater": 60000.0,
+      "cashNow": 62400.0,
+      "cashLater": 78000.0
+    }
+  },
+  {
+    "name": "20y-25pct-13m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 25,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 20
+    },
+    "months": 13,
+    "expected": {
+      "futurePrice": 611261.5590729036,
+      "priceIncrease": 131261.55907290362,
+      "rentPaid": 31284.0,
+      "pmtNow": 3284.7725221763994,
+      "pmtThen": 3630.6501666541612,
+      "monthlyPmtIncrease": 345.8776444777615,
+      "extraDown": 13126.155907290362,
+      "extraClosing": 3937.8467721871084,
+      "equityMissed": 11494.919139342283,
+      "downNow": 48000.0,
+      "downLater": 61126.15590729036,
+      "cashNow": 62400.0,
+      "cashLater": 79464.00267947747
+    }
+  },
+  {
+    "name": "20y-25pct-24m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 25,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 20
+    },
+    "months": 24,
+    "expected": {
+      "futurePrice": 750000.0,
+      "priceIncrease": 270000.0,
+      "rentPaid": 58608.0,
+      "pmtNow": 3284.7725221763994,
+      "pmtThen": 4454.701239712437,
+      "monthlyPmtIncrease": 1169.9287175360375,
+      "extraDown": 27000.0,
+      "extraClosing": 8100.0,
+      "equityMissed": 21897.968614649126,
+      "downNow": 48000.0,
+      "downLater": 75000.0,
+      "cashNow": 62400.0,
+      "cashLater": 97500.0
+    }
+  },
+  {
+    "name": "20y-25pct-25m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 25,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 20
+    },
+    "months": 25,
+    "expected": {
+      "futurePrice": 764076.9488411295,
+      "priceIncrease": 284076.94884112955,
+      "rentPaid": 61178.94,
+      "pmtNow": 3284.7725221763994,
+      "pmtThen": 4538.312708317701,
+      "monthlyPmtIncrease": 1253.5401861413018,
+      "extraDown": 28407.694884112952,
+      "extraClosing": 8522.308465233886,
+      "equityMissed": 22875.91721028293,
+      "downNow": 48000.0,
+      "downLater": 76407.69488411295,
+      "cashNow": 62400.0,
+      "cashLater": 99330.00334934684
+    }
+  },
+  {
+    "name": "20y-25pct-36m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 25,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 20
+    },
+    "months": 36,
+    "expected": {
+      "futurePrice": 937500.0,
+      "priceIncrease": 457500.0,
+      "rentPaid": 89459.28,
+      "pmtNow": 3284.7725221763994,
+      "pmtThen": 5568.376549640547,
+      "monthlyPmtIncrease": 2283.604027464147,
+      "extraDown": 45750.0,
+      "extraClosing": 13725.0,
+      "equityMissed": 34003.30955460982,
+      "downNow": 48000.0,
+      "downLater": 93750.0,
+      "cashNow": 62400.0,
+      "cashLater": 121875.0
+    }
+  },
+  {
+    "name": "30y--25pct-1m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": -25,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 30
+    },
+    "months": 1,
+    "expected": {
+      "futurePrice": 468629.55637314875,
+      "priceIncrease": -11370.443626851267,
+      "rentPaid": 2400.0,
+      "pmtNow": 2801.94377717469,
+      "pmtThen": 2264.1343113932317,
+      "monthlyPmtIncrease": -537.8094657814582,
+      "extraDown": -1137.0443626851268,
+      "extraClosing": -341.113308805538,
+      "equityMissed": 371.94377717468967,
+      "downNow": 48000.0,
+      "downLater": 46862.95563731487,
+      "cashNow": 62400.0,
+      "cashLater": 60921.84232850934
+    }
+  },
+  {
+    "name": "30y--25pct-6m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": -25,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 30
+    },
+    "months": 6,
+    "expected": {
+      "futurePrice": 415692.1938165306,
+      "priceIncrease": -64307.80618346945,
+      "rentPaid": 14400.0,
+      "pmtNow": 2801.94377717469,
+      "pmtThen": 2008.373023422599,
+      "monthlyPmtIncrease": -793.5707537520905,
+      "extraDown": -6430.780618346945,
+      "extraClosing": -1929.2341855040836,
+      "equityMissed": 2263.2817851250434,
+      "downNow": 48000.0,
+      "downLater": 41569.219381653056,
+      "cashNow": 62400.0,
+      "cashLater": 54039.98519614897
+    }
+  },
+  {
+    "name": "30y--25pct-12m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": -25,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 30
+    },
+    "months": 12,
+    "expected": {
+      "futurePrice": 360000.0,
+      "priceIncrease": -120000.0,
+      "rentPaid": 28800.0,
+      "pmtNow": 2801.94377717469,
+      "pmtThen": 1739.3020585593304,
+      "monthlyPmtIncrease": -1062.6417186153594,
+      "extraDown": -12000.0,
+      "extraClosing": -3600.0,
+      "equityMissed": 4604.031595626299,
+      "downNow": 48000.0,
+      "downLater": 36000.0,
+      "cashNow": 62400.0,
+      "cashLater": 46800.0
+    }
+  },
+  {
+    "name": "30y--25pct-13m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": -25,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 30
+    },
+    "months": 13,
+    "expected": {
+      "futurePrice": 351472.1672798616,
+      "priceIncrease": -128527.83272013845,
+      "rentPaid": 31284.0,
+      "pmtNow": 2801.94377717469,
+      "pmtThen": 1698.1007335449235,
+      "monthlyPmtIncrease": -1103.843043629766,
+      "extraDown": -12852.783272013845,
+      "extraClosing": -3855.8349816041537,
+      "equityMissed": 5001.8730505263875,
+      "downNow": 48000.0,
+      "downLater": 35147.21672798615,
+      "cashNow": 62400.0,
+      "cashLater": 45691.381746382
+    }
+  },
+  {
+    "name": "30y--25pct-24m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": -25,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 30
+    },
+    "months": 24,
+    "expected": {
+      "futurePrice": 270000.0,
+      "priceIncrease": -210000.0,
+      "rentPaid": 58608.0,
+      "pmtNow": 2801.94377717469,
+      "pmtThen": 1304.4765439194978,
+      "monthlyPmtIncrease": -1497.467233255192,
+      "extraDown": -21000.0,
+      "extraClosing": -6300.0,
+      "equityMissed": 9528.632411167466,
+      "downNow": 48000.0,
+      "downLater": 27000.0,
+      "cashNow": 62400.0,
+      "cashLater": 35100.0
+    }
+  },
+  {
+    "name": "30y--25pct-25m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": -25,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 30
+    },
+    "months": 25,
+    "expected": {
+      "futurePrice": 263604.12545989617,
+      "priceIncrease": -216395.87454010383,
+      "rentPaid": 61178.94,
+      "pmtNow": 2801.94377717469,
+      "pmtThen": 1273.5755501586927,
+      "monthlyPmtIncrease": -1528.368227015997,
+      "extraDown": -21639.587454010383,
+      "extraClosing": -6491.876236203115,
+      "equityMissed": 9954.174745654973,
+      "downNow": 48000.0,
+      "downLater": 26360.412545989617,
+      "cashNow": 62400.0,
+      "cashLater": 34268.536309786505
+    }
+  },
+  {
+    "name": "30y--25pct-36m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": -25,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 30
+    },
+    "months": 36,
+    "expected": {
+      "futurePrice": 202500.0,
+      "priceIncrease": -277500.0,
+      "rentPaid": 89459.28,
+      "pmtNow": 2801.94377717469,
+      "pmtThen": 978.3574079396233,
+      "monthlyPmtIncrease": -1823.5863692350663,
+      "extraDown": -27750.0,
+      "extraClosing": -8325.0,
+      "equityMissed": 14796.123019934606,
+      "downNow": 48000.0,
+      "downLater": 20250.0,
+      "cashNow": 62400.0,
+      "cashLater": 26325.0
+    }
+  },
+  {
+    "name": "30y--3pct-1m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": -3,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 30
+    },
+    "months": 1,
+    "expected": {
+      "futurePrice": 478783.17666535836,
+      "priceIncrease": -1216.8233346416253,
+      "rentPaid": 2400.0,
+      "pmtNow": 2801.94377717469,
+      "pmtThen": 2313.1904577156483,
+      "monthlyPmtIncrease": -488.7533194590415,
+      "extraDown": -121.68233346416253,
+      "extraClosing": -36.50470003924875,
+      "equityMissed": 371.94377717468967,
+      "downNow": 48000.0,
+      "downLater": 47878.31766653584,
+      "cashNow": 62400.0,
+      "cashLater": 62241.81296649659
+    }
+  },
+  {
+    "name": "30y--3pct-6m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": -3,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 30
+    },
+    "months": 6,
+    "expected": {
+      "futurePrice": 472745.174486213,
+      "priceIncrease": -7254.825513786974,
+      "rentPaid": 14400.0,
+      "pmtNow": 2801.94377717469,
+      "pmtThen": 2284.018486549611,
+      "monthlyPmtIncrease": -517.9252906250782,
+      "extraDown": -725.4825513786973,
+      "extraClosing": -217.6447654136092,
+      "equityMissed": 2263.2817851250434,
+      "downNow": 48000.0,
+      "downLater": 47274.5174486213,
+      "cashNow": 62400.0,
+      "cashLater": 61456.87268320769
+    }
+  },
+  {
+    "name": "30y--3pct-12m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": -3,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 30
+    },
+    "months": 12,
+    "expected": {
+      "futurePrice": 465600.0,
+      "priceIncrease": -14400.0,
+      "rentPaid": 28800.0,
+      "pmtNow": 2801.94377717469,
+      "pmtThen": 2249.4973290700673,
+      "monthlyPmtIncrease": -552.4464481046225,
+      "extraDown": -1440.0,
+      "extraClosing": -432.0,
+      "equityMissed": 4604.031595626299,
+      "downNow": 48000.0,
+      "downLater": 46560.0,
+      "cashNow": 62400.0,
+      "cashLater": 60528.0
+    }
+  },
+  {
+    "name": "30y--3pct-13m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": -3,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 30
+    },
+    "months": 13,
+    "expected": {
+      "futurePrice": 464419.68136539764,
+      "priceIncrease": -15580.318634602376,
+      "rentPaid": 31284.0,
+      "pmtNow": 2801.94377717469,
+      "pmtThen": 2243.7947439841787,
+      "monthlyPmtIncrease": -558.149033190511,
+      "extraDown": -1558.0318634602377,
+      "extraClosing": -467.4095590380713,
+      "equityMissed": 5001.8730505263875,
+      "downNow": 48000.0,
+      "downLater": 46441.96813653976,
+      "cashNow": 62400.0,
+      "cashLater": 60374.55857750169
+    }
+  },
+  {
+    "name": "30y--3pct-24m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": -3,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 30
+    },
+    "months": 24,
+    "expected": {
+      "futurePrice": 451632.0,
+      "priceIncrease": -28368.0,
+      "rentPaid": 58608.0,
+      "pmtNow": 2801.94377717469,
+      "pmtThen": 2182.012409197965,
+      "monthlyPmtIncrease": -619.9313679767245,
+      "extraDown": -2836.8,
+      "extraClosing": -851.04,
+      "equityMissed": 9528.632411167466,
+      "downNow": 48000.0,
+      "downLater": 45163.2,
+      "cashNow": 62400.0,
+      "cashLater": 58712.16
+    }
+  },
+  {
+    "name": "30y--3pct-25m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": -3,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 30
+    },
+    "months": 25,
+    "expected": {
+      "futurePrice": 450487.0909244357,
+      "priceIncrease": -29512.909075564305,
+      "rentPaid": 61178.94,
+      "pmtNow": 2801.94377717469,
+      "pmtThen": 2176.480901664653,
+      "monthlyPmtIncrease": -625.4628755100363,
+      "extraDown": -2951.2909075564307,
+      "extraClosing": -885.3872722669291,
+      "equityMissed": 9954.174745654973,
+      "downNow": 48000.0,
+      "downLater": 45048.70909244357,
+      "cashNow": 62400.0,
+      "cashLater": 58563.32182017664
+    }
+  },
+  {
+    "name": "30y--3pct-36m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": -3,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 30
+    },
+    "months": 36,
+    "expected": {
+      "futurePrice": 438083.04,
+      "priceIncrease": -41916.96,
+      "rentPaid": 89459.28,
+      "pmtNow": 2801.94377717469,
+      "pmtThen": 2116.552036922026,
+      "monthlyPmtIncrease": -685.3917402526635,
+      "extraDown": -4191.696,
+      "extraClosing": -1257.5088,
+      "equityMissed": 14796.123019934606,
+      "downNow": 48000.0,
+      "downLater": 43808.304,
+      "cashNow": 62400.0,
+      "cashLater": 56950.7952
+    }
+  },
+  {
+    "name": "30y-0pct-1m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 0,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 30
+    },
+    "months": 1,
+    "expected": {
+      "futurePrice": 480000.0,
+      "priceIncrease": 0.0,
+      "rentPaid": 2400.0,
+      "pmtNow": 2801.94377717469,
+      "pmtThen": 2319.0694114124403,
+      "monthlyPmtIncrease": -482.8743657622493,
+      "extraDown": 0.0,
+      "extraClosing": 0.0,
+      "equityMissed": 371.94377717468967,
+      "downNow": 48000.0,
+      "downLater": 48000.0,
+      "cashNow": 62400.0,
+      "cashLater": 62400.0
+    }
+  },
+  {
+    "name": "30y-0pct-6m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 0,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 30
+    },
+    "months": 6,
+    "expected": {
+      "futurePrice": 480000.0,
+      "priceIncrease": 0.0,
+      "rentPaid": 14400.0,
+      "pmtNow": 2801.94377717469,
+      "pmtThen": 2319.0694114124403,
+      "monthlyPmtIncrease": -482.8743657622493,
+      "extraDown": 0.0,
+      "extraClosing": 0.0,
+      "equityMissed": 2263.2817851250434,
+      "downNow": 48000.0,
+      "downLater": 48000.0,
+      "cashNow": 62400.0,
+      "cashLater": 62400.0
+    }
+  },
+  {
+    "name": "30y-0pct-12m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 0,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 30
+    },
+    "months": 12,
+    "expected": {
+      "futurePrice": 480000.0,
+      "priceIncrease": 0.0,
+      "rentPaid": 28800.0,
+      "pmtNow": 2801.94377717469,
+      "pmtThen": 2319.0694114124403,
+      "monthlyPmtIncrease": -482.8743657622493,
+      "extraDown": 0.0,
+      "extraClosing": 0.0,
+      "equityMissed": 4604.031595626299,
+      "downNow": 48000.0,
+      "downLater": 48000.0,
+      "cashNow": 62400.0,
+      "cashLater": 62400.0
+    }
+  },
+  {
+    "name": "30y-0pct-13m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 0,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 30
+    },
+    "months": 13,
+    "expected": {
+      "futurePrice": 480000.0,
+      "priceIncrease": 0.0,
+      "rentPaid": 31284.0,
+      "pmtNow": 2801.94377717469,
+      "pmtThen": 2319.0694114124403,
+      "monthlyPmtIncrease": -482.8743657622493,
+      "extraDown": 0.0,
+      "extraClosing": 0.0,
+      "equityMissed": 5001.8730505263875,
+      "downNow": 48000.0,
+      "downLater": 48000.0,
+      "cashNow": 62400.0,
+      "cashLater": 62400.0
+    }
+  },
+  {
+    "name": "30y-0pct-24m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 0,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 30
+    },
+    "months": 24,
+    "expected": {
+      "futurePrice": 480000.0,
+      "priceIncrease": 0.0,
+      "rentPaid": 58608.0,
+      "pmtNow": 2801.94377717469,
+      "pmtThen": 2319.0694114124403,
+      "monthlyPmtIncrease": -482.8743657622493,
+      "extraDown": 0.0,
+      "extraClosing": 0.0,
+      "equityMissed": 9528.632411167466,
+      "downNow": 48000.0,
+      "downLater": 48000.0,
+      "cashNow": 62400.0,
+      "cashLater": 62400.0
+    }
+  },
+  {
+    "name": "30y-0pct-25m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 0,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 30
+    },
+    "months": 25,
+    "expected": {
+      "futurePrice": 480000.0,
+      "priceIncrease": 0.0,
+      "rentPaid": 61178.94,
+      "pmtNow": 2801.94377717469,
+      "pmtThen": 2319.0694114124403,
+      "monthlyPmtIncrease": -482.8743657622493,
+      "extraDown": 0.0,
+      "extraClosing": 0.0,
+      "equityMissed": 9954.174745654973,
+      "downNow": 48000.0,
+      "downLater": 48000.0,
+      "cashNow": 62400.0,
+      "cashLater": 62400.0
+    }
+  },
+  {
+    "name": "30y-0pct-36m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 0,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 30
+    },
+    "months": 36,
+    "expected": {
+      "futurePrice": 480000.0,
+      "priceIncrease": 0.0,
+      "rentPaid": 89459.28,
+      "pmtNow": 2801.94377717469,
+      "pmtThen": 2319.0694114124403,
+      "monthlyPmtIncrease": -482.8743657622493,
+      "extraDown": 0.0,
+      "extraClosing": 0.0,
+      "equityMissed": 14796.123019934606,
+      "downNow": 48000.0,
+      "downLater": 48000.0,
+      "cashNow": 62400.0,
+      "cashLater": 62400.0
+    }
+  },
+  {
+    "name": "30y-3.5pct-1m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 3.5,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 30
+    },
+    "months": 1,
+    "expected": {
+      "futurePrice": 481378.0313851568,
+      "priceIncrease": 1378.0313851567812,
+      "rentPaid": 2400.0,
+      "pmtNow": 2801.94377717469,
+      "pmtThen": 2325.7272248151144,
+      "monthlyPmtIncrease": -476.21655235957553,
+      "extraDown": 137.8031385156781,
+      "extraClosing": 41.340941554703434,
+      "equityMissed": 371.94377717468967,
+      "downNow": 48000.0,
+      "downLater": 48137.80313851568,
+      "cashNow": 62400.0,
+      "cashLater": 62579.14408007038
+    }
+  },
+  {
+    "name": "30y-3.5pct-6m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 3.5,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 30
+    },
+    "months": 6,
+    "expected": {
+      "futurePrice": 488327.7587850193,
+      "priceIncrease": 8327.758785019307,
+      "rentPaid": 14400.0,
+      "pmtNow": 2801.94377717469,
+      "pmtThen": 2359.3041002956893,
+      "monthlyPmtIncrease": -442.6396768790003,
+      "extraDown": 832.7758785019306,
+      "extraClosing": 249.8327635505792,
+      "equityMissed": 2263.2817851250434,
+      "downNow": 48000.0,
+      "downLater": 48832.77587850193,
+      "cashNow": 62400.0,
+      "cashLater": 63482.60864205251
+    }
+  },
+  {
+    "name": "30y-3.5pct-12m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 3.5,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 30
+    },
+    "months": 12,
+    "expected": {
+      "futurePrice": 496800.0,
+      "priceIncrease": 16800.0,
+      "rentPaid": 28800.0,
+      "pmtNow": 2801.94377717469,
+      "pmtThen": 2400.236840811876,
+      "monthlyPmtIncrease": -401.70693636281385,
+      "extraDown": 1680.0,
+      "extraClosing": 504.0,
+      "equityMissed": 4604.031595626299,
+      "downNow": 48000.0,
+      "downLater": 49680.0,
+      "cashNow": 62400.0,
+      "cashLater": 64584.0
+    }
+  },
+  {
+    "name": "30y-3.5pct-13m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 3.5,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 30
+    },
+    "months": 13,
+    "expected": {
+      "futurePrice": 498226.26248363726,
+      "priceIncrease": 18226.262483637267,
+      "rentPaid": 31284.0,
+      "pmtNow": 2801.94377717469,
+      "pmtThen": 2407.127677683643,
+      "monthlyPmtIncrease": -394.8160994910465,
+      "extraDown": 1822.626248363727,
+      "extraClosing": 546.7878745091181,
+      "equityMissed": 5001.8730505263875,
+      "downNow": 48000.0,
+      "downLater": 49822.626248363726,
+      "cashNow": 62400.0,
+      "cashLater": 64769.41412287285
+    }
+  },
+  {
+    "name": "30y-3.5pct-24m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 3.5,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 30
+    },
+    "months": 24,
+    "expected": {
+      "futurePrice": 514188.0,
+      "priceIncrease": 34188.0,
+      "rentPaid": 58608.0,
+      "pmtNow": 2801.94377717469,
+      "pmtThen": 2484.2451302402915,
+      "monthlyPmtIncrease": -317.6986469343982,
+      "extraDown": 3418.8,
+      "extraClosing": 1025.64,
+      "equityMissed": 9528.632411167466,
+      "downNow": 48000.0,
+      "downLater": 51418.8,
+      "cashNow": 62400.0,
+      "cashLater": 66844.44
+    }
+  },
+  {
+    "name": "30y-3.5pct-25m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 3.5,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 30
+    },
+    "months": 25,
+    "expected": {
+      "futurePrice": 515664.1816705646,
+      "priceIncrease": 35664.181670564576,
+      "rentPaid": 61178.94,
+      "pmtNow": 2801.94377717469,
+      "pmtThen": 2491.377146402571,
+      "monthlyPmtIncrease": -310.566630772119,
+      "extraDown": 3566.418167056457,
+      "extraClosing": 1069.925450116937,
+      "equityMissed": 9954.174745654973,
+      "downNow": 48000.0,
+      "downLater": 51566.41816705646,
+      "cashNow": 62400.0,
+      "cashLater": 67036.34361717339
+    }
+  },
+  {
+    "name": "30y-3.5pct-36m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 3.5,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 30
+    },
+    "months": 36,
+    "expected": {
+      "futurePrice": 532184.58,
+      "priceIncrease": 52184.58,
+      "rentPaid": 89459.28,
+      "pmtNow": 2801.94377717469,
+      "pmtThen": 2571.1937097987015,
+      "monthlyPmtIncrease": -230.750067375988,
+      "extraDown": 5218.458,
+      "extraClosing": 1565.5374,
+      "equityMissed": 14796.123019934606,
+      "downNow": 48000.0,
+      "downLater": 53218.458,
+      "cashNow": 62400.0,
+      "cashLater": 69183.9954
+    }
+  },
+  {
+    "name": "30y-25pct-1m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 25,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 30
+    },
+    "months": 1,
+    "expected": {
+      "futurePrice": 489009.2472583229,
+      "priceIncrease": 9009.247258322894,
+      "rentPaid": 2400.0,
+      "pmtNow": 2801.94377717469,
+      "pmtThen": 2362.5966400304155,
+      "monthlyPmtIncrease": -439.34713714427426,
+      "extraDown": 900.9247258322894,
+      "extraClosing": 270.2774177496868,
+      "equityMissed": 371.94377717468967,
+      "downNow": 48000.0,
+      "downLater": 48900.92472583229,
+      "cashNow": 62400.0,
+      "cashLater": 63571.20214358198
+    }
+  },
+  {
+    "name": "30y-25pct-6m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 25,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 30
+    },
+    "months": 6,
+    "expected": {
+      "futurePrice": 536656.3145999495,
+      "priceIncrease": 56656.314599949525,
+      "rentPaid": 14400.0,
+      "pmtNow": 2801.94377717469,
+      "pmtThen": 2592.798424229322,
+      "monthlyPmtIncrease": -209.14535294536802,
+      "extraDown": 5665.631459994953,
+      "extraClosing": 1699.6894379984858,
+      "equityMissed": 2263.2817851250434,
+      "downNow": 48000.0,
+      "downLater": 53665.631459994955,
+      "cashNow": 62400.0,
+      "cashLater": 69765.32089799344
+    }
+  },
+  {
+    "name": "30y-25pct-12m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 25,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 30
+    },
+    "months": 12,
+    "expected": {
+      "futurePrice": 600000.0,
+      "priceIncrease": 120000.0,
+      "rentPaid": 28800.0,
+      "pmtNow": 2801.94377717469,
+      "pmtThen": 2898.8367642655503,
+      "monthlyPmtIncrease": 96.89298709086083,
+      "extraDown": 12000.0,
+      "extraClosing": 3600.0,
+      "equityMissed": 4604.031595626299,
+      "downNow": 48000.0,
+      "downLater": 60000.0,
+      "cashNow": 62400.0,
+      "cashLater": 78000.0
+    }
+  },
+  {
+    "name": "30y-25pct-13m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 25,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 30
+    },
+    "months": 13,
+    "expected": {
+      "futurePrice": 611261.5590729036,
+      "priceIncrease": 131261.55907290362,
+      "rentPaid": 31284.0,
+      "pmtNow": 2801.94377717469,
+      "pmtThen": 2953.2458000380193,
+      "monthlyPmtIncrease": 151.30202286332963,
+      "extraDown": 13126.155907290362,
+      "extraClosing": 3937.8467721871084,
+      "equityMissed": 5001.8730505263875,
+      "downNow": 48000.0,
+      "downLater": 61126.15590729036,
+      "cashNow": 62400.0,
+      "cashLater": 79464.00267947747
+    }
+  },
+  {
+    "name": "30y-25pct-24m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 25,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 30
+    },
+    "months": 24,
+    "expected": {
+      "futurePrice": 750000.0,
+      "priceIncrease": 270000.0,
+      "rentPaid": 58608.0,
+      "pmtNow": 2801.94377717469,
+      "pmtThen": 3623.5459553319383,
+      "monthlyPmtIncrease": 821.6021781572484,
+      "extraDown": 27000.0,
+      "extraClosing": 8100.0,
+      "equityMissed": 9528.632411167466,
+      "downNow": 48000.0,
+      "downLater": 75000.0,
+      "cashNow": 62400.0,
+      "cashLater": 97500.0
+    }
+  },
+  {
+    "name": "30y-25pct-25m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 25,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 30
+    },
+    "months": 25,
+    "expected": {
+      "futurePrice": 764076.9488411295,
+      "priceIncrease": 284076.94884112955,
+      "rentPaid": 61178.94,
+      "pmtNow": 2801.94377717469,
+      "pmtThen": 3691.557250047524,
+      "monthlyPmtIncrease": 889.6134728728344,
+      "extraDown": 28407.694884112952,
+      "extraClosing": 8522.308465233886,
+      "equityMissed": 9954.174745654973,
+      "downNow": 48000.0,
+      "downLater": 76407.69488411295,
+      "cashNow": 62400.0,
+      "cashLater": 99330.00334934684
+    }
+  },
+  {
+    "name": "30y-25pct-36m",
+    "inputs": {
+      "hp": 480000,
+      "rent": 2400,
+      "dp": 10,
+      "rate": 6.75,
+      "appr": 25,
+      "ri": 3.5,
+      "futureRate": 5,
+      "lt": 30
+    },
+    "months": 36,
+    "expected": {
+      "futurePrice": 937500.0,
+      "priceIncrease": 457500.0,
+      "rentPaid": 89459.28,
+      "pmtNow": 2801.94377717469,
+      "pmtThen": 4529.432444164922,
+      "monthlyPmtIncrease": 1727.488666990233,
+      "extraDown": 45750.0,
+      "extraClosing": 13725.0,
+      "equityMissed": 14796.123019934606,
+      "downNow": 48000.0,
+      "downLater": 93750.0,
+      "cashNow": 62400.0,
+      "cashLater": 121875.0
+    }
+  },
+  {
+    "name": "edge-0-0-10000",
+    "inputs": {
+      "hp": 10000,
+      "rent": 2400,
+      "dp": 0,
+      "rate": 0,
+      "appr": -3,
+      "ri": -25,
+      "futureRate": 0,
+      "lt": 30
+    },
+    "months": 36,
+    "expected": {
+      "futurePrice": 9126.73,
+      "priceIncrease": -873.27,
+      "rentPaid": 66600.0,
+      "pmtNow": 27.77777777777778,
+      "pmtThen": 25.352027777777778,
+      "monthlyPmtIncrease": -2.42575,
+      "extraDown": -0.0,
+      "extraClosing": -26.1981,
+      "equityMissed": 1000.0,
+      "downNow": 0.0,
+      "downLater": 0.0,
+      "cashNow": 300.0,
+      "cashLater": 273.8019
+    }
+  },
+  {
+    "name": "edge-0-0-10000000",
+    "inputs": {
+      "hp": 10000000,
+      "rent": 2400,
+      "dp": 0,
+      "rate": 0,
+      "appr": -3,
+      "ri": -25,
+      "futureRate": 0,
+      "lt": 30
+    },
+    "months": 36,
+    "expected": {
+      "futurePrice": 9126730.0,
+      "priceIncrease": -873270.0,
+      "rentPaid": 66600.0,
+      "pmtNow": 27777.777777777777,
+      "pmtThen": 25352.027777777777,
+      "monthlyPmtIncrease": -2425.75,
+      "extraDown": -0.0,
+      "extraClosing": -26198.1,
+      "equityMissed": 1000000.0,
+      "downNow": 0.0,
+      "downLater": 0.0,
+      "cashNow": 300000.0,
+      "cashLater": 273801.9
+    }
+  },
+  {
+    "name": "edge-0-1e-12-10000",
+    "inputs": {
+      "hp": 10000,
+      "rent": 2400,
+      "dp": 0,
+      "rate": 1e-12,
+      "appr": -3,
+      "ri": -25,
+      "futureRate": 1e-12,
+      "lt": 30
+    },
+    "months": 36,
+    "expected": {
+      "futurePrice": 9126.73,
+      "priceIncrease": -873.27,
+      "rentPaid": 66600.0,
+      "pmtNow": 27.777777777781957,
+      "pmtThen": 25.35202777778159,
+      "monthlyPmtIncrease": -2.425750000000365,
+      "extraDown": -0.0,
+      "extraClosing": -26.1981,
+      "equityMissed": 999.999999999865,
+      "downNow": 0.0,
+      "downLater": 0.0,
+      "cashNow": 300.0,
+      "cashLater": 273.8019
+    }
+  },
+  {
+    "name": "edge-0-1e-12-10000000",
+    "inputs": {
+      "hp": 10000000,
+      "rent": 2400,
+      "dp": 0,
+      "rate": 1e-12,
+      "appr": -3,
+      "ri": -25,
+      "futureRate": 1e-12,
+      "lt": 30
+    },
+    "months": 36,
+    "expected": {
+      "futurePrice": 9126730.0,
+      "priceIncrease": -873270.0,
+      "rentPaid": 66600.0,
+      "pmtNow": 27777.777777781957,
+      "pmtThen": 25352.02777778159,
+      "monthlyPmtIncrease": -2425.7500000003647,
+      "extraDown": -0.0,
+      "extraClosing": -26198.1,
+      "equityMissed": 999999.999999865,
+      "downNow": 0.0,
+      "downLater": 0.0,
+      "cashNow": 300000.0,
+      "cashLater": 273801.9
+    }
+  },
+  {
+    "name": "edge-0-25-10000",
+    "inputs": {
+      "hp": 10000,
+      "rent": 2400,
+      "dp": 0,
+      "rate": 25,
+      "appr": -3,
+      "ri": -25,
+      "futureRate": 25,
+      "lt": 30
+    },
+    "months": 36,
+    "expected": {
+      "futurePrice": 9126.73,
+      "priceIncrease": -873.27,
+      "rentPaid": 66600.0,
+      "pmtNow": 208.45786360269787,
+      "pmtThen": 190.25386374786507,
+      "monthlyPmtIncrease": -18.203999854832794,
+      "extraDown": -0.0,
+      "extraClosing": -26.1981,
+      "equityMissed": 6.579680250718285,
+      "downNow": 0.0,
+      "downLater": 0.0,
+      "cashNow": 300.0,
+      "cashLater": 273.8019
+    }
+  },
+  {
+    "name": "edge-0-25-10000000",
+    "inputs": {
+      "hp": 10000000,
+      "rent": 2400,
+      "dp": 0,
+      "rate": 25,
+      "appr": -3,
+      "ri": -25,
+      "futureRate": 25,
+      "lt": 30
+    },
+    "months": 36,
+    "expected": {
+      "futurePrice": 9126730.0,
+      "priceIncrease": -873270.0,
+      "rentPaid": 66600.0,
+      "pmtNow": 208457.86360269785,
+      "pmtThen": 190253.86374786505,
+      "monthlyPmtIncrease": -18203.999854832797,
+      "extraDown": -0.0,
+      "extraClosing": -26198.1,
+      "equityMissed": 6579.680250718286,
+      "downNow": 0.0,
+      "downLater": 0.0,
+      "cashNow": 300000.0,
+      "cashLater": 273801.9
+    }
+  },
+  {
+    "name": "edge-100-0-10000",
+    "inputs": {
+      "hp": 10000,
+      "rent": 2400,
+      "dp": 100,
+      "rate": 0,
+      "appr": -3,
+      "ri": -25,
+      "futureRate": 0,
+      "lt": 30
+    },
+    "months": 36,
+    "expected": {
+      "futurePrice": 9126.73,
+      "priceIncrease": -873.27,
+      "rentPaid": 66600.0,
+      "pmtNow": 0.0,
+      "pmtThen": 0.0,
+      "monthlyPmtIncrease": 0.0,
+      "extraDown": -873.27,
+      "extraClosing": -26.1981,
+      "equityMissed": 0.0,
+      "downNow": 10000.0,
+      "downLater": 9126.73,
+      "cashNow": 10300.0,
+      "cashLater": 9400.5319
+    }
+  },
+  {
+    "name": "edge-100-0-10000000",
+    "inputs": {
+      "hp": 10000000,
+      "rent": 2400,
+      "dp": 100,
+      "rate": 0,
+      "appr": -3,
+      "ri": -25,
+      "futureRate": 0,
+      "lt": 30
+    },
+    "months": 36,
+    "expected": {
+      "futurePrice": 9126730.0,
+      "priceIncrease": -873270.0,
+      "rentPaid": 66600.0,
+      "pmtNow": 0.0,
+      "pmtThen": 0.0,
+      "monthlyPmtIncrease": 0.0,
+      "extraDown": -873270.0,
+      "extraClosing": -26198.1,
+      "equityMissed": 0.0,
+      "downNow": 10000000.0,
+      "downLater": 9126730.0,
+      "cashNow": 10300000.0,
+      "cashLater": 9400531.9
+    }
+  },
+  {
+    "name": "edge-100-1e-12-10000",
+    "inputs": {
+      "hp": 10000,
+      "rent": 2400,
+      "dp": 100,
+      "rate": 1e-12,
+      "appr": -3,
+      "ri": -25,
+      "futureRate": 1e-12,
+      "lt": 30
+    },
+    "months": 36,
+    "expected": {
+      "futurePrice": 9126.73,
+      "priceIncrease": -873.27,
+      "rentPaid": 66600.0,
+      "pmtNow": 0.0,
+      "pmtThen": 0.0,
+      "monthlyPmtIncrease": 0.0,
+      "extraDown": -873.27,
+      "extraClosing": -26.1981,
+      "equityMissed": 0.0,
+      "downNow": 10000.0,
+      "downLater": 9126.73,
+      "cashNow": 10300.0,
+      "cashLater": 9400.5319
+    }
+  },
+  {
+    "name": "edge-100-1e-12-10000000",
+    "inputs": {
+      "hp": 10000000,
+      "rent": 2400,
+      "dp": 100,
+      "rate": 1e-12,
+      "appr": -3,
+      "ri": -25,
+      "futureRate": 1e-12,
+      "lt": 30
+    },
+    "months": 36,
+    "expected": {
+      "futurePrice": 9126730.0,
+      "priceIncrease": -873270.0,
+      "rentPaid": 66600.0,
+      "pmtNow": 0.0,
+      "pmtThen": 0.0,
+      "monthlyPmtIncrease": 0.0,
+      "extraDown": -873270.0,
+      "extraClosing": -26198.1,
+      "equityMissed": 0.0,
+      "downNow": 10000000.0,
+      "downLater": 9126730.0,
+      "cashNow": 10300000.0,
+      "cashLater": 9400531.9
+    }
+  },
+  {
+    "name": "edge-100-25-10000",
+    "inputs": {
+      "hp": 10000,
+      "rent": 2400,
+      "dp": 100,
+      "rate": 25,
+      "appr": -3,
+      "ri": -25,
+      "futureRate": 25,
+      "lt": 30
+    },
+    "months": 36,
+    "expected": {
+      "futurePrice": 9126.73,
+      "priceIncrease": -873.27,
+      "rentPaid": 66600.0,
+      "pmtNow": 0.0,
+      "pmtThen": 0.0,
+      "monthlyPmtIncrease": 0.0,
+      "extraDown": -873.27,
+      "extraClosing": -26.1981,
+      "equityMissed": 0.0,
+      "downNow": 10000.0,
+      "downLater": 9126.73,
+      "cashNow": 10300.0,
+      "cashLater": 9400.5319
+    }
+  },
+  {
+    "name": "edge-100-25-10000000",
+    "inputs": {
+      "hp": 10000000,
+      "rent": 2400,
+      "dp": 100,
+      "rate": 25,
+      "appr": -3,
+      "ri": -25,
+      "futureRate": 25,
+      "lt": 30
+    },
+    "months": 36,
+    "expected": {
+      "futurePrice": 9126730.0,
+      "priceIncrease": -873270.0,
+      "rentPaid": 66600.0,
+      "pmtNow": 0.0,
+      "pmtThen": 0.0,
+      "monthlyPmtIncrease": 0.0,
+      "extraDown": -873270.0,
+      "extraClosing": -26198.1,
+      "equityMissed": 0.0,
+      "downNow": 10000000.0,
+      "downLater": 9126730.0,
+      "cashNow": 10300000.0,
+      "cashLater": 9400531.9
+    }
+  }
+]

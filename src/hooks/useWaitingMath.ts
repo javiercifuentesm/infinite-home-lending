@@ -1,4 +1,4 @@
-/** Pure waiting-cost math — no React. */
+/** Pure scenario math. Keep full precision; round only for display. */
 
 export type WaitingInputs = {
   hp: number;
@@ -12,14 +12,10 @@ export type WaitingInputs = {
 };
 
 export type WaitingCalcResult = {
-  totalCost: number;
-  monthlyCostRate: number;
   rentPaid: number;
-  appreciationMissed: number;
   extraDown: number;
   extraClosing: number;
   equityMissed: number;
-  lifetimePmtImpact: number;
   priceIncrease: number;
   futurePrice: number;
   pmtNow: number;
@@ -32,7 +28,8 @@ export function monthlyPayment(principal: number, annualRatePct: number, termMon
   if (!Number.isFinite(principal) || principal <= 0) return 0;
   if (!Number.isFinite(termMonths) || termMonths <= 0) return 0;
   if (r === 0) return principal / termMonths;
-  return (principal * (r * Math.pow(1 + r, termMonths))) / (Math.pow(1 + r, termMonths) - 1);
+  // Stable even for a very small positive rate: avoid subtracting nearly equal numbers.
+  return principal * r / -Math.expm1(-termMonths * Math.log1p(r));
 }
 
 export function calcCostForMonths(waitMonths: number, inputs: WaitingInputs): WaitingCalcResult {
@@ -62,7 +59,7 @@ export function calcCostForMonths(waitMonths: number, inputs: WaitingInputs): Wa
     rentPaid += curRent;
   }
 
-  const futurePrice = hp * Math.pow(1 + apprRate / 12, safeMonths);
+  const futurePrice = hp * Math.pow(1 + apprRate, safeMonths / 12);
   const priceIncrease = futurePrice - hp;
 
   const downThen = futurePrice * dpPct;
@@ -75,36 +72,28 @@ export function calcCostForMonths(waitMonths: number, inputs: WaitingInputs): Wa
   const loanThen = futurePrice * (1 - dpPct);
   const pmtThen = monthlyPayment(loanThen, futureRate, termMos);
   const monthlyPmtIncrease = pmtThen - pmtNow;
-  const lifetimePmtImpact = monthlyPmtIncrease * termMos;
 
   let equityMissed = 0;
   let bal = hp * (1 - dpPct);
   const r = rate / 100 / 12;
   const pmt = monthlyPayment(bal, rate, termMos);
-  for (let m = 0; m < safeMonths; m++) {
+  for (let m = 0; m < Math.min(safeMonths, termMos); m++) {
     const intP = bal * r;
     const prinP = pmt - intP;
     equityMissed += prinP;
     bal -= prinP;
   }
 
-  const totalCost = rentPaid + priceIncrease + extraDown + extraClosing;
-  const monthlyCostRate = totalCost / safeMonths;
-
   return {
-    totalCost: Math.round(totalCost),
-    monthlyCostRate: Math.round(monthlyCostRate),
-    rentPaid: Math.round(rentPaid),
-    appreciationMissed: Math.round(priceIncrease),
-    extraDown: Math.round(extraDown),
-    extraClosing: Math.round(extraClosing),
-    equityMissed: Math.round(equityMissed),
-    lifetimePmtImpact: Math.round(lifetimePmtImpact),
-    priceIncrease: Math.round(priceIncrease),
-    futurePrice: Math.round(futurePrice),
-    pmtNow: Math.round(pmtNow),
-    pmtThen: Math.round(pmtThen),
-    monthlyPmtIncrease: Math.round(monthlyPmtIncrease),
+    rentPaid,
+    extraDown,
+    extraClosing,
+    equityMissed,
+    priceIncrease,
+    futurePrice,
+    pmtNow,
+    pmtThen,
+    monthlyPmtIncrease,
   };
 }
 
