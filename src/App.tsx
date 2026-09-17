@@ -15,6 +15,7 @@ import Solutions from "./pages/Solutions";
 import LoanProgramDetailPage from "./pages/LoanProgramDetail";
 import HowItWorks from "./pages/HowItWorks";
 import Contact from "./pages/Contact";
+import ContactUs from "./pages/ContactUs";
 import RequestACall from "./pages/RequestACall";
 import LoanSimulator from "./pages/LoanSimulator";
 import BuyVsWaitAnalyzer from "./pages/BuyVsWaitAnalyzer";
@@ -105,6 +106,7 @@ const AppContent = () => {
           <Route path="/how-we-work" element={<HowItWorks />} />
           <Route path="/how-it-works" element={<HowItWorks />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/request-a-call" element={<RequestACall />} />
           <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
           <Route path="/sms-terms" element={<SmsTermsPage />} />

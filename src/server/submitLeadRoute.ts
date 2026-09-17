@@ -1487,6 +1487,7 @@ export function createSubmitLeadRouter(): Router {
         smsConsentParsed.value,
         submissionTimestamp,
         submittedLang,
+        body.smsConsentSource === "/contact-us" ? "/contact-us" : "/contact",
       );
 
       if (!ALLOWED_PATHS.has(path)) {

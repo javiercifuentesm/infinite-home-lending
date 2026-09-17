@@ -47,11 +47,12 @@ export function buildContactSmsConsentRecord(
   smsConsent: boolean,
   submissionTimestamp: string,
   submittedLang: ContactSubmittedLang,
+  source: string = CONTACT_SMS_CONSENT_SOURCE,
 ): ContactSmsConsentRecord {
   return {
     smsConsent: smsConsent ? "Yes" : "No",
     smsConsentDecision: smsConsent ? "Explicit Yes" : "Explicit No",
-    smsConsentSource: CONTACT_SMS_CONSENT_SOURCE,
+    smsConsentSource: source === "/contact-us" ? source : CONTACT_SMS_CONSENT_SOURCE,
     smsConsentDisclosureVersion: CONTACT_SMS_CONSENT_DISCLOSURE_VERSION,
     smsConsentDisclosureLanguage: contactDisclosureLanguageLabel(submittedLang),
     smsConsentTimestamp: submissionTimestamp,
