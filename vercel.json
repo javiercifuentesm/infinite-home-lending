@@ -3,6 +3,14 @@
   "outputDirectory": "dist",
   "rewrites": [
     {
+      "source": "/free-consultation",
+      "destination": "https://free-homebuying-review.javiercifuentesm.chatgpt.site/free-consultation"
+    },
+    {
+      "source": "/free-consultation/:path*",
+      "destination": "https://free-homebuying-review.javiercifuentesm.chatgpt.site/free-consultation/:path*"
+    },
+    {
       "source": "/api/calculator-reports/:path*",
       "destination": "https://infinite-home-lending-production.up.railway.app/api/calculator-reports/:path*"
     },
@@ -40,7 +48,7 @@
         {
           "type": "header",
           "key": "referer",
-          "value": ".*/FREE-(Homebuying|Home-Equity)-Review.*"
+          "value": ".*/(FREE-(Homebuying|Home-Equity)-Review|free-consultation).*"
         }
       ],
       "destination": "https://free-homebuying-review.javiercifuentesm.chatgpt.site/ihl-logo.png"
