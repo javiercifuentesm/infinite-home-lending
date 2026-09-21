@@ -5,7 +5,7 @@ import { randomUUID } from "node:crypto";
 import { parseReportRequest, reportRows } from "../src/lib/calculatorReport";
 import { emptyCalculatorState, type CalculatorStore, type CalculatorState, type CalculatorLead } from "../src/server/calculatorAutomationStore";
 import { CalculatorWorker, actionToken } from "../src/server/calculatorAutomationWorker";
-import { ProviderError, renderCalculatorEmail, type CalculatorProviders } from "../src/server/calculatorAutomationProviders";
+import { createCalculatorProviders, ProviderError, renderCalculatorEmail, type CalculatorProviders } from "../src/server/calculatorAutomationProviders";
 import { createCalculatorReportRouter } from "../src/server/calculatorReportRoute";
 
 class MemoryStore implements CalculatorStore {
@@ -74,6 +74,32 @@ test("opt out, advisor activity and failed preflight suppress nurture", async ()
     if (reason === "replied") f.providers.stopReason = async () => "HubSpot reply";
     if (reason === "unavailable") f.providers.stopReason = async () => { throw new ProviderError(503); };
     f.advance(6 * 86400000); await f.worker().tick(); assert.deepEqual(f.sent, ["report", "advisor"]);
+  }
+});
+test("HubSpot incoming email activity from the lead stops nurture", async () => {
+  const f = fixture(true);
+  const lead = f.store.state.leads[f.id];
+  const originalFetch = globalThis.fetch;
+  const requests: Array<{ url: string; body?: any }> = [];
+  globalThis.fetch = async (input, init) => {
+    const url = String(input);
+    const body = init?.body ? JSON.parse(String(init.body)) : undefined;
+    requests.push({ url, body });
+    if (url.includes("/crm/v3/objects/contacts/")) return Response.json({ id: "123", properties: {} });
+    if (url.endsWith("/crm/v3/objects/emails/search")) return Response.json({ total: 1, results: [{ id: "email-1" }] });
+    throw new Error(`Unexpected request: ${url}`);
+  };
+  try {
+    assert.equal(await createCalculatorProviders().stopReason(lead), "HubSpot incoming email from lead");
+    const search = requests.find(x => x.url.endsWith("/crm/v3/objects/emails/search"))!;
+    assert.deepEqual(search.body.filterGroups[0].filters, [
+      { propertyName: "associations.contact", operator: "EQ", value: "123" },
+      { propertyName: "hs_email_direction", operator: "EQ", value: "INCOMING_EMAIL" },
+      { propertyName: "hs_email_from_email", operator: "EQ", value: "test@example.com" },
+      { propertyName: "hs_createdate", operator: "GTE", value: String(now) },
+    ]);
+  } finally {
+    globalThis.fetch = originalFetch;
   }
 });
 test("expired sending lease requires review after restart", async () => {
