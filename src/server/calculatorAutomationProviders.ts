@@ -107,6 +107,18 @@ export function createCalculatorProviders(): CalculatorProviders {
         if (Date.parse(p[key] || "") >= lead.createdAt) return `HubSpot ${key}`;
       }
       if (p.ihl_lead_status && p.ihl_lead_status !== "New / Unworked") return "advisor has updated lead status";
+      const incoming = await hs("/crm/v3/objects/emails/search", "POST", {
+        filterGroups: [{ filters: [
+          { propertyName: "associations.contact", operator: "EQ", value: String(contact.id) },
+          { propertyName: "hs_email_direction", operator: "EQ", value: "INCOMING_EMAIL" },
+          { propertyName: "hs_email_from_email", operator: "EQ", value: lead.request.email },
+          { propertyName: "hs_createdate", operator: "GTE", value: String(lead.createdAt) },
+        ] }],
+        properties: ["hs_email_direction", "hs_email_from_email", "hs_createdate"],
+        sorts: ["-hs_createdate"],
+        limit: 1,
+      });
+      if ((incoming.total ?? incoming.results?.length ?? 0) > 0) return "HubSpot incoming email from lead";
       try {
         const contact = await brevo(`/contacts/${encodeURIComponent(lead.request.email)}`);
         if (contact.emailBlacklisted) return "Brevo email opt-out";
