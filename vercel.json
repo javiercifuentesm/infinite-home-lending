@@ -147,6 +147,14 @@
       "destination": "https://my-home-equity-review-ihl.javiercifuentesm.chatgpt.site/:path*"
     },
     {
+      "source": "/Talk-to-Alma",
+      "destination": "https://alma-jaramillo-card.javiercifuentesm.chatgpt.site"
+    },
+    {
+      "source": "/Talk-to-Alma/:path*",
+      "destination": "https://alma-jaramillo-card.javiercifuentesm.chatgpt.site/:path*"
+    },
+    {
       "source": "/talk-to-javier",
       "destination": "https://javier-cifuentes-card.javiercifuentesm.chatgpt.site"
     },
