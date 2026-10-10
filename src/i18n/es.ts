@@ -12,7 +12,7 @@ export const es = {
   "footer.askSarah": "Pregunta a Sarah",
 
   "sarah.askSarah": "Habla con Sarah",
-  "sarah.subtitle": "Concierge Hipotecaria · DC · MD",
+  "sarah.subtitle": "Concierge Hipotecaria · DC · MD · VA",
   "sarah.disclaimer":
     "Sarah es nuestra Concierge Hipotecaria de IHL. No es una asesora hipotecaria con licencia. La información proporcionada es únicamente con fines educativos.",
 
