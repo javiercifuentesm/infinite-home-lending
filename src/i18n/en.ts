@@ -12,7 +12,7 @@ export const en = {
   "footer.askSarah": "Ask Sarah",
 
   "sarah.askSarah": "Ask Sarah",
-  "sarah.subtitle": "IHL Mortgage Concierge · DC · MD",
+  "sarah.subtitle": "IHL Mortgage Concierge · DC · MD · VA",
   "sarah.disclaimer":
     "Sarah is our IHL Mortgage Concierge — not a licensed advisor. Information is educational only.",
 
