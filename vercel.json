@@ -12,17 +12,35 @@
     },
     {
       "source": "/app.js",
-      "has": [{ "type": "header", "key": "referer", "value": ".*/my-reverse-mortgage-review.*" }],
+      "has": [
+        {
+          "type": "header",
+          "key": "referer",
+          "value": ".*/my-reverse-mortgage-review.*"
+        }
+      ],
       "destination": "https://my-reverse-mortgage-review-ihl.javiercifuentesm.chatgpt.site/app.js"
     },
     {
       "source": "/styles.css",
-      "has": [{ "type": "header", "key": "referer", "value": ".*/my-reverse-mortgage-review.*" }],
+      "has": [
+        {
+          "type": "header",
+          "key": "referer",
+          "value": ".*/my-reverse-mortgage-review.*"
+        }
+      ],
       "destination": "https://my-reverse-mortgage-review-ihl.javiercifuentesm.chatgpt.site/styles.css"
     },
     {
       "source": "/ihl-logo.png",
-      "has": [{ "type": "header", "key": "referer", "value": ".*/my-reverse-mortgage-review.*" }],
+      "has": [
+        {
+          "type": "header",
+          "key": "referer",
+          "value": ".*/my-reverse-mortgage-review.*"
+        }
+      ],
       "destination": "https://my-reverse-mortgage-review-ihl.javiercifuentesm.chatgpt.site/ihl-logo.png"
     },
     {
@@ -76,6 +94,22 @@
     {
       "source": "/My-Home-Equity-Review/:path*",
       "destination": "https://my-home-equity-review-ihl.javiercifuentesm.chatgpt.site/:path*"
+    },
+    {
+      "source": "/Talk-to-Alma",
+      "destination": "https://alma-jaramillo-card.javiercifuentesm.chatgpt.site"
+    },
+    {
+      "source": "/Talk-to-Alma/:path*",
+      "destination": "https://alma-jaramillo-card.javiercifuentesm.chatgpt.site/:path*"
+    },
+    {
+      "source": "/talk-to-javier",
+      "destination": "https://javier-cifuentes-card.javiercifuentesm.chatgpt.site"
+    },
+    {
+      "source": "/talk-to-javier/:path*",
+      "destination": "https://javier-cifuentes-card.javiercifuentesm.chatgpt.site/:path*"
     },
     {
       "source": "/(.*)",
