@@ -112,6 +112,14 @@
       "destination": "https://javier-cifuentes-card.javiercifuentesm.chatgpt.site/:path*"
     },
     {
+      "source": "/home-financing-with-alma",
+      "destination": "https://home-financing-with-alma.javiercifuentesm.chatgpt.site"
+    },
+    {
+      "source": "/home-financing-with-alma/:path*",
+      "destination": "https://home-financing-with-alma.javiercifuentesm.chatgpt.site/:path*"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
