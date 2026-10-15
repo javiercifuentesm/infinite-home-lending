@@ -3,6 +3,18 @@
   "outputDirectory": "dist",
   "rewrites": [
     {
+      "source": "/The-IHL-Event-Giveaway",
+      "destination": "/The-IHL-Event-Giveaway/index.html"
+    },
+    {
+      "source": "/The-IHL-Event-Giveaway/rules",
+      "destination": "/The-IHL-Event-Giveaway/rules/index.html"
+    },
+    {
+      "source": "/api/event-giveaway/:path*",
+      "destination": "https://infinite-home-lending-production.up.railway.app/api/event-giveaway/:path*"
+    },
+    {
       "source": "/my-reverse-mortgage-review",
       "destination": "https://my-reverse-mortgage-review-ihl.javiercifuentesm.chatgpt.site"
     },
