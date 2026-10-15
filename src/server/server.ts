@@ -1,3 +1,4 @@
+import { createEventGiveawayRouter, drainGiveawayQueue } from './eventGiveawayRoute';
 import { createCalculatorReportRouter } from "./calculatorReportRoute";
 import { S3CalculatorStore } from "./calculatorAutomationStore";
 import { CalculatorWorker } from "./calculatorAutomationWorker";
@@ -210,6 +211,9 @@ app.get("/api/health", (_req, res) => {
   res.status(200).json({ ok: true, service: "ihl-api" });
 });
 app.use(express.json({ limit: "1mb" }));
+app.use("/api", createEventGiveawayRouter());
+const giveawayQueueTimer = setInterval(() => { void drainGiveawayQueue(); }, 60000);
+giveawayQueueTimer.unref();
 app.use(express.urlencoded({ extended: true }));
 
 const calculatorClient = tryGetS3Client();
