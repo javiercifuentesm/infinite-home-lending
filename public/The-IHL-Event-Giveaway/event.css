@@ -3,3 +3,5 @@
 
 /* Keep the event caption aligned with the form after removing the extra motto. */
 .story > .overline:first-child{margin-top:0}
+@media(max-width:680px){.entry label{font-size:12px}.entry input:not([type=checkbox]),.entry select{font-size:16px;min-height:46px}.entry button{font-size:14px;min-height:48px}.entry .checkbox{font-size:12px;min-height:30px}.entry .checkbox input{width:18px;height:18px}.entry .marketing strong{font-size:12px}.entry form>.twocol:nth-of-type(2){grid-template-columns:1fr;gap:0}}
+@media(max-width:374px){h1{font-size:36px;line-height:1.25}}
