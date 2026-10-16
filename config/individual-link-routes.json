@@ -1,0 +1,196 @@
+{
+  "rewrites": [
+    {
+      "source": "/The-IHL-Event-Giveaway",
+      "destination": "/The-IHL-Event-Giveaway/index.html"
+    },
+    {
+      "source": "/The-IHL-Event-Giveaway/rules",
+      "destination": "/The-IHL-Event-Giveaway/rules/index.html"
+    },
+    {
+      "source": "/api/event-giveaway/:path*",
+      "destination": "https://infinite-home-lending-production.up.railway.app/api/event-giveaway/:path*"
+    },
+    {
+      "source": "/api/calculator-reports/:path*",
+      "destination": "https://infinite-home-lending-production.up.railway.app/api/calculator-reports/:path*"
+    },
+    {
+      "source": "/FREE-Home-Equity-Review",
+      "destination": "https://free-homebuying-review.javiercifuentesm.chatgpt.site/FREE-Home-Equity-Review"
+    },
+    {
+      "source": "/FREE-Home-Equity-Review/:path*",
+      "destination": "https://free-homebuying-review.javiercifuentesm.chatgpt.site/FREE-Home-Equity-Review/:path*"
+    },
+    {
+      "source": "/FREE-Homebuying-Review",
+      "destination": "https://free-homebuying-review.javiercifuentesm.chatgpt.site"
+    },
+    {
+      "source": "/FREE-Homebuying-Review/:path*",
+      "destination": "https://free-homebuying-review.javiercifuentesm.chatgpt.site/:path*"
+    },
+    {
+      "source": "/_next/:path*",
+      "destination": "https://free-homebuying-review.javiercifuentesm.chatgpt.site/_next/:path*"
+    },
+    {
+      "source": "/api/review-requests",
+      "destination": "https://free-homebuying-review.javiercifuentesm.chatgpt.site/api/review-requests"
+    },
+    {
+      "source": "/homebuying-review-conversation.png",
+      "destination": "https://free-homebuying-review.javiercifuentesm.chatgpt.site/homebuying-review-conversation.png"
+    },
+    {
+      "source": "/ihl-logo.png",
+      "has": [
+        {
+          "type": "header",
+          "key": "referer",
+          "value": ".*/(FREE-(Homebuying|Home-Equity)-Review|free-consultation).*"
+        }
+      ],
+      "destination": "https://free-homebuying-review.javiercifuentesm.chatgpt.site/ihl-logo.png"
+    },
+    {
+      "source": "/my-reverse-mortgage-review",
+      "destination": "https://my-reverse-mortgage-review-ihl.javiercifuentesm.chatgpt.site"
+    },
+    {
+      "source": "/my-reverse-mortgage-review/:path*",
+      "destination": "https://my-reverse-mortgage-review-ihl.javiercifuentesm.chatgpt.site/:path*"
+    },
+    {
+      "source": "/app.js",
+      "has": [
+        {
+          "type": "header",
+          "key": "referer",
+          "value": ".*/my-reverse-mortgage-review.*"
+        }
+      ],
+      "destination": "https://my-reverse-mortgage-review-ihl.javiercifuentesm.chatgpt.site/app.js"
+    },
+    {
+      "source": "/styles.css",
+      "has": [
+        {
+          "type": "header",
+          "key": "referer",
+          "value": ".*/my-reverse-mortgage-review.*"
+        }
+      ],
+      "destination": "https://my-reverse-mortgage-review-ihl.javiercifuentesm.chatgpt.site/styles.css"
+    },
+    {
+      "source": "/ihl-logo.png",
+      "has": [
+        {
+          "type": "header",
+          "key": "referer",
+          "value": ".*/my-reverse-mortgage-review.*"
+        }
+      ],
+      "destination": "https://my-reverse-mortgage-review-ihl.javiercifuentesm.chatgpt.site/ihl-logo.png"
+    },
+    {
+      "source": "/reverse-hero.png",
+      "destination": "https://my-reverse-mortgage-review-ihl.javiercifuentesm.chatgpt.site/reverse-hero.png"
+    },
+    {
+      "source": "/api/send-reverse-report",
+      "destination": "https://my-reverse-mortgage-review-ihl.javiercifuentesm.chatgpt.site/api/send-reverse-report"
+    },
+    {
+      "source": "/my-homeownership-path",
+      "destination": "https://my-homeownership-path-ihl.javiercifuentesm.chatgpt.site"
+    },
+    {
+      "source": "/my-homeownership-path/:path*",
+      "destination": "https://my-homeownership-path-ihl.javiercifuentesm.chatgpt.site/:path*"
+    },
+    {
+      "source": "/app.js",
+      "destination": "https://my-homeownership-path-ihl.javiercifuentesm.chatgpt.site/app.js"
+    },
+    {
+      "source": "/styles.css",
+      "destination": "https://my-homeownership-path-ihl.javiercifuentesm.chatgpt.site/styles.css"
+    },
+    {
+      "source": "/brand.css",
+      "destination": "https://my-homeownership-path-ihl.javiercifuentesm.chatgpt.site/brand.css"
+    },
+    {
+      "source": "/ihl-logo.png",
+      "destination": "https://my-homeownership-path-ihl.javiercifuentesm.chatgpt.site/ihl-logo.png"
+    },
+    {
+      "source": "/ihl-logo-email.png",
+      "destination": "https://my-homeownership-path-ihl.javiercifuentesm.chatgpt.site/ihl-logo-email.png"
+    },
+    {
+      "source": "/api/send-plan",
+      "destination": "https://my-homeownership-path-ihl.javiercifuentesm.chatgpt.site/api/send-plan"
+    },
+    {
+      "source": "/api/send-feedback",
+      "destination": "https://my-homeownership-path-ihl.javiercifuentesm.chatgpt.site/api/send-feedback"
+    },
+    {
+      "source": "/My-Home-Equity-Review",
+      "destination": "https://my-home-equity-review-ihl.javiercifuentesm.chatgpt.site"
+    },
+    {
+      "source": "/My-Home-Equity-Review/:path*",
+      "destination": "https://my-home-equity-review-ihl.javiercifuentesm.chatgpt.site/:path*"
+    },
+    {
+      "source": "/Talk-to-Alma",
+      "destination": "https://alma-jaramillo-card.javiercifuentesm.chatgpt.site"
+    },
+    {
+      "source": "/Talk-to-Alma/:path*",
+      "destination": "https://alma-jaramillo-card.javiercifuentesm.chatgpt.site/:path*"
+    },
+    {
+      "source": "/talk-to-javier",
+      "destination": "https://javier-cifuentes-card.javiercifuentesm.chatgpt.site"
+    },
+    {
+      "source": "/talk-to-javier/:path*",
+      "destination": "https://javier-cifuentes-card.javiercifuentesm.chatgpt.site/:path*"
+    },
+    {
+      "source": "/home-financing-with-alma/temporary-buydowns",
+      "destination": "https://home-financing-with-alma.javiercifuentesm.chatgpt.site"
+    },
+    {
+      "source": "/home-financing-with-alma/temporary-buydowns/",
+      "destination": "https://home-financing-with-alma.javiercifuentesm.chatgpt.site"
+    },
+    {
+      "source": "/home-financing-with-alma",
+      "destination": "https://home-financing-with-alma.javiercifuentesm.chatgpt.site"
+    },
+    {
+      "source": "/home-financing-with-alma/:path*",
+      "destination": "https://home-financing-with-alma.javiercifuentesm.chatgpt.site/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "requiredFiles": [
+    "public/The-IHL-Event-Giveaway/index.html",
+    "public/The-IHL-Event-Giveaway/rules/index.html"
+  ],
+  "requiredAppRoutes": [
+    "/free-consultation",
+    "/free-consultation/es"
+  ]
+}

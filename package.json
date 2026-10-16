@@ -10,7 +10,7 @@
     "postinstall": "patch-package",
     "dev": "vite --port=3000 --host=0.0.0.0",
     "social:preview": "vite --port=3000 --host=0.0.0.0 --open /social-preview.html",
-    "build": "vite build",
+    "build": "npm run verify:links && vite build",
     "preview": "vite preview",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",
@@ -18,7 +18,8 @@
     "server": "tsx src/server/server.ts",
     "server:agent-v3": "tsx src/server/server.ts",
     "verify:horizon": "tsx src/lib/verifyHorizonMonotonicity.ts",
-    "process-logo": ".venv/bin/python scripts/process-ihl-logo.py"
+    "process-logo": ".venv/bin/python scripts/process-ihl-logo.py",
+    "verify:links": "node scripts/verify-individual-links.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.91.1",
