@@ -36,10 +36,10 @@ export default function FreeConsultation() {
   </header>
   <main className="mx-auto grid max-w-6xl items-center gap-5 px-5 pb-4 pt-1 sm:px-8 lg:grid-cols-[.95fr_1.05fr] lg:gap-12 lg:py-5">
    <section className="relative isolate flex min-h-[205px] flex-col justify-center overflow-hidden rounded-2xl px-5 py-8 sm:min-h-[260px] sm:px-8 lg:min-h-[540px] lg:overflow-visible lg:px-0">
-    <img src="/homebuying-review-conversation.png" alt="" aria-hidden="true" className="pointer-events-none absolute inset-0 -z-20 h-full w-full object-cover object-center opacity-30 lg:relative lg:inset-auto lg:order-2 lg:mt-7 lg:h-[315px] lg:rounded-xl lg:object-cover lg:opacity-100"/>
+    <img src="/knowledge/knowledge-buying-home.png" alt="" aria-hidden="true" className="pointer-events-none absolute inset-0 -z-20 h-full w-full object-cover object-center opacity-30 lg:relative lg:inset-auto lg:order-2 lg:mt-7 lg:h-[315px] lg:rounded-xl lg:object-cover lg:opacity-100"/>
     <div className="absolute inset-0 -z-10 bg-gradient-to-r from-[#F7F7F5]/95 via-[#F7F7F5]/75 to-[#F7F7F5]/30 lg:hidden"/>
     <p className="mb-3 text-[11px] font-semibold uppercase tracking-[.20em] text-[#A8823F]">{c.eyebrow}</p>
-    <h1 className="font-display text-[2.2rem] font-semibold leading-[1.15] tracking-tight sm:text-[2.8rem]">{lang==="en"?<>Your <strong className="font-bold">FREE</strong> Mortgage Consultation</>:<>Su consulta hipotecaria <strong className="font-bold">GRATIS</strong></>}</h1>
+    <h1 className="font-display text-[2.2rem] font-semibold leading-[1.15] tracking-tight sm:text-[2.8rem]">{lang==="en"?<>Get your <strong className="font-bold">FREE</strong> consultation</>:<>Obtenga su consulta <strong className="font-bold">GRATIS</strong></>}</h1>
     <div className="my-4 h-0.5 w-14 bg-[#C6A15B]"/>
     <p className="max-w-md text-[15px] leading-6 text-[#465B6D]">{c.sub}</p>
    </section>
