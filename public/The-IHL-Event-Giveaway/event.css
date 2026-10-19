@@ -76,3 +76,4 @@
 .giveaway footer span:last-child{text-align:center;margin-top:2px}
 .giveaway .success{padding:20px 0}
 }
+@media(max-width:680px){.giveaway .top{padding-top:6px;padding-bottom:6px}.giveaway main{padding-top:8px}.giveaway .schedule{margin-top:5px;margin-bottom:8px}.giveaway footer{padding-top:6px;padding-bottom:8px}}
