@@ -9,6 +9,7 @@ const LOAN_PURPOSE_OPTIONS = [
   { value: "purchase", label: "Purchase a home" },
   { value: "refinance", label: "Refinance" },
   { value: "heloc", label: "Home equity line of credit (HELOC)" },
+  { value: "closed_end_second", label: "Closed-End Second Mortgage (Home Equity Loan)" },
   { value: "reverse", label: "Reverse mortgage" },
 ] as const;
 

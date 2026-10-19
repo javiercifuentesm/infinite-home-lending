@@ -18,6 +18,7 @@ const LOAN_PURPOSE_OPTIONS: Record<string, string> = {
   purchase: "Purchase",
   refinance: "Refinance",
   heloc: "HELOC",
+  closed_end_second: "Closed-End Second Mortgage",
   reverse: "Reverse Mortgage",
 };
 
