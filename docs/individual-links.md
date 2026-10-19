@@ -17,7 +17,7 @@ The article's origin remained available at https://home-financing-with-alma.javi
 
 ## Home equity campaign
 
-`/home-equity-review` serves the campaign page from `public/home-equity-review/index.html`. Its logo, poster and video use `/home-equity-review-assets/`, an isolated asset prefix. Keep the media origin public. Preserve the earlier `/My-Home-Equity-Review` assessment route.
+`/home-equity-review` serves the campaign page from `public/home-equity-review/index.html`. Its logo, poster and video use `/home-equity-review-assets/`, an isolated asset prefix served from this same repository. The page and media deploy together without a preview-host dependency. Preserve the earlier `/My-Home-Equity-Review` assessment route.
 
 ## Public entry points
 

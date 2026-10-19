@@ -10,7 +10,7 @@
     },
     {
       "source": "/home-equity-review-assets/:path*",
-      "destination": "https://ihl-my-home-equity-review.javiercifuentesm.chatgpt.site/assets/:path*"
+      "destination": "/home-equity-review/assets/:path*"
     },
     {
       "source": "/The-IHL-Event-Giveaway",
@@ -200,7 +200,10 @@
   "requiredFiles": [
     "public/The-IHL-Event-Giveaway/index.html",
     "public/The-IHL-Event-Giveaway/rules/index.html",
-    "public/home-equity-review/index.html"
+    "public/home-equity-review/index.html",
+    "public/home-equity-review/assets/ihl-logo.png",
+    "public/home-equity-review/assets/home-equity-poster.jpg",
+    "public/home-equity-review/assets/home-equity-education.mp4"
   ],
   "requiredAppRoutes": [
     "/free-consultation",

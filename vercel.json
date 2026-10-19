@@ -12,7 +12,7 @@
     },
     {
       "source": "/home-equity-review-assets/:path*",
-      "destination": "https://ihl-my-home-equity-review.javiercifuentesm.chatgpt.site/assets/:path*"
+      "destination": "/home-equity-review/assets/:path*"
     },
     {
       "source": "/The-IHL-Event-Giveaway",
