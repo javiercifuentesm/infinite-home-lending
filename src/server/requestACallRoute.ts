@@ -143,7 +143,7 @@ async function sendRequestACallEmail(fields: {
   const e = escapeHtml;
   const matchLabel =
     fields.matchType === "matched"
-      ? "Matched existing HubSpot contact by phone"
+      ? "Matched existing HubSpot contact"
       : fields.matchType === "new"
         ? "New HubSpot contact created"
         : "HubSpot sync skipped or unavailable";
