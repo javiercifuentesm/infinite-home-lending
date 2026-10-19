@@ -731,21 +731,23 @@ export async function syncRequestACallHubSpotContact(params: {
 
     applyUtmProperties(updateProperties, params.utmParams);
 
-    const patchResponse = await fetch(
-      `${HUBSPOT_API}/crm/v3/objects/contacts/${existing.id}`,
-      {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          "Content-Type": "application/json",
+    if (Object.keys(updateProperties).length > 0) {
+      const patchResponse = await fetch(
+        `${HUBSPOT_API}/crm/v3/objects/contacts/${existing.id}`,
+        {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${apiKey}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ properties: updateProperties }),
         },
-        body: JSON.stringify({ properties: updateProperties }),
-      },
-    );
+      );
 
-    if (!patchResponse.ok) {
-      const errText = await patchResponse.text().catch(() => "");
-      throw new Error(`HubSpot contact update error ${patchResponse.status}: ${errText}`);
+      if (!patchResponse.ok) {
+        const errText = await patchResponse.text().catch(() => "");
+        throw new Error(`HubSpot contact update error ${patchResponse.status}: ${errText}`);
+      }
     }
 
     const matchedNotes = buildRequestACallNotes({
