@@ -195,6 +195,14 @@
       "destination": "https://home-financing-with-alma.javiercifuentesm.chatgpt.site/:path*"
     },
     {
+      "source": "/ES",
+      "destination": "/es-home.html"
+    },
+    {
+      "source": "/es",
+      "destination": "/es-home.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

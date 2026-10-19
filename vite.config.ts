@@ -19,6 +19,7 @@ export default defineConfig(({mode}) => {
       rollupOptions: {
         input: {
           main: path.resolve(__dirname, 'index.html'),
+          spanishHome: path.resolve(__dirname, 'es-home.html'),
           socialPreview: path.resolve(__dirname, 'social-preview.html'),
         },
       },

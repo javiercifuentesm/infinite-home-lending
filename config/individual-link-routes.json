@@ -193,6 +193,14 @@
       "destination": "https://home-financing-with-alma.javiercifuentesm.chatgpt.site/:path*"
     },
     {
+      "source": "/ES",
+      "destination": "/es-home.html"
+    },
+    {
+      "source": "/es",
+      "destination": "/es-home.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
@@ -203,10 +211,13 @@
     "public/home-equity-review/index.html",
     "public/home-equity-review/assets/ihl-logo.png",
     "public/home-equity-review/assets/home-equity-poster.jpg",
-    "public/home-equity-review/assets/home-equity-education.mp4"
+    "public/home-equity-review/assets/home-equity-education.mp4",
+    "es-home.html",
+    "public/images/ihl-es-share-v1.png"
   ],
   "requiredAppRoutes": [
     "/free-consultation",
-    "/free-consultation/es"
+    "/free-consultation/es",
+    "/ES"
   ]
 }
