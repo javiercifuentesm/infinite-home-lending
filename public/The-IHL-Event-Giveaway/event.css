@@ -5,3 +5,74 @@
 .story > .overline:first-child{margin-top:0}
 @media(max-width:680px){.entry label{font-size:12px}.entry input:not([type=checkbox]),.entry select{font-size:16px;min-height:46px}.entry button{font-size:14px;min-height:48px}.entry .checkbox{font-size:12px;min-height:30px}.entry .checkbox input{width:18px;height:18px}.entry .marketing strong{font-size:12px}.entry form>.twocol:nth-of-type(2){grid-template-columns:1fr;gap:0}}
 @media(max-width:374px){h1{font-size:36px;line-height:1.25}}
+
+/* Compact, giveaway-first event entry. Rules-page styles remain separate. */
+.giveaway{background:#061e33;min-height:100svh;display:grid;place-items:center;padding:24px}
+.giveaway-shell{width:min(1020px,100%);background:var(--navy);border:1px solid #ffffff18;border-radius:12px;overflow:hidden;box-shadow:0 24px 80px #0003}
+.giveaway .top{padding:18px 34px;max-width:none;gap:20px}
+.giveaway .top img{width:112px;height:70px;display:block}
+.giveaway .eventlabel{font-size:10px;line-height:1.65;letter-spacing:1.7px}
+.giveaway .eventlabel span{font-size:9px;margin-top:5px}
+.giveaway main{padding:30px 34px;grid-template-columns:1fr 1.12fr;gap:34px;align-items:center}
+.giveaway .story{padding:0}
+.giveaway .overline{margin:0 0 16px;font-size:10px;letter-spacing:2.2px}
+.giveaway h1{font-size:43px;line-height:1.18;letter-spacing:-1.4px;margin:0 0 15px}
+.giveaway h1 em{display:block;font-style:normal;font-size:88px;line-height:1.12;margin-top:4px;color:#e3c488}
+.giveaway .prize-subtitle{font-size:12px;letter-spacing:2.4px;margin:0 0 28px;color:#eef1f3}
+.giveaway .prizehead{margin:0 0 13px;font-size:13px;letter-spacing:.4px;color:#d2dce4;display:block}
+.giveaway .prizes{gap:9px}
+.giveaway .prize{padding:19px 9px 16px;text-align:center;border:1px solid #c6a15b99;border-radius:5px;background:linear-gradient(145deg,#ffffff06,transparent)}
+.giveaway .prize strong{font-size:32px;letter-spacing:-.6px}
+.giveaway .prize small{font-size:8px;letter-spacing:1px;margin-top:10px;color:#d8e0e7}
+.giveaway .schedule{background:none;border:0;padding:0;color:#d1dce5;margin:20px 0 0;font-size:11px}
+.giveaway .entry{padding:24px;border-radius:9px;background:#faf8f3}
+.giveaway h2{font-size:25px;margin:0 0 18px;text-align:center}
+.giveaway .fields{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:11px 12px}
+.giveaway label{font-size:11px;margin:0;min-width:0}
+.giveaway input:not([type=checkbox]),.giveaway select{font:16px Arial,sans-serif;min-width:0;min-height:44px;height:44px;padding:8px;margin-top:5px;background:#fff}
+.giveaway .checkbox{font-size:11px;line-height:1.45;gap:9px;font-weight:400}
+.giveaway .checkbox input{width:20px;height:20px;margin:0;flex-shrink:0}
+.giveaway .eligibility{margin-top:15px}
+.giveaway .marketing{padding-top:12px;margin-top:12px;margin-bottom:14px;color:#475767}
+.giveaway .marketing strong{font-size:11px;margin-bottom:3px}
+.giveaway button{min-height:46px;font-size:13px;justify-content:center;gap:15px}
+.giveaway button:disabled{opacity:1;background:#43596b;cursor:default}
+.giveaway .fineprint{font-size:10px;line-height:1.5;text-align:center;margin-top:10px;color:#586571}
+.giveaway .fineprint a{color:#18334c}
+.giveaway footer{margin:0 34px;padding:14px 0;max-width:none;display:flex;gap:8px;font-size:9px;line-height:1.5}
+.giveaway footer span:last-child{text-align:right}
+@media(max-width:680px){
+.giveaway{padding:0;display:block;background:var(--navy)}
+.giveaway-shell{border:0;border-radius:0;max-width:430px;margin:auto;box-shadow:none}
+.giveaway .top{padding:8px 16px;gap:14px}
+.giveaway .top img{width:75px;height:48px}
+.giveaway .eventlabel{font-size:8px;line-height:1.45;max-width:220px;letter-spacing:1px}
+.giveaway .eventlabel span{font-size:7px;margin-top:3px;letter-spacing:.5px}
+.giveaway main{padding:12px 14px 9px;display:block}
+.giveaway .story{text-align:center}
+.giveaway .overline{font-size:8px;letter-spacing:1.7px;margin:0 0 4px}
+.giveaway h1{font-size:23px;letter-spacing:-.6px;line-height:1.15;margin:0 0 4px}
+.giveaway h1 em{display:inline;font-size:36px;line-height:1;white-space:nowrap;margin:0 0 0 3px}
+.giveaway .prize-subtitle{font-size:9px;letter-spacing:1.7px;margin:0 0 7px}
+.giveaway .prizehead{font-size:10px;margin:0 0 7px}
+.giveaway .prizes{gap:8px;max-width:330px;margin:auto}
+.giveaway .prize{padding:7px 6px}
+.giveaway .prize strong{font-size:25px;line-height:1.1}
+.giveaway .prize small{font-size:7px;letter-spacing:.7px;margin-top:4px}
+.giveaway .schedule{font-size:9px;margin:7px 0 10px}
+.giveaway .entry{padding:13px 14px 11px}
+.giveaway h2{font-size:21px;margin:0 0 10px}
+.giveaway .fields{gap:9px 10px}
+.giveaway label{font-size:10px;line-height:1.25}
+.giveaway input:not([type=checkbox]),.giveaway select{margin-top:4px;min-height:44px;height:44px}
+.giveaway .checkbox{font-size:10px;line-height:1.45;min-height:0}
+.giveaway .eligibility{margin-top:11px}
+.giveaway .marketing{margin-top:9px;padding-top:9px;margin-bottom:11px}
+.giveaway .marketing strong{font-size:10px;margin-bottom:2px}
+.giveaway button{font-size:12px;min-height:46px;padding:10px}
+.giveaway .fineprint{font-size:9px;line-height:1.45;margin-top:8px}
+.giveaway footer{margin:0 16px;padding:8px 0 10px;display:block;font-size:8px;text-align:center}
+.giveaway footer span{display:block}
+.giveaway footer span:last-child{text-align:center;margin-top:2px}
+.giveaway .success{padding:20px 0}
+}
