@@ -15,6 +15,10 @@ Before release, run the build. After release, open the affected branded URL, che
 
 The article's origin remained available at https://home-financing-with-alma.javiercifuentesm.chatgpt.site with title “Home Financing with Alma | Temporary Buydowns”. Newsletter rewrites were committed on `virginia-licensing-deploy` (1be581e, 7dddb38, e0867db), but were absent from main. Main's newer release therefore served the website SPA fallback for the article URL. Restore only those four newsletter rewrites onto current main, preserving newer giveaway and consultation work.
 
+## Home equity campaign
+
+`/home-equity-review` serves the campaign page from `public/home-equity-review/index.html`. Its logo, poster and video use `/home-equity-review-assets/`, an isolated asset prefix. Keep the media origin public. Preserve the earlier `/My-Home-Equity-Review` assessment route.
+
 ## Public entry points
 
 - `/home-financing-with-alma/temporary-buydowns` — Alma newsletter article
