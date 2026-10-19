@@ -542,6 +542,20 @@ type HubSpotSearchContact = {
   properties: Record<string, string>;
 };
 
+/** Email is HubSpot's unique contact identifier; check it before phone matching. */
+async function findRequestACallContactByEmail(email: string, apiKey: string): Promise<HubSpotSearchContact | null> {
+  if (!email.trim()) return null;
+  const properties = ["email", "phone", IHL_HUBSPOT_PROPERTIES.phoneNormalized,
+    IHL_HUBSPOT_PROPERTIES.loanPurpose, IHL_HUBSPOT_PROPERTIES.leadSource];
+  const response = await fetch(
+    `${HUBSPOT_API}/crm/v3/objects/contacts/${encodeURIComponent(email.trim())}?idProperty=email&properties=${properties.join(",")}`,
+    { headers: { Authorization: `Bearer ${apiKey}` } },
+  );
+  if (response.status === 404) return null;
+  if (!response.ok) throw new Error(`HubSpot contact email lookup error ${response.status}`);
+  return await response.json() as HubSpotSearchContact;
+}
+
 /** Find an existing contact by ihl_phone_normalized (CRM Search API). */
 export async function findHubSpotContactByNormalizedPhone(
   phoneNormalized: string,
@@ -599,6 +613,9 @@ export async function findHubSpotContactByNormalizedPhone(
 }
 
 function buildRequestACallNotes(params: {
+  loanPurposeLabel: string;
+  leadSource: string;
+  phone: string;
   bestTimeToReach: string;
   focusNotes: string;
   matchType: "new" | "matched";
@@ -606,7 +623,10 @@ function buildRequestACallNotes(params: {
   smsConsentTimestamp: string;
 }): string[] {
   const notes = [
-    `[Request a Call — ${params.matchType === "matched" ? "matched existing contact by phone" : "new contact"}]`,
+    `[Request a Call — ${params.matchType === "matched" ? "matched existing contact" : "new contact"}]`,
+    `Loan purpose for this inquiry: ${params.loanPurposeLabel}`,
+    `Inquiry source: ${params.leadSource}`,
+    `Callback phone submitted: ${params.phone}`,
     `Best day & time to reach: ${params.bestTimeToReach}`,
     `SMS Consent: ${params.smsConsent ? "Yes" : "No"}`,
     `SMS Consent Source: /request-a-call`,
@@ -681,12 +701,14 @@ export async function syncRequestACallHubSpotContact(params: {
     return { contactId: null, matchType: "skipped" };
   }
 
-  const existing = await findHubSpotContactByNormalizedPhone(params.phoneNormalized);
+  const existing = await findRequestACallContactByEmail(params.email, apiKey)
+    ?? await findHubSpotContactByNormalizedPhone(params.phoneNormalized);
 
   if (existing) {
-    const updateProperties: Record<string, string> = {
-      [IHL_HUBSPOT_PROPERTIES.phoneNormalized]: params.phoneNormalized,
-    };
+    const updateProperties: Record<string, string> = {};
+    if (!existing.properties[IHL_HUBSPOT_PROPERTIES.phoneNormalized]?.trim()) {
+      updateProperties[IHL_HUBSPOT_PROPERTIES.phoneNormalized] = params.phoneNormalized;
+    }
 
     if (params.leadSource) {
       const currentLeadSource =
@@ -727,6 +749,9 @@ export async function syncRequestACallHubSpotContact(params: {
     }
 
     const matchedNotes = buildRequestACallNotes({
+      loanPurposeLabel: params.loanPurposeLabel,
+      leadSource: params.leadSource,
+      phone: params.phone,
       bestTimeToReach: params.bestTimeToReach,
       focusNotes: params.focusNotes,
       matchType: "matched",
@@ -793,6 +818,9 @@ export async function syncRequestACallHubSpotContact(params: {
   }
 
   const newNotes = buildRequestACallNotes({
+    loanPurposeLabel: params.loanPurposeLabel,
+    leadSource: params.leadSource,
+    phone: params.phone,
     bestTimeToReach: params.bestTimeToReach,
     focusNotes: params.focusNotes,
     matchType: "new",
