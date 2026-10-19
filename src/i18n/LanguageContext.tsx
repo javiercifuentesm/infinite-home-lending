@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { en } from "./en";
 import { es } from "./es";
 
@@ -23,9 +23,15 @@ export function useLanguage() {
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Language>(() => {
     if (typeof window === "undefined") return "en";
+    if (/^\/es\/?$/i.test(window.location.pathname)) return "es";
     const stored = localStorage.getItem("ihl_lang");
     return stored === "es" || stored === "en" ? stored : "en";
   });
+
+  useEffect(() => {
+    document.documentElement.lang = lang;
+    localStorage.setItem("ihl_lang", lang);
+  }, [lang]);
 
   const setLang = (l: Language) => {
     setLangState(l);

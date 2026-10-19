@@ -101,6 +101,7 @@ const AppContent = () => {
         <main>
           <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/ES" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/solutions" element={<Solutions />} />
           <Route path="/solutions/programs/:programId" element={<LoanProgramDetailPage />} />
