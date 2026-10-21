@@ -16,7 +16,7 @@ Primary sources checked October 15, 2026:
 
 Section 8 has no gift-value safe harbor. The normal promotional/educational exception requires no conditioning on referrals and no defraying costs a referral source would otherwise incur. A broad one-time drawing with equal opportunities and no referral or business condition is favorable, but does not by itself resolve every condition. CFPB's drawing example uses a recreational item, not an unrestricted gift card. Our concern about unrestricted Amazon cards as expense substitutes is an inference, not an express CFPB determination about this event. Obtain RESPA counsel's review of the prize choice and actual event arrangement before running the promotion. Also review applicable Maryland giveaway requirements separately. No claim is made that no-purchase wording alone establishes compliance.
 
-Rules currently use 11 a.m.–3:30 p.m. Eastern, three distinct winners ($100/$75/$25), one entry per person, no application/transaction/referral or email subscription required, and 48 hours to respond to winner notice. Confirm these operational choices with Lina and Alma before the event.
+Rules currently use 11 a.m.–3:30 p.m. Eastern, two distinct winners ($75/$25), total prize value $100, one entry per person, no application/transaction/referral or email subscription required, and 48 hours to respond to winner notice. Confirm these operational choices with Lina and Alma before the event.
 
 ## Verification
 - npm run build
