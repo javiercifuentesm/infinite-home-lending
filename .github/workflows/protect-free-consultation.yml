@@ -1,0 +1,26 @@
+name: Protect Free Consultation
+on:
+  pull_request:
+    paths:
+      - "src/App.tsx"
+      - "src/pages/FreeConsultation.tsx"
+      - "vercel.json"
+      - "scripts/verify-free-consultation.mjs"
+      - ".github/workflows/protect-free-consultation.yml"
+  push:
+    branches: [main]
+    paths:
+      - "src/App.tsx"
+      - "src/pages/FreeConsultation.tsx"
+      - "vercel.json"
+      - "scripts/verify-free-consultation.mjs"
+      - ".github/workflows/protect-free-consultation.yml"
+jobs:
+  verify-isolation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: node scripts/verify-free-consultation.mjs
