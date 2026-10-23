@@ -17,6 +17,7 @@ import HowItWorks from "./pages/HowItWorks";
 import Contact from "./pages/Contact";
 import ContactUs from "./pages/ContactUs";
 import RequestACall from "./pages/RequestACall";
+import RealtorPartnership from "./pages/RealtorPartnership";
 import FreeConsultation from "./pages/FreeConsultation";
 import LoanSimulator from "./pages/LoanSimulator";
 import BuyVsWaitAnalyzer from "./pages/BuyVsWaitAnalyzer";
@@ -110,6 +111,7 @@ const AppContent = () => {
           <Route path="/contact" element={<Contact />} />
           <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/request-a-call" element={<RequestACall />} />
+          <Route path="/realtor-partnership" element={<RealtorPartnership />} />
           <Route path="/free-consultation" element={<FreeConsultation />} />
           <Route path="/free-consultation/es" element={<FreeConsultation />} />
           <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />

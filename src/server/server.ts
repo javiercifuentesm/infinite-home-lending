@@ -14,6 +14,7 @@ import { createMortgageConciergeSendLeadRouter } from "./mortgageConciergeSendLe
 import { createAssignLeadRouter } from "./assignLeadRoute";
 import { createSubmitLeadRouter } from "./submitLeadRoute";
 import { createRequestACallRouter } from "./requestACallRoute";
+import { createRealtorPartnershipRouter } from "./realtorPartnershipRoute";
 import {
   createIntelligenceLoopRouter,
   fetchFredRate,
@@ -239,6 +240,7 @@ app.use("/api", createMortgageConciergeSendLeadRouter());
 app.use("/api", createAssignLeadRouter());
 app.use("/api", createSubmitLeadRouter());
 app.use("/api", createRequestACallRouter());
+app.use("/api", createRealtorPartnershipRouter());
 app.use("/api", createAnalyticsRouter());
 app.use("/api", createIntelligenceLoopRouter());
 app.use("/api", createIntelligenceBriefRouter());
