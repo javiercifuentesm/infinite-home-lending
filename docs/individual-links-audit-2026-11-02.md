@@ -2,7 +2,7 @@
 
 Verified November 2, 2026 (America/New_York).
 
-**Result:** 19 primary entry URLs now render their intended pages. One advisor entry URL and its five known child routes remain unavailable because the original advisor-site implementation could not be recovered. Twenty-eight persistent domain-routing rules are live, with no staged changes remaining. Four external form/report routing rules remain blocked by automatic approval review; complete lead/report delivery is not certified.
+**Result:** 19 primary entry URLs now render their intended pages. One advisor entry URL and its five known child routes remain unavailable because the original advisor-site implementation could not be recovered. Thirty-two persistent domain-routing rules are live, with no staged changes remaining. The four external form/report routing rules were explicitly approved by Javier and are now active. Complete lead/report delivery is not certified.
 
 All paths below use **https://www.infinitehomelending.com**. A slash added by the static host is an expected canonical redirect.
 
@@ -14,12 +14,12 @@ All paths below use **https://www.infinitehomelending.com**. A slash added by th
 | `/talk-to-javier` | Javier digital card restored and renders | Persistent card and asset subtree route |
 | `/home-financing-with-alma/temporary-buydowns` | Original newsletter restored and renders | Persistent article route |
 | `/home-financing-with-alma` | Newsletter index restored and renders | Persistent index and asset subtree routes |
-| `/my-homeownership-path` | Homeownership assessment renders | Page/assets protected; report/feedback API locking awaits approval |
+| `/my-homeownership-path` | Homeownership assessment renders | Page/assets protected; report/feedback API routes now persist independently of website builds |
 | `/My-Home-Equity-Review` | Original equity assessment renders | Persistent page route; its source uses origin-hosted assets |
 | `/home-equity-review` | Newer home-equity educational page restored and renders | Preserved static page, image/poster/video namespace; CTA uses callback form |
-| `/my-reverse-mortgage-review` | Reverse assessment renders | Page/assets protected; report API locking awaits approval |
-| `/FREE-Homebuying-Review` | Homebuying review restored and renders | Page/compiled assets protected; review-request API restoration awaits approval |
-| `/FREE-Home-Equity-Review` | Free equity review restored and renders | Canonical redirect corrected; same review-request API limitation |
+| `/my-reverse-mortgage-review` | Reverse assessment renders | Page/assets protected; report API route now persists independently of website builds |
+| `/FREE-Homebuying-Review` | Homebuying review restored and renders | Page/compiled assets protected; review-request API route restored and protected |
+| `/FREE-Home-Equity-Review` | Free equity review restored and renders | Canonical redirect corrected; same protected review-request API route |
 | `/The-IHL-Event-Giveaway` | Giveaway archive restored and renders | Explicit closed-event notice; submit button disabled; backend confirms event closed |
 | `/The-IHL-Event-Giveaway/rules` | Official rules restored and render | Persistent archived page/assets |
 | `/realtor-partnership` | Realtor partnership page restored and renders | Preserved application build/assets; original Railway endpoint validates empty input |
@@ -57,9 +57,9 @@ The archive checks the existence and SHA-256 hash of 146 published files before 
 
 This protection addresses the observed old-deployment regression. It does not prevent domain expiry, hosting outages, deliberate routing deletion, or failures inside an upstream page or backend.
 
-## Form/report routes requiring approval
+## Approved form/report routes — activated November 2, 2026
 
-Automatic approval review rejected adding persistent external routing for these actions because visitor information would be sent to an external hosted origin without explicit approval naming the payload and destination. These rules were not added through another method.
+Automatic approval review initially blocked these routes. Javier explicitly approved preserving visitor contact details, assessment answers, report requests, and feedback to the named existing IHL services. All four routes are now enabled in production.
 
 | Route | Existing IHL destination to preserve | Visitor information involved |
 |---|---|---|
@@ -68,7 +68,7 @@ Automatic approval review rejected adding persistent external routing for these 
 | `/api/send-feedback` | `https://my-homeownership-path-ihl.javiercifuentesm.chatgpt.site/api/send-feedback` | Submitted participant feedback and identifying information included in it |
 | `/api/send-reverse-report` | `https://my-reverse-mortgage-review-ihl.javiercifuentesm.chatgpt.site/api/send-reverse-report` | Contact details, reverse-review answers and report request |
 
-Some of these API paths remain present in the current website build, but they are not protected against replacement by a future build. `/api/review-requests` also needs its missing branded route restored. Page rendering alone is not proof of submission or report delivery.
+All four API paths now use persistent project-level routing outside the replaceable website build. Production routing version: `562d7b1c-394f-4086-bc67-6d5d9461d225`. Verification confirmed 32 enabled rules and no staged changes. Empty JSON probes to these four branded endpoints received HTTP 403 with hosting-layer error code 1010; successful validation, report generation, and email delivery could not be confirmed through that automated client. No bypass was attempted. Page rendering and saved routing are not proof of delivery.
 
 ## Testing evidence and limits
 

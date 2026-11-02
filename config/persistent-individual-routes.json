@@ -456,18 +456,70 @@
       },
       "srcSyntax": "regex",
       "routeType": "rewrite"
+    },
+    {
+      "id": "d2d19a89-f85c-4362-9173-eb73125eaf9c",
+      "name": "Approved persistent review-requests",
+      "description": "User explicitly approved preserving visitor contact details, assessment answers, report requests and feedback to these existing IHL hosted services on November 2, 2026.",
+      "enabled": true,
+      "staged": false,
+      "route": {
+        "src": "/api/review-requests",
+        "dest": "https://free-homebuying-review.javiercifuentesm.chatgpt.site/api/review-requests"
+      },
+      "srcSyntax": "equals",
+      "routeType": "rewrite"
+    },
+    {
+      "id": "7df8e9ca-038c-4c85-aecf-73c8369260e9",
+      "name": "Approved persistent send-plan",
+      "description": "User explicitly approved preserving visitor contact details, assessment answers, report requests and feedback to these existing IHL hosted services on November 2, 2026.",
+      "enabled": true,
+      "staged": false,
+      "route": {
+        "src": "/api/send-plan",
+        "dest": "https://my-homeownership-path-ihl.javiercifuentesm.chatgpt.site/api/send-plan"
+      },
+      "srcSyntax": "equals",
+      "routeType": "rewrite"
+    },
+    {
+      "id": "8e388fa2-410a-44c0-8261-39881d3fc851",
+      "name": "Approved persistent send-feedback",
+      "description": "User explicitly approved preserving visitor contact details, assessment answers, report requests and feedback to these existing IHL hosted services on November 2, 2026.",
+      "enabled": true,
+      "staged": false,
+      "route": {
+        "src": "/api/send-feedback",
+        "dest": "https://my-homeownership-path-ihl.javiercifuentesm.chatgpt.site/api/send-feedback"
+      },
+      "srcSyntax": "equals",
+      "routeType": "rewrite"
+    },
+    {
+      "id": "17d70fdd-6857-4ae8-92d2-95cc32a7a9b9",
+      "name": "Approved persistent send-reverse-report",
+      "description": "User explicitly approved preserving visitor contact details, assessment answers, report requests and feedback to these existing IHL hosted services on November 2, 2026.",
+      "enabled": true,
+      "staged": false,
+      "route": {
+        "src": "/api/send-reverse-report",
+        "dest": "https://my-reverse-mortgage-review-ihl.javiercifuentesm.chatgpt.site/api/send-reverse-report"
+      },
+      "srcSyntax": "equals",
+      "routeType": "rewrite"
     }
   ],
   "version": {
-    "id": "8f331062-7338-4442-bf39-f3389278346e",
-    "s3Key": "3de9f9f9da7a9e38",
+    "id": "562d7b1c-394f-4086-bc67-6d5d9461d225",
+    "s3Key": "b99d9b6914d12e8c",
     "createdBy": "",
-    "lastModified": 1793653244868,
-    "ruleCount": 28,
+    "lastModified": 1793655327772,
+    "ruleCount": 32,
     "alias": "infinite-home-lending-b375d0-routes-javiers-projects-9f9861ed.vercel.app"
   },
   "limit": {
     "maxRoutes": 100,
-    "currentRoutes": 28
+    "currentRoutes": 32
   }
 }
