@@ -37,6 +37,16 @@ External origin assets sharing root paths (such as /app.js or /_next) remain cou
 
 Incident: production dpl_DJkAFkRPK1d9R5qdAG72JpXjap6o was created by CLI and identifies virginia-licensing-deploy / 91b79bc, predating the consultation page and registry. Main still has the page. Repository checks cannot run inside an old checkout that lacks them.
 
-Recovery architecture: deploy standalone/free-consultation as a separate Vercel project. Main-domain project-level routing forwards /free-consultation and every child path there. This route exists outside any deployment's vercel.json and survives main-site rebuilds. All page assets and the form API use the /free-consultation namespace. Existing Railway submit-lead handles submissions; no server or CRM changes are required. The original English and Spanish form is retained, with /es and /ES accepted. Existing primary-site deployment remains untouched.
+Recovery architecture: deploy standalone/free-consultation as an independent static Site. Main-domain project-level routing forwards /free-consultation and every child path there. This route exists outside any deployment's vercel.json and survives main-site rebuilds. All page assets and the form API use the /free-consultation namespace. Existing Railway submit-lead handles submissions; no server or CRM changes are required. The original English and Spanish form is retained, with /es and /ES accepted. Existing primary-site deployment remains untouched.
 
 Do not deploy old main-site branches as production. Do not replace this project-level route with a build-local rewrite. Before changing the independent project, test EN/ES, images, form validation, backend responses, and sibling links. This architecture isolates the consultation only; other campaign routes still need deliberate migration.
+
+Actual hosting: Vercel refused independent project creation (403). The isolated consultation is instead public Site `appgprj_6ae8ed9ccc8481918fd36a9c2ada7c39`, origin https://ihl-free-consultation-live.javiercifuentesm.chatgpt.site. Its managed source repository holds the deployed static output; editable React source is in standalone/free-consultation on production/individual-links. Build then copy index, assets, and media beneath dist/free-consultation (including ES and es index documents) before packaging the Site.
+
+Vercel project-level routes, production routing version c8534aed-1d53-48a5-8680-fa399b04629c:
+1. Exact /free-consultation/api/submit-lead → Railway /api/submit-lead (route 434b4a10-7d86-441e-ba01-682d0ccb9f3a).
+2. Case-insensitive ^/free-consultation(?:/(.*))?$ → Site /free-consultation/$1 (route d5088245-3e74-42a1-8295-3bdaf27afdc8).
+
+Page and asset routing was verified in the branded browser. Backend rejection of an empty payload is tested without creating a real lead or sending notification emails. Successful lead delivery remains untested in this repair.
+
+Alma card also restored with project-level route 742bb6ba-c571-4e1f-857a-1030bcfde8d3. Current combined production routing version: 140c0224-a3a9-4c1b-ac64-0912895af53b (3 rules). The primary-site deployment was not replaced.
