@@ -32,3 +32,11 @@ The article's origin remained available at https://home-financing-with-alma.javi
 - `/FREE-Homebuying-Review` and `/FREE-Home-Equity-Review` — review entry points
 
 External origin assets sharing root paths (such as /app.js or /_next) remain coupled through global rewrites. New pages should use page-specific asset paths. Existing integrations require separate browser verification before migrating their asset routing.
+
+## Consultation isolation — November 2, 2026
+
+Incident: production dpl_DJkAFkRPK1d9R5qdAG72JpXjap6o was created by CLI and identifies virginia-licensing-deploy / 91b79bc, predating the consultation page and registry. Main still has the page. Repository checks cannot run inside an old checkout that lacks them.
+
+Recovery architecture: deploy standalone/free-consultation as a separate Vercel project. Main-domain project-level routing forwards /free-consultation and every child path there. This route exists outside any deployment's vercel.json and survives main-site rebuilds. All page assets and the form API use the /free-consultation namespace. Existing Railway submit-lead handles submissions; no server or CRM changes are required. The original English and Spanish form is retained, with /es and /ES accepted. Existing primary-site deployment remains untouched.
+
+Do not deploy old main-site branches as production. Do not replace this project-level route with a build-local rewrite. Before changing the independent project, test EN/ES, images, form validation, backend responses, and sibling links. This architecture isolates the consultation only; other campaign routes still need deliberate migration.

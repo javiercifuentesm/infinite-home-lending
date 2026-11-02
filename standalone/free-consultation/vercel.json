@@ -1,0 +1,22 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "rewrites": [
+    {
+      "source": "/free-consultation/api/submit-lead",
+      "destination": "https://infinite-home-lending-production.up.railway.app/api/submit-lead"
+    },
+    {
+      "source": "/free-consultation/assets/:path*",
+      "destination": "/assets/:path*"
+    },
+    {
+      "source": "/free-consultation/media/:path*",
+      "destination": "/media/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
