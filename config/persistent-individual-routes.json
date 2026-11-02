@@ -1,0 +1,473 @@
+{
+  "projectId": "prj_Lw2Ft6r73MyHjCT6qLPDwBnZ2v8t",
+  "teamId": "team_73HmvItNq2RYd3JbY3SAAXRs",
+  "verifiedAt": "2026-11-02",
+  "routes": [
+    {
+      "id": "434b4a10-7d86-441e-ba01-682d0ccb9f3a",
+      "name": "Independent consultation lead API",
+      "description": "Preserve consultation submissions across main-site deployments.",
+      "enabled": true,
+      "staged": false,
+      "route": {
+        "src": "/free-consultation/api/submit-lead",
+        "dest": "https://infinite-home-lending-production.up.railway.app/api/submit-lead"
+      },
+      "srcSyntax": "equals",
+      "routeType": "rewrite"
+    },
+    {
+      "id": "d5088245-3e74-42a1-8295-3bdaf27afdc8",
+      "name": "Independent free consultation page",
+      "description": "Consultation and namespaced assets served independently of main-site builds.",
+      "enabled": true,
+      "staged": false,
+      "route": {
+        "src": "^/free-consultation(?:/(.*))?$",
+        "dest": "https://ihl-free-consultation-live.javiercifuentesm.chatgpt.site/free-consultation/$1",
+        "caseSensitive": false
+      },
+      "srcSyntax": "regex",
+      "routeType": "rewrite"
+    },
+    {
+      "id": "742bb6ba-c571-4e1f-857a-1030bcfde8d3",
+      "name": "Persistent Alma digital business card",
+      "description": "Restore card route omitted by older primary-site deployment.",
+      "enabled": true,
+      "staged": false,
+      "route": {
+        "src": "^/Talk-to-Alma(?:/(.*))?$",
+        "dest": "https://alma-jaramillo-card.javiercifuentesm.chatgpt.site/$1",
+        "caseSensitive": false
+      },
+      "srcSyntax": "regex",
+      "routeType": "rewrite"
+    },
+    {
+      "id": "67877e25-e5bd-4cd0-a51f-23b84c5c3643",
+      "name": "IHL 1: Protected dependency /api/event-giveaway/:path*",
+      "description": "Persistent published-link routing; managed independently of website builds.",
+      "enabled": true,
+      "staged": false,
+      "route": {
+        "src": "^/api/event\\-giveaway/(.*)$",
+        "dest": "https://infinite-home-lending-production.up.railway.app/api/event-giveaway/$1",
+        "caseSensitive": false
+      },
+      "srcSyntax": "regex",
+      "routeType": "rewrite"
+    },
+    {
+      "id": "4a893cc3-ceab-4190-852d-3911208af4c6",
+      "name": "IHL 2: Protected dependency /api/calculator-reports/:path*",
+      "description": "Persistent published-link routing; managed independently of website builds.",
+      "enabled": true,
+      "staged": false,
+      "route": {
+        "src": "^/api/calculator\\-reports/(.*)$",
+        "dest": "https://infinite-home-lending-production.up.railway.app/api/calculator-reports/$1",
+        "caseSensitive": false
+      },
+      "srcSyntax": "regex",
+      "routeType": "rewrite"
+    },
+    {
+      "id": "df810d68-ab73-47e6-90eb-4fac6f21bd85",
+      "name": "IHL 3: Review page compiled static assets",
+      "description": "Preserve only published static JS/CSS files used by existing review pages.",
+      "enabled": true,
+      "staged": false,
+      "route": {
+        "src": "^/_next/static/(.*)$",
+        "dest": "https://free-homebuying-review.javiercifuentesm.chatgpt.site/_next/static/$1",
+        "caseSensitive": false
+      },
+      "srcSyntax": "regex",
+      "routeType": "rewrite"
+    },
+    {
+      "id": "cb0b1541-9554-429a-a12f-12940f9839ba",
+      "name": "IHL 5: Protected dependency /homebuying-review-conversation.png",
+      "description": "Preserve existing published page dependency and original destination from repository vercel.json; no changes to recipients or payload.",
+      "enabled": true,
+      "staged": false,
+      "route": {
+        "src": "^/homebuying\\-review\\-conversation\\.png$",
+        "dest": "https://free-homebuying-review.javiercifuentesm.chatgpt.site/homebuying-review-conversation.png",
+        "caseSensitive": false
+      },
+      "srcSyntax": "regex",
+      "routeType": "rewrite"
+    },
+    {
+      "id": "f1748462-2e8a-4492-8f96-8de3b006cf37",
+      "name": "IHL 6: Protected dependency /ihl-logo.png",
+      "description": "Preserve existing published page dependency and original destination from repository vercel.json; no changes to recipients or payload.",
+      "enabled": true,
+      "staged": false,
+      "route": {
+        "src": "^/ihl\\-logo\\.png$",
+        "dest": "https://free-homebuying-review.javiercifuentesm.chatgpt.site/ihl-logo.png",
+        "caseSensitive": false,
+        "has": [
+          {
+            "type": "header",
+            "key": "referer",
+            "value": ".*/(FREE-(Homebuying|Home-Equity)-Review|free-consultation).*"
+          }
+        ]
+      },
+      "srcSyntax": "regex",
+      "routeType": "rewrite"
+    },
+    {
+      "id": "c5a973de-a090-482d-928a-24748d90fcda",
+      "name": "IHL 7: Protected dependency /app.js",
+      "description": "Preserve existing published page dependency and original destination from repository vercel.json; no changes to recipients or payload.",
+      "enabled": true,
+      "staged": false,
+      "route": {
+        "src": "^/app\\.js$",
+        "dest": "https://my-reverse-mortgage-review-ihl.javiercifuentesm.chatgpt.site/app.js",
+        "caseSensitive": false,
+        "has": [
+          {
+            "type": "header",
+            "key": "referer",
+            "value": ".*/my-reverse-mortgage-review.*"
+          }
+        ]
+      },
+      "srcSyntax": "regex",
+      "routeType": "rewrite"
+    },
+    {
+      "id": "3d6cb5ad-a4de-42af-9686-3d7958c79036",
+      "name": "IHL 8: Protected dependency /styles.css",
+      "description": "Preserve existing published page dependency and original destination from repository vercel.json; no changes to recipients or payload.",
+      "enabled": true,
+      "staged": false,
+      "route": {
+        "src": "^/styles\\.css$",
+        "dest": "https://my-reverse-mortgage-review-ihl.javiercifuentesm.chatgpt.site/styles.css",
+        "caseSensitive": false,
+        "has": [
+          {
+            "type": "header",
+            "key": "referer",
+            "value": ".*/my-reverse-mortgage-review.*"
+          }
+        ]
+      },
+      "srcSyntax": "regex",
+      "routeType": "rewrite"
+    },
+    {
+      "id": "17392b1d-c151-46d7-b14e-95dd83de0418",
+      "name": "IHL 9: Protected dependency /ihl-logo.png",
+      "description": "Preserve existing published page dependency and original destination from repository vercel.json; no changes to recipients or payload.",
+      "enabled": true,
+      "staged": false,
+      "route": {
+        "src": "^/ihl\\-logo\\.png$",
+        "dest": "https://my-reverse-mortgage-review-ihl.javiercifuentesm.chatgpt.site/ihl-logo.png",
+        "caseSensitive": false,
+        "has": [
+          {
+            "type": "header",
+            "key": "referer",
+            "value": ".*/my-reverse-mortgage-review.*"
+          }
+        ]
+      },
+      "srcSyntax": "regex",
+      "routeType": "rewrite"
+    },
+    {
+      "id": "af0f767c-197c-41c1-97dc-1971d9327fef",
+      "name": "IHL 10: Protected dependency /reverse-hero.png",
+      "description": "Preserve existing published page dependency and original destination from repository vercel.json; no changes to recipients or payload.",
+      "enabled": true,
+      "staged": false,
+      "route": {
+        "src": "^/reverse\\-hero\\.png$",
+        "dest": "https://my-reverse-mortgage-review-ihl.javiercifuentesm.chatgpt.site/reverse-hero.png",
+        "caseSensitive": false
+      },
+      "srcSyntax": "regex",
+      "routeType": "rewrite"
+    },
+    {
+      "id": "0f127932-543e-4614-939f-ec7fea80d1be",
+      "name": "IHL 12: Protected dependency /app.js",
+      "description": "Preserve existing published page dependency and original destination from repository vercel.json; no changes to recipients or payload.",
+      "enabled": true,
+      "staged": false,
+      "route": {
+        "src": "^/app\\.js$",
+        "dest": "https://my-homeownership-path-ihl.javiercifuentesm.chatgpt.site/app.js",
+        "caseSensitive": false,
+        "has": [
+          {
+            "type": "header",
+            "key": "referer",
+            "value": ".*/my-homeownership-path.*"
+          }
+        ]
+      },
+      "srcSyntax": "regex",
+      "routeType": "rewrite"
+    },
+    {
+      "id": "f7f352c6-7324-4e8e-b9a7-00ac03e344b7",
+      "name": "IHL 13: Protected dependency /styles.css",
+      "description": "Preserve existing published page dependency and original destination from repository vercel.json; no changes to recipients or payload.",
+      "enabled": true,
+      "staged": false,
+      "route": {
+        "src": "^/styles\\.css$",
+        "dest": "https://my-homeownership-path-ihl.javiercifuentesm.chatgpt.site/styles.css",
+        "caseSensitive": false,
+        "has": [
+          {
+            "type": "header",
+            "key": "referer",
+            "value": ".*/my-homeownership-path.*"
+          }
+        ]
+      },
+      "srcSyntax": "regex",
+      "routeType": "rewrite"
+    },
+    {
+      "id": "8563dd24-b913-4b88-ba6e-227d886cf23b",
+      "name": "IHL 14: Protected dependency /brand.css",
+      "description": "Preserve existing published page dependency and original destination from repository vercel.json; no changes to recipients or payload.",
+      "enabled": true,
+      "staged": false,
+      "route": {
+        "src": "^/brand\\.css$",
+        "dest": "https://my-homeownership-path-ihl.javiercifuentesm.chatgpt.site/brand.css",
+        "caseSensitive": false,
+        "has": [
+          {
+            "type": "header",
+            "key": "referer",
+            "value": ".*/my-homeownership-path.*"
+          }
+        ]
+      },
+      "srcSyntax": "regex",
+      "routeType": "rewrite"
+    },
+    {
+      "id": "a88528d0-3fa0-4313-aa61-b8b90e4212b3",
+      "name": "IHL 15: Protected dependency /ihl-logo.png",
+      "description": "Preserve existing published page dependency and original destination from repository vercel.json; no changes to recipients or payload.",
+      "enabled": true,
+      "staged": false,
+      "route": {
+        "src": "^/ihl\\-logo\\.png$",
+        "dest": "https://my-homeownership-path-ihl.javiercifuentesm.chatgpt.site/ihl-logo.png",
+        "caseSensitive": false,
+        "has": [
+          {
+            "type": "header",
+            "key": "referer",
+            "value": ".*/my-homeownership-path.*"
+          }
+        ]
+      },
+      "srcSyntax": "regex",
+      "routeType": "rewrite"
+    },
+    {
+      "id": "2a2619f3-50c8-4e0a-9c37-4bdf0a01bebb",
+      "name": "IHL 16: Protected dependency /ihl-logo-email.png",
+      "description": "Preserve existing published page dependency and original destination from repository vercel.json; no changes to recipients or payload.",
+      "enabled": true,
+      "staged": false,
+      "route": {
+        "src": "^/ihl\\-logo\\-email\\.png$",
+        "dest": "https://my-homeownership-path-ihl.javiercifuentesm.chatgpt.site/ihl-logo-email.png",
+        "caseSensitive": false,
+        "has": [
+          {
+            "type": "header",
+            "key": "referer",
+            "value": ".*/my-homeownership-path.*"
+          }
+        ]
+      },
+      "srcSyntax": "regex",
+      "routeType": "rewrite"
+    },
+    {
+      "id": "fa034df1-8d2f-4181-a0f6-bf9456129dee",
+      "name": "Javier digital business card",
+      "description": "Restore existing public page URL; static page routing only.",
+      "enabled": true,
+      "staged": false,
+      "route": {
+        "src": "^/talk-to-javier(?:/(.*))?$",
+        "dest": "https://javier-cifuentes-card.javiercifuentesm.chatgpt.site/$1",
+        "caseSensitive": false
+      },
+      "srcSyntax": "regex",
+      "routeType": "rewrite"
+    },
+    {
+      "id": "b3691aea-5b6e-42bb-9060-6643d8d3708d",
+      "name": "Alma newsletter article and index",
+      "description": "Restore existing public page URL; static page routing only.",
+      "enabled": true,
+      "staged": false,
+      "route": {
+        "src": "^/home-financing-with-alma(?:/temporary-buydowns)?/?$",
+        "dest": "https://home-financing-with-alma.javiercifuentesm.chatgpt.site/",
+        "caseSensitive": false
+      },
+      "srcSyntax": "regex",
+      "routeType": "rewrite"
+    },
+    {
+      "id": "c6b4ad87-a770-404c-869a-9b66942568e3",
+      "name": "Alma newsletter assets",
+      "description": "Restore existing public page URL; static page routing only.",
+      "enabled": true,
+      "staged": false,
+      "route": {
+        "src": "^/home-financing-with-alma/(.*)$",
+        "dest": "https://home-financing-with-alma.javiercifuentesm.chatgpt.site/$1",
+        "caseSensitive": false
+      },
+      "srcSyntax": "regex",
+      "routeType": "rewrite"
+    },
+    {
+      "id": "db5bf027-1776-4ca0-806c-b095b0fb11b1",
+      "name": "Homeownership Path",
+      "description": "Restore existing public page URL; static page routing only.",
+      "enabled": true,
+      "staged": false,
+      "route": {
+        "src": "^/my-homeownership-path(?:/(.*))?$",
+        "dest": "https://my-homeownership-path-ihl.javiercifuentesm.chatgpt.site/$1",
+        "caseSensitive": false
+      },
+      "srcSyntax": "regex",
+      "routeType": "rewrite"
+    },
+    {
+      "id": "babbf255-02e7-4c96-a1dd-a47b0d00ce22",
+      "name": "Original equity assessment",
+      "description": "Restore existing public page URL; static page routing only.",
+      "enabled": true,
+      "staged": false,
+      "route": {
+        "src": "^/My-Home-Equity-Review(?:/(.*))?$",
+        "dest": "https://my-home-equity-review-ihl.javiercifuentesm.chatgpt.site/$1",
+        "caseSensitive": false
+      },
+      "srcSyntax": "regex",
+      "routeType": "rewrite"
+    },
+    {
+      "id": "0bb6b303-a1f4-4d10-9640-b303a023c2e5",
+      "name": "Reverse mortgage assessment",
+      "description": "Restore existing public page URL; static page routing only.",
+      "enabled": true,
+      "staged": false,
+      "route": {
+        "src": "^/my-reverse-mortgage-review(?:/(.*))?$",
+        "dest": "https://my-reverse-mortgage-review-ihl.javiercifuentesm.chatgpt.site/$1",
+        "caseSensitive": false
+      },
+      "srcSyntax": "regex",
+      "routeType": "rewrite"
+    },
+    {
+      "id": "772d39c2-36b9-4670-b61e-8c603e4791c7",
+      "name": "Free homebuying review",
+      "description": "Restore existing public page URL; static page routing only.",
+      "enabled": true,
+      "staged": false,
+      "route": {
+        "src": "^/FREE-Homebuying-Review(?:/(.*))?$",
+        "dest": "https://free-homebuying-review.javiercifuentesm.chatgpt.site/$1",
+        "caseSensitive": false
+      },
+      "srcSyntax": "regex",
+      "routeType": "rewrite"
+    },
+    {
+      "id": "5b73ef3c-f5f2-417c-913f-717327b4bc31",
+      "name": "Free equity review",
+      "description": "Preserve the Next page canonical path without adding a redirecting trailing slash.",
+      "enabled": true,
+      "staged": false,
+      "route": {
+        "src": "^/FREE-Home-Equity-Review(/.+)?/?$",
+        "dest": "https://free-homebuying-review.javiercifuentesm.chatgpt.site/FREE-Home-Equity-Review$1",
+        "caseSensitive": false
+      },
+      "srcSyntax": "regex",
+      "routeType": "rewrite"
+    },
+    {
+      "id": "98637215-05c9-4d8d-bfb6-5e3854612512",
+      "name": "Protected static and contact pages",
+      "description": "Restore existing public page URL; static page routing only.",
+      "enabled": true,
+      "staged": false,
+      "route": {
+        "src": "^/(home-equity-review(?:/.*)?|home-equity-review-assets/.*|The-IHL-Event-Giveaway(?:/.*)?|links\\.html|contact-us/?|request-a-call/?|realtor-partnership/?|ES/?|es/?|_ihl-pages/.*)$",
+        "dest": "https://ihl-protected-link-pages.javiercifuentesm.chatgpt.site/$1",
+        "caseSensitive": false
+      },
+      "srcSyntax": "regex",
+      "routeType": "rewrite"
+    },
+    {
+      "id": "86df677e-bc7c-4008-8fe0-2371ce7d55ec",
+      "name": "Alma email signature images",
+      "description": "Restore the nine public signature PNG images from the existing approved signature package.",
+      "enabled": true,
+      "staged": false,
+      "route": {
+        "src": "^/assets/email-signatures/alma/(.*\\.png)$",
+        "dest": "https://ihl-protected-link-pages.javiercifuentesm.chatgpt.site/signature-assets/alma/$1",
+        "caseSensitive": false
+      },
+      "srcSyntax": "regex",
+      "routeType": "rewrite"
+    },
+    {
+      "id": "6217769d-db1e-4124-8dff-6e987c6b26c1",
+      "name": "Public links hub canonical URL",
+      "description": "Keep the clean /links URL used by the static host after /links.html redirects.",
+      "enabled": true,
+      "staged": false,
+      "route": {
+        "src": "^/links/?$",
+        "dest": "https://ihl-protected-link-pages.javiercifuentesm.chatgpt.site/links",
+        "caseSensitive": false
+      },
+      "srcSyntax": "regex",
+      "routeType": "rewrite"
+    }
+  ],
+  "version": {
+    "id": "8f331062-7338-4442-bf39-f3389278346e",
+    "s3Key": "3de9f9f9da7a9e38",
+    "createdBy": "",
+    "lastModified": 1793653244868,
+    "ruleCount": 28,
+    "alias": "infinite-home-lending-b375d0-routes-javiers-projects-9f9861ed.vercel.app"
+  },
+  "limit": {
+    "maxRoutes": 100,
+    "currentRoutes": 28
+  }
+}
