@@ -62,6 +62,8 @@ export const en = {
   "footer.startPreApproval": "Start Pre-Approval",
   "footer.rights": "All rights reserved.",
   "footer.nmls": "Licensed in Washington, DC & Maryland",
+  "footer.nmlsConsumerAccessPrefix": "Licensing details available via ",
+  "footer.nmlsConsumerAccessLink": "NMLS Consumer Access",
   "footer.loanDisclaimer": "All loans subject to credit approval. Rates and terms subject to change without notice.",
   "footer.serving": "Serving Washington, D.C.",
   "footer.privacy": "Privacy Policy",
