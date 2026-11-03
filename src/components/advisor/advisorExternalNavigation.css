@@ -1,0 +1,87 @@
+
+/* Advisor external navigation handoff modal */
+
+.advisor-ext-nav {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  background: rgba(10, 25, 47, 0.42);
+}
+
+.advisor-ext-nav__dialog {
+  width: min(100%, 28.5rem);
+  margin: 0;
+  padding: clamp(1.75rem, 4vw, 2.25rem);
+  background: #f7f7f5;
+  border: 1px solid rgba(10, 25, 47, 0.08);
+  border-radius: 4px;
+  box-shadow: 0 24px 64px -20px rgba(10, 25, 47, 0.35);
+  text-align: center;
+}
+
+.advisor-ext-nav__eyebrow {
+  margin: 0;
+}
+
+.advisor-ext-nav__headline {
+  margin: 0.875rem 0 0;
+  font-family: var(--font-heading, "Cormorant Garamond", serif);
+  font-size: clamp(1.5rem, 1.25rem + 0.9vw, 1.875rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  color: #0a192f;
+  text-wrap: balance;
+}
+
+.advisor-ext-nav__rule {
+  margin: 1.125rem auto 0;
+  height: 1px;
+  width: 2.5rem;
+  background: rgba(197, 160, 89, 0.55);
+}
+
+.advisor-ext-nav__body {
+  margin: 1.25rem 0 0;
+  font-family: var(--font-sans, Inter, sans-serif);
+  font-size: 1rem;
+  line-height: 1.65;
+  color: #475569;
+}
+
+.advisor-ext-nav__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+}
+
+@media (min-width: 480px) {
+  .advisor-ext-nav__actions {
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
+
+.advisor-ext-nav__cta-primary,
+.advisor-ext-nav__cta-secondary {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+}
+
+@media (min-width: 480px) {
+  .advisor-ext-nav__cta-primary,
+  .advisor-ext-nav__cta-secondary {
+    width: auto;
+    min-width: 9.5rem;
+  }
+}

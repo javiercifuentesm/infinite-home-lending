@@ -42,7 +42,7 @@ export const en = {
     "Mortgage guides for Maryland, DC, and Virginia—buying, refinancing, loan types, and numbers explained without jargon. Find clear answers before you decide.",
 
   // Footer
-  "footer.tagline": "Premium mortgage guidance built around your life — not just your rate. Serving Washington, DC & Maryland",
+  "footer.tagline": "Premium mortgage guidance built around your life — not just your rate. Serving Maryland, DC & Virginia",
   "footer.slogan": "Tailored Lending. Infinite Possibilities.",
   "footer.company": "Company",
   "footer.resources": "Resources",
@@ -61,9 +61,11 @@ export const en = {
   "footer.calculators": "Calculators",
   "footer.startPreApproval": "Start Pre-Approval",
   "footer.rights": "All rights reserved.",
-  "footer.nmls": "Licensed in Washington, DC & Maryland",
+  "footer.nmls": "Licensed in MD, DC, and VA.",
+  "footer.nmlsConsumerAccessPrefix": "Licensing details available via ",
+  "footer.nmlsConsumerAccessLink": "NMLS Consumer Access",
   "footer.loanDisclaimer": "All loans subject to credit approval. Rates and terms subject to change without notice.",
-  "footer.serving": "Serving Washington, D.C.",
+  "footer.serving": "Serving Maryland, DC & Virginia",
   "footer.privacy": "Privacy Policy",
   "footer.terms": "Terms of Use",
   "footer.compliance": "Compliance",
@@ -2961,4 +2963,322 @@ export const en = {
   // Language toggle
   "lang.toggle.en": "EN",
   "lang.toggle.es": "ES",
+
+  // Alma advisor microsite
+  "advisor.nav.home": "Home",
+  "advisor.nav.about": "About Me",
+  "advisor.nav.loanSolutions": "Loan Solutions",
+  "advisor.nav.smartTools": "Smart Tools",
+  "advisor.nav.resources": "Resources",
+  "advisor.nav.contact": "Contact Me",
+  "advisor.nav.applyNow": "APPLY NOW",
+  "advisor.cta.applyNow": "APPLY NOW",
+  "advisor.cta.talkWithMe": "Talk With Me",
+  "advisor.externalNav.eyebrow": "INFINITE HOME LENDING RESOURCE",
+  "advisor.externalNav.headline": "We'll keep {name}'s page right here.",
+  "advisor.externalNav.body":
+    "This resource will open in a new tab so you can continue exploring without losing your place.",
+  "advisor.externalNav.open": "OPEN RESOURCE",
+  "advisor.externalNav.stay": "STAY HERE",
+  "advisor.trustStrip.ariaLabel": "Licensing and credentials",
+  "advisor.trustStrip.company": "Infinite Home Lending, L.L.C.",
+  "advisor.trustStrip.brokerage": "Independent Mortgage Brokerage",
+  "advisor.trustStrip.languages": "English & Spanish",
+  "advisor.mobileCta.ariaLabel": "Contact actions",
+  "advisor.footer.contactAdvisor": "Contact",
+  "advisor.footer.applyNow": "Apply Now",
+
+  // Advisor — Alma Jaramillo
+  "advisor.alma.title": "Lending Director",
+  "advisor.alma.hero.eyebrow": "ALMA JARAMILLO · LENDING DIRECTOR",
+  "advisor.alma.hero.headline": "A mortgage should begin with understanding you.",
+  "advisor.alma.hero.body":
+    "Whether you're buying, refinancing, investing, or exploring a different way to qualify, I'll help you understand your options, weigh the tradeoffs, and find a path built around your goals.",
+  "advisor.alma.hero.bodyMobile":
+    "I'll help you understand your mortgage options and find a path built around your goals.",
+  "advisor.alma.hero.reassurance":
+    "Not sure where to start? That's okay. We can start with a conversation.",
+  "advisor.alma.seo.title": "Alma Jaramillo | Lending Director | Infinite Home Lending",
+  "advisor.alma.seo.description":
+    "Work with Alma Jaramillo, Lending Director at Infinite Home Lending. Personalized guidance for buying, refinancing, and qualifying — in English and Spanish.",
+
+  // Advisor homepage — shared CTAs
+  "advisor.home.cta.exploreSolution": "Explore a Solution",
+  "advisor.home.cta.tryTool": "Try the Tool",
+  "advisor.home.cta.exploreAllTools": "Explore All Smart Tools",
+  "advisor.home.cta.viewAllLoanSolutions": "View All Loan Solutions",
+  "advisor.home.cta.understandOptions": "Understand Your Options",
+  "advisor.home.cta.talkWithAlma": "Talk With Alma",
+  "advisor.home.goals.unsure.eyebrow": "NOT SURE WHERE TO START?",
+
+  // Advisor homepage — Alma Jaramillo
+  "advisor.alma.home.goals.headline": "What can I help you accomplish?",
+  "advisor.alma.home.goals.intro":
+    "Start with what you're trying to do. We can explore the financing from there.",
+  "advisor.alma.home.goals.buy.title": "Buy a Home",
+  "advisor.alma.home.goals.buy.body": "Find financing built around your goals.",
+  "advisor.alma.home.goals.refinance.title": "Refinance",
+  "advisor.alma.home.goals.refinance.body":
+    "See whether changing your mortgage actually makes financial sense.",
+  "advisor.alma.home.goals.equity.title": "Use My Home Equity",
+  "advisor.alma.home.goals.equity.body":
+    "Explore ways your equity may help with the next chapter.",
+  "advisor.alma.home.goals.invest.title": "Invest in Real Estate",
+  "advisor.alma.home.goals.invest.body":
+    "Explore financing designed around investment opportunities.",
+  "advisor.alma.home.goals.unsure.title": "I'm Not Sure Yet",
+  "advisor.alma.home.goals.unsure.body": "That's okay. We can start with a conversation.",
+  "advisor.alma.home.spotlight.headline": "More situations deserve more than one solution.",
+  "advisor.alma.home.spotlight.intro":
+    "The right financing depends on your goals, finances, property, and strategy — not a one-size-fits-all product.",
+  "advisor.alma.home.spotlight.fha.label": "First-Time / Low Down Payment",
+  "advisor.alma.home.spotlight.selfEmployed.label": "Self-Employed",
+  "advisor.alma.home.spotlight.investor.label": "Real Estate Investors",
+  "advisor.alma.home.spotlight.equity.label": "Home Equity",
+  "advisor.alma.home.featuredTool.headline": "Before you make the decision, run the numbers.",
+  "advisor.alma.home.featuredTool.framing": "Should I buy now — or wait?",
+  "advisor.alma.home.featuredTool.supporting":
+    "See how waiting may affect purchasing power, appreciation, down payment needs, and potential equity.",
+  "advisor.alma.home.insight.eyebrow": "ALMA'S MORTGAGE INSIGHT",
+  "advisor.alma.home.insight.headline":
+    "You don't necessarily need 20% down to buy a home.",
+  "advisor.alma.home.insight.body":
+    "Depending on the loan program and your qualifications, significantly lower down-payment options may be available.",
+  "advisor.alma.home.insight.disclaimer":
+    "Loan programs, eligibility, and down-payment requirements vary. This is general educational information — not a commitment to lend.",
+  "advisor.alma.home.journey.headline":
+    "Mortgage guidance doesn't have to feel complicated.",
+  "advisor.alma.home.journey.step1.title": "We start with you",
+  "advisor.alma.home.journey.step1.body": "Tell me what you're trying to accomplish.",
+  "advisor.alma.home.journey.step2.title": "We explore the possibilities",
+  "advisor.alma.home.journey.step2.body":
+    "We'll look at strategies and loan options that fit your situation.",
+  "advisor.alma.home.journey.step3.title": "We understand the numbers",
+  "advisor.alma.home.journey.step3.body":
+    "We'll walk through costs, tradeoffs, and what the options actually mean.",
+  "advisor.alma.home.journey.step4.title": "You decide with clarity",
+  "advisor.alma.home.journey.step4.body": "No pressure. Just a path you understand.",
+  "advisor.alma.home.trust.headline": "Guidance backed by an independent mortgage brokerage.",
+  "advisor.alma.home.trust.body":
+    "Infinite Home Lending was built around clarity, strategic planning, and direct access to experienced mortgage professionals — in English and Spanish.",
+  "advisor.alma.home.closing.headline": "You don't have to know exactly where to start.",
+  "advisor.alma.home.closing.body": "Tell me what you're thinking. We'll take it from there.",
+  "advisor.alma.home.closing.reassurance":
+    "No pressure. Just a conversation about your options.",
+
+  // Advisor placeholders
+  "advisor.placeholder.about": "About Me",
+  "advisor.placeholder.loanSolutions": "Loan Solutions",
+  "advisor.placeholder.tools": "Smart Tools",
+  "advisor.placeholder.resources": "Resources",
+  "advisor.placeholder.contact": "Contact Me",
+  "advisor.placeholder.body": "This page is coming soon. In the meantime, apply online or reach out to start a conversation.",
+  "advisor.placeholder.metaDescription":
+    "Advisor page at Infinite Home Lending — content coming soon.",
+
+  // Advisor About — shared
+  "advisor.about.intro.eyebrow": "ABOUT ME",
+  "advisor.about.credibility.ariaLabel": "Advisor credentials",
+
+  // Advisor About — Alma Jaramillo
+  "advisor.alma.about.intro.headline": "Mortgage guidance should begin with understanding you.",
+  "advisor.alma.about.intro.body":
+    "Every client has a different story, different goals, and different priorities. Before we talk about loan options, I want to understand what matters to you — then help you build a path around it.",
+  "advisor.alma.about.meet.label": "MEET ALMA",
+  "advisor.alma.about.meet.headline": "Mortgage lending should feel like guidance, not a transaction.",
+  "advisor.alma.about.meet.imageAlt":
+    "A smiling couple embracing in front of their home",
+  "advisor.alma.about.meet.p1":
+    "Alma believes the best mortgage conversations begin by understanding the person before discussing the product. Every client comes with a different financial picture, different priorities, and a different definition of what a successful outcome looks like.",
+  "advisor.alma.about.meet.p2":
+    "That philosophy helped shape Infinite Home Lending: an independent mortgage brokerage built around clarity, strategic planning, and direct access to experienced mortgage professionals. Together, IHL's founders bring more than 40 years of combined mortgage-industry experience and have helped guide more than 1,000 families through important financing decisions.",
+  "advisor.alma.about.meet.p3":
+    "For Alma, the job is not simply to place a loan. It is to help clients understand how different financing structures may affect their payment, flexibility, cash position, and longer-term goals—then stay involved from the first conversation through closing.",
+  "advisor.alma.about.meet.p4":
+    "Whether a client is buying, refinancing, investing, self-employed, or exploring a less traditional way to qualify, Alma's approach stays the same: listen first, explain clearly, and build the strategy around the client.",
+  "advisor.alma.about.whyIhl.eyebrow": "WHY INFINITE HOME LENDING",
+  "advisor.alma.about.whyIhl.headline": "Built around the way mortgage guidance should work.",
+  "advisor.alma.about.whyIhl.intro":
+    "Infinite Home Lending was created around a simple idea: clients deserve more than a quote. They deserve clarity, structure, and a mortgage professional who understands the full picture before recommending a path.",
+  "advisor.alma.about.whyIhl.1.title": "Clarity First",
+  "advisor.alma.about.whyIhl.1.body":
+    "Complex financing decisions should be explained in a way that makes the options, tradeoffs, and next steps easy to understand.",
+  "advisor.alma.about.whyIhl.2.title": "Strategic Lending",
+  "advisor.alma.about.whyIhl.2.body":
+    "The right mortgage structure should support the client's broader financial goals—not simply solve for today's rate.",
+  "advisor.alma.about.whyIhl.3.title": "High-Touch Service",
+  "advisor.alma.about.whyIhl.3.body":
+    "Clients work directly with experienced mortgage professionals and receive proactive guidance throughout the process.",
+  "advisor.alma.about.principles.heading": "HOW I APPROACH YOUR MORTGAGE",
+  "advisor.alma.about.principles.1.title": "I listen first.",
+  "advisor.alma.about.principles.1.body":
+    "Your goals and constraints come before any product discussion.",
+  "advisor.alma.about.principles.2.title": "I explain the tradeoffs.",
+  "advisor.alma.about.principles.2.body":
+    "You should understand how each option may affect your payment, timeline, and flexibility—not just the rate.",
+  "advisor.alma.about.principles.3.title": "I stay with you.",
+  "advisor.alma.about.principles.3.body":
+    "From first conversation through closing, you should always know where things stand and what comes next.",
+  "advisor.alma.about.credibility.languages": "English & Spanish",
+  "advisor.alma.about.credibility.region": "Washington, D.C. & Maryland",
+  "advisor.alma.about.audiences.heading": "WHO I HELP",
+  "advisor.alma.about.audiences.intro":
+    "Whether you are buying your first home, moving into your next one, refinancing, investing, or exploring a different way to qualify, my role is to help you understand the path in front of you.",
+  "advisor.alma.about.audiences.1.title": "Homebuyers",
+  "advisor.alma.about.audiences.1.body":
+    "Buying a first home or planning the next move.",
+  "advisor.alma.about.audiences.2.title": "Homeowners",
+  "advisor.alma.about.audiences.2.body":
+    "Exploring refinancing or ways to use home equity.",
+  "advisor.alma.about.audiences.3.title": "Real Estate Investors",
+  "advisor.alma.about.audiences.3.body":
+    "Evaluating financing for eligible investment properties.",
+  "advisor.alma.about.audiences.4.title": "Self-Employed & Non-Traditional Borrowers",
+  "advisor.alma.about.audiences.4.body":
+    "Exploring financing options that may use alternative forms of income documentation.",
+  "advisor.alma.about.closing.headline": "Let's start with your goals.",
+  "advisor.alma.about.closing.body":
+    "You do not need to know which mortgage program you need before we talk. Tell me what you are trying to accomplish, and we can start there.",
+  "advisor.alma.about.seo.title":
+    "About Alma Jaramillo | Lending Director | Infinite Home Lending",
+  "advisor.alma.about.seo.description":
+    "Meet Alma Jaramillo, Lending Director with Infinite Home Lending, and learn about her personal, educational approach to helping clients understand their mortgage options.",
+
+  // Advisor Loan Solutions — shared
+  "advisor.loanSolutions.eyebrow": "LOAN SOLUTIONS",
+  "advisor.loanSolutions.closing.eyebrow": "NOT SURE WHICH OPTION FITS?",
+
+  // Advisor Loan Solutions — educational program modal chrome
+  "advisor.loanSolutions.modal.close": "Close",
+  "advisor.loanSolutions.modal.talkWithAdvisor": "Talk With {name}",
+  "advisor.loanSolutions.modal.viewFullProgram": "View Full Program",
+  "advisor.loanSolutions.modal.couldBeFit": "Could This Be a Fit?",
+  "advisor.loanSolutions.modal.whyConsider": "Why Clients Consider It",
+  "advisor.loanSolutions.modal.keepInMind": "Keep in Mind",
+
+  // Advisor Loan Solutions — Alma Jaramillo
+  "advisor.alma.loanSolutions.intro.headline":
+    "The right mortgage starts with understanding your options.",
+  "advisor.alma.loanSolutions.intro.body":
+    "Every borrower's financial picture is different. Explore the loan solutions available through Infinite Home Lending, and when you're ready, I'll help you understand which options may fit your goals.",
+  "advisor.alma.loanSolutions.closing.headline": "You don't have to figure it out alone.",
+  "advisor.alma.loanSolutions.closing.body":
+    "Tell me what you're trying to accomplish, and we'll start by understanding your goals and exploring the options that may fit.",
+  "advisor.alma.loanSolutions.seo.title":
+    "Loan Solutions | Alma Jaramillo | Infinite Home Lending",
+  "advisor.alma.loanSolutions.seo.description":
+    "Explore mortgage loan solutions with Alma Jaramillo at Infinite Home Lending, including options for homebuyers, homeowners, investors, self-employed borrowers, and other financing needs.",
+
+  // Advisor Smart Tools — shared
+  "advisor.smartTools.eyebrow": "SMART TOOLS",
+  "advisor.smartTools.featuredEyebrow": "START HERE",
+  "advisor.smartTools.featuredTitle": "Start with the decisions that matter most.",
+  "advisor.smartTools.featuredSupport":
+    "These tools are designed to help you evaluate the questions that often shape the next move.",
+  "advisor.smartTools.featuredBadge": "Featured",
+  "advisor.smartTools.secondaryBadge": "Also featured",
+  "advisor.smartTools.directoryEyebrow": "TOOL DIRECTORY",
+  "advisor.smartTools.directoryTitle": "Explore by what you're trying to understand.",
+  "advisor.smartTools.directorySupport": "Find the tools that match the decision in front of you.",
+  "advisor.smartTools.launch": "Open tool",
+  "advisor.smartTools.intent.buying": "Buying a Home",
+  "advisor.smartTools.intent.comparing": "Comparing Options",
+  "advisor.smartTools.intent.payments": "Payments & Building Wealth",
+  "advisor.smartTools.intent.equity": "Using Home Equity",
+  "advisor.smartTools.closing.eyebrow": "NEED HELP MAKING SENSE OF THE NUMBERS?",
+
+  // Advisor Smart Tools — Alma Jaramillo
+  "advisor.alma.smartTools.intro.headline": "Better decisions start with better information.",
+  "advisor.alma.smartTools.intro.body":
+    "Explore tools designed to help you understand the numbers, compare possibilities, and prepare for the conversations that matter.",
+  "advisor.alma.smartTools.closing.headline":
+    "The tools can inform you. I'll help you put it in context.",
+  "advisor.alma.smartTools.closing.body":
+    "Use these tools to explore the possibilities, then let's talk about what the numbers may mean for your goals.",
+  "advisor.alma.smartTools.seo.title":
+    "Mortgage Smart Tools | Alma Jaramillo | Infinite Home Lending",
+  "advisor.alma.smartTools.seo.description":
+    "Explore mortgage tools with Alma Jaramillo at Infinite Home Lending to understand payments, compare options, and make more informed home financing decisions.",
+
+  // Advisor Resources — shared
+  "advisor.resources.eyebrow": "RESOURCES",
+  "advisor.resources.featuredEyebrow": "START WITH UNDERSTANDING",
+  "advisor.resources.featuredTitle": "Foundational learning for clearer decisions.",
+  "advisor.resources.featuredSupport":
+    "These guided paths help you build context before choosing a financing direction.",
+  "advisor.resources.featuredBadge": "Featured",
+  "advisor.resources.secondaryBadge": "Also featured",
+  "advisor.resources.startEyebrow": "NEW TO THE MORTGAGE PROCESS?",
+  "advisor.resources.startTitle": "Start here.",
+  "advisor.resources.startSupport":
+    "A short sequence of foundational paths if you are still getting oriented.",
+  "advisor.resources.directoryEyebrow": "LEARNING PATHS",
+  "advisor.resources.directoryTitle": "Explore by what you want to understand.",
+  "advisor.resources.directorySupport":
+    "Continue with the paths that match the next question on your mind.",
+  "advisor.resources.explore": "Explore",
+  "advisor.resources.path.orientation": "Getting Oriented",
+  "advisor.resources.path.buying": "Buying a Home",
+  "advisor.resources.path.numbers": "Understanding the Numbers",
+  "advisor.resources.path.loanOptions": "Choosing Loan Options",
+  "advisor.resources.path.refinance": "Refinancing & Home Equity",
+  "advisor.resources.path.quickAnswers": "Quick Answers",
+  "advisor.resources.closing.eyebrow": "HAVE A QUESTION ABOUT WHAT YOU'RE READING?",
+
+  // Advisor Resources — Alma Jaramillo
+  "advisor.alma.resources.intro.headline":
+    "The more you understand, the better you can decide.",
+  "advisor.alma.resources.intro.body":
+    "Explore mortgage education, practical guidance, and helpful resources designed to make the financing process easier to understand.",
+  "advisor.alma.resources.closing.headline":
+    "Information is useful. Context makes it actionable.",
+  "advisor.alma.resources.closing.body":
+    "If something raises a question about your own situation, let's talk through it together.",
+  "advisor.alma.resources.seo.title":
+    "Mortgage Resources | Alma Jaramillo | Infinite Home Lending",
+  "advisor.alma.resources.seo.description":
+    "Explore mortgage education and practical home financing resources with Alma Jaramillo at Infinite Home Lending.",
+
+  // Advisor Contact — shared chrome
+  "advisor.contact.scheduler.ariaLabel": "Schedule a conversation",
+  "advisor.contact.scheduler.loading": "Loading calendar…",
+  "advisor.contact.scheduler.fallbackTitle": "Having trouble loading the calendar?",
+  "advisor.contact.scheduler.fallbackBody":
+    "You can open the scheduling page directly and choose a time that works for you.",
+  "advisor.contact.scheduler.fallbackCta": "Open scheduling",
+  "advisor.contact.scheduler.unavailableTitle": "Scheduling is not available yet",
+  "advisor.contact.scheduler.unavailableBody":
+    "Please check back soon, or reach out using the contact details in the footer.",
+
+  // Advisor Contact — Alma Jaramillo
+  "advisor.alma.contact.intro.headline": "Let's talk about what you're trying to accomplish.",
+  "advisor.alma.contact.intro.body":
+    "Whether you're buying, refinancing, investing, exploring your equity, or simply not sure where to begin, choose a time that works for you. We'll start with a conversation.",
+  "advisor.alma.contact.studio.eyebrow": "SCHEDULE A CONVERSATION",
+  "advisor.alma.contact.studio.heading": "Choose a time that works for you.",
+  "advisor.alma.contact.studio.supporting":
+    "We'll start with what's on your mind, understand what you're trying to accomplish, and take it from there.",
+  "advisor.alma.contact.journey.headline": "A conversation, not a commitment.",
+  "advisor.alma.contact.journey.supporting":
+    "You don't need to have everything figured out before we talk.",
+  "advisor.alma.contact.journey.step1.title": "Choose a Time",
+  "advisor.alma.contact.journey.step1.body": "Pick a time that works for your schedule.",
+  "advisor.alma.contact.journey.step2.title": "Tell Me Where You Are",
+  "advisor.alma.contact.journey.step2.body":
+    "Buying, refinancing, investing — or simply exploring.",
+  "advisor.alma.contact.journey.step3.title": "We'll Take It From There",
+  "advisor.alma.contact.journey.step3.body":
+    "We'll talk through the options that may make sense for your goals.",
+  "advisor.alma.contact.reassurance.headline": "Not sure where to start?",
+  "advisor.alma.contact.reassurance.body":
+    "That's completely fine. You don't need to know which loan or strategy fits before we talk. Pick a time that works for you, and we'll take it from there.",
+  "advisor.alma.contact.seo.title":
+    "Contact Alma Jaramillo | Schedule a Conversation | Infinite Home Lending",
+  "advisor.alma.contact.seo.description":
+    "Schedule a conversation with Alma Jaramillo, Lending Director at Infinite Home Lending. Choose a time that works for you — in English or Spanish.",
+
+  // Advisor Resources — educational modal chrome (shared educational copy: data/resourceModalSummaries.ts)
+  "advisor.resources.modal.close": "Close",
+  "advisor.resources.modal.talkWithAdvisor": "Talk With {name}",
+  "advisor.resources.modal.learnMore": "Learn More",
 };
