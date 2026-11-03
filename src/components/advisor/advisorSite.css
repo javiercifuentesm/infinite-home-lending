@@ -1,0 +1,340 @@
+
+/* =============================================================================
+   Advisor subsite — shared layout, hero, mobile CTA
+   ============================================================================= */
+
+/* Advisor personal signature in the Hero */
+.advisor-hero__signature {
+  display: block;
+  width: clamp(6rem, 5.75rem + 2.5vw, 8.45rem);
+  height: auto;
+  margin-top: clamp(1.25rem, 2vw, 1.75rem);
+  margin-bottom: 0.25rem;
+  object-fit: contain;
+  object-position: left center;
+}
+
+@media (min-width: 640px) {
+  .advisor-hero__signature {
+    width: clamp(6.75rem, 6.2rem + 1.35vw, 8.45rem);
+  }
+}
+
+@media (min-width: 1024px) {
+  .advisor-hero__signature {
+    width: clamp(7.15rem, 6.75rem + 0.85vw, 8.45rem);
+  }
+}
+
+body.ihl-advisor-site {
+  --advisor-mobile-cta-height: 4.5rem;
+}
+
+body.ihl-advisor-site .advisor-main {
+  padding-bottom: calc(var(--advisor-mobile-cta-height) + env(safe-area-inset-bottom, 0px));
+}
+
+@media (min-width: 768px) {
+  body.ihl-advisor-site .advisor-main {
+    padding-bottom: 0;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Advisor subsite — unified page opening header (About, Loan Solutions, etc.) */
+/* -------------------------------------------------------------------------- */
+
+.advisor-page-intro {
+  padding-top: calc(var(--site-header-height) + clamp(3.5rem, 7vw, 5rem));
+  padding-bottom: clamp(3.75rem, 7.5vw, 5.5rem);
+  background: #fff;
+  border-bottom: 1px solid rgba(10, 25, 47, 0.06);
+}
+
+.advisor-page-intro__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.advisor-page-intro .advisor-about-section-header {
+  width: 100%;
+  max-width: none;
+}
+
+.advisor-page-intro .advisor-about-section-header__headline {
+  margin-top: 0;
+}
+
+.advisor-page-intro .advisor-about-section-header__rule {
+  margin-top: 1.125rem;
+}
+
+.advisor-page-intro__headline {
+  margin: 0;
+  max-width: clamp(18rem, 78vw, 36rem);
+  margin-inline: auto;
+  font-family: var(--font-heading, "Cormorant Garamond", serif);
+  font-size: clamp(2rem, 1.55rem + 1.5vw, 2.875rem);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.14;
+  text-wrap: balance;
+}
+
+.advisor-page-intro__body {
+  margin: 1.625rem 0 0;
+  max-width: min(47.5rem, 760px);
+  line-height: 1.72;
+  text-align: center;
+  font-size: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+  color: #475569;
+}
+
+.advisor-hero {
+  position: relative;
+  margin-top: var(--site-header-height);
+  overflow: hidden;
+  background: #f7f7f5;
+}
+
+.advisor-hero__watermark {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 88% 18%, rgba(197, 160, 89, 0.07), transparent 42%),
+    radial-gradient(circle at 8% 92%, rgba(10, 25, 47, 0.04), transparent 38%);
+}
+
+.advisor-hero__inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  max-width: 75rem;
+  margin-inline: auto;
+  padding: clamp(2.25rem, 5vw, 3.75rem) 1.5rem clamp(1.5rem, 3vw, 2.5rem);
+}
+
+@media (min-width: 1024px) {
+  .advisor-hero__inner {
+    grid-template-columns: minmax(0, 55fr) minmax(0, 45fr);
+    align-items: center;
+    gap: clamp(2rem, 4vw, 3.5rem);
+    padding-top: clamp(3rem, 5.5vw, 4.75rem);
+    padding-bottom: clamp(2.5rem, 4vw, 3.5rem);
+  }
+}
+
+.advisor-hero__copy {
+  max-width: 36rem;
+}
+
+.advisor-hero__eyebrow {
+  margin-bottom: 1.125rem;
+}
+
+.advisor-hero__headline {
+  margin-bottom: 1.25rem;
+  max-width: 20ch;
+  text-wrap: balance;
+}
+
+@media (min-width: 1024px) {
+  .advisor-hero__headline {
+    max-width: 24ch;
+  }
+}
+
+.advisor-hero__body--desktop {
+  display: none;
+  margin-bottom: 2rem;
+  max-width: 34rem;
+}
+
+.advisor-hero__body--mobile {
+  display: block;
+  margin-bottom: 1.75rem;
+  max-width: 32rem;
+}
+
+@media (min-width: 1024px) {
+  .advisor-hero__body--desktop {
+    display: block;
+  }
+
+  .advisor-hero__body--mobile {
+    display: none;
+  }
+}
+
+.advisor-hero__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.125rem;
+}
+
+@media (min-width: 640px) {
+  .advisor-hero__actions {
+    flex-flow: row wrap;
+    align-items: center;
+  }
+}
+
+.advisor-hero__cta-primary,
+.advisor-hero__cta-secondary {
+  display: inline-flex;
+  min-height: 3.25rem;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+@media (max-width: 639px) {
+  .advisor-hero__cta-primary,
+  .advisor-hero__cta-secondary {
+    width: 100%;
+  }
+}
+
+.advisor-hero__reassurance {
+  max-width: 28rem;
+  margin-top: 0.25rem;
+  font-family: var(--font-sans, Inter, sans-serif);
+  font-size: 0.8125rem;
+  line-height: 1.65;
+  font-weight: 400;
+  color: #475569;
+}
+
+.advisor-hero__portrait-col {
+  width: 100%;
+  max-width: 28rem;
+  margin-inline: auto;
+}
+
+@media (min-width: 1024px) {
+  .advisor-hero__portrait-col {
+    max-width: none;
+    margin-inline: 0;
+  }
+}
+
+.advisor-portrait__frame {
+  overflow: hidden;
+  border: 1px solid rgba(197, 160, 89, 0.28);
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: 0 22px 58px -14px rgba(10, 25, 47, 0.2);
+}
+
+.advisor-portrait__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  object-position: center center;
+}
+
+.advisor-hero__trust-mobile {
+  grid-column: 1 / -1;
+  margin-inline: -1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .advisor-hero__trust-mobile {
+    display: none;
+  }
+}
+
+.advisor-hero__trust-desktop {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .advisor-hero__trust-desktop {
+    display: block;
+  }
+}
+
+.advisor-mobile-cta-bar {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 45;
+  border-top: 1px solid rgba(10, 25, 47, 0.08);
+  background: rgba(255, 255, 255, 0.97);
+  padding: 0.625rem 1rem calc(0.625rem + env(safe-area-inset-bottom, 0px));
+  backdrop-filter: blur(10px);
+}
+
+.advisor-mobile-cta-bar__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.625rem;
+  max-width: 28rem;
+  margin-inline: auto;
+}
+
+.advisor-mobile-cta-bar__secondary {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625rem 0.75rem;
+  border: 1px solid #0a192f;
+  border-radius: 4px;
+  background: #fff;
+  font-family: var(--font-sans, Inter, sans-serif);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #0a192f;
+  text-align: center;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.advisor-mobile-cta-bar__secondary:hover {
+  border-color: #c5a059;
+  color: #8b6f2f;
+}
+
+.advisor-mobile-cta-bar__primary {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625rem 0.75rem;
+  border-radius: 4px;
+  background: #c5a059;
+  font-family: var(--font-sans, Inter, sans-serif);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #fff;
+  text-align: center;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.advisor-mobile-cta-bar__primary:hover {
+  background: #b8924f;
+}
+
+.advisor-mobile-nav-panel {
+  padding-bottom: calc(var(--advisor-mobile-cta-height, 4.5rem) + env(safe-area-inset-bottom, 0px));
+}
+
+@media (min-width: 768px) {
+  .advisor-mobile-nav-panel {
+    padding-bottom: 0;
+  }
+}

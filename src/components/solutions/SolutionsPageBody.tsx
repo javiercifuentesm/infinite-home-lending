@@ -20,9 +20,21 @@ const HIGHLIGHT_DURATION_MS = 4200;
 type SolutionsPageBodyProps = {
   recentlyViewedId: string | null;
   lang: string;
+  /** Advisor subsites supply their own page intro above the library. */
+  hideAdvisoryIntro?: boolean;
+  /** Advisor subsites use their own closing CTA instead of the main-site band. */
+  hideMaClosing?: boolean;
+  /** No Solutions hero above — omit hero-to-body gradient handoff. */
+  hideHeroHandoff?: boolean;
 };
 
-export function SolutionsPageBody({ recentlyViewedId, lang }: SolutionsPageBodyProps) {
+export function SolutionsPageBody({
+  recentlyViewedId,
+  lang,
+  hideAdvisoryIntro = false,
+  hideMaClosing = false,
+  hideHeroHandoff = false,
+}: SolutionsPageBodyProps) {
   const { t } = useLanguage();
   const reduceMotion = usePrefersReducedMotion();
   const gridRef = useRef<HTMLElement>(null);
@@ -77,20 +89,27 @@ export function SolutionsPageBody({ recentlyViewedId, lang }: SolutionsPageBodyP
   return (
     <div className="solutions-page">
       {/* 1 — Advisory intro + pathway cards */}
-      <section className="sp-section sp-section--intro" aria-labelledby="solutions-advisory-heading">
-        <div className="sp-hero-handoff" aria-hidden />
+      <section
+        className={`sp-section sp-section--intro${hideHeroHandoff ? " sp-section--intro-no-handoff" : ""}`}
+        aria-labelledby={hideAdvisoryIntro ? "solutions-pathways-heading" : "solutions-advisory-heading"}
+      >
+        {hideHeroHandoff ? null : <div className="sp-hero-handoff" aria-hidden />}
         <div className="sp-intro-glow" aria-hidden />
         <motion.div {...motionProps} className="max-w-6xl mx-auto px-6 relative z-[1]">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="sp-intro-accent mx-auto mb-8" aria-hidden />
-            <h2 id="solutions-advisory-heading" className="sp-advisory-headline">
-              {t("solutions.body.intro.headline")}
-            </h2>
-            <p className="sp-advisory-subline">{t("solutions.body.intro.body")}</p>
-          </div>
+          {hideAdvisoryIntro ? null : (
+            <div className="max-w-4xl mx-auto text-center">
+              <div className="sp-intro-accent mx-auto mb-8" aria-hidden />
+              <h2 id="solutions-advisory-heading" className="sp-advisory-headline">
+                {t("solutions.body.intro.headline")}
+              </h2>
+              <p className="sp-advisory-subline">{t("solutions.body.intro.body")}</p>
+            </div>
+          )}
 
-          <div className="sp-pathways mt-14 lg:mt-20">
-            <h3 className="sp-pathways-title">{t("solutions.flagship.pathwaysTitle")}</h3>
+          <div className={`sp-pathways${hideAdvisoryIntro ? " sp-pathways--standalone" : " mt-14 lg:mt-20"}`}>
+            <h3 id="solutions-pathways-heading" className="sp-pathways-title">
+              {t("solutions.flagship.pathwaysTitle")}
+            </h3>
             <ul className="sp-pathway-grid">
               {SOLUTIONS_PATHWAYS.map(({ id, titleKey, bodyKey, programsKey, ctaKey, programIds, emoji }) => (
                 <li key={id}>
@@ -307,26 +326,28 @@ export function SolutionsPageBody({ recentlyViewedId, lang }: SolutionsPageBodyP
       </section>
 
       {/* 6 — Connect with a Mortgage Advisor */}
-      <section className="sp-section sp-section--ma relative overflow-hidden bg-navy" aria-labelledby="solutions-ma-heading">
-        <div className="sp-ma-glow pointer-events-none absolute inset-0" aria-hidden />
-        <motion.div {...motionProps} className="max-w-4xl mx-auto px-6 relative z-10 text-center">
-          <div className="sp-ma-accent mx-auto mb-8" aria-hidden />
-          <h2 id="solutions-ma-heading" className="sp-ma-headline">
-            {t("solutions.body.ma.headline")}
-          </h2>
-          <p className="sp-ma-lead">{t("solutions.body.ma.lead")}</p>
-          <p className="sp-ma-subline">{t("solutions.body.ma.body")}</p>
-          <div className="sp-ma-actions">
-            <Link
-              to="/contact?topic=loan-strategy"
-              className="sp-ma-cta btn-gold inline-flex items-center justify-center gap-2.5 min-h-[52px] shadow-[0_10px_40px_rgba(197,160,89,0.28)] hover:shadow-[0_18px_52px_rgba(197,160,89,0.45)] hover:-translate-y-0.5 motion-reduce:hover:translate-y-0 transition-all duration-300"
-            >
-              {t("solutions.body.maCta.primary")}
-              <ArrowRight size={18} strokeWidth={2} aria-hidden />
-            </Link>
-          </div>
-        </motion.div>
-      </section>
+      {hideMaClosing ? null : (
+        <section className="sp-section sp-section--ma relative overflow-hidden bg-navy" aria-labelledby="solutions-ma-heading">
+          <div className="sp-ma-glow pointer-events-none absolute inset-0" aria-hidden />
+          <motion.div {...motionProps} className="max-w-4xl mx-auto px-6 relative z-10 text-center">
+            <div className="sp-ma-accent mx-auto mb-8" aria-hidden />
+            <h2 id="solutions-ma-heading" className="sp-ma-headline">
+              {t("solutions.body.ma.headline")}
+            </h2>
+            <p className="sp-ma-lead">{t("solutions.body.ma.lead")}</p>
+            <p className="sp-ma-subline">{t("solutions.body.ma.body")}</p>
+            <div className="sp-ma-actions">
+              <Link
+                to="/contact?topic=loan-strategy"
+                className="sp-ma-cta btn-gold inline-flex items-center justify-center gap-2.5 min-h-[52px] shadow-[0_10px_40px_rgba(197,160,89,0.28)] hover:shadow-[0_18px_52px_rgba(197,160,89,0.45)] hover:-translate-y-0.5 motion-reduce:hover:translate-y-0 transition-all duration-300"
+              >
+                {t("solutions.body.maCta.primary")}
+                <ArrowRight size={18} strokeWidth={2} aria-hidden />
+              </Link>
+            </div>
+          </motion.div>
+        </section>
+      )}
 
       {/* 7 — Footer transition */}
       <div className="sp-footer-bridge" aria-hidden />

@@ -1,20 +1,14 @@
 import {
-  Banknote,
-  Briefcase,
   ChevronRight,
-  Home,
-  Landmark,
-  LineChart,
-  MapPin,
-  Medal,
-  RefreshCw,
-  Shield,
-  type LucideIcon,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import type { MouseEvent, ReactNode } from "react";
 import type { LoanProductData } from "./LoanProductCard";
 import { PROGRAM_DISPLAY_CATEGORY } from "../config/solutionsFlagshipConfig";
 import { useLanguage } from "../i18n/LanguageContext";
+import { hasAdvisorLoanProgramModalData } from "../lib/advisorLoanProgramModal";
+import { getLoanProgramIcon } from "../lib/loanProgramIcons";
+import { useAdvisorLoanProgramModalOptional } from "./advisor/loan-solutions/AdvisorLoanProgramModalContext";
 
 /** Max bullets under highlight line */
 const CARD_BULLET_CAP = 3;
@@ -61,18 +55,6 @@ function HighlightLine({ text, productId }: { text: string; productId: string })
   );
 }
 
-const LOAN_ICONS: Record<string, LucideIcon> = {
-  conventional: Landmark,
-  fha: Shield,
-  va: Medal,
-  usda: MapPin,
-  refinance: RefreshCw,
-  "cash-out-refinance": Banknote,
-  heloc: LineChart,
-  reverse: Home,
-  "non-qm": Briefcase,
-};
-
 type LoanProductGridCardProps = {
   product: LoanProductData;
   guidedDimmed?: boolean;
@@ -89,14 +71,17 @@ export function LoanProductGridCard({
   scenarioDimmed = false,
 }: LoanProductGridCardProps) {
   const { t } = useLanguage();
+  const loanModal = useAdvisorLoanProgramModalOptional();
   const productTag = product.tags?.[0];
   const bullets = product.highlights.slice(0, CARD_BULLET_CAP);
-  const Icon = LOAN_ICONS[product.id] ?? Landmark;
+  const Icon = getLoanProgramIcon(product.id);
   const displayCategory = PROGRAM_DISPLAY_CATEGORY[product.id];
   const displayCategoryLabel = displayCategory ? t(DISPLAY_CATEGORY_I18N[displayCategory]) : null;
   const featured = Boolean(product.featuredCard);
 
   const dimmed = guidedDimmed || scenarioDimmed;
+  const opensAdvisorModal =
+    Boolean(loanModal) && hasAdvisorLoanProgramModalData(product);
 
   const shell = (() => {
     if (scenarioHighlighted) {
@@ -113,12 +98,10 @@ export function LoanProductGridCard({
 
   const recentRing = recentlyViewed && !scenarioHighlighted ? "ring-2 ring-gold/35 ring-offset-2 ring-offset-white" : "";
 
-  return (
-    <Link
-      to={`/solutions/programs/${product.id}`}
-      data-program-id={product.id}
-      className={`loan-grid-card group h-full min-h-0 w-full text-left rounded-[4px] border p-6 md:p-8 flex flex-col gap-4 transition-[box-shadow,border-color,background-color,transform,opacity] duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white motion-reduce:transition-none active:scale-[0.995] motion-reduce:active:scale-100 ${recentRing} ${shell} hover:-translate-y-1 hover:shadow-[0_20px_56px_rgba(10,25,47,0.11)] hover:border-gold/40 motion-reduce:hover:translate-y-0`}
-    >
+  const className = `loan-grid-card group h-full min-h-0 w-full text-left rounded-[4px] border p-6 md:p-8 flex flex-col gap-4 transition-[box-shadow,border-color,background-color,transform,opacity] duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white motion-reduce:transition-none active:scale-[0.995] motion-reduce:active:scale-100 ${recentRing} ${shell} hover:-translate-y-1 hover:shadow-[0_20px_56px_rgba(10,25,47,0.11)] hover:border-gold/40 motion-reduce:hover:translate-y-0`;
+
+  const body: ReactNode = (
+    <>
       <div className="loan-grid-card-accent" aria-hidden />
 
       <div className="flex flex-col gap-3.5 shrink-0">
@@ -177,6 +160,32 @@ export function LoanProductGridCard({
           />
         </span>
       </div>
+    </>
+  );
+
+  if (opensAdvisorModal && loanModal) {
+    return (
+      <button
+        type="button"
+        data-program-id={product.id}
+        className={className}
+        onClick={(event: MouseEvent<HTMLButtonElement>) => {
+          event.preventDefault();
+          loanModal.openModal(product.id, event.currentTarget);
+        }}
+      >
+        {body}
+      </button>
+    );
+  }
+
+  return (
+    <Link
+      to={`/solutions/programs/${product.id}`}
+      data-program-id={product.id}
+      className={className}
+    >
+      {body}
     </Link>
   );
 }
