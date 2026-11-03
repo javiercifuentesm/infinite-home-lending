@@ -42,7 +42,7 @@ export const en = {
     "Mortgage guides for Maryland, DC, and Virginia—buying, refinancing, loan types, and numbers explained without jargon. Find clear answers before you decide.",
 
   // Footer
-  "footer.tagline": "Premium mortgage guidance built around your life — not just your rate. Serving Washington, DC & Maryland",
+  "footer.tagline": "Premium mortgage guidance built around your life — not just your rate. Serving Maryland, DC & Virginia",
   "footer.slogan": "Tailored Lending. Infinite Possibilities.",
   "footer.company": "Company",
   "footer.resources": "Resources",
@@ -61,11 +61,11 @@ export const en = {
   "footer.calculators": "Calculators",
   "footer.startPreApproval": "Start Pre-Approval",
   "footer.rights": "All rights reserved.",
-  "footer.nmls": "Licensed in Washington, DC & Maryland",
+  "footer.nmls": "Licensed in MD, DC, and VA.",
   "footer.nmlsConsumerAccessPrefix": "Licensing details available via ",
   "footer.nmlsConsumerAccessLink": "NMLS Consumer Access",
   "footer.loanDisclaimer": "All loans subject to credit approval. Rates and terms subject to change without notice.",
-  "footer.serving": "Serving Washington, D.C.",
+  "footer.serving": "Serving Maryland, DC & Virginia",
   "footer.privacy": "Privacy Policy",
   "footer.terms": "Terms of Use",
   "footer.compliance": "Compliance",

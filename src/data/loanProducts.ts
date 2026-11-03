@@ -1,8 +1,19 @@
 import type { LoanProductData } from "../components/LoanProductCard";
 import { LOAN_PRODUCTS_ES } from "./loanProducts.es";
 
-/** Grid layout: 3 + 3 + 3 + 3 + 3 + 3 */
+/** Company Solutions grid layout — preserved from integration base (3 × 3). */
 export const LOAN_GRID_ROWS: readonly (readonly string[])[] = [
+  ["conventional", "fha", "va"],
+  ["usda", "refinance", "cash-out-refinance"],
+  ["heloc", "reverse", "non-qm"],
+] as const;
+
+/**
+ * Advisor microsite loan library layout (original Alma experience).
+ * Extra specialty programs remain in LOAN_PRODUCTS for lookup/modals but
+ * only appear on company Solutions when added to LOAN_GRID_ROWS.
+ */
+export const ADVISOR_LOAN_GRID_ROWS: readonly (readonly string[])[] = [
   ["conventional", "fha", "dpa-advantage"],
   ["fha-repair-escrow", "fha-203k-limited", "va"],
   ["usda", "refinance", "cash-out-refinance"],

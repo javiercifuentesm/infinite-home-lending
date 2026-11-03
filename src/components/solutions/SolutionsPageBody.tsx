@@ -26,6 +26,11 @@ type SolutionsPageBodyProps = {
   hideMaClosing?: boolean;
   /** No Solutions hero above — omit hero-to-body gradient handoff. */
   hideHeroHandoff?: boolean;
+  /**
+   * Optional program grid rows. Company Solutions omits this and uses LOAN_GRID_ROWS.
+   * Advisor microsites pass ADVISOR_LOAN_GRID_ROWS for the original expanded library.
+   */
+  gridRows?: readonly (readonly string[])[];
 };
 
 export function SolutionsPageBody({
@@ -34,6 +39,7 @@ export function SolutionsPageBody({
   hideAdvisoryIntro = false,
   hideMaClosing = false,
   hideHeroHandoff = false,
+  gridRows = LOAN_GRID_ROWS,
 }: SolutionsPageBodyProps) {
   const { t } = useLanguage();
   const reduceMotion = usePrefersReducedMotion();
@@ -258,7 +264,7 @@ export function SolutionsPageBody({
 
           <div className="sp-grid-stage max-w-6xl mx-auto">
             <div className="space-y-8 md:space-y-10">
-              {LOAN_GRID_ROWS.map((row) => (
+              {gridRows.map((row) => (
                 <div
                   key={row.join("-")}
                   className="grid grid-cols-1 md:grid-cols-3 gap-7 md:gap-8 lg:gap-9 items-stretch"

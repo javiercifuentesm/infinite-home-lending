@@ -42,7 +42,7 @@ export const es = {
     "Guías hipotecarias para Washington, D.C. y Maryland—compra, refinanciamiento, tipos de préstamo y números explicados sin jerga. Encuentre respuestas claras antes de decidir.",
 
   // Footer
-  "footer.tagline": "Asesoría hipotecaria de alto nivel, diseñada alrededor de su vida — no solo de su tasa. Atendemos Washington, D.C. y Maryland",
+  "footer.tagline": "Asesoría hipotecaria de alto nivel, diseñada alrededor de su vida — no solo de su tasa. Atendemos Maryland, D.C. y Virginia",
   "footer.slogan": "Préstamos a su medida. Posibilidades infinitas.",
   "footer.company": "Empresa",
   "footer.resources": "Recursos",
@@ -61,11 +61,11 @@ export const es = {
   "footer.calculators": "Calculadoras",
   "footer.startPreApproval": "Iniciar pre-aprobación",
   "footer.rights": "Todos los derechos reservados.",
-  "footer.nmls": "Licenciado en Washington, D.C. y Maryland",
+  "footer.nmls": "Licenciado en MD, DC y VA.",
   "footer.nmlsConsumerAccessPrefix": "Información de licencias disponible a través de ",
   "footer.nmlsConsumerAccessLink": "NMLS Consumer Access",
   "footer.loanDisclaimer": "Todos los préstamos están sujetos a aprobación de crédito. Las tasas y condiciones pueden cambiar sin previo aviso.",
-  "footer.serving": "Atendemos Washington, D.C.",
+  "footer.serving": "Atendemos Maryland, D.C. y Virginia",
   "footer.privacy": "Política de privacidad",
   "footer.terms": "Términos de uso",
   "footer.compliance": "Cumplimiento",

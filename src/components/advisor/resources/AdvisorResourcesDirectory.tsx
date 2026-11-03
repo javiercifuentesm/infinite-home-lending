@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { useLanguage } from "../../../i18n/LanguageContext";
 import { PAGE_CONTENT_RAIL_CLASS } from "../../../constants/layout";
 import {
@@ -88,12 +89,15 @@ export function AdvisorResourcesDirectory() {
 
             <ol className="advisor-resources-journey__track">
               {startHere.map((resource, index) => (
-                <AdvisorResourceJourneyStep
-                  key={resource.routeId}
-                  resource={resource}
-                  step={index + 1}
-                  showConnector={index < startHere.length - 1}
-                />
+                // Key on Fragment so list identity stays correct under React 19
+                // typings (key is not part of custom component props).
+                <Fragment key={resource.routeId}>
+                  <AdvisorResourceJourneyStep
+                    resource={resource}
+                    step={index + 1}
+                    showConnector={index < startHere.length - 1}
+                  />
+                </Fragment>
               ))}
             </ol>
           </div>
@@ -121,12 +125,13 @@ export function AdvisorResourcesDirectory() {
 
           <div className="advisor-resources-chapters__list">
             {chapterRows.map((resource, index) => (
-              <AdvisorResourceChapterRow
-                key={resource.routeId}
-                resource={resource}
-                chapter={chapterLabel(index + 4)}
-                tone={index % 2 === 0 ? "light" : "warm"}
-              />
+              <Fragment key={resource.routeId}>
+                <AdvisorResourceChapterRow
+                  resource={resource}
+                  chapter={chapterLabel(index + 4)}
+                  tone={index % 2 === 0 ? "light" : "warm"}
+                />
+              </Fragment>
             ))}
           </div>
         </div>

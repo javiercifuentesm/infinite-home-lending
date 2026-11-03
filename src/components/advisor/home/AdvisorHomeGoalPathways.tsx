@@ -1,5 +1,5 @@
 import { ChevronRight, type LucideIcon } from "lucide-react";
-import { type MouseEvent } from "react";
+import { Fragment, type MouseEvent } from "react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "../../../i18n/LanguageContext";
 import { useAdvisor } from "../../../context/AdvisorContext";
@@ -134,11 +134,14 @@ export function AdvisorHomeGoalPathways() {
 
         <div className="advisor-home-goals__grid">
           {primary.map((pathway) => (
-            <GoalPathwayCard
-              key={pathway.id}
-              pathway={pathway}
-              Icon={ADVISOR_HOME_GOAL_ICONS[pathway.icon]}
-            />
+            // Key on Fragment: React 19 types keep `key` off component props;
+            // host/Fragment keys match the pattern used by SolutionsPageBody lists.
+            <Fragment key={pathway.id}>
+              <GoalPathwayCard
+                pathway={pathway}
+                Icon={ADVISOR_HOME_GOAL_ICONS[pathway.icon]}
+              />
+            </Fragment>
           ))}
         </div>
 

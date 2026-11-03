@@ -7,6 +7,7 @@ import { AdvisorLoanSolutionsIntro } from "../../components/advisor/loan-solutio
 import { AdvisorLoanSolutionsClosingCta } from "../../components/advisor/loan-solutions/AdvisorLoanSolutionsClosingCta";
 import { AdvisorLoanProgramModalProvider } from "../../components/advisor/loan-solutions/AdvisorLoanProgramModalContext";
 import { AdvisorLoanProgramModal } from "../../components/advisor/loan-solutions/AdvisorLoanProgramModal";
+import { ADVISOR_LOAN_GRID_ROWS } from "../../data/loanProducts";
 import "../../components/solutions/solutionsPage.css";
 import "../../components/advisor/loan-solutions/advisorLoanSolutions.css";
 
@@ -56,6 +57,7 @@ export function AdvisorLoanSolutionsPage() {
           hideAdvisoryIntro
           hideMaClosing
           hideHeroHandoff
+          gridRows={ADVISOR_LOAN_GRID_ROWS}
         />
         <AdvisorLoanSolutionsClosingCta />
       </article>
