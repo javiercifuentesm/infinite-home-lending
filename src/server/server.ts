@@ -233,7 +233,7 @@ const metaCallback = createMetaCallbackRouter(metaClient ? new S3CallbackStore(m
     baseUrl: (process.env.API_BASE_URL || "https://infinite-home-lending-production.up.railway.app").replace(/\/$/, "") });
 app.use("/api", metaCallback.router);
 if (metaReady && metaCallback.worker) {
-  const tickMeta = () => metaCallback.worker!.tick().catch(() => console.error("[meta-callback] Durable queue needs review"));
+  const tickMeta = () => metaCallback.worker!.tick().catch(error => console.error("[meta-callback] Durable queue needs review", String(error?.name || "Error").replace(/[^a-zA-Z0-9_]/g, "").slice(0, 80), Number(error?.$metadata?.httpStatusCode || error?.status || 0)));
   void tickMeta(); setInterval(tickMeta, 30000).unref();
 }
 

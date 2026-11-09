@@ -16,14 +16,29 @@ export interface CallbackStore {
 export class S3CallbackStore implements CallbackStore {
   constructor(private client: S3Client, private bucket: string) {}
   private key = "uploads/automation/meta-es-callback-v1.json";
+  private async getSnapshot() {
+    const r = await this.client.send(new GetObjectCommand({ Bucket: this.bucket, Key: this.key }));
+    const state = JSON.parse(await r.Body!.transformToString()) as CallbackState;
+    if (state.version !== 1 || !state.contacts) throw new Error("Invalid callback state");
+    return { state, etag: r.ETag };
+  }
   private async snapshot() {
     try {
-      const r = await this.client.send(new GetObjectCommand({ Bucket: this.bucket, Key: this.key }));
-      const state = JSON.parse(await r.Body!.transformToString()) as CallbackState;
-      if (state.version !== 1 || !state.contacts) throw new Error("Invalid callback state");
-      return { state, etag: r.ETag };
+      return await this.getSnapshot();
     } catch (e) {
       if ((e as Error).name === "NoSuchKey") return { state: { version: 1, contacts: {} } as CallbackState, etag: undefined };
+      // S3 returns 403 for a missing key when the principal has Get/Put but no ListBucket.
+      // Initialize conditionally, never overwrite or treat a genuinely unreadable object as empty.
+      if ((e as any).$metadata?.httpStatusCode === 403) {
+        try {
+          await this.client.send(new PutObjectCommand({ Bucket: this.bucket, Key: this.key,
+            Body: JSON.stringify({ version: 1, contacts: {} }), ContentType: "application/json",
+            ServerSideEncryption: "AES256", IfNoneMatch: "*" }));
+        } catch (initializationError) {
+          if (![409, 412].includes((initializationError as any).$metadata?.httpStatusCode)) throw initializationError;
+        }
+        return this.getSnapshot();
+      }
       throw e;
     }
   }
@@ -125,19 +140,27 @@ export function createMetaCallbackRouter(store: CallbackStore | null, providers:
     if (!Array.isArray(ids) || ids.length < 1 || ids.length > 20 || ids.some(id => typeof id !== "string" || !/^\d{1,16}$/.test(id))) { res.status(400).json({ error: "Supply 1–20 existing Brevo contact IDs" }); return; }
     const results: { id: string; prepared: boolean }[] = [];
     for (const id of [...new Set(ids)] as string[]) {
+      let stage = "contact_lookup";
       try {
         const c = await providers.contact(id);
         if (c.id !== id || !c.firstName.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(c.email)) throw new Error("Contact incomplete");
         const key = contactKey(c);
+        stage = "storage";
         await store!.mutate(s => {
           if (!s.contacts[key]) {
             if (Object.keys(s.contacts).length >= 10000) throw new Error("Capacity review required");
             s.contacts[key] = { ...c, registeredAt: Date.now() };
           }
         });
+        stage = "link_provisioning";
         await providers.prepare(c, callbackLinks(options.secret, options.baseUrl, c));
         results.push({ id, prepared: true });
-      } catch { results.push({ id, prepared: false }); }
+      } catch (error) {
+        const name = String((error as any)?.name || "Error").replace(/[^a-zA-Z0-9_]/g, "").slice(0, 80);
+        const status = Number((error as any)?.$metadata?.httpStatusCode || (error as any)?.status || 0);
+        console.error(`[meta-callback] prepare ${stage} failed: ${name} HTTP ${status}`);
+        results.push({ id, prepared: false });
+      }
     }
     res.json({ results });
   });
