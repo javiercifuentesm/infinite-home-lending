@@ -111,11 +111,17 @@ export function createMetaCallbackRouter(store: CallbackStore | null, providers:
   const worker = store ? new CallbackWorker(store, providers) : null;
   const available = () => options.enabled && Boolean(store && options.secret);
   router.get("/meta-es/availability", (_req, res) => res.json({ available: available() }));
+  router.get("/meta-es/prepare", (_req, res) => {
+    if (!available()) { res.sendStatus(404); return; }
+    res.set({ "Cache-Control": "no-store", "Referrer-Policy": "no-referrer", "X-Robots-Tag": "noindex, nofollow", "Content-Security-Policy": "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; frame-ancestors 'none'" });
+    res.type("html").send(page("Preparar enlaces de revisión", '<p>Acceso exclusivo para el administrador. Esta acción prepara enlaces; no suscribe ni inscribe contactos en una campaña.</p><form method="post"><label>Credencial del administrador<br><input type="password" name="adminSecret" required autocomplete="off" style="font:inherit;width:100%;box-sizing:border-box"></label><br><label>IDs de contactos existentes en Brevo (máximo 20, separados por comas)<br><input name="contactIds" required style="font:inherit;width:100%;box-sizing:border-box"></label><p><button type="submit">Preparar y verificar enlaces</button></p></form>'));
+  });
   // Deliberate, authenticated provisioning only. Does not subscribe, enroll, or change consent.
   router.post("/meta-es/prepare", async (req, res) => {
     res.set("Cache-Control", "no-store");
-    if (!available() || options.adminSecret.length < 32 || !safeEqual(req.headers.authorization, `Bearer ${options.adminSecret}`)) { res.sendStatus(404); return; }
-    const ids = req.body?.contactIds;
+    const authorized = safeEqual(req.headers.authorization, `Bearer ${options.adminSecret}`) || safeEqual(req.body?.adminSecret, options.adminSecret);
+    if (!available() || options.adminSecret.length < 32 || !authorized) { res.sendStatus(404); return; }
+    const ids = typeof req.body?.contactIds === "string" ? req.body.contactIds.split(",").map((id: string) => id.trim()) : req.body?.contactIds;
     if (!Array.isArray(ids) || ids.length < 1 || ids.length > 20 || ids.some(id => typeof id !== "string" || !/^\d{1,16}$/.test(id))) { res.status(400).json({ error: "Supply 1–20 existing Brevo contact IDs" }); return; }
     const results: { id: string; prepared: boolean }[] = [];
     for (const id of [...new Set(ids)] as string[]) {

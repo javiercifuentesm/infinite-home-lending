@@ -1,6 +1,6 @@
 # META ES nurture — callback release and recovery record
 
-Status: implementation tested locally; **not deployed; Brevo automation 11 remains inactive**.
+Status: implementation tested locally; deployment and creation of the two server credentials approved by Javier on November 9, 2026; **live verification still pending; Brevo automation 11 remains inactive**.
 Observed: November 9, 2026, Eastern time. This record supersedes historical claims that the last five emails were still missing. It does not certify live delivery.
 
 ## Brevo audit observed in this session
@@ -63,7 +63,7 @@ The existing Railway `cooperative-passion / infinite-home-lending` service track
 - Callback HTTP, queue, scanner, tampering, restart, duplicate-click, and provisioning tests; provider payload/readback tests; existing calculator regression tests.
 - Run with `node --import tsx --test tests/metaNurtureCallback.test.ts tests/metaNurtureProviders.test.ts tests/calculatorAutomation.test.ts`.
 - Local tests use fake provider responses and an in-memory store. They do not certify live S3/Brevo/HubSpot permissions, delivery, or production behavior.
-- All 29 selected tests passed (15 new callback/provider tests and 14 existing calculator tests), including concurrent worker claims and no job writes for completed requests.
+- All 30 selected tests passed (16 new callback/provider tests and 14 existing calculator tests), including concurrent worker claims, no job writes for completed requests, and password-authenticated browser provisioning without URL credentials.
 - Production build passed; the individual-link protection check passed all 44 registered rewrites.
 - TypeScript on unchanged main `ce852211326e6ad93c9d4bb01e219760ea5493d1`: 32 errors. This branch: 32 errors, byte-identical diagnostic output. No new TypeScript errors.
 

@@ -125,3 +125,14 @@ test("competing workers claim each external action once and completed requests c
     await f.worker.tick(); assert.equal(writes, 0);
   } finally { await f.close(); }
 });
+test("administrator browser form prepares a contact without putting credentials in URLs", async () => {
+  const f = await fixture();
+  try {
+    const page = await fetch(f.base + "/api/meta-es/prepare");
+    assert.equal(page.status, 200); const html = await page.text();
+    assert.match(html, /type="password"/); assert.match(html, /method="post"/); assert.doesNotMatch(html, new RegExp(adminSecret));
+    const result = await fetch(f.base + "/api/meta-es/prepare", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: new URLSearchParams({ adminSecret, contactIds: "123, 123" }) });
+    assert.deepEqual(await result.json(), { results: [{ id: "123", prepared: true }] });
+    assert.deepEqual(f.calls, ["prepare"]);
+  } finally { await f.close(); }
+});
