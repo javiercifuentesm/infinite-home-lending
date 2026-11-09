@@ -112,3 +112,16 @@ test("provisioning requires admin authentication and never enrolls contacts", as
     assert.notEqual(links.IHL_META_CTA_01, links.IHL_META_CTA_50);
   } finally { await f.close(); }
 });
+test("competing workers claim each external action once and completed requests cause no job writes", async () => {
+  const f = await fixture();
+  try {
+    const record = f.store.state.contacts[contactKey(contact)]; record.requestedAt = Date.now(); record.message = 9;
+    record.jobs = { pause: { state: "pending" }, task: { state: "pending" }, alert: { state: "pending" } };
+    await Promise.all([new CallbackWorker(f.store, f.providers).tick(), new CallbackWorker(f.store, f.providers).tick()]);
+    await f.worker.tick();
+    assert.deepEqual(f.calls, ["pause", "task", "alert"]);
+    let writes = 0; const mutate = f.store.mutate.bind(f.store);
+    f.store.mutate = async fn => { writes++; return mutate(fn); };
+    await f.worker.tick(); assert.equal(writes, 0);
+  } finally { await f.close(); }
+});

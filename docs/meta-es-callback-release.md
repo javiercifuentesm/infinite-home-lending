@@ -43,7 +43,7 @@ Do not place secrets or prospect data in Git, PR text, files committed to this b
 
 ## Deployment dependency
 
-The existing Railway `cooperative-passion / infinite-home-lending` service tracks `main` and auto-deploys GitHub pushes. Its current active deployment is the Realtor partnership callback release. There is **one pre-existing, unrelated staged configuration change**. Do not apply that pending change as part of this release without identifying and resolving it with the owner. This branch is based on current `main`; it does not include the separate frontend `production/individual-links` branch.
+The existing Railway `cooperative-passion / infinite-home-lending` service tracks `main` and auto-deploys GitHub pushes. Its current active deployment is the Realtor partnership callback release. There is **one pre-existing, unrelated staged employee-ID configuration change** (`VITE_MA_EMPLOYEE_IDS`). Its values were inspected privately, left pending, and are not reproduced here. Do not apply or discard that pending change as part of this release without resolving it with the owner. This branch is based on current `main`; it does not include the separate frontend `production/individual-links` branch.
 
 ## Mandatory remaining release checks
 
@@ -63,7 +63,7 @@ The existing Railway `cooperative-passion / infinite-home-lending` service track
 - Callback HTTP, queue, scanner, tampering, restart, duplicate-click, and provisioning tests; provider payload/readback tests; existing calculator regression tests.
 - Run with `node --import tsx --test tests/metaNurtureCallback.test.ts tests/metaNurtureProviders.test.ts tests/calculatorAutomation.test.ts`.
 - Local tests use fake provider responses and an in-memory store. They do not certify live S3/Brevo/HubSpot permissions, delivery, or production behavior.
-- All 28 selected tests passed (14 new callback/provider tests and 14 existing calculator tests).
+- All 29 selected tests passed (15 new callback/provider tests and 14 existing calculator tests), including concurrent worker claims and no job writes for completed requests.
 - Production build passed; the individual-link protection check passed all 44 registered rewrites.
 - TypeScript on unchanged main `ce852211326e6ad93c9d4bb01e219760ea5493d1`: 32 errors. This branch: 32 errors, byte-identical diagnostic output. No new TypeScript errors.
 

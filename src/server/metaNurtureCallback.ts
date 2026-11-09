@@ -31,7 +31,9 @@ export class S3CallbackStore implements CallbackStore {
   async mutate<T>(fn: (state: CallbackState) => T): Promise<T> {
     for (let i = 0; i < 8; i++) {
       const { state, etag } = await this.snapshot();
+      const before = JSON.stringify(state);
       const result = fn(state);
+      if (JSON.stringify(state) === before) return result;
       try {
         await this.client.send(new PutObjectCommand({ Bucket: this.bucket, Key: this.key,
           Body: JSON.stringify(state), ContentType: "application/json", ServerSideEncryption: "AES256",
@@ -75,6 +77,7 @@ export class CallbackWorker {
     try {
       for (const [key, record] of Object.entries((await this.store.read()).contacts)) {
         if (!record.requestedAt || !record.jobs) continue;
+        if (Object.values(record.jobs).every(job => ["done", "review"].includes(job.state))) continue;
         for (const kind of ["pause", "task", "alert"] as const) {
           const claim = await this.store.mutate(s => {
             const r = s.contacts[key], job = r.jobs![kind];
