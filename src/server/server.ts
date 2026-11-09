@@ -4,6 +4,8 @@ import { S3CalculatorStore } from "./calculatorAutomationStore";
 import { CalculatorWorker } from "./calculatorAutomationWorker";
 import { createCalculatorProviders } from "./calculatorAutomationProviders";
 import { tryGetS3Client } from "./lib/s3Upload";
+import { createMetaCallbackRouter, S3CallbackStore } from "./metaNurtureCallback";
+import { createMetaCallbackProviders } from "./metaNurtureProviders";
 import "./loadEnv";
 import cors from "cors";
 import express from "express";
@@ -216,6 +218,24 @@ app.use("/api", createEventGiveawayRouter());
 const giveawayQueueTimer = setInterval(() => { void drainGiveawayQueue(); }, 60000);
 giveawayQueueTimer.unref();
 app.use(express.urlencoded({ extended: true }));
+
+// Separate opt-in release: shipping this route never enables the 50-email Brevo workflow.
+const metaClient = tryGetS3Client();
+const metaEnabled = process.env.META_ES_CALLBACK_ENABLED === "true";
+const metaSecret = process.env.META_ES_LINK_SECRET || "";
+const metaListId = Number(process.env.META_ES_ELIGIBLE_LIST_ID || "0");
+const metaReady = metaEnabled && Boolean(metaClient && metaSecret.length >= 32 && process.env.BREVO_API_KEY && process.env.HUBSPOT_API_KEY && Number.isSafeInteger(metaListId) && metaListId > 0);
+const metaCallback = createMetaCallbackRouter(metaClient ? new S3CallbackStore(metaClient, process.env.S3_BUCKET!) : null,
+  createMetaCallbackProviders({ brevoKey: process.env.BREVO_API_KEY || "", hubspotKey: process.env.HUBSPOT_API_KEY || "",
+    eligibleListId: metaListId, advisorEmail: "Javier.Cifuentes@infinitehomelending.com", ownerId: "93679106",
+    senderEmail: "Javier.Cifuentes@infinitehomelending.com" }),
+  { enabled: metaReady, secret: metaSecret, adminSecret: process.env.META_ES_ADMIN_SECRET || "",
+    baseUrl: (process.env.API_BASE_URL || "https://infinite-home-lending-production.up.railway.app").replace(/\/$/, "") });
+app.use("/api", metaCallback.router);
+if (metaReady && metaCallback.worker) {
+  const tickMeta = () => metaCallback.worker!.tick().catch(() => console.error("[meta-callback] Durable queue needs review"));
+  void tickMeta(); setInterval(tickMeta, 30000).unref();
+}
 
 const calculatorClient = tryGetS3Client();
 const calculatorStore = calculatorClient ? new S3CalculatorStore(calculatorClient, process.env.S3_BUCKET!) : null;
