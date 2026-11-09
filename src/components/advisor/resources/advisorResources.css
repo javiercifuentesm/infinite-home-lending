@@ -1,0 +1,530 @@
+
+/* =============================================================================
+   Advisor Resources — editorial learning center
+   ============================================================================= */
+
+.advisor-resources-page {
+  background: #fff;
+}
+
+/* Intro — uses shared `.advisor-page-intro` in advisorSite.css */
+
+/* -------------------------------------------------------------------------- */
+/* Shared editorial atoms                                                     */
+/* -------------------------------------------------------------------------- */
+
+.advisor-resources-section-header {
+  margin-bottom: clamp(1.75rem, 3.5vw, 2.5rem);
+  max-width: 42rem;
+}
+
+.advisor-resources-section-header--left {
+  text-align: left;
+}
+
+.advisor-resources-section-header__title {
+  margin: 0.75rem 0 0;
+  font-family: var(--font-heading, "Cormorant Garamond", serif);
+  font-size: clamp(1.55rem, 1.3rem + 0.95vw, 2.2rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.16;
+  color: #0a192f;
+  text-wrap: balance;
+}
+
+.advisor-resources-section-header__rule {
+  margin-top: 1rem;
+  height: 1px;
+  width: 2.5rem;
+  background: rgba(197, 160, 89, 0.55);
+}
+
+.advisor-resources-section-header__support {
+  margin: 1rem 0 0;
+  max-width: 36rem;
+  font-family: var(--font-sans, Inter, sans-serif);
+  font-size: 1rem;
+  line-height: 1.65;
+  color: #64748b;
+}
+
+.advisor-resources-section-header--on-navy .advisor-resources-section-header__title {
+  color: #fff;
+}
+
+.advisor-resources-section-header--on-navy .advisor-resources-section-header__support {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.advisor-resources-section-header--on-navy .advisor-resources-section-header__rule {
+  background: rgba(197, 160, 89, 0.55);
+}
+
+.advisor-resource-chapter {
+  margin: 0;
+  font-family: var(--font-heading, "Cormorant Garamond", serif);
+  font-size: clamp(2.5rem, 2rem + 1.8vw, 3.75rem);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 0.9;
+  color: rgba(197, 160, 89, 0.85);
+}
+
+.advisor-resource-chapter--sm {
+  font-size: clamp(1.75rem, 1.45rem + 0.9vw, 2.25rem);
+}
+
+.advisor-resource-kicker {
+  margin: 0;
+  font-family: var(--font-sans, Inter, sans-serif);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #c5a059;
+}
+
+.advisor-resource-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  width: fit-content;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-sans, Inter, sans-serif);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #c5a059;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.2s ease, gap 0.2s ease;
+}
+
+.advisor-resource-cta:hover {
+  color: #0a192f;
+  gap: 0.55rem;
+}
+
+.advisor-resource-cta:focus-visible {
+  outline: 2px solid rgba(197, 160, 89, 0.55);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.advisor-resource-cta--primary {
+  margin-top: 1.75rem;
+  padding: 0.7rem 1.15rem;
+  border-radius: 999px;
+  background: #c5a059;
+  color: #0a192f;
+}
+
+.advisor-resource-cta--primary:hover {
+  background: #d4b56e;
+  color: #0a192f;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Featured — magazine contents                                               */
+/* -------------------------------------------------------------------------- */
+
+.advisor-resources-featured {
+  padding: clamp(2.75rem, 5.5vw, 4.5rem) 0;
+  background: linear-gradient(180deg, #f4f1ea 0%, #f7f5f0 100%);
+  border-bottom: 1px solid rgba(10, 25, 47, 0.06);
+}
+
+.advisor-resources-featured__layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(2rem, 4vw, 3rem);
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  .advisor-resources-featured__layout {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.9fr);
+    gap: clamp(2.5rem, 4vw, 3.5rem);
+  }
+}
+
+.advisor-resource-featured-primary {
+  text-align: left;
+  padding-right: clamp(0rem, 2vw, 1.5rem);
+}
+
+.advisor-resource-featured-primary .advisor-resource-chapter {
+  margin-bottom: 1rem;
+}
+
+.advisor-resource-featured-primary .advisor-resource-kicker {
+  margin-bottom: 0.75rem;
+}
+
+.advisor-resource-featured-primary__title {
+  margin: 0;
+  max-width: 18ch;
+  font-family: var(--font-heading, "Cormorant Garamond", serif);
+  font-size: clamp(2rem, 1.55rem + 1.6vw, 3rem);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.1;
+  color: #0a192f;
+  text-wrap: balance;
+}
+
+.advisor-resource-featured-primary__desc {
+  margin: 1.15rem 0 0;
+  max-width: 34rem;
+  font-family: var(--font-sans, Inter, sans-serif);
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: #475569;
+}
+
+.advisor-resources-featured__secondary {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.advisor-resources-featured__secondary > li {
+  border-top: 1px solid rgba(10, 25, 47, 0.1);
+}
+
+.advisor-resources-featured__secondary > li:last-child {
+  border-bottom: 1px solid rgba(10, 25, 47, 0.1);
+}
+
+.advisor-resource-featured-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem 1.25rem;
+  padding: 1.35rem 0;
+  text-align: left;
+}
+
+@media (min-width: 640px) {
+  .advisor-resource-featured-row {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 1.25rem 1.5rem;
+  }
+}
+
+.advisor-resource-featured-row__meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.4rem;
+  min-width: 5.5rem;
+}
+
+.advisor-resource-featured-row__title {
+  margin: 0;
+  font-family: var(--font-heading, "Cormorant Garamond", serif);
+  font-size: clamp(1.25rem, 1.1rem + 0.55vw, 1.5rem);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  color: #0a192f;
+  text-wrap: balance;
+}
+
+.advisor-resource-featured-row__desc {
+  margin: 0.45rem 0 0;
+  font-family: var(--font-sans, Inter, sans-serif);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: #64748b;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Guided journey — navy                                                      */
+/* -------------------------------------------------------------------------- */
+
+.advisor-resources-journey {
+  padding: clamp(3rem, 6vw, 4.75rem) 0;
+  background: #0a192f;
+}
+
+.advisor-resources-journey__track {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+
+@media (min-width: 900px) {
+  .advisor-resources-journey__track {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: stretch;
+  }
+}
+
+.advisor-resources-journey__item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 899px) {
+  .advisor-resources-journey__item:not(:last-child) {
+    padding-bottom: 1.75rem;
+    margin-bottom: 1.75rem;
+    border-bottom: 1px solid rgba(197, 160, 89, 0.22);
+  }
+
+  .advisor-resources-journey__connector {
+    display: none;
+  }
+}
+
+@media (min-width: 900px) {
+  .advisor-resources-journey__item {
+    padding-right: 1.5rem;
+  }
+
+  .advisor-resources-journey__item:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 1.35rem;
+    right: 0.35rem;
+    width: 1.75rem;
+    height: 1px;
+    background: rgba(197, 160, 89, 0.45);
+  }
+
+  .advisor-resources-journey__connector {
+    display: none;
+  }
+}
+
+.advisor-resources-journey__step {
+  text-align: left;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.advisor-resources-journey__step .advisor-resource-chapter {
+  margin-bottom: 0.85rem;
+  color: rgba(197, 160, 89, 0.9);
+}
+
+.advisor-resources-journey__title {
+  margin: 0;
+  font-family: var(--font-heading, "Cormorant Garamond", serif);
+  font-size: clamp(1.35rem, 1.15rem + 0.6vw, 1.65rem);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  color: #fff;
+  text-wrap: balance;
+}
+
+.advisor-resources-journey__desc {
+  margin: 0.7rem 0 0;
+  flex: 1;
+  font-family: var(--font-sans, Inter, sans-serif);
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.68);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.advisor-resources-journey__step .advisor-resource-cta {
+  margin-top: 1.25rem;
+  color: #c5a059;
+}
+
+.advisor-resources-journey__step .advisor-resource-cta:hover {
+  color: #fff;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Chapter rows                                                               */
+/* -------------------------------------------------------------------------- */
+
+.advisor-resources-chapters {
+  padding: clamp(3rem, 6vw, 4.75rem) 0 clamp(2.5rem, 5vw, 3.5rem);
+  background: #fff;
+}
+
+.advisor-resources-chapters__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: 1px solid rgba(10, 25, 47, 0.08);
+}
+
+.advisor-resource-chapter-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem 1.5rem;
+  padding: clamp(1.5rem, 3vw, 2rem) clamp(0rem, 1vw, 0.5rem);
+  text-align: left;
+  border-bottom: 1px solid rgba(10, 25, 47, 0.08);
+}
+
+.advisor-resource-chapter-row--warm {
+  background: rgba(244, 241, 234, 0.55);
+}
+
+@media (min-width: 768px) {
+  .advisor-resource-chapter-row {
+    grid-template-columns: minmax(9rem, 14rem) minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 1.5rem 2rem;
+    padding-inline: 1.25rem;
+  }
+}
+
+.advisor-resource-chapter-row__left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.advisor-resource-chapter-row__title {
+  margin: 0;
+  font-family: var(--font-heading, "Cormorant Garamond", serif);
+  font-size: clamp(1.35rem, 1.15rem + 0.65vw, 1.75rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.18;
+  color: #0a192f;
+  text-wrap: balance;
+}
+
+.advisor-resource-chapter-row__desc {
+  margin: 0.55rem 0 0;
+  max-width: 40rem;
+  font-family: var(--font-sans, Inter, sans-serif);
+  font-size: 0.975rem;
+  line-height: 1.65;
+  color: #475569;
+}
+
+.advisor-resource-chapter-row__right {
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 767px) {
+  .advisor-resource-chapter-row__right {
+    padding-top: 0.25rem;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Closing                                                                    */
+/* -------------------------------------------------------------------------- */
+
+.advisor-resources-closing {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(3.5rem, 7vw, 5.25rem) 0;
+  background: #0a192f;
+}
+
+.advisor-resources-closing::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 18% 20%, rgba(197, 160, 89, 0.1), transparent 40%),
+    radial-gradient(circle at 85% 80%, rgba(27, 42, 74, 0.9), transparent 45%);
+}
+
+.advisor-resources-closing__inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 40rem;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.advisor-resources-closing .advisor-about-section-header {
+  width: 100%;
+  max-width: none;
+}
+
+.advisor-resources-closing .advisor-about-section-header__eyebrow {
+  color: rgba(197, 160, 89, 0.95);
+}
+
+.advisor-resources-closing__headline {
+  margin: 0.875rem 0 0;
+  max-width: clamp(18rem, 78vw, 34rem);
+  margin-inline: auto;
+  font-family: var(--font-heading, "Cormorant Garamond", serif);
+  font-size: clamp(1.875rem, 1.5rem + 1.35vw, 2.625rem);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.14;
+  text-wrap: balance;
+}
+
+.advisor-resources-closing__body {
+  margin: 1.375rem 0 0;
+  max-width: min(47.5rem, 760px);
+  line-height: 1.72;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+}
+
+.advisor-resources-closing__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 2rem;
+  width: 100%;
+  max-width: 28rem;
+}
+
+@media (min-width: 640px) {
+  .advisor-resources-closing__actions {
+    flex-flow: row wrap;
+    justify-content: center;
+    width: auto;
+    max-width: none;
+  }
+}
+
+.advisor-resources-closing__cta-primary,
+.advisor-resources-closing__cta-secondary {
+  display: inline-flex;
+  min-height: 3.25rem;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 639px) {
+  .advisor-resources-closing__cta-primary,
+  .advisor-resources-closing__cta-secondary {
+    width: 100%;
+  }
+}

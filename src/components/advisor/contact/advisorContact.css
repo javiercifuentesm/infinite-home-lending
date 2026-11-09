@@ -1,0 +1,568 @@
+
+/* =============================================================================
+   Advisor Contact Me — Flagship Scheduling Studio
+   ============================================================================= */
+
+.advisor-contact {
+  background: #fff;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Editorial intro — compact                                                  */
+/* -------------------------------------------------------------------------- */
+
+.advisor-contact-intro {
+  border-bottom: none;
+  padding-top: calc(var(--site-header-height) + clamp(2.75rem, 5.5vw, 4rem));
+  padding-bottom: clamp(1.75rem, 3.5vw, 2.5rem);
+}
+
+.advisor-contact-intro .advisor-page-intro__body {
+  margin-top: 1.25rem;
+  max-width: min(42rem, 680px);
+}
+
+/* -------------------------------------------------------------------------- */
+/* Flagship Scheduling Studio                                                 */
+/* -------------------------------------------------------------------------- */
+
+.advisor-contact-studio {
+  padding-bottom: clamp(2.75rem, 5.5vw, 4rem);
+  background: #fff;
+}
+
+.advisor-contact-studio__rail {
+  width: 100%;
+  max-width: 76rem; /* ~1216px — flagship studio width */
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+  box-sizing: border-box;
+}
+
+.advisor-contact-studio__frame {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  border: 1px solid rgba(10, 25, 47, 0.08);
+  border-radius: 2px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 8px 28px rgba(10, 25, 47, 0.05);
+}
+
+@media (min-width: 1024px) {
+  .advisor-contact-studio__frame {
+    flex-direction: row;
+    align-items: stretch;
+  }
+}
+
+/* Left — advisor context panel */
+.advisor-contact-studio__panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: clamp(1.5rem, 3.5vw, 2.5rem) clamp(1.35rem, 3vw, 2.25rem);
+  background: #0a192f;
+  color: #fff;
+}
+
+@media (min-width: 1024px) {
+  .advisor-contact-studio__panel {
+    flex: 0 1 36%;
+    min-width: 17rem;
+    align-self: stretch;
+    padding: 2.75rem 2.25rem 2.5rem;
+  }
+}
+
+.advisor-contact-studio__eyebrow {
+  margin: 0;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(197, 160, 89, 0.95);
+}
+
+.advisor-contact-studio__rule {
+  width: 2.25rem;
+  height: 1px;
+  margin-top: 1rem;
+  background: rgba(197, 160, 89, 0.55);
+}
+
+.advisor-contact-studio__heading {
+  margin: 1.125rem 0 0;
+  font-family: var(--font-heading, "Cormorant Garamond", serif);
+  font-size: clamp(1.5rem, 1.3rem + 0.7vw, 2rem);
+  font-weight: 600;
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+  color: #fff;
+  text-wrap: balance;
+}
+
+.advisor-contact-studio__supporting {
+  margin: 1rem 0 0;
+  max-width: 22rem;
+  font-size: 0.975rem;
+  line-height: 1.68;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.advisor-contact-studio__identity {
+  margin-top: clamp(1.5rem, 3vw, 2.25rem);
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.advisor-contact-studio__name {
+  margin: 0;
+  font-family: var(--font-heading, "Cormorant Garamond", serif);
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: #fff;
+}
+
+.advisor-contact-studio__title {
+  margin: 0.3rem 0 0;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.advisor-contact-studio__nmls {
+  margin: 0.55rem 0 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: rgba(197, 160, 89, 0.85);
+}
+
+.advisor-contact-studio__signature {
+  display: block;
+  width: clamp(5.5rem, 12vw, 7rem);
+  height: auto;
+  margin-top: auto;
+  padding-top: 1.75rem;
+  object-fit: contain;
+  object-position: left bottom;
+  /* Invert black ink signature onto navy panel */
+  filter: brightness(0) invert(1);
+  opacity: 0.88;
+}
+
+@media (max-width: 1023px) {
+  .advisor-contact-studio__panel {
+    padding-block: 1.35rem 1.5rem;
+  }
+
+  .advisor-contact-studio__supporting {
+    max-width: none;
+  }
+
+  .advisor-contact-studio__identity {
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+  }
+
+  .advisor-contact-studio__signature {
+    margin-top: 1.25rem;
+    padding-top: 0;
+    width: 5.25rem;
+  }
+}
+
+/* Right — Calendly */
+.advisor-contact-studio__scheduler {
+  position: relative;
+  min-width: 0;
+  background: #fff;
+  border-top: 1px solid rgba(10, 25, 47, 0.06);
+}
+
+@media (min-width: 1024px) {
+  .advisor-contact-studio__scheduler {
+    flex: 1 1 64%;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    border-top: none;
+    border-left: 1px solid rgba(10, 25, 47, 0.06);
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Calendly embed — nested inside studio (preserve behavior)                  */
+/* -------------------------------------------------------------------------- */
+
+.advisor-contact-studio .advisor-contact-scheduler {
+  position: relative;
+  width: 100%;
+  max-width: none;
+  margin-inline: 0;
+  border: none;
+  border-radius: 0;
+  background: #fff;
+  box-shadow: none;
+  overflow: hidden;
+}
+
+@media (min-width: 1024px) {
+  .advisor-contact-studio .advisor-contact-scheduler {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    align-self: stretch;
+    min-height: 0;
+  }
+}
+
+.advisor-contact-scheduler__embed {
+  min-width: 320px;
+  min-height: 720px;
+  width: 100%;
+  height: auto;
+  flex: 0 0 auto;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+@media (min-width: 1024px) {
+  .advisor-contact-scheduler__embed {
+    min-height: 760px;
+  }
+}
+
+.advisor-contact-scheduler__embed.is-ready {
+  opacity: 1;
+}
+
+.advisor-contact-scheduler__embed.is-hidden {
+  display: none;
+}
+
+.advisor-contact-scheduler__embed iframe {
+  width: 100% !important;
+  min-width: 320px;
+}
+
+.advisor-contact-scheduler__loading {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 2rem 1.5rem;
+  background: #fff;
+  pointer-events: none;
+}
+
+.advisor-contact-scheduler__skeleton {
+  width: 100%;
+  max-width: 28rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.advisor-contact-scheduler__skeleton-bar {
+  width: 42%;
+  height: 0.75rem;
+  border-radius: 2px;
+  background: rgba(10, 25, 47, 0.06);
+}
+
+.advisor-contact-scheduler__skeleton-panel {
+  width: 100%;
+  height: 14rem;
+  border-radius: 2px;
+  background: linear-gradient(
+    90deg,
+    rgba(10, 25, 47, 0.04) 0%,
+    rgba(197, 160, 89, 0.08) 50%,
+    rgba(10, 25, 47, 0.04) 100%
+  );
+  background-size: 200% 100%;
+  animation: advisor-contact-shimmer 1.6s ease-in-out infinite;
+}
+
+.advisor-contact-scheduler__skeleton-row {
+  width: 100%;
+  height: 0.65rem;
+  border-radius: 2px;
+  background: rgba(10, 25, 47, 0.05);
+}
+
+.advisor-contact-scheduler__skeleton-row--short {
+  width: 68%;
+}
+
+.advisor-contact-scheduler__loading-text {
+  margin: 1.5rem 0 0;
+  font-size: 0.8125rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+
+@keyframes advisor-contact-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .advisor-contact-scheduler__skeleton-panel {
+    animation: none;
+  }
+
+  .advisor-contact-scheduler__embed {
+    transition: none;
+  }
+}
+
+.advisor-contact-scheduler__fallback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: clamp(2.5rem, 6vw, 3.75rem) 1.5rem;
+  max-width: 28rem;
+  margin-inline: auto;
+}
+
+.advisor-contact-scheduler__fallback-title {
+  margin: 0;
+  font-family: var(--font-heading, "Cormorant Garamond", serif);
+  font-size: 1.375rem;
+  font-weight: 600;
+  color: #0a192f;
+}
+
+.advisor-contact-scheduler__fallback-body {
+  margin: 0.75rem 0 0;
+  font-size: 0.975rem;
+  line-height: 1.65;
+  color: #64748b;
+}
+
+.advisor-contact-scheduler__fallback-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  margin-top: 1.5rem;
+  padding: 0.625rem 1.35rem;
+  border: 1px solid rgba(10, 25, 47, 0.22);
+  border-radius: 2px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #0a192f;
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.advisor-contact-scheduler__fallback-cta:hover {
+  border-color: rgba(197, 160, 89, 0.6);
+  color: #8a6d2f;
+}
+
+.advisor-contact-scheduler__fallback-cta:focus-visible {
+  outline: 2px solid rgba(197, 160, 89, 0.7);
+  outline-offset: 3px;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Micro-journey                                                              */
+/* -------------------------------------------------------------------------- */
+
+.advisor-contact-journey {
+  padding-block: clamp(2.5rem, 5vw, 3.5rem);
+  background: #fafaf8;
+  border-top: 1px solid rgba(10, 25, 47, 0.05);
+}
+
+.advisor-contact-journey__inner {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.75rem, 3.5vw, 2.5rem);
+}
+
+.advisor-contact-journey__header {
+  max-width: 34rem;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.advisor-contact-journey__headline {
+  margin: 0;
+  font-family: var(--font-heading, "Cormorant Garamond", serif);
+  font-size: clamp(1.5rem, 1.3rem + 0.65vw, 1.875rem);
+  font-weight: 600;
+  line-height: 1.2;
+  color: #0a192f;
+  text-wrap: balance;
+}
+
+.advisor-contact-journey__supporting {
+  margin: 0.75rem 0 0;
+  font-size: 1rem;
+  line-height: 1.65;
+  color: #64748b;
+}
+
+.advisor-contact-journey__steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  position: relative;
+}
+
+@media (min-width: 900px) {
+  .advisor-contact-journey__steps {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+
+  .advisor-contact-journey__steps::before {
+    content: "";
+    position: absolute;
+    top: 1.25rem;
+    left: 12%;
+    right: 12%;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(197, 160, 89, 0.4) 15%,
+      rgba(197, 160, 89, 0.4) 85%,
+      transparent
+    );
+    pointer-events: none;
+  }
+}
+
+.advisor-contact-journey__step {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.15rem 0;
+  border-bottom: 1px solid rgba(10, 25, 47, 0.07);
+}
+
+.advisor-contact-journey__step:last-child {
+  border-bottom: none;
+}
+
+@media (min-width: 900px) {
+  .advisor-contact-journey__step {
+    align-items: center;
+    text-align: center;
+    padding: 0 0.5rem;
+    border-bottom: none;
+  }
+}
+
+.advisor-contact-journey__step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid rgba(197, 160, 89, 0.45);
+  border-radius: 999px;
+  background: #fff;
+  font-family: var(--font-mono, "DM Mono", monospace);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: #8a6d2f;
+}
+
+.advisor-contact-journey__step-title {
+  margin: 0;
+  font-family: var(--font-heading, "Cormorant Garamond", serif);
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: #0a192f;
+}
+
+.advisor-contact-journey__step-body {
+  margin: 0.35rem 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: #64748b;
+}
+
+@media (min-width: 900px) {
+  .advisor-contact-journey__step-body {
+    max-width: 15rem;
+    margin-inline: auto;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Reassurance — compressed                                                   */
+/* -------------------------------------------------------------------------- */
+
+.advisor-contact-reassurance {
+  padding-block: clamp(1.75rem, 3.5vw, 2.5rem);
+  background: #fff;
+  border-top: 1px solid rgba(10, 25, 47, 0.05);
+}
+
+.advisor-contact-reassurance__inner {
+  max-width: 32rem;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.advisor-contact-reassurance__rule {
+  width: 2rem;
+  height: 1px;
+  margin: 0 auto 1rem;
+  background: rgba(197, 160, 89, 0.55);
+}
+
+.advisor-contact-reassurance__headline {
+  margin: 0;
+  font-family: var(--font-heading, "Cormorant Garamond", serif);
+  font-size: clamp(1.25rem, 1.1rem + 0.4vw, 1.5rem);
+  font-weight: 600;
+  font-style: italic;
+  line-height: 1.28;
+  color: #0a192f;
+  text-wrap: balance;
+}
+
+.advisor-contact-reassurance__body {
+  margin: 0.65rem 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: #64748b;
+}
+
+/* Contact page: hide mobile CTA bar so it does not obscure Calendly controls */
+body.ihl-advisor-site.ihl-advisor-contact .advisor-mobile-cta-bar {
+  display: none;
+}
+
+body.ihl-advisor-site.ihl-advisor-contact .advisor-main {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
