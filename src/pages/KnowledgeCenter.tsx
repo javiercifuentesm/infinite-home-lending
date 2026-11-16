@@ -168,6 +168,11 @@ export default function KnowledgeCenter() {
 
   return (
     <PageContainer className="min-h-screen bg-[#fafbfc] pb-0">
+      <div className="mx-auto max-w-6xl px-6 pt-6 text-right">
+        <a className="text-sm text-navy underline underline-offset-4" href={`/knowledge-center/articles/${lang === "es" ? "es" : "en"}`}>
+          {lang === "es" ? "Explora nuestras guías hipotecarias" : "Explore our mortgage guides"}
+        </a>
+      </div>
       {/* —— Hero —— */}
       <section
         id="guided-entry"
