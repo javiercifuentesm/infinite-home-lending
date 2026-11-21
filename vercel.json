@@ -203,6 +203,14 @@
       "destination": "/es-home.html"
     },
     {
+      "source": "/knowledge-center/articles/:language/:slug",
+      "destination": "/knowledge-center/articles/:language/:slug/index.html"
+    },
+    {
+      "source": "/knowledge-center/articles/:language",
+      "destination": "/knowledge-center/articles/:language/index.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
