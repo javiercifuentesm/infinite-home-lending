@@ -250,4 +250,13 @@ export const PROGRAM_DISPLAY_CATEGORY: Record<string, "purchase" | "equity" | "s
   heloc: "equity",
   reverse: "equity",
   "non-qm": "specialty",
+  dscr: "specialty",
+  "bank-statement": "specialty",
+  "1099-income": "specialty",
+  "dpa-advantage": "purchase",
+  "asset-depletion": "specialty",
+  "pl-loan": "specialty",
+  "foreign-national": "specialty",
+  "fha-repair-escrow": "purchase",
+  "fha-203k-limited": "purchase",
 };

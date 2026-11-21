@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Roboto+Mono:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Roboto+Mono:wght@500;600;700&family=Style+Script&display=swap');
 @import "tailwindcss";
 
 /* True Cost of Waiting + shared tool tokens */
@@ -255,6 +255,8 @@ html {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   /* Single display serif stack — avoid Georgia/Times so fallback never mimics a “second” brand serif */
   --font-heading: "Cormorant Garamond", serif;
+  /* Advisor personal mark — refined signature script (Google Fonts; not a local file) */
+  --font-signature: "Style Script", cursive;
   --color-navy: #0A192F;
   --color-gold: #C5A059;
   --color-surface: #F8F9FA;

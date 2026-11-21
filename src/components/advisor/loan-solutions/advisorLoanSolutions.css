@@ -1,0 +1,107 @@
+
+/* =============================================================================
+   Advisor Loan Solutions page — editorial intro + closing CTA
+   ============================================================================= */
+
+.advisor-loan-solutions-closing {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(3.75rem, 7.5vw, 5.75rem) 0;
+  background: #0a192f;
+}
+
+.advisor-loan-solutions-closing::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 80% 20%, rgba(197, 160, 89, 0.08), transparent 45%);
+}
+
+.advisor-loan-solutions-closing__inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 40rem;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.advisor-loan-solutions-closing .advisor-about-section-header {
+  width: 100%;
+  max-width: none;
+}
+
+.advisor-loan-solutions-closing .advisor-about-section-header__eyebrow {
+  color: rgba(197, 160, 89, 0.95);
+}
+
+.advisor-loan-solutions-closing__headline {
+  margin: 0.875rem 0 0;
+  max-width: clamp(18rem, 78vw, 34rem);
+  margin-inline: auto;
+  font-family: var(--font-heading, "Cormorant Garamond", serif);
+  font-size: clamp(1.875rem, 1.5rem + 1.35vw, 2.625rem);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.14;
+  text-wrap: balance;
+}
+
+.advisor-loan-solutions-closing__body {
+  margin: 1.375rem 0 0;
+  max-width: min(47.5rem, 760px);
+  line-height: 1.72;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+}
+
+.advisor-loan-solutions-closing__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 2rem;
+  width: 100%;
+  max-width: 28rem;
+}
+
+@media (min-width: 640px) {
+  .advisor-loan-solutions-closing__actions {
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+    max-width: none;
+    width: auto;
+  }
+}
+
+.advisor-loan-solutions-closing__cta-primary,
+.advisor-loan-solutions-closing__cta-secondary {
+  display: inline-flex;
+  min-height: 3.25rem;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+@media (max-width: 639px) {
+  .advisor-loan-solutions-closing__cta-primary,
+  .advisor-loan-solutions-closing__cta-secondary {
+    width: 100%;
+  }
+}
+
+.advisor-loan-solutions-page .solutions-page .sp-section--intro-no-handoff {
+  padding-top: clamp(3.5rem, 7vw, 5rem);
+}
+
+.advisor-loan-solutions-page .solutions-page .sp-pathways--standalone {
+  margin-top: 0;
+}
+
+.advisor-loan-solutions-page .solutions-page .sp-footer-bridge {
+  display: none;
+}

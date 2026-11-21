@@ -59,6 +59,18 @@ import LicensingPage from "./pages/compliance/LicensingPage";
 import EqualHousingPage from "./pages/compliance/EqualHousingPage";
 import { SarahCareersFloating } from "./components/careers/SarahCareersFloating";
 import { shouldShowCareersSarahUi } from "./config/careersSarah";
+import {
+  shouldShowGlobalFooter,
+  shouldShowGlobalNavbar,
+  shouldShowSarah,
+} from "./config/advisorChrome";
+import { AdvisorSiteLayout } from "./layouts/AdvisorSiteLayout";
+import { AdvisorHomePage } from "./pages/advisor/AdvisorHomePage";
+import { AdvisorAboutPage } from "./pages/advisor/AdvisorAboutPage";
+import { AdvisorLoanSolutionsPage } from "./pages/advisor/AdvisorLoanSolutionsPage";
+import { AdvisorSmartToolsPage } from "./pages/advisor/AdvisorSmartToolsPage";
+import { AdvisorResourcesPage } from "./pages/advisor/AdvisorResourcesPage";
+import { AdvisorContactPage } from "./pages/advisor/AdvisorContactPage";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -68,16 +80,9 @@ const ScrollToTop = () => {
   return null;
 };
 
-const isCareersChromeHidden = (pathname: string) =>
-  pathname === "/careers" || pathname.startsWith("/careers-asset-capture") || pathname === "/free-consultation" || pathname === "/free-consultation/es";
-
 const FooterWhenNotAnalytics = () => {
   const { pathname } = useLocation();
-  if (
-    pathname === "/analytics" ||
-    pathname.startsWith("/ma-dashboard") ||
-    isCareersChromeHidden(pathname)
-  ) {
+  if (!shouldShowGlobalFooter(pathname)) {
     return null;
   }
   return <Footer />;
@@ -86,7 +91,8 @@ const FooterWhenNotAnalytics = () => {
 const AppContent = () => {
   const location = useLocation();
   const [searchParams] = useSearchParams();
-  const onCareers = isCareersChromeHidden(location.pathname);
+  const showGlobalNavbar = shouldShowGlobalNavbar(location.pathname);
+  const showSarah = shouldShowSarah(location.pathname);
 
   return (
     <>
@@ -94,11 +100,9 @@ const AppContent = () => {
       {location.pathname === "/careers" && shouldShowCareersSarahUi(searchParams) && (
         <SarahCareersFloating />
       )}
-      {!onCareers &&
-        location.pathname !== "/analytics" &&
-        !location.pathname.startsWith("/ma-dashboard") && <MortgageConcierge />}
+      {showSarah && <MortgageConcierge />}
       <div className="min-h-screen bg-white font-sans text-slate-900 selection:bg-slate-900 selection:text-white">
-        {!onCareers && <Navbar />}
+        {showGlobalNavbar && <Navbar />}
         <main>
           <Routes>
           <Route path="/" element={<Home />} />
@@ -149,6 +153,15 @@ const AppContent = () => {
           <Route path="/deal-desk/deal-rescue" element={<DealRescue />} />
           <Route path="/deal-desk" element={<DealDeskEntry />} />
           <Route path="/ma-dashboard" element={<MADashboard />} />
+          {/* Registered advisor slugs only — unknown /:advisorSlug redirects home via layout */}
+          <Route path="/:advisorSlug" element={<AdvisorSiteLayout />}>
+            <Route index element={<AdvisorHomePage />} />
+            <Route path="about" element={<AdvisorAboutPage />} />
+            <Route path="loan-solutions" element={<AdvisorLoanSolutionsPage />} />
+            <Route path="tools" element={<AdvisorSmartToolsPage />} />
+            <Route path="resources" element={<AdvisorResourcesPage />} />
+            <Route path="contact" element={<AdvisorContactPage />} />
+          </Route>
           </Routes>
         </main>
         <FooterWhenNotAnalytics />
