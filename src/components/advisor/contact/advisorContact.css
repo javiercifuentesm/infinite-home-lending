@@ -123,7 +123,71 @@
   font-size: 1.25rem;
   font-weight: 600;
   line-height: 1.2;
-  color: #ff…335 tokens truncated…    flex-direction: column;
+  color: #fff;
+}
+
+.advisor-contact-studio__title {
+  margin: 0.3rem 0 0;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.advisor-contact-studio__nmls {
+  margin: 0.55rem 0 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: rgba(197, 160, 89, 0.85);
+}
+
+.advisor-contact-studio__signature {
+  display: block;
+  width: clamp(5.5rem, 12vw, 7rem);
+  height: auto;
+  margin-top: auto;
+  padding-top: 1.75rem;
+  object-fit: contain;
+  object-position: left bottom;
+  /* Invert black ink signature onto navy panel */
+  filter: brightness(0) invert(1);
+  opacity: 0.88;
+}
+
+@media (max-width: 1023px) {
+  .advisor-contact-studio__panel {
+    padding-block: 1.35rem 1.5rem;
+  }
+
+  .advisor-contact-studio__supporting {
+    max-width: none;
+  }
+
+  .advisor-contact-studio__identity {
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+  }
+
+  .advisor-contact-studio__signature {
+    margin-top: 1.25rem;
+    padding-top: 0;
+    width: 5.25rem;
+  }
+}
+
+/* Right — Calendly */
+.advisor-contact-studio__scheduler {
+  position: relative;
+  min-width: 0;
+  background: #fff;
+  border-top: 1px solid rgba(10, 25, 47, 0.06);
+}
+
+@media (min-width: 1024px) {
+  .advisor-contact-studio__scheduler {
+    flex: 1 1 64%;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
     border-top: none;
     border-left: 1px solid rgba(10, 25, 47, 0.06);
   }
