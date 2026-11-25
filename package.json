@@ -19,7 +19,7 @@
     "server:agent-v3": "tsx src/server/server.ts",
     "verify:horizon": "tsx src/lib/verifyHorizonMonotonicity.ts",
     "process-logo": ".venv/bin/python scripts/process-ihl-logo.py",
-    "verify:links": "node scripts/verify-individual-links.mjs"
+    "verify:links": "node scripts/verify-individual-links.mjs && node scripts/verify-alma-links.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.91.1",

@@ -164,11 +164,11 @@
     },
     {
       "source": "/Talk-to-Alma",
-      "destination": "https://alma-jaramillo-card.javiercifuentesm.chatgpt.site"
+      "destination": "/Talk-to-Alma/index.html"
     },
     {
-      "source": "/Talk-to-Alma/:path*",
-      "destination": "https://alma-jaramillo-card.javiercifuentesm.chatgpt.site/:path*"
+      "source": "/Talk-to-Alma/",
+      "destination": "/Talk-to-Alma/index.html"
     },
     {
       "source": "/talk-to-javier",
