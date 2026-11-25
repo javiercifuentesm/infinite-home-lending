@@ -51,6 +51,8 @@ export type LoanProductData = {
   modalDetail: LoanModalDetail;
   /** Subtle emphasis on grid (1–2 flagship cards) */
   featuredCard?: boolean;
+  /** Related programs shown in detail/modal contexts */
+  relatedProgramIds?: string[];
 };
 
 const SECONDARY_CTA = { label: "Speak with an advisor", to: "/contact" as const };

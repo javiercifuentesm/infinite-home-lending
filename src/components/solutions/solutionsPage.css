@@ -26,6 +26,15 @@
   }
 }
 
+/* Advisor loan-solutions embed: no company hero above this body */
+.solutions-page .sp-section--intro-no-handoff {
+  padding-top: clamp(3.5rem, 7vw, 5rem);
+}
+
+.solutions-page .sp-pathways--standalone {
+  margin-top: 0;
+}
+
 .solutions-page .sp-intro-glow {
   pointer-events: none;
   position: absolute;
@@ -750,10 +759,23 @@
   z-index: 1;
 }
 
-.solutions-page .solutions-program-card > a.loan-grid-card {
+.solutions-page .solutions-program-card > a.loan-grid-card,
+.solutions-page .solutions-program-card > button.loan-grid-card {
+
   position: relative;
   border-radius: 6px !important;
   overflow: hidden;
+}
+
+
+.solutions-page .solutions-program-card > button.loan-grid-card {
+  appearance: none;
+  -webkit-appearance: none;
+  background-clip: padding-box;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  width: 100%;
 }
 
 .solutions-page .loan-grid-card-accent {
@@ -980,11 +1002,13 @@
     gap: 0.5rem;
   }
 
-  .solutions-page .solutions-program-card > a.loan-grid-card:hover .loan-grid-card-accent {
+  .solutions-page .solutions-program-card > a.loan-grid-card:hover .loan-grid-card-accent,
+  .solutions-page .solutions-program-card > button.loan-grid-card:hover .loan-grid-card-accent {
     opacity: 1;
   }
 
-  .solutions-page .solutions-program-card > a.loan-grid-card:hover {
+  .solutions-page .solutions-program-card > a.loan-grid-card:hover,
+  .solutions-page .solutions-program-card > button.loan-grid-card:hover {
     transform: translateY(-4px);
     border-color: rgb(197 160 89 / 0.38) !important;
     box-shadow:
@@ -999,6 +1023,7 @@
   .solutions-page .sp-scenario-tile,
   .solutions-page .sp-tool-card,
   .solutions-page .solutions-program-card > a,
+  .solutions-page .solutions-program-card > button.loan-grid-card,
   .solutions-page .sp-framework-card-accent,
   .solutions-page .sp-framework-connector-line,
   .solutions-page .loan-grid-card-accent {
@@ -1009,7 +1034,8 @@
   .solutions-page .sp-pathway-card:hover,
   .solutions-page .sp-scenario-tile:hover,
   .solutions-page .sp-tool-card:hover,
-  .solutions-page .solutions-program-card > a:hover {
+  .solutions-page .solutions-program-card > a:hover,
+  .solutions-page .solutions-program-card > button.loan-grid-card:hover {
     transform: none;
   }
 }

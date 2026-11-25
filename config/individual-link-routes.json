@@ -213,11 +213,14 @@
     "public/home-equity-review/assets/home-equity-poster.jpg",
     "public/home-equity-review/assets/home-equity-education.mp4",
     "es-home.html",
-    "public/images/ihl-es-share-v1.png"
+    "public/images/ihl-es-share-v1.png",
+    "src/config/advisors/almaJaramillo.ts",
+    "src/components/advisor/contact/AdvisorHubSpotEmbed.tsx"
   ],
   "requiredAppRoutes": [
     "/free-consultation",
     "/free-consultation/es",
-    "/ES"
+    "/ES",
+    "/alma-jaramillo"
   ]
 }

@@ -1,0 +1,293 @@
+
+/* Advisor Loan Solutions — educational program modal */
+
+.advisor-loan-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  padding-bottom: max(1rem, env(safe-area-inset-bottom, 0px));
+  padding-top: max(1rem, env(safe-area-inset-top, 0px));
+  background: rgba(11, 42, 74, 0.48);
+}
+
+.advisor-loan-modal__dialog {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: min(100%, 860px);
+  max-height: min(92vh, 900px);
+  margin: 0;
+  background: #f7f7f5;
+  border: 1px solid rgba(11, 42, 74, 0.1);
+  border-radius: 4px;
+  box-shadow: 0 20px 48px -24px rgba(11, 42, 74, 0.35);
+  overflow: hidden;
+}
+
+@media (max-width: 639px) {
+  .advisor-loan-modal {
+    align-items: stretch;
+    padding: 0;
+  }
+
+  .advisor-loan-modal__dialog {
+    width: 100%;
+    max-height: none;
+    height: 100%;
+    border-radius: 0;
+    border: none;
+  }
+}
+
+.advisor-loan-modal__icon-close {
+  position: absolute;
+  top: 0.85rem;
+  right: 0.85rem;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  color: #2e2e2e;
+  background: transparent;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.advisor-loan-modal__icon-close:hover {
+  color: #0b2a4a;
+}
+
+.advisor-loan-modal__icon-close:focus-visible {
+  outline: 2px solid rgba(198, 161, 91, 0.7);
+  outline-offset: 2px;
+}
+
+.advisor-loan-modal__scroll {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 2rem 1.75rem 1.5rem;
+  padding-right: 3.25rem;
+  text-align: left;
+}
+
+@media (min-width: 640px) {
+  .advisor-loan-modal__scroll {
+    padding: 2.35rem 2.5rem 1.85rem;
+    padding-right: 3.6rem;
+  }
+}
+
+.advisor-loan-modal__meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.advisor-loan-modal__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  color: #c6a15b;
+  flex-shrink: 0;
+}
+
+.advisor-loan-modal__category {
+  margin: 0;
+  font-family: var(--font-sans, Inter, sans-serif);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #c6a15b;
+}
+
+.advisor-loan-modal__title {
+  margin: 0.85rem 0 0;
+  font-family: var(--font-heading, "Cormorant Garamond", serif);
+  font-size: clamp(1.85rem, 1.45rem + 1.15vw, 2.45rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.12;
+  color: #0b2a4a;
+  text-wrap: balance;
+}
+
+.advisor-loan-modal__headline {
+  margin: 0.85rem 0 0;
+  max-width: 42ch;
+  font-family: var(--font-sans, Inter, sans-serif);
+  font-size: 1.05rem;
+  font-weight: 500;
+  line-height: 1.55;
+  color: #0b2a4a;
+}
+
+.advisor-loan-modal__rule {
+  margin-top: 1.15rem;
+  height: 1px;
+  width: 2.5rem;
+  background: rgba(198, 161, 91, 0.65);
+}
+
+.advisor-loan-modal__overview {
+  margin: 1.35rem 0 0;
+  font-family: var(--font-sans, Inter, sans-serif);
+  font-size: 1.015rem;
+  line-height: 1.7;
+  color: #2e2e2e;
+}
+
+.advisor-loan-modal__section {
+  margin-top: 1.55rem;
+}
+
+.advisor-loan-modal__section--fit {
+  padding: 1.15rem 1.2rem;
+  background: #efe6d6;
+  border-radius: 3px;
+}
+
+.advisor-loan-modal__section-title {
+  margin: 0;
+  font-family: var(--font-sans, Inter, sans-serif);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #0b2a4a;
+}
+
+.advisor-loan-modal__list {
+  margin: 0.85rem 0 0;
+  padding-left: 1.15rem;
+  font-family: var(--font-sans, Inter, sans-serif);
+  font-size: 0.975rem;
+  line-height: 1.65;
+  color: #2e2e2e;
+}
+
+.advisor-loan-modal__list li + li {
+  margin-top: 0.45rem;
+}
+
+.advisor-loan-modal__disclaimer {
+  margin: 1.5rem 0 0;
+  font-family: var(--font-sans, Inter, sans-serif);
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: #64748b;
+}
+
+.advisor-loan-modal__footer {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem 1.75rem 1.35rem;
+  padding-bottom: max(1.35rem, env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid rgba(11, 42, 74, 0.08);
+  background: #f7f7f5;
+}
+
+@media (min-width: 640px) {
+  .advisor-loan-modal__footer {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 0.85rem 1rem;
+    padding: 1.15rem 2.5rem 1.5rem;
+  }
+}
+
+.advisor-loan-modal__cta-primary {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.advisor-loan-modal__cta-secondary {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1.25rem;
+  font-family: var(--font-sans, Inter, sans-serif);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #0b2a4a;
+  background: transparent;
+  border: 1px solid rgba(11, 42, 74, 0.28);
+  border-radius: 2px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.advisor-loan-modal__cta-secondary:hover {
+  border-color: #c6a15b;
+  color: #0b2a4a;
+}
+
+.advisor-loan-modal__cta-secondary:focus-visible {
+  outline: 2px solid rgba(198, 161, 91, 0.7);
+  outline-offset: 2px;
+}
+
+.advisor-loan-modal__cta-close {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 0.75rem;
+  font-family: var(--font-sans, Inter, sans-serif);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #0b2a4a;
+  background: transparent;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.advisor-loan-modal__cta-close:hover {
+  text-decoration-color: #c6a15b;
+}
+
+.advisor-loan-modal__cta-close:focus-visible {
+  outline: 2px solid rgba(198, 161, 91, 0.7);
+  outline-offset: 2px;
+}
+
+@media (max-width: 639px) {
+  .advisor-loan-modal__cta-primary,
+  .advisor-loan-modal__cta-secondary,
+  .advisor-loan-modal__cta-close {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .advisor-loan-modal,
+  .advisor-loan-modal__dialog {
+    transition: none;
+  }
+}
