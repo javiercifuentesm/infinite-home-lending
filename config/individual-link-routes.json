@@ -162,11 +162,11 @@
     },
     {
       "source": "/Talk-to-Alma",
-      "destination": "https://alma-jaramillo-card.javiercifuentesm.chatgpt.site"
+      "destination": "/Talk-to-Alma/index.html"
     },
     {
-      "source": "/Talk-to-Alma/:path*",
-      "destination": "https://alma-jaramillo-card.javiercifuentesm.chatgpt.site/:path*"
+      "source": "/Talk-to-Alma/",
+      "destination": "/Talk-to-Alma/index.html"
     },
     {
       "source": "/talk-to-javier",
@@ -215,7 +215,12 @@
     "es-home.html",
     "public/images/ihl-es-share-v1.png",
     "src/config/advisors/almaJaramillo.ts",
-    "src/components/advisor/contact/AdvisorHubSpotEmbed.tsx"
+    "src/components/advisor/contact/AdvisorHubSpotEmbed.tsx",
+    "public/Talk-to-Alma/qr.svg",
+    "public/Talk-to-Alma/index.html",
+    "public/Talk-to-Alma/ihl-logo.png",
+    "public/Talk-to-Alma/alma.jpeg",
+    "public/Talk-to-Alma/alma.vcf"
   ],
   "requiredAppRoutes": [
     "/free-consultation",
