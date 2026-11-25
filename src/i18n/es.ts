@@ -42,7 +42,7 @@ export const es = {
     "Guías hipotecarias para Washington, D.C. y Maryland—compra, refinanciamiento, tipos de préstamo y números explicados sin jerga. Encuentre respuestas claras antes de decidir.",
 
   // Footer
-  "footer.tagline": "Asesoría hipotecaria de alto nivel, diseñada alrededor de su vida — no solo de su tasa. Atendemos Washington, D.C. y Maryland",
+  "footer.tagline": "Asesoría hipotecaria de alto nivel, diseñada alrededor de su vida — no solo de su tasa. Atendemos Maryland, D.C. y Virginia",
   "footer.slogan": "Préstamos a su medida. Posibilidades infinitas.",
   "footer.company": "Empresa",
   "footer.resources": "Recursos",
@@ -61,9 +61,11 @@ export const es = {
   "footer.calculators": "Calculadoras",
   "footer.startPreApproval": "Iniciar pre-aprobación",
   "footer.rights": "Todos los derechos reservados.",
-  "footer.nmls": "Licenciado en Washington, D.C. y Maryland",
+  "footer.nmls": "Licenciado en MD, DC y VA.",
+  "footer.nmlsConsumerAccessPrefix": "Información de licencias disponible a través de ",
+  "footer.nmlsConsumerAccessLink": "NMLS Consumer Access",
   "footer.loanDisclaimer": "Todos los préstamos están sujetos a aprobación de crédito. Las tasas y condiciones pueden cambiar sin previo aviso.",
-  "footer.serving": "Atendemos Washington, D.C.",
+  "footer.serving": "Atendemos Maryland, D.C. y Virginia",
   "footer.privacy": "Política de privacidad",
   "footer.terms": "Términos de uso",
   "footer.compliance": "Cumplimiento",
@@ -2967,4 +2969,328 @@ export const es = {
   // Language toggle
   "lang.toggle.en": "EN",
   "lang.toggle.es": "ES",
+
+  // Alma advisor microsite
+  "advisor.nav.home": "Inicio",
+  "advisor.nav.about": "Sobre Mí",
+  "advisor.nav.loanSolutions": "Soluciones",
+  "advisor.nav.smartTools": "Herramientas",
+  "advisor.nav.resources": "Recursos",
+  "advisor.nav.contact": "Contacto",
+  "advisor.nav.applyNow": "SOLICITAR AHORA",
+  "advisor.cta.applyNow": "SOLICITAR AHORA",
+  "advisor.cta.talkWithMe": "Hable Conmigo",
+  "advisor.externalNav.eyebrow": "RECURSO DE INFINITE HOME LENDING",
+  "advisor.externalNav.headline": "Mantendremos la página de {name} abierta.",
+  "advisor.externalNav.body":
+    "Este recurso se abrirá en una nueva pestaña para que pueda continuar explorando sin perder su lugar.",
+  "advisor.externalNav.open": "ABRIR RECURSO",
+  "advisor.externalNav.stay": "QUEDARME AQUÍ",
+  "advisor.trustStrip.ariaLabel": "Licencias y credenciales",
+  "advisor.trustStrip.company": "Infinite Home Lending, L.L.C.",
+  "advisor.trustStrip.brokerage": "Correduría Hipotecaria Independiente",
+  "advisor.trustStrip.languages": "Inglés y Español",
+  "advisor.mobileCta.ariaLabel": "Acciones de contacto",
+  "advisor.footer.contactAdvisor": "Contacto",
+  "advisor.footer.applyNow": "Solicitar Ahora",
+
+  // Advisor — Alma Jaramillo
+  "advisor.alma.title": "Directora de Préstamos",
+  "advisor.alma.hero.eyebrow": "ALMA JARAMILLO · DIRECTORA DE PRÉSTAMOS",
+  "advisor.alma.hero.headline": "Una hipoteca debe comenzar por entenderle.",
+  "advisor.alma.hero.body":
+    "Ya sea que esté comprando, refinanciando, invirtiendo o explorando una manera diferente de calificar, le ayudaré a entender sus opciones, evaluar los diferentes caminos y encontrar una estrategia alineada con sus metas.",
+  "advisor.alma.hero.bodyMobile":
+    "Le ayudaré a entender sus opciones hipotecarias y encontrar un camino alineado con sus metas.",
+  "advisor.alma.hero.reassurance":
+    "¿No sabe por dónde empezar? Está bien. Podemos comenzar con una conversación.",
+  "advisor.alma.seo.title": "Alma Jaramillo | Directora de Préstamos | Infinite Home Lending",
+  "advisor.alma.seo.description":
+    "Trabaje con Alma Jaramillo, Directora de Préstamos en Infinite Home Lending. Orientación personalizada para comprar, refinanciar y calificar — en inglés y español.",
+
+  // Advisor homepage — shared CTAs
+  "advisor.home.cta.exploreSolution": "Explorar una solución",
+  "advisor.home.cta.tryTool": "Probar la herramienta",
+  "advisor.home.cta.exploreAllTools": "Explorar todas las herramientas",
+  "advisor.home.cta.viewAllLoanSolutions": "Ver todas las soluciones",
+  "advisor.home.cta.understandOptions": "Entienda sus opciones",
+  "advisor.home.cta.talkWithAlma": "Hable con Alma",
+  "advisor.home.goals.unsure.eyebrow": "¿NO SABE POR DÓNDE EMPEZAR?",
+
+  // Advisor homepage — Alma Jaramillo
+  "advisor.alma.home.goals.headline": "¿En qué puedo ayudarle?",
+  "advisor.alma.home.goals.intro":
+    "Comience con lo que desea lograr. Desde ahí podemos explorar el financiamiento.",
+  "advisor.alma.home.goals.buy.title": "Comprar una vivienda",
+  "advisor.alma.home.goals.buy.body": "Encuentre financiamiento alineado con sus metas.",
+  "advisor.alma.home.goals.refinance.title": "Refinanciar",
+  "advisor.alma.home.goals.refinance.body":
+    "Evalúe si cambiar su hipoteca realmente tiene sentido financiero.",
+  "advisor.alma.home.goals.equity.title": "Usar el patrimonio de mi vivienda",
+  "advisor.alma.home.goals.equity.body":
+    "Explore cómo su patrimonio puede apoyar el siguiente capítulo.",
+  "advisor.alma.home.goals.invest.title": "Invertir en bienes raíces",
+  "advisor.alma.home.goals.invest.body":
+    "Explore financiamiento diseñado para oportunidades de inversión.",
+  "advisor.alma.home.goals.unsure.title": "Aún no estoy seguro",
+  "advisor.alma.home.goals.unsure.body": "Está bien. Podemos comenzar con una conversación.",
+  "advisor.alma.home.spotlight.headline": "Más situaciones merecen más de una solución.",
+  "advisor.alma.home.spotlight.intro":
+    "El financiamiento adecuado depende de sus metas, finanzas, propiedad y estrategia — no de un producto genérico.",
+  "advisor.alma.home.spotlight.fha.label": "Primera vivienda / pago inicial bajo",
+  "advisor.alma.home.spotlight.selfEmployed.label": "Trabajadores independientes",
+  "advisor.alma.home.spotlight.investor.label": "Inversionistas inmobiliarios",
+  "advisor.alma.home.spotlight.equity.label": "Patrimonio de la vivienda",
+  "advisor.alma.home.featuredTool.headline": "Antes de decidir, revise los números.",
+  "advisor.alma.home.featuredTool.framing": "¿Compro ahora — o espero?",
+  "advisor.alma.home.featuredTool.supporting":
+    "Vea cómo esperar puede afectar su poder de compra, la plusvalía, el enganche y el patrimonio potencial.",
+  "advisor.alma.home.insight.eyebrow": "PERSPECTIVA HIPOTECARIA DE ALMA",
+  "advisor.alma.home.insight.headline":
+    "No necesariamente necesita un 20% de enganche para comprar una vivienda.",
+  "advisor.alma.home.insight.body":
+    "Según el programa de préstamo y sus calificaciones, pueden existir opciones de enganche significativamente más bajas.",
+  "advisor.alma.home.insight.disclaimer":
+    "Los programas, la elegibilidad y los requisitos de enganche varían. Esta es información educativa general — no una oferta de préstamo.",
+  "advisor.alma.home.journey.headline":
+    "La orientación hipotecaria no tiene que sentirse complicada.",
+  "advisor.alma.home.journey.step1.title": "Comenzamos con usted",
+  "advisor.alma.home.journey.step1.body": "Cuénteme qué desea lograr.",
+  "advisor.alma.home.journey.step2.title": "Exploramos las posibilidades",
+  "advisor.alma.home.journey.step2.body":
+    "Revisaremos estrategias y opciones de préstamo que se ajusten a su situación.",
+  "advisor.alma.home.journey.step3.title": "Entendemos los números",
+  "advisor.alma.home.journey.step3.body":
+    "Repasaremos costos, compensaciones y lo que cada opción realmente significa.",
+  "advisor.alma.home.journey.step4.title": "Usted decide con claridad",
+  "advisor.alma.home.journey.step4.body": "Sin presión. Solo un camino que entienda.",
+  "advisor.alma.home.trust.headline": "Orientación respaldada por una correduría hipotecaria independiente.",
+  "advisor.alma.home.trust.body":
+    "Infinite Home Lending fue creada en torno a la claridad, la planificación estratégica y el acceso directo a profesionales hipotecarios con experiencia — en inglés y español.",
+  "advisor.alma.home.closing.headline": "No tiene que saber exactamente por dónde empezar.",
+  "advisor.alma.home.closing.body": "Cuénteme qué tiene en mente. Tomaremos el camino desde ahí.",
+  "advisor.alma.home.closing.reassurance":
+    "Sin presión. Solo una conversación sobre sus opciones.",
+
+  // Advisor placeholders
+  "advisor.placeholder.about": "Sobre Mí",
+  "advisor.placeholder.loanSolutions": "Soluciones Hipotecarias",
+  "advisor.placeholder.tools": "Herramientas Inteligentes",
+  "advisor.placeholder.resources": "Recursos",
+  "advisor.placeholder.contact": "Contácteme",
+  "advisor.placeholder.body":
+    "Esta página estará disponible pronto. Mientras tanto, puede solicitar en línea o comunicarse para iniciar una conversación.",
+  "advisor.placeholder.metaDescription":
+    "Página del asesor en Infinite Home Lending — contenido próximamente.",
+
+  // Advisor About — shared
+  "advisor.about.intro.eyebrow": "SOBRE MÍ",
+  "advisor.about.credibility.ariaLabel": "Credenciales del asesor",
+
+  // Advisor About — Alma Jaramillo
+  "advisor.alma.about.intro.headline": "La orientación hipotecaria debe comenzar por entenderle a usted.",
+  "advisor.alma.about.intro.body":
+    "Cada cliente tiene una historia, metas y prioridades diferentes. Antes de hablar sobre opciones de préstamo, quiero entender qué es lo más importante para usted y luego ayudarle a construir un camino alrededor de ello.",
+  "advisor.alma.about.meet.label": "CONOZCA A ALMA",
+  "advisor.alma.about.meet.headline":
+    "El crédito hipotecario debe sentirse como orientación, no como una transacción.",
+  "advisor.alma.about.meet.imageAlt":
+    "Una pareja sonriente abrazándose frente a su vivienda",
+  "advisor.alma.about.meet.p1":
+    "Alma cree que las mejores conversaciones hipotecarias comienzan por entender a la persona antes de hablar sobre el producto. Cada cliente llega con un panorama financiero distinto, prioridades diferentes y una definición propia de lo que significa un resultado exitoso.",
+  "advisor.alma.about.meet.p2":
+    "Esa filosofía ayudó a dar forma a Infinite Home Lending: una correduría hipotecaria independiente construida alrededor de la claridad, la planificación estratégica y el acceso directo a profesionales hipotecarios con experiencia. Juntos, los fundadores de IHL aportan más de 40 años de experiencia combinada en la industria hipotecaria y han ayudado a guiar a más de 1,000 familias en decisiones de financiamiento importantes.",
+  "advisor.alma.about.meet.p3":
+    "Para Alma, el trabajo no consiste simplemente en colocar un préstamo. Se trata de ayudar a los clientes a entender cómo las diferentes estructuras de financiamiento pueden afectar su pago, flexibilidad, posición de efectivo y metas a largo plazo—y mantenerse involucrada desde la primera conversación hasta el cierre.",
+  "advisor.alma.about.meet.p4":
+    "Ya sea que un cliente esté comprando, refinanciando, invirtiendo, sea trabajador independiente o explore una forma menos tradicional de calificar, el enfoque de Alma se mantiene igual: escuchar primero, explicar con claridad y construir la estrategia alrededor del cliente.",
+  "advisor.alma.about.whyIhl.eyebrow": "POR QUÉ INFINITE HOME LENDING",
+  "advisor.alma.about.whyIhl.headline":
+    "Construido alrededor de la forma en que la orientación hipotecaria debe funcionar.",
+  "advisor.alma.about.whyIhl.intro":
+    "Infinite Home Lending fue creado en torno a una idea simple: los clientes merecen más que una cotización. Merecen claridad, estructura y un profesional hipotecario que entienda el panorama completo antes de recomendar un camino.",
+  "advisor.alma.about.whyIhl.1.title": "Claridad Primero",
+  "advisor.alma.about.whyIhl.1.body":
+    "Las decisiones de financiamiento complejas deben explicarse de una manera que haga que las opciones, las diferencias y los próximos pasos sean fáciles de entender.",
+  "advisor.alma.about.whyIhl.2.title": "Préstamos Estratégicos",
+  "advisor.alma.about.whyIhl.2.body":
+    "La estructura hipotecaria adecuada debe apoyar las metas financieras más amplias del cliente—no simplemente resolver la tasa de hoy.",
+  "advisor.alma.about.whyIhl.3.title": "Servicio Personalizado",
+  "advisor.alma.about.whyIhl.3.body":
+    "Los clientes trabajan directamente con profesionales hipotecarios con experiencia y reciben orientación proactiva durante todo el proceso.",
+  "advisor.alma.about.principles.heading": "CÓMO ABORDO SU HIPOTECA",
+  "advisor.alma.about.principles.1.title": "Primero escucho.",
+  "advisor.alma.about.principles.1.body":
+    "Sus metas y limitaciones vienen antes de cualquier conversación sobre productos.",
+  "advisor.alma.about.principles.2.title": "Le explico las diferencias.",
+  "advisor.alma.about.principles.2.body":
+    "Debe entender cómo cada opción puede afectar su pago, plazo y flexibilidad—no solo la tasa.",
+  "advisor.alma.about.principles.3.title": "Le acompaño durante el proceso.",
+  "advisor.alma.about.principles.3.body":
+    "Desde la primera conversación hasta el cierre, siempre debe saber en qué etapa se encuentra y qué sigue.",
+  "advisor.alma.about.credibility.languages": "Inglés y Español",
+  "advisor.alma.about.credibility.region": "Washington, D.C. y Maryland",
+  "advisor.alma.about.audiences.heading": "A QUIÉN AYUDO",
+  "advisor.alma.about.audiences.intro":
+    "Ya sea que esté comprando su primera vivienda, buscando su próximo hogar, refinanciando, invirtiendo o explorando una manera diferente de calificar, mi función es ayudarle a entender el camino que tiene frente a usted.",
+  "advisor.alma.about.audiences.1.title": "Compradores de Vivienda",
+  "advisor.alma.about.audiences.1.body":
+    "Comprando su primera vivienda o planificando su próxima mudanza.",
+  "advisor.alma.about.audiences.2.title": "Propietarios",
+  "advisor.alma.about.audiences.2.body":
+    "Explorando opciones de refinanciamiento o maneras de utilizar el patrimonio de su vivienda.",
+  "advisor.alma.about.audiences.3.title": "Inversionistas de Bienes Raíces",
+  "advisor.alma.about.audiences.3.body":
+    "Evaluando financiamiento para propiedades de inversión elegibles.",
+  "advisor.alma.about.audiences.4.title": "Trabajadores Independientes y Perfiles No Tradicionales",
+  "advisor.alma.about.audiences.4.body":
+    "Explorando opciones de financiamiento que puedan utilizar formas alternativas de documentación de ingresos.",
+  "advisor.alma.about.closing.headline": "Comencemos con sus metas.",
+  "advisor.alma.about.closing.body":
+    "No necesita saber qué programa hipotecario necesita antes de hablar conmigo. Cuénteme qué desea lograr y podemos comenzar por ahí.",
+  "advisor.alma.about.seo.title":
+    "Sobre Alma Jaramillo | Directora de Préstamos | Infinite Home Lending",
+  "advisor.alma.about.seo.description":
+    "Conozca a Alma Jaramillo, Directora de Préstamos en Infinite Home Lending, y descubra su enfoque personal y educativo para ayudar a los clientes a entender sus opciones hipotecarias.",
+
+  // Advisor Loan Solutions — shared
+  "advisor.loanSolutions.eyebrow": "SOLUCIONES HIPOTECARIAS",
+  "advisor.loanSolutions.closing.eyebrow": "¿NO ESTÁ SEGURO QUÉ OPCIÓN LE CONVIENE?",
+
+  // Advisor Loan Solutions — educational program modal chrome
+  "advisor.loanSolutions.modal.close": "Cerrar",
+  "advisor.loanSolutions.modal.talkWithAdvisor": "Hable Con {name}",
+  "advisor.loanSolutions.modal.viewFullProgram": "Ver Programa Completo",
+  "advisor.loanSolutions.modal.couldBeFit": "¿Podría Ser Adecuado?",
+  "advisor.loanSolutions.modal.whyConsider": "Por Qué Lo Consideran Los Clientes",
+  "advisor.loanSolutions.modal.keepInMind": "Tenga En Cuenta",
+
+  // Advisor Loan Solutions — Alma Jaramillo
+  "advisor.alma.loanSolutions.intro.headline":
+    "El préstamo hipotecario adecuado comienza por entender sus opciones.",
+  "advisor.alma.loanSolutions.intro.body":
+    "Cada prestatario tiene un panorama financiero diferente. Explore las soluciones de préstamo disponibles a través de Infinite Home Lending y, cuando esté listo, le ayudaré a entender qué opciones pueden alinearse con sus metas.",
+  "advisor.alma.loanSolutions.closing.headline": "No tiene que resolverlo solo.",
+  "advisor.alma.loanSolutions.closing.body":
+    "Cuénteme qué desea lograr y comenzaremos por entender sus metas y explorar las opciones que puedan encajar.",
+  "advisor.alma.loanSolutions.seo.title":
+    "Soluciones Hipotecarias | Alma Jaramillo | Infinite Home Lending",
+  "advisor.alma.loanSolutions.seo.description":
+    "Explore soluciones de préstamos hipotecarios con Alma Jaramillo en Infinite Home Lending, incluyendo opciones para compradores de vivienda, propietarios, inversionistas, trabajadores independientes y otras necesidades de financiamiento.",
+
+  // Advisor Smart Tools — shared
+  "advisor.smartTools.eyebrow": "HERRAMIENTAS INTELIGENTES",
+  "advisor.smartTools.featuredEyebrow": "COMIENCE AQUÍ",
+  "advisor.smartTools.featuredTitle": "Comience con las decisiones que más importan.",
+  "advisor.smartTools.featuredSupport":
+    "Estas herramientas están diseñadas para ayudarle a evaluar las preguntas que a menudo definen el siguiente paso.",
+  "advisor.smartTools.featuredBadge": "Destacada",
+  "advisor.smartTools.secondaryBadge": "También destacada",
+  "advisor.smartTools.directoryEyebrow": "DIRECTORIO DE HERRAMIENTAS",
+  "advisor.smartTools.directoryTitle": "Explore según lo que necesita entender.",
+  "advisor.smartTools.directorySupport":
+    "Encuentre las herramientas que coinciden con la decisión que tiene frente a usted.",
+  "advisor.smartTools.launch": "Abrir herramienta",
+  "advisor.smartTools.intent.buying": "Comprar una Vivienda",
+  "advisor.smartTools.intent.comparing": "Comparar Opciones",
+  "advisor.smartTools.intent.payments": "Pagos y Creación de Patrimonio",
+  "advisor.smartTools.intent.equity": "Usar el Patrimonio de la Vivienda",
+  "advisor.smartTools.closing.eyebrow": "¿NECESITA AYUDA PARA ENTENDER LOS NÚMEROS?",
+
+  // Advisor Smart Tools — Alma Jaramillo
+  "advisor.alma.smartTools.intro.headline":
+    "Mejores decisiones comienzan con mejor información.",
+  "advisor.alma.smartTools.intro.body":
+    "Explore herramientas diseñadas para ayudarle a entender los números, comparar posibilidades y prepararse para las conversaciones que importan.",
+  "advisor.alma.smartTools.closing.headline":
+    "Las herramientas pueden informarle. Yo le ayudo a ponerlas en contexto.",
+  "advisor.alma.smartTools.closing.body":
+    "Use estas herramientas para explorar las posibilidades y luego hablemos sobre lo que los números pueden significar para sus metas.",
+  "advisor.alma.smartTools.seo.title":
+    "Herramientas Hipotecarias Inteligentes | Alma Jaramillo | Infinite Home Lending",
+  "advisor.alma.smartTools.seo.description":
+    "Explore herramientas hipotecarias con Alma Jaramillo en Infinite Home Lending para entender pagos, comparar opciones y tomar decisiones de financiamiento más informadas.",
+
+  // Advisor Resources — shared
+  "advisor.resources.eyebrow": "RECURSOS",
+  "advisor.resources.featuredEyebrow": "COMIENCE POR ENTENDER",
+  "advisor.resources.featuredTitle":
+    "Aprendizaje fundamental para decisiones más claras.",
+  "advisor.resources.featuredSupport":
+    "Estos caminos guiados le ayudan a construir contexto antes de elegir una dirección de financiamiento.",
+  "advisor.resources.featuredBadge": "Destacado",
+  "advisor.resources.secondaryBadge": "También destacado",
+  "advisor.resources.startEyebrow": "¿ES NUEVO EN EL PROCESO HIPOTECARIO?",
+  "advisor.resources.startTitle": "Comience aquí.",
+  "advisor.resources.startSupport":
+    "Una secuencia breve de caminos fundamentales si todavía se está orientando.",
+  "advisor.resources.directoryEyebrow": "CAMINOS DE APRENDIZAJE",
+  "advisor.resources.directoryTitle": "Explore según lo que desea entender.",
+  "advisor.resources.directorySupport":
+    "Continúe con los caminos que coinciden con la siguiente pregunta que tiene en mente.",
+  "advisor.resources.explore": "Explorar",
+  "advisor.resources.path.orientation": "Orientación Inicial",
+  "advisor.resources.path.buying": "Comprar una Vivienda",
+  "advisor.resources.path.numbers": "Entender los Números",
+  "advisor.resources.path.loanOptions": "Elegir Opciones de Préstamo",
+  "advisor.resources.path.refinance": "Refinanciamiento y Patrimonio",
+  "advisor.resources.path.quickAnswers": "Respuestas Rápidas",
+  "advisor.resources.closing.eyebrow": "¿TIENE ALGUNA PREGUNTA SOBRE LO QUE ESTÁ LEYENDO?",
+
+  // Advisor Resources — Alma Jaramillo
+  "advisor.alma.resources.intro.headline":
+    "Mientras más entienda, mejores decisiones podrá tomar.",
+  "advisor.alma.resources.intro.body":
+    "Explore educación hipotecaria, orientación práctica y recursos útiles diseñados para ayudarle a comprender mejor el proceso de financiamiento.",
+  "advisor.alma.resources.closing.headline":
+    "La información es útil. El contexto ayuda a convertirla en acción.",
+  "advisor.alma.resources.closing.body":
+    "Si algún tema genera una pregunta sobre su propia situación, conversemos sobre ello.",
+  "advisor.alma.resources.seo.title":
+    "Recursos Hipotecarios | Alma Jaramillo | Infinite Home Lending",
+  "advisor.alma.resources.seo.description":
+    "Explore educación hipotecaria y recursos prácticos de financiamiento con Alma Jaramillo en Infinite Home Lending.",
+
+  // Advisor Contact — shared chrome
+  "advisor.contact.scheduler.ariaLabel": "Programar una conversación",
+  "advisor.contact.scheduler.loading": "Cargando calendario…",
+  "advisor.contact.scheduler.fallbackTitle": "¿Tiene problemas para cargar el calendario?",
+  "advisor.contact.scheduler.fallbackBody":
+    "Puede abrir la página de programación directamente y elegir un horario que le funcione.",
+  "advisor.contact.scheduler.fallbackCta": "Abrir programación",
+  "advisor.contact.scheduler.unavailableTitle": "La programación aún no está disponible",
+  "advisor.contact.scheduler.unavailableBody":
+    "Vuelva a intentar pronto, o comuníquese usando los datos de contacto en el pie de página.",
+
+  // Advisor Contact — Alma Jaramillo
+  "advisor.alma.contact.intro.headline": "Hablemos de lo que quiere lograr.",
+  "advisor.alma.contact.intro.body":
+    "Ya sea que esté comprando, refinanciando, invirtiendo, explorando el valor acumulado de su vivienda o simplemente no sepa por dónde comenzar, elija un horario que le funcione. Empezaremos con una conversación.",
+  "advisor.alma.contact.studio.eyebrow": "AGENDE UNA CONVERSACIÓN",
+  "advisor.alma.contact.studio.heading": "Elija un horario que le funcione.",
+  "advisor.alma.contact.studio.supporting":
+    "Empezaremos por lo que tiene en mente, entenderemos lo que quiere lograr y avanzaremos desde ahí.",
+  "advisor.alma.contact.journey.headline": "Una conversación, no un compromiso.",
+  "advisor.alma.contact.journey.supporting":
+    "No necesita tener todo resuelto antes de hablar.",
+  "advisor.alma.contact.journey.step1.title": "Elija un Horario",
+  "advisor.alma.contact.journey.step1.body": "Seleccione el momento que mejor le funcione.",
+  "advisor.alma.contact.journey.step2.title": "Cuénteme Dónde Está",
+  "advisor.alma.contact.journey.step2.body":
+    "Compra, refinanciamiento, inversión — o simplemente explorando.",
+  "advisor.alma.contact.journey.step3.title": "Lo Vemos Juntos",
+  "advisor.alma.contact.journey.step3.body":
+    "Hablaremos sobre las opciones que puedan ajustarse a sus objetivos.",
+  "advisor.alma.contact.reassurance.headline": "¿No sabe por dónde empezar?",
+  "advisor.alma.contact.reassurance.body":
+    "No hay problema. No necesita saber qué préstamo o estrategia es la adecuada antes de hablar. Elija un horario que le funcione y lo veremos juntos.",
+  "advisor.alma.contact.seo.title":
+    "Contacto Alma Jaramillo | Programe una conversación | Infinite Home Lending",
+  "advisor.alma.contact.seo.description":
+    "Programe una conversación con Alma Jaramillo, Directora de Préstamos en Infinite Home Lending. Elija un horario que le funcione — en inglés o español.",
+
+  // Advisor Resources — educational modal chrome (shared educational copy: data/resourceModalSummaries.ts)
+  "advisor.resources.modal.close": "Cerrar",
+  "advisor.resources.modal.talkWithAdvisor": "Hable Con {name}",
+  "advisor.resources.modal.learnMore": "Conozca Más",
 };

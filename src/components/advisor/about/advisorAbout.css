@@ -1,0 +1,618 @@
+
+/* =============================================================================
+   Advisor About page — unified editorial system
+   ============================================================================= */
+
+.advisor-about {
+  --about-section-y: clamp(3.75rem, 7.5vw, 5.75rem);
+  --about-header-max: 42rem;
+  --about-intro-body-max: 38rem;
+  --about-body-max: 38rem;
+  --about-manifesto-gap: clamp(3rem, 6vw, 4.25rem);
+  background: #f7f7f5;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Shared section header                                                      */
+/* -------------------------------------------------------------------------- */
+
+.advisor-about-section-header {
+  max-width: var(--about-header-max);
+}
+
+.advisor-about-section-header--center {
+  margin-inline: auto;
+  text-align: center;
+}
+
+.advisor-about-section-header--left {
+  text-align: left;
+}
+
+.advisor-about-section-header__eyebrow {
+  margin: 0;
+}
+
+.advisor-about-section-header__headline {
+  margin: 0.875rem 0 0;
+  text-wrap: balance;
+  font-size: clamp(1.75rem, 1.45rem + 1.1vw, 2.375rem);
+  line-height: 1.18;
+}
+
+.advisor-about-section-header__headline--page {
+  margin-top: 1rem;
+}
+
+.advisor-about-section-header__headline--meet {
+  max-width: 22rem;
+}
+
+@media (min-width: 640px) {
+  .advisor-about-section-header__headline--meet {
+    max-width: 26rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .advisor-about-section-header__headline--meet {
+    max-width: none;
+  }
+}
+
+.advisor-about-section-header__rule {
+  margin-top: 1.125rem;
+  height: 1px;
+  width: 2.5rem;
+  background: rgba(197, 160, 89, 0.55);
+}
+
+.advisor-about-section-header--center .advisor-about-section-header__rule {
+  margin-inline: auto;
+}
+
+.advisor-about-section-header__intro {
+  margin: 1.375rem 0 0;
+  max-width: var(--about-intro-body-max);
+  line-height: 1.72;
+}
+
+.advisor-about-section-header--center .advisor-about-section-header__intro {
+  margin-inline: auto;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Page intro — uses shared `.advisor-page-intro` in advisorSite.css         */
+/* -------------------------------------------------------------------------- */
+
+/* -------------------------------------------------------------------------- */
+/* Meet Alma                                                                  */
+/* -------------------------------------------------------------------------- */
+
+.advisor-about-meet {
+  padding-block: var(--about-section-y);
+  background: #fff;
+  border-bottom: 1px solid rgba(10, 25, 47, 0.06);
+}
+
+.advisor-about-meet__layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(2rem, 4vw, 2.75rem);
+}
+
+@media (min-width: 1024px) {
+  .advisor-about-meet__layout {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    column-gap: clamp(2.5rem, 4.5vw, 3.75rem);
+    row-gap: clamp(1.75rem, 3vw, 2.25rem);
+    align-items: start;
+  }
+
+  .advisor-about-meet__layout > .advisor-about-section-header {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .advisor-about-meet__figure {
+    grid-column: 2;
+    grid-row: 1 / 3;
+    justify-self: end;
+    align-self: start;
+  }
+
+  .advisor-about-meet__bio {
+    grid-column: 1;
+    grid-row: 2;
+  }
+}
+
+.advisor-about-meet__figure {
+  width: 100%;
+  max-width: min(28rem, 92vw);
+  margin-inline: auto;
+}
+
+@media (min-width: 640px) {
+  .advisor-about-meet__figure {
+    max-width: min(30rem, 88vw);
+  }
+}
+
+@media (min-width: 1024px) {
+  .advisor-about-meet__figure {
+    max-width: clamp(26rem, 38vw, 32rem);
+    margin-inline: 0;
+  }
+}
+
+.advisor-about-meet__bio {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  max-width: var(--about-body-max);
+}
+
+.advisor-about-meet__bio .type-body {
+  line-height: 1.72;
+  margin: 0;
+}
+
+/* Portrait treatments */
+.advisor-about-image {
+  margin: 0;
+}
+
+.advisor-about-image__frame {
+  overflow: hidden;
+  border: 1px solid rgba(197, 160, 89, 0.22);
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: 0 18px 48px -16px rgba(10, 25, 47, 0.18);
+}
+
+.advisor-about-image__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+}
+
+.advisor-about-image--compact .advisor-about-image__frame {
+  box-shadow: 0 12px 32px -14px rgba(10, 25, 47, 0.14);
+}
+
+.advisor-about-image--compact .advisor-about-image__img {
+  aspect-ratio: 1 / 1;
+}
+
+.advisor-about-image--editorial {
+  position: relative;
+  padding: 0.65rem 0.65rem 0 0;
+}
+
+.advisor-about-image--editorial::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 1.25rem;
+  left: 1.25rem;
+  border-radius: 4px;
+  background: #f3f0ea;
+  z-index: 0;
+}
+
+.advisor-about-image--editorial .advisor-about-image__frame {
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 16px 40px -14px rgba(10, 25, 47, 0.16);
+}
+
+.advisor-about-image--editorial .advisor-about-image__img {
+  aspect-ratio: 4 / 5;
+}
+
+.advisor-about-meet__figure.advisor-about-image--editorial .advisor-about-image__img {
+  aspect-ratio: 766 / 1024;
+  object-position: center 38%;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Why Infinite Home Lending — manifesto                                      */
+/* -------------------------------------------------------------------------- */
+
+.advisor-about-why-ihl {
+  padding-block: var(--about-section-y);
+  background: #f7f7f5;
+}
+
+.advisor-about-why-ihl__manifesto {
+  list-style: none;
+  margin: var(--about-manifesto-gap) 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(2rem, 4vw, 2.75rem);
+}
+
+@media (min-width: 768px) {
+  .advisor-about-why-ihl__manifesto {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+    border-top: 1px solid rgba(197, 160, 89, 0.35);
+    padding-top: clamp(2rem, 4vw, 2.75rem);
+  }
+}
+
+.advisor-about-why-ihl__item {
+  position: relative;
+  padding-top: 0.25rem;
+}
+
+@media (min-width: 768px) {
+  .advisor-about-why-ihl__item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-height: 100%;
+    padding: 0 clamp(1.25rem, 2.5vw, 2rem);
+  }
+
+  .advisor-about-why-ihl__item:first-child {
+    padding-left: 0;
+  }
+
+  .advisor-about-why-ihl__item:last-child {
+    padding-right: 0;
+  }
+
+  .advisor-about-why-ihl__item:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 1px;
+    height: 100%;
+    background: rgba(10, 25, 47, 0.08);
+  }
+}
+
+@media (max-width: 767px) {
+  .advisor-about-why-ihl__item {
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(197, 160, 89, 0.35);
+  }
+
+  .advisor-about-why-ihl__item:first-child {
+    padding-top: 0;
+    border-top: none;
+  }
+}
+
+.advisor-about-why-ihl__index {
+  display: block;
+  margin-bottom: 1rem;
+  font-family: var(--font-sans, Inter, sans-serif);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: #c5a059;
+}
+
+.advisor-about-why-ihl__title {
+  margin: 0;
+  font-family: var(--font-heading, "Cormorant Garamond", serif);
+  font-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.375rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  color: #0a192f;
+}
+
+.advisor-about-why-ihl__body {
+  margin: 0.875rem 0 0;
+  line-height: 1.68;
+  color: #475569;
+}
+
+/* -------------------------------------------------------------------------- */
+/* How I approach — horizontal timeline                                       */
+/* -------------------------------------------------------------------------- */
+
+.advisor-about-principles {
+  padding-block: var(--about-section-y);
+  background: #fff;
+  border-top: 1px solid rgba(10, 25, 47, 0.06);
+  border-bottom: 1px solid rgba(10, 25, 47, 0.06);
+}
+
+.advisor-about-principles__timeline {
+  list-style: none;
+  margin: var(--about-manifesto-gap) 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(2rem, 4vw, 2.75rem);
+}
+
+@media (min-width: 1024px) {
+  .advisor-about-principles__timeline {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+    border-top: 1px solid rgba(10, 25, 47, 0.07);
+    padding-top: clamp(2rem, 4vw, 2.75rem);
+  }
+}
+
+.advisor-about-principles__item {
+  position: relative;
+  padding-top: 0.25rem;
+}
+
+@media (min-width: 1024px) {
+  .advisor-about-principles__item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0 clamp(1.25rem, 2.5vw, 2rem);
+  }
+
+  .advisor-about-principles__item:first-child {
+    padding-left: 0;
+  }
+
+  .advisor-about-principles__item:last-child {
+    padding-right: 0;
+  }
+
+  .advisor-about-principles__item:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 1px;
+    height: 100%;
+    background: rgba(10, 25, 47, 0.07);
+  }
+}
+
+@media (max-width: 1023px) {
+  .advisor-about-principles__item {
+    padding-bottom: clamp(2rem, 4vw, 2.5rem);
+    border-bottom: 1px solid rgba(10, 25, 47, 0.07);
+  }
+
+  .advisor-about-principles__item:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+}
+
+.advisor-about-principles__num {
+  display: block;
+  margin-bottom: 1rem;
+  font-family: var(--font-sans, Inter, sans-serif);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: #c5a059;
+}
+
+.advisor-about-principles__title {
+  margin: 0;
+  font-family: var(--font-heading, "Cormorant Garamond", serif);
+  font-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.375rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  color: #0a192f;
+}
+
+.advisor-about-principles__body {
+  margin: 0.875rem 0 0;
+  line-height: 1.72;
+  color: #475569;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Credibility strip                                                          */
+/* -------------------------------------------------------------------------- */
+
+.advisor-about-credibility {
+  background: #1b2a4a;
+  border-top: 1px solid rgba(201, 168, 76, 0.35);
+}
+
+.advisor-about-credibility__inner {
+  padding-block: 0.9375rem;
+}
+
+.advisor-about-credibility__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+@media (min-width: 768px) {
+  .advisor-about-credibility__list {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0;
+    align-items: center;
+  }
+}
+
+.advisor-about-credibility__item {
+  padding: 0.375rem 0.875rem;
+  font-family: var(--font-sans, Inter, sans-serif);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.95);
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .advisor-about-credibility__item {
+    padding: 0.375rem 1rem;
+  }
+}
+
+.advisor-about-credibility__sep {
+  width: 1px;
+  height: 1rem;
+  background: rgba(201, 168, 76, 0.45);
+  list-style: none;
+}
+
+@media (min-width: 768px) {
+  .advisor-about-credibility__sep {
+    display: none;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Who I help — editorial tiles                                               */
+/* -------------------------------------------------------------------------- */
+
+.advisor-about-audiences {
+  padding-block: var(--about-section-y);
+  background: #f7f7f5;
+}
+
+.advisor-about-audiences__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+  margin-top: var(--about-manifesto-gap);
+  list-style: none;
+  padding: 0;
+}
+
+@media (min-width: 640px) {
+  .advisor-about-audiences__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem 1.5rem;
+  }
+}
+
+.advisor-about-audiences__tile {
+  background: #fff;
+  border: 1px solid rgba(10, 25, 47, 0.08);
+  border-top: 2px solid rgba(197, 160, 89, 0.5);
+  border-radius: 4px;
+  padding: 1.375rem 1.5rem 1.5rem;
+}
+
+.advisor-about-audiences__index {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-family: var(--font-sans, Inter, sans-serif);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: #c5a059;
+}
+
+.advisor-about-audiences__title {
+  margin: 0;
+  font-family: var(--font-heading, "Cormorant Garamond", serif);
+  font-size: clamp(1.125rem, 1rem + 0.35vw, 1.25rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  color: #0a192f;
+}
+
+.advisor-about-audiences__body {
+  margin: 0.625rem 0 0;
+  line-height: 1.68;
+  color: #475569;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Closing CTA                                                                */
+/* -------------------------------------------------------------------------- */
+
+.advisor-about-closing {
+  position: relative;
+  overflow: hidden;
+  padding-block: var(--about-section-y);
+  background: #0a192f;
+}
+
+.advisor-about-closing::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 80% 20%, rgba(197, 160, 89, 0.08), transparent 45%);
+}
+
+.advisor-about-closing__inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 40rem;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.advisor-about-closing__headline {
+  margin: 0;
+  text-wrap: balance;
+  font-size: clamp(1.75rem, 1.45rem + 1.1vw, 2.375rem);
+  line-height: 1.18;
+}
+
+.advisor-about-closing__body {
+  margin: 1.375rem 0 0;
+  max-width: 36rem;
+  line-height: 1.72;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.advisor-about-closing__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 2rem;
+  width: 100%;
+  max-width: 28rem;
+}
+
+@media (min-width: 640px) {
+  .advisor-about-closing__actions {
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+    max-width: none;
+    width: auto;
+  }
+}
+
+.advisor-about-closing__cta-primary,
+.advisor-about-closing__cta-secondary {
+  display: inline-flex;
+  min-height: 3.25rem;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+@media (max-width: 639px) {
+  .advisor-about-closing__cta-primary,
+  .advisor-about-closing__cta-secondary {
+    width: 100%;
+  }
+}

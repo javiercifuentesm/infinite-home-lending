@@ -12,6 +12,7 @@ export type PageMetadataOptions = {
   ogTitle?: string;
   ogDescription?: string;
   ogUrl?: string;
+  ogImage?: string;
 };
 
 function formatTitle(title: string): string {
@@ -54,7 +55,7 @@ function clearManagedPageMetadata(): void {
 
 /** Sets document title + meta description (and optional OG/canonical), with cleanup on unmount. */
 export function usePageMetadata(options: PageMetadataOptions): void {
-  const { title, description, canonical, ogTitle, ogDescription, ogUrl } = options;
+  const { title, description, canonical, ogTitle, ogDescription, ogUrl, ogImage } = options;
 
   useEffect(() => {
     document.title = formatTitle(title);
@@ -62,8 +63,9 @@ export function usePageMetadata(options: PageMetadataOptions): void {
     if (ogTitle) setManagedMeta("property", "og:title", ogTitle);
     if (ogDescription) setManagedMeta("property", "og:description", ogDescription);
     if (ogUrl) setManagedMeta("property", "og:url", ogUrl);
+    if (ogImage) setManagedMeta("property", "og:image", ogImage);
     if (canonical) setManagedCanonical(canonical);
 
     return clearManagedPageMetadata;
-  }, [title, description, canonical, ogTitle, ogDescription, ogUrl]);
+  }, [title, description, canonical, ogTitle, ogDescription, ogUrl, ogImage]);
 }
