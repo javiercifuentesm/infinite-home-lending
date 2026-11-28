@@ -1,5 +1,6 @@
 import { Router } from "express";
 import Anthropic from "@anthropic-ai/sdk";
+import { SONNET_55_OPTIONS, readTextBlocks } from "./sonnet55";
 import { getCachedBrief, getCacheStats } from "./intelligenceBriefCache";
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY ?? "" });
@@ -89,16 +90,16 @@ Article content: ${articleContent}
 Follow the exact format specified. Be precise, agent-focused, and MD/DC/VA grounded.`;
 
       const response = await client.messages.create({
-        model: "claude-sonnet-4-5",
+        ...SONNET_55_OPTIONS,
         max_tokens: 600,
         system: BRIEF_SYSTEM_PROMPT,
         messages: [{ role: "user", content: userPrompt }],
       });
 
       const text =
-        response.content[0]?.type === "text" ? response.content[0].text : "";
+        readTextBlocks(response.content);
 
-      if (text.includes("BRIEF_UNAVAILABLE")) {
+      if (response.stop_reason !== "end_turn" || !text || text.includes("BRIEF_UNAVAILABLE")) {
         res.json({ ok: false, reason: "unavailable" });
         return;
       }
@@ -120,6 +121,11 @@ Follow the exact format specified. Be precise, agent-focused, and MD/DC/VA groun
         theMove: parse("THE MOVE", "VOICE RULES"),
       };
 
+      if (Object.values(brief).some((value) => !value)) {
+        res.json({ ok: false, reason: "unavailable" });
+        return;
+      }
+
       res.json({ ok: true, brief });
     } catch (err) {
       console.error("Intelligence brief error:", err);
@@ -129,3 +135,4 @@ Follow the exact format specified. Be precise, agent-focused, and MD/DC/VA groun
 
   return router;
 }
+
