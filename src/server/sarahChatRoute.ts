@@ -1,5 +1,6 @@
 import { Router } from "express";
 import Anthropic from "@anthropic-ai/sdk";
+import { SONNET_55_OPTIONS } from "./sonnet55";
 import type { MessageParam } from "@anthropic-ai/sdk/resources/messages";
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY ?? "" });
@@ -292,7 +293,7 @@ export function createSarahChatRouter() {
           : "";
 
         const stream = await client.messages.stream({
-          model: "claude-sonnet-4-5",
+          ...SONNET_55_OPTIONS,
           max_tokens: 4096,
           system: SARAH_SYSTEM_PROMPT + spanishAppend,
           messages: messages as MessageParam[],
@@ -327,3 +328,4 @@ export function createSarahChatRouter() {
 
   return router;
 }
+

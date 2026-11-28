@@ -1,64 +1,15 @@
 {
-  "name": "react-example",
-  "private": true,
-  "version": "0.0.0",
   "type": "module",
-  "engines": {
-    "node": ">=20.0.0"
-  },
-  "scripts": {
-    "postinstall": "patch-package",
-    "dev": "vite --port=3000 --host=0.0.0.0",
-    "social:preview": "vite --port=3000 --host=0.0.0.0 --open /social-preview.html",
-    "build": "npm run verify:links && vite build",
-    "preview": "vite preview",
-    "clean": "rm -rf dist",
-    "lint": "tsc --noEmit",
-    "eval:agent-v3": "tsx src/lib/agent-v3/evals/agentV3EvalRunner.ts",
-    "server": "tsx src/server/server.ts",
-    "server:agent-v3": "tsx src/server/server.ts",
-    "verify:horizon": "tsx src/lib/verifyHorizonMonotonicity.ts",
-    "process-logo": ".venv/bin/python scripts/process-ihl-logo.py",
-    "verify:links": "node scripts/verify-individual-links.mjs && node scripts/verify-alma-links.mjs"
-  },
+  "private": true,
   "dependencies": {
     "@anthropic-ai/sdk": "^0.91.1",
-    "@aws-sdk/client-s3": "^3.1031.0",
-    "@aws-sdk/s3-request-presigner": "^3.1031.0",
-    "@elevenlabs/client": "1.2.1",
-    "@elevenlabs/react": "1.2.1",
-    "@google/genai": "^1.29.0",
-    "@tailwindcss/vite": "^4.1.14",
-    "@vitejs/plugin-react": "^5.0.4",
-    "chart.js": "^4.5.1",
-    "cors": "^2.8.6",
-    "dotenv": "^17.2.3",
-    "express": "^4.21.2",
-    "html-to-image": "^1.11.13",
-    "jspdf": "^4.2.1",
-    "jspdf-autotable": "^5.0.7",
-    "lucide-react": "^0.546.0",
-    "motion": "^12.23.24",
-    "multer": "^2.1.1",
-    "openai": "^4.104.0",
-    "react": "^19.0.0",
-    "react-chartjs-2": "^5.3.1",
-    "react-dom": "^19.0.0",
-    "react-router-dom": "^7.2.0",
-    "recharts": "^2.15.0",
-    "resend": "^6.12.2",
-    "vite": "^6.2.0"
-  },
-  "devDependencies": {
-    "@types/cors": "^2.8.19",
     "@types/express": "^4.17.21",
-    "@types/multer": "^2.1.0",
-    "@types/node": "^22.14.0",
-    "autoprefixer": "^10.4.21",
-    "patch-package": "^8.0.1",
-    "tailwindcss": "^4.1.14",
+    "@types/node": "^22.20.7",
+    "express": "^4.21.2",
     "tsx": "^4.21.0",
-    "typescript": "~5.8.2",
-    "vite": "^6.2.0"
+    "typescript": "^5.8.2"
+  },
+  "scripts": {
+    "start": "node --import tsx live-check.mts"
   }
 }

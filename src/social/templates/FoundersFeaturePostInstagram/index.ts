@@ -1,1 +1,0 @@
-export { FoundersFeaturePostInstagram } from "./FoundersFeaturePostInstagram";

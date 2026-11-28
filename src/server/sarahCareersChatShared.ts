@@ -133,3 +133,4 @@ export async function sendCareersChatLeadEmail(
     console.error(`[${options.logTag}] Resend error:`, errText);
   }
 }
+

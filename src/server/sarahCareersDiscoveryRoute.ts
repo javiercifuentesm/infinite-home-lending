@@ -1,5 +1,6 @@
 import { Router } from "express";
 import Anthropic from "@anthropic-ai/sdk";
+import { SONNET_55_OPTIONS } from "./sonnet55";
 import type { MessageParam } from "@anthropic-ai/sdk/resources/messages";
 import {
   buildTranscript,
@@ -403,7 +404,7 @@ export function createSarahCareersDiscoveryRouter() {
 
       try {
         const stream = await client.messages.stream({
-          model: "claude-sonnet-4-5",
+          ...SONNET_55_OPTIONS,
           max_tokens: 2048,
           system: SARAH_CAREERS_DISCOVERY_SYSTEM_PROMPT,
           messages: messages as MessageParam[],
@@ -463,3 +464,4 @@ export function createSarahCareersDiscoveryRouter() {
 
   return router;
 }
+
