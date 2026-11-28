@@ -1,4 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
+import { SONNET_55_OPTIONS, readTextBlocks } from "./sonnet55";
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY ?? "" });
 
@@ -105,14 +106,14 @@ ${hasContent ? `Article content: ${articleContent}` : `Note: Full article not av
 Follow the exact format specified. Be precise, agent-focused, and MD/DC/VA grounded.`;
 
     const response = await client.messages.create({
-      model: "claude-sonnet-4-5",
+      ...SONNET_55_OPTIONS,
       max_tokens: 600,
       system: BRIEF_SYSTEM_PROMPT,
       messages: [{ role: "user", content: userPrompt }],
     });
 
-    const text = response.content[0]?.type === "text" ? response.content[0].text : "";
-    return parseBrief(text);
+    const text = readTextBlocks(response.content);
+    return response.stop_reason === "end_turn" ? parseBrief(text) : null;
   } catch (err) {
     console.error(`[brief-cache] Failed to generate brief for ${item.id}:`, err);
     return null;
@@ -169,3 +170,4 @@ export async function runBriefScheduler(
   schedulerRunning = false;
   console.log(`[brief-cache] Scheduler complete. Cache size: ${briefCache.size}`);
 }
+
